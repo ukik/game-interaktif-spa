@@ -1,0 +1,38 @@
+{
+  "name": "GameInteraktif",
+  "version": "0.0.1",
+  "description": "selling diary products",
+  "productName": "Yuvori Snack",
+  "author": "ukik <muhamadduki@gmail.com>",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "build:ssg": "quasar ssg generate && node scripts/generate-seo.js",
+    "serve:ssg": "quasar ssg serve dist/ssg",
+    "dev:ssg": "quasar ssg dev"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.4",
+    "animate.css": "^4.1.1",
+    "axios": "^1.2.1",
+    "dexie": "^4.3.0",
+    "pinia": "^2.0.11",
+    "quasar": "^2.16.0",
+    "vue": "^3.4.18",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "^1.9.0",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.14",
+    "quasar-app-extension-ssg": "^5.2.0",
+    "vite-plugin-prerender": "^1.0.8"
+  },
+  "engines": {
+    "node": "^20 || ^18 || ^16",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}

@@ -1,0 +1,14 @@
+/* override Animate.css reduce motion */
+
+.animate__animated {
+  animation: inherit !important;
+}
+
+a, a .router-link-active {
+  text-decoration: none;
+  color: black;
+}
+
+.swal2-popup {
+  border-radius: 20px;
+}

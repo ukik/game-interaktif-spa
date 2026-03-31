@@ -1,0 +1,57 @@
+.snackbar {
+  min-width: 260px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(80px);
+  transition: 0.45s;
+  pointer-events: none;
+}
+
+.snackbar.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.snackbar.success {
+  background: #fff;
+  color: #16a34a;
+  border: 2px solid #16a34a;
+}
+
+.snackbar.timeout,
+.snackbar.error {
+  background: #fff;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+}
+
+.snackbar.bad {
+  background: #fff;
+  color: #da6a02;
+  border: 2px solid #da6a02;
+}
+
+.snackbar.enough {
+  background: #fff;
+  color: #1194d1;
+  border: 2px solid #1194d1;
+}
+
+#snackbar-container {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+
+  display: flex;
+  flex-direction: column;
+  /* ⬅️ PENTING */
+  gap: 10px;
+
+  pointer-events: none;
+  overflow: visible;
+}

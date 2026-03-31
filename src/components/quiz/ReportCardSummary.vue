@@ -1,0 +1,10 @@
+<template>
+  <q-card>
+    <q-card-actions>
+      xxxxx
+    </q-card-actions>
+    <q-card-section>
+      xxxxxxx
+    </q-card-section>
+  </q-card>
+</template>
