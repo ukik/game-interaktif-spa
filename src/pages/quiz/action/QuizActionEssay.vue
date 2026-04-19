@@ -51,7 +51,7 @@
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import list_questions from "src/composables/quiz/soalEssay";
-import shake from "src/composables/quiz/shake";
+// import shake from "src/composables/quiz/shake";
 
 import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "src/stores/useTimerStore";

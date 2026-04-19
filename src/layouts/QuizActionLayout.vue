@@ -2,11 +2,13 @@
   <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }">
     <q-header elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
-      <q-toolbar>
-        <q-btn @click="$router.back" flat round dense icon="arrow_back" class="q-mr-sm" />
-        <q-toolbar-title class="q-px-xs">📑 Laporan</q-toolbar-title>
-        <q-btn flat round dense icon="search" class="q-mr-xs" />
-        <q-btn flat round dense icon="group_add" />
+      <q-toolbar class="bg-primary text-white">
+        <!-- <q-btn @click="$router.back" flat round dense icon="arrow_back" class="q-mr-sm" /> -->
+        <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title>
+        <q-btn flat round  icon="search" />
+        <q-btn flat round  icon="assignment" @click="leftDrawerOpen = true" />
+        <q-btn flat round  icon="group_add" @click="leftDrawerOpen = true" />
+        <q-btn flat round  icon="logout" @click="onLogoutConfirmDialog"/>
       </q-toolbar>
       <!-- <q-separator></q-separator> -->
       <!-- <q-toolbar class="bg-white text-dark"> Hasil Matching Progress </q-toolbar> -->
@@ -15,6 +17,7 @@
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" behavior="mobile" bordered>
       <!-- drawer content -->
+      <LeftDrawerItem />
     </q-drawer>
 
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" behavior="mobile" bordered>
@@ -26,6 +29,8 @@
         :class="[is_mobile_size ? '' : 'q-card--borderedX']" />
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
+
+    <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
 
     <!-- <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
@@ -43,7 +48,14 @@
 <script>
 import { ref } from "vue";
 
+import LeftDrawerItem from "./components/LeftDrawerItem.vue";
+import { mapActions } from "pinia";
+import { useAuthStore } from "src/stores/auth/AuthStore";
+
 export default {
+  components: {
+    LeftDrawerItem
+  },
   setup() {
     const leftDrawerOpen = ref(false);
     const rightDrawerOpen = ref(false);
@@ -61,8 +73,15 @@ export default {
     };
   },
   beforeRouteLeave(to, from) {
+    return;
     const answer = window.confirm('Do you really want to leave?')
     if (!answer) return false // Cancels the back navigation
+  },
+  methods: {
+    ...mapActions(useAuthStore, ['onLogout']),
+    onLogoutConfirmDialog() {
+      this.$refs.LogoutConfirmDialog.onOpen(true)
+    }
   }
 };
 </script>

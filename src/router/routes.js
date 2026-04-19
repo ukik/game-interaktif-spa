@@ -27,6 +27,24 @@ const routes = [
           ]
         }
       },
+
+    ]
+  },
+
+  {
+    path: "/",
+    component: () => import("layouts/QuizActionLayout.vue"),
+    children: [
+      {
+        path: "/dashboard",
+        name: '/dashboard',
+        component: () => import("pages/IndexPage.vue"),
+        meta: {
+          logged: true,
+          title: "Dashboard STARKY",
+          meta: [{ name: "description", content: "Dashboard" }],
+        },
+      }
     ]
   },
 
@@ -36,6 +54,40 @@ const routes = [
     children: [
       {
         path: "/",
+        name: '/',
+        component: () => import("pages/Home.vue"),
+        meta: {
+          logged: false,
+          title: "Home STARKY",
+          meta: [{ name: "description", content: "Home" }],
+        },
+      },
+      {
+        path: "/login",
+        name: "/login",
+        component: () => import("pages/LoginPage.vue"),
+        meta: {
+          logged: false,
+          title: "Login STARKY",
+          meta: [{ name: "description", content: "Login produk." }],
+        },
+      },
+      {
+        path: "/logged",
+        name: "/logged",
+        component: () => import("pages/LoggedPage.vue"),
+        meta: {
+          logged: true,
+          title: "Logged STARKY",
+          meta: [{ name: "description", content: "Logged produk." }],
+        },
+      },
+
+
+
+
+      {
+        path: "/A",
         component: () => import("pages/GradientAPage.vue"),
       },
       {

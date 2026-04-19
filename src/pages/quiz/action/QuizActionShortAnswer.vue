@@ -27,7 +27,7 @@
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
-import shake from "src/composables/quiz/shake";
+// import shake from "src/composables/quiz/shake";
 import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
 
 import { mapActions, mapState } from "pinia";

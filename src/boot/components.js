@@ -119,7 +119,9 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/quiz/QuizIndexCard.vue'))
   )
 
-
+  app.component("LogoutConfirmDialog",
+    defineAsyncComponent(() => import('src/components/lms/LogoutConfirmDialog.vue'))
+  )
 
 
   // app.component("RelatedImageSlide",

@@ -62,7 +62,8 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      'axios',
+      'axios', // wajib di atas
+      'router',
       'components',
       // 'meta',
       'gradient',
@@ -151,7 +152,8 @@ module.exports = configure(function (/* ctx */) {
       // Quasar plugins
       plugins: [
         'Meta',
-        'Notify'
+        'Notify',
+        'Loading',
       ]
     },
 
