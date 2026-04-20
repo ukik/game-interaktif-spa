@@ -2,6 +2,7 @@ import { mapState } from 'pinia';
 import { boot } from 'quasar/wrappers'
 
 import { useAuthStore } from "src/stores/auth/AuthStore";
+import { useUiStore } from 'src/stores/ui';
 
 const domain = "http://localhost:8000"
 const MIX_API_ROUTE_PREFIX = "/api";
@@ -17,17 +18,20 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       return {
         route_api,
         domain,
+        global_url_image: "https://placehold.co/400x300/cccccc/000000.png?text=No+Image",
+        global_default_image: "https://placehold.co/400x300/cccccc/000000.png?text=No+Image",
       };
     },
     computed: {
       ...mapState(useAuthStore, [
         'getAuthUser',
-        'getAuth',
+        // 'getAuth',
         'getIsLogin',
-        'getLoadingInit',
-        'getAccessToken',
-        'getLoading',
+        // 'getLoadingInit',
+        // 'getAccessToken',
+        // 'getLoading',
       ]),
+      ...mapState(useUiStore, ['getPageWidth']),
       getScreen() {
         return this.$q.screen.width
       },
@@ -43,7 +47,12 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       lowerLaptop() {
         return this.getScreen < 1024
       },
-
+      is_mobile_size() {
+        return Screen.width < 768;
+      },
+      is_ipad_size() {
+        return Screen.width >= 768 && Screen.width < 1024;
+      },
     }
   })
 })

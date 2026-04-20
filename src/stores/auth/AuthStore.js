@@ -20,7 +20,7 @@ import axios from 'axios'
 // const _id = Math.round(Math.random() * 100000000000000)
 
 
-function notifSuccess(caption, message = 'Loading success') {
+function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
     color: 'positive',
     position: 'top',
@@ -30,7 +30,7 @@ function notifSuccess(caption, message = 'Loading success') {
   })
 }
 
-function notifFailed(caption, message = 'Loading failed') {
+function notifFailed(caption = 'data gagal diproses', message = 'Loading failed') {
   Notify.create({
     color: 'negative',
     position: 'top',
@@ -188,8 +188,8 @@ export const useAuthStore = defineStore('AuthStore', {
 
           "data": {
             "accessToken": data?.payload?.token,
-            "user": data?.payload,
-            "roles": data?.payload?.role,
+            "user": data?.payload?.user,
+            "roles": data?.payload?.user?.role,
             "expiresIn": data?.expires_in
           }
         }
@@ -259,8 +259,8 @@ export const useAuthStore = defineStore('AuthStore', {
 
           "data": {
             "accessToken": data?.payload?.token,
-            "user": data?.payload,
-            "roles": data?.payload?.role,
+            "user": data?.payload?.user,
+            "roles": data?.payload?.user.role,
             "expiresIn": data?.expires_in
           }
         }
@@ -314,8 +314,8 @@ export const useAuthStore = defineStore('AuthStore', {
 
         "data": {
           "accessToken": data?.payload?.token,
-          "user": data?.payload,
-          "roles": data?.payload?.role,
+          "user": data?.payload?.user,
+          "roles": data?.payload?.user?.role,
           "expiresIn": data?.expires_in
         }
       }
@@ -373,6 +373,16 @@ export const useAuthStore = defineStore('AuthStore', {
     },
 
 
+
+
+
+
+
+
+
+
+
+
     async onRelogin() {
 
       console.log('onRelogin')
@@ -400,6 +410,22 @@ export const useAuthStore = defineStore('AuthStore', {
 
       console.log('stores/lagia-stores/auth/AuthStore/onRelogin', this.auth)
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

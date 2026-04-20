@@ -1,14 +1,17 @@
 <template>
-  <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }">
+  <q-layout view="hHh lpR fFf" class="bg-green-1">
+    <!-- <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }"> -->
     <q-header elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
         <!-- <q-btn @click="$router.back" flat round dense icon="arrow_back" class="q-mr-sm" /> -->
-        <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title>
-        <q-btn flat round  icon="search" />
-        <q-btn flat round  icon="assignment" @click="leftDrawerOpen = true" />
-        <q-btn flat round  icon="group_add" @click="leftDrawerOpen = true" />
-        <q-btn flat round  icon="logout" @click="onLogoutConfirmDialog"/>
+        <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
+        <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
+        <!-- <q-btn flat round icon="search" /> -->
+        <q-btn flat round icon="assignment" @click="leftDrawerOpen = true" />
+        <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
+        <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile>
+        <!-- <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" /> -->
       </q-toolbar>
       <!-- <q-separator></q-separator> -->
       <!-- <q-toolbar class="bg-white text-dark"> Hasil Matching Progress </q-toolbar> -->
@@ -25,7 +28,7 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
-      <router-view class="col-12 col-xl-6 col-lg-6 col-md-9 col-sm-12 bg-white rounded-borders"
+      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 bg-white rounded-bordersX"
         :class="[is_mobile_size ? '' : 'q-card--borderedX']" />
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
@@ -52,9 +55,13 @@ import LeftDrawerItem from "./components/LeftDrawerItem.vue";
 import { mapActions } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 
+import MenuProfile from "./components/MenuProfile.vue";
+
+import { useUiStore } from 'src/stores/ui'
+
 export default {
   components: {
-    LeftDrawerItem
+    LeftDrawerItem, MenuProfile
   },
   setup() {
     const leftDrawerOpen = ref(false);
@@ -81,7 +88,38 @@ export default {
     ...mapActions(useAuthStore, ['onLogout']),
     onLogoutConfirmDialog() {
       this.$refs.LogoutConfirmDialog.onOpen(true)
-    }
-  }
+    },
+    updateWidth() {
+      const ui = useUiStore();
+
+      const mainEl = document.querySelector(".q-page-container > main");
+      const width = mainEl?.offsetWidth;
+
+      ui.setPageWidth(width);
+
+      // this.observer = new ResizeObserver((entries) => {
+      //   for (let entry of entries) {
+      //     // ui.setPageWidth(entry.contentRect.width) // kalo pake ini masih dikenakan padding
+      //   }
+      //   ui.setPageWidth(width);
+      // });
+
+      // this.observer.observe(this.$refs?.pageContainer.$el);
+    },
+  },
+
+  mounted() {
+    this.updateWidth()
+    window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
+  },
+
+  beforeUnmount() {
+    this.observer.disconnect()
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("resize", this.updateWidth);
+  },
+
 };
 </script>

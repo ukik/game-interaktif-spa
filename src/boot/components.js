@@ -4,47 +4,47 @@ import { scroll, date, Notify, Platform, Screen, Cookies } from "quasar";
 
 export default boot(({ app }) => {
 
-  app.mixin({
-    computed: {
-      is_mobile_size() {
-        return Screen.width < 768;
-      },
-      is_ipad_size() {
-        return Screen.width >= 768 && Screen.width < 1024;
-      },
+  // app.mixin({
+  //   computed: {
+  //     // is_mobile_size() {
+  //     //   return Screen.width < 768;
+  //     // },
+  //     // is_ipad_size() {
+  //     //   return Screen.width >= 768 && Screen.width < 1024;
+  //     // },
 
-      // is_mobile_size() {
-      //   return Screen.width <= 425;
-      // },
-      // is_higher_mobile_size() {
-      //   return Screen.width > 425;
-      // },
-      // is_higher_ipad_size() {
-      //   return Screen.width > 768;
-      // },
-      // is_ipad_size() {
-      //   return Screen.width <= 768 && Screen.width >= 425;
-      // },
-      // is_lower_ipad_size() {
-      //   return Screen.width <= 768;
-      // },
-      // is_lower_laptop_size() {
-      //   return Screen.width <= 1024;
-      // },
-      // is_higher_laptop_size() {
-      //   return Screen.width > 1024;
-      // },
-      // is_higher_ipad_size_route() {
-      //   return Screen.width > 768 ? "" : "";
-      // },
-      // is_mobile_size_route() {
-      //   return Screen.width <= 425 ? "" : "";
-      // },
-      // is_higher_desktop_size() {
-      //   return Screen.width > 1440;
-      // },
-    }
-  })
+  //     // is_mobile_size() {
+  //     //   return Screen.width <= 425;
+  //     // },
+  //     // is_higher_mobile_size() {
+  //     //   return Screen.width > 425;
+  //     // },
+  //     // is_higher_ipad_size() {
+  //     //   return Screen.width > 768;
+  //     // },
+  //     // is_ipad_size() {
+  //     //   return Screen.width <= 768 && Screen.width >= 425;
+  //     // },
+  //     // is_lower_ipad_size() {
+  //     //   return Screen.width <= 768;
+  //     // },
+  //     // is_lower_laptop_size() {
+  //     //   return Screen.width <= 1024;
+  //     // },
+  //     // is_higher_laptop_size() {
+  //     //   return Screen.width > 1024;
+  //     // },
+  //     // is_higher_ipad_size_route() {
+  //     //   return Screen.width > 768 ? "" : "";
+  //     // },
+  //     // is_mobile_size_route() {
+  //     //   return Screen.width <= 425 ? "" : "";
+  //     // },
+  //     // is_higher_desktop_size() {
+  //     //   return Screen.width > 1440;
+  //     // },
+  //   }
+  // })
 
   app.component("HomeCarousel",
     defineAsyncComponent(() => import('src/components/HomeCarousel.vue'))
@@ -122,6 +122,22 @@ export default boot(({ app }) => {
   app.component("LogoutConfirmDialog",
     defineAsyncComponent(() => import('src/components/lms/LogoutConfirmDialog.vue'))
   )
+
+  app.component("Pagination",
+    defineAsyncComponent(() => import('src/components/lms/Pagination.vue'))
+  )
+
+  app.component("NoDataSVG",
+    defineAsyncComponent(() => import('src/components/lms/NoDataSVG.vue'))
+  )
+  app.component("EmptyBlock",
+    defineAsyncComponent(() => import('src/components/lms/EmptyBlock.vue'))
+  )
+
+  app.component("InitLoading",
+    defineAsyncComponent(() => import('src/components/lms/InitLoading.vue'))
+  )
+
 
 
   // app.component("RelatedImageSlide",

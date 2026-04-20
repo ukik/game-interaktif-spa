@@ -37,14 +37,97 @@ const routes = [
     children: [
       {
         path: "/dashboard",
-        name: '/dashboard',
+        name: 'dashboard',
         component: () => import("pages/IndexPage.vue"),
         meta: {
           logged: true,
           title: "Dashboard STARKY",
           meta: [{ name: "description", content: "Dashboard" }],
         },
-      }
+      },
+      {
+        path: "/lms-siswa-index",
+        name: 'lms-siswa-index',
+        component: () => import("pages/LmsSiswaIndexPage.vue"),
+        meta: {
+          logged: true,
+          title: "Index Siswa",
+          meta: [{ name: "description", content: "Index Siswa" }],
+        },
+      },
+      {
+        path: "/lms-siswa-show/:slug",
+        name: 'lms-siswa-show',
+        component: () => import("pages/LmsSiswaShowPage.vue"),
+        meta: {
+          logged: true,
+          title: "Detail Siswa",
+          meta: [{ name: "description", content: "Detail Siswa" }],
+        },
+      },
+      // STAKEHOLDER
+      {
+        path: "/lms-stakeholder-index",
+        name: 'lms-stakeholder-index',
+        component: () => import("pages/LmsStakeholderIndexPage.vue"),
+        meta: {
+          logged: true,
+          title: "Index Stakeholder",
+          meta: [{ name: "description", content: "Index Stakeholder" }],
+        },
+      },
+      {
+        path: "/lms-stakeholder-show/:slug",
+        name: 'lms-stakeholder-show',
+        component: () => import("pages/LmsStakeholderShowPage.vue"),
+        meta: {
+          logged: true,
+          title: "Detail Stakeholder",
+          meta: [{ name: "description", content: "Detail Stakeholder" }],
+        },
+      },
+      // PARENT
+      {
+        path: "/lms-ortu-index",
+        name: 'lms-ortu-index',
+        component: () => import("pages/LmsParentIndexPage.vue"),
+        meta: {
+          logged: true,
+          title: "Index Orangtua",
+          meta: [{ name: "description", content: "Index Orangtua" }],
+        },
+      },
+      {
+        path: "/lms-ortu-show/:slug",
+        name: 'lms-ortu-show',
+        component: () => import("pages/LmsParentShowPage.vue"),
+        meta: {
+          logged: true,
+          title: "Detail Orangtua",
+          meta: [{ name: "description", content: "Detail Orangtua" }],
+        },
+      },
+      // SEKOLAH
+      {
+        path: "/lms-sekolah-index",
+        name: 'lms-sekolah-index',
+        component: () => import("pages/LmsSekolahIndexPage.vue"),
+        meta: {
+          logged: true,
+          title: "Index Sekolah",
+          meta: [{ name: "description", content: "Index Sekolah" }],
+        },
+      },
+      {
+        path: "/lms-sekolah-show/:slug",
+        name: 'lms-sekolah-show',
+        component: () => import("pages/LmsSekolahShowPage.vue"),
+        meta: {
+          logged: true,
+          title: "Detail Sekolah",
+          meta: [{ name: "description", content: "Detail Sekolah" }],
+        },
+      },
     ]
   },
 
@@ -54,7 +137,7 @@ const routes = [
     children: [
       {
         path: "/",
-        name: '/',
+        name: '',
         component: () => import("pages/Home.vue"),
         meta: {
           logged: false,
@@ -64,7 +147,7 @@ const routes = [
       },
       {
         path: "/login",
-        name: "/login",
+        name: "login",
         component: () => import("pages/LoginPage.vue"),
         meta: {
           logged: false,
@@ -74,7 +157,7 @@ const routes = [
       },
       {
         path: "/logged",
-        name: "/logged",
+        name: "logged",
         component: () => import("pages/LoggedPage.vue"),
         meta: {
           logged: true,

@@ -5,7 +5,7 @@
       src="~assets/quasar-logo-vertical.svg"
       style="width: 200px; height: 200px"
     > -->
-    {{ auth }}
+    {{ getAuthUser }}
   </q-page>
 </template>
 
@@ -17,7 +17,7 @@ import { useAuthStore } from "src/stores/auth/AuthStore";
 
 export default {
   computed: {
-    ...mapState(useAuthStore, ['auth'])
+    ...mapState(useAuthStore, ['getAuthUser'])
   },
   methods: {
     ...mapActions(useAuthStore, ['onLogout']),

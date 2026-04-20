@@ -23,11 +23,11 @@ export default boot(async ({ router, store }) => {
     if (to.meta.logged && auth.getIsLogin) {
       next()
     } else if (to.meta.logged && !auth.getIsLogin) {
-      next({ name: '/login' })
-    } else if (to.name == '/login' && auth.getIsLogin) {
-      next({ name: '/dashboard' })
+      next({ name: 'login' })
+    } else if (to.name == 'login' && auth.getIsLogin) {
+      next({ name: 'dashboard' })
     } else if (to.name == 'register' && auth.getIsLogin) {
-      next({ name: '/dashboard' })
+      next({ name: 'dashboard' })
     } else {
       next()
     }

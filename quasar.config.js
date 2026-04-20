@@ -56,7 +56,7 @@ module.exports = configure(function (/* ctx */) {
 
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
-    // preFetch: true,
+    preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -67,8 +67,14 @@ module.exports = configure(function (/* ctx */) {
       'components',
       // 'meta',
       'gradient',
-      'indexedDB',
+      // 'indexedDB',
       'main',
+      'common',
+      'glightbox',
+      // {
+      //   server: false, // run on client-side only!
+      //   path: 'glightbox' // references /src/boot/<name>.js
+      // },
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

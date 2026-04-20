@@ -134,13 +134,13 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     // always update Login status
     if (isLogin) {
       if (payload?.token) await cookies.set('accessToken', payload?.token, is_cookie_secure)
-      if (route.getName == '/login' || route.getName == '/register') router.replace({ name: '/dashboard' })
+      if (route.getName == 'login' || route.getName == 'register') router.replace({ name: 'dashboard' })
       // if (additional?.idToken) await cookies.set('idToken', additional?.idToken, is_cookie_secure)
       // if (additional?.refreshToken) await cookies.set('refreshToken', additional?.refreshToken, is_cookie_secure)
     } else {
       await onClearAuth()
       await cookies.remove('accessToken')
-      if (route.getMeta?.logged) router.replace({ name: '/login' })
+      if (route.getMeta?.logged) router.replace({ name: 'login' })
     }
 
 
