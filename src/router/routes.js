@@ -1,6 +1,9 @@
 import routes_quiz_action from "./routes_quiz_action";
 import routes_quiz_report from "./routes_quiz_report";
 import routes_quiz_intro from "./routes_quiz_intro";
+import routes_account from "./routes_account";
+import routes_collection from "./routes_collection";
+import routes_activity from "./routes_activity";
 
 const routes = [
   {
@@ -45,89 +48,9 @@ const routes = [
           meta: [{ name: "description", content: "Dashboard" }],
         },
       },
-      {
-        path: "/lms-siswa-index",
-        name: 'lms-siswa-index',
-        component: () => import("pages/LmsSiswaIndexPage.vue"),
-        meta: {
-          logged: true,
-          title: "Index Siswa",
-          meta: [{ name: "description", content: "Index Siswa" }],
-        },
-      },
-      {
-        path: "/lms-siswa-show/:slug",
-        name: 'lms-siswa-show',
-        component: () => import("pages/LmsSiswaShowPage.vue"),
-        meta: {
-          logged: true,
-          title: "Detail Siswa",
-          meta: [{ name: "description", content: "Detail Siswa" }],
-        },
-      },
-      // STAKEHOLDER
-      {
-        path: "/lms-stakeholder-index",
-        name: 'lms-stakeholder-index',
-        component: () => import("pages/LmsStakeholderIndexPage.vue"),
-        meta: {
-          logged: true,
-          title: "Index Stakeholder",
-          meta: [{ name: "description", content: "Index Stakeholder" }],
-        },
-      },
-      {
-        path: "/lms-stakeholder-show/:slug",
-        name: 'lms-stakeholder-show',
-        component: () => import("pages/LmsStakeholderShowPage.vue"),
-        meta: {
-          logged: true,
-          title: "Detail Stakeholder",
-          meta: [{ name: "description", content: "Detail Stakeholder" }],
-        },
-      },
-      // PARENT
-      {
-        path: "/lms-ortu-index",
-        name: 'lms-ortu-index',
-        component: () => import("pages/LmsParentIndexPage.vue"),
-        meta: {
-          logged: true,
-          title: "Index Orangtua",
-          meta: [{ name: "description", content: "Index Orangtua" }],
-        },
-      },
-      {
-        path: "/lms-ortu-show/:slug",
-        name: 'lms-ortu-show',
-        component: () => import("pages/LmsParentShowPage.vue"),
-        meta: {
-          logged: true,
-          title: "Detail Orangtua",
-          meta: [{ name: "description", content: "Detail Orangtua" }],
-        },
-      },
-      // SEKOLAH
-      {
-        path: "/lms-sekolah-index",
-        name: 'lms-sekolah-index',
-        component: () => import("pages/LmsSekolahIndexPage.vue"),
-        meta: {
-          logged: true,
-          title: "Index Sekolah",
-          meta: [{ name: "description", content: "Index Sekolah" }],
-        },
-      },
-      {
-        path: "/lms-sekolah-show/:slug",
-        name: 'lms-sekolah-show',
-        component: () => import("pages/LmsSekolahShowPage.vue"),
-        meta: {
-          logged: true,
-          title: "Detail Sekolah",
-          meta: [{ name: "description", content: "Detail Sekolah" }],
-        },
-      },
+      ...routes_account,
+      ...routes_collection,
+      ...routes_activity,
     ]
   },
 

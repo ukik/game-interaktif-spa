@@ -4,7 +4,9 @@
     <q-header elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
-        <!-- <q-btn @click="$router.back" flat round dense icon="arrow_back" class="q-mr-sm" /> -->
+
+        <q-btn v-if="$route.meta?.page_type == 'show'" @click="$router.back" flat round dense icon="arrow_back" class="q-mr-sm" />
+
         <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
@@ -28,8 +30,8 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
-      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 bg-white rounded-bordersX"
-        :class="[is_mobile_size ? '' : 'q-card--borderedX']" />
+      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
+        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" />
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
@@ -114,7 +116,7 @@ export default {
   },
 
   beforeUnmount() {
-    this.observer.disconnect()
+    // this.observer?.disconnect()
   },
 
   beforeDestroy() {

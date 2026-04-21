@@ -14,7 +14,7 @@
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="stakeholder" class="q-pa-none">
-          <template v-if="get_show_payload?.name">
+          <template v-if="get_show_payload?.id">
             <q-card-actions align="center" class="q-py-md">
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">

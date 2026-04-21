@@ -6,9 +6,9 @@
         <q-item v-for="(item, index) in get_index_data" :key="index" clickable v-ripple
           :to="{ name: 'lms-siswa-show', params: { slug: item?.id } }">
           <q-item-section avatar>
-            <q-avatar size="80px">
+            <q-avatar size="55px">
               <q-img :src="item?.url_image" @error="item.url_image = global_url_image" error-src="global_url_image" />
-              <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge>
+              <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
 
             </q-avatar>
           </q-item-section>
@@ -16,11 +16,11 @@
           <q-item-section>
             <q-item-label>{{ item?.name }}</q-item-label>
             <q-item-label caption lines="1">{{ item?.email }}</q-item-label>
-            <q-item-label caption lines="1">{{ item?.siswa?.nis }} / {{ item?.siswa?.nisn }}</q-item-label>
+            <!-- <q-item-label caption lines="1">{{ item?.siswa?.nis }} / {{ item?.siswa?.nisn }}</q-item-label> -->
           </q-item-section>
 
-          <q-item-section side top>
-            <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label>
+          <q-item-section side>
+            <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
             <q-item-label>
               <q-avatar>
                 <q-icon name="group" color="grey" />
@@ -28,6 +28,7 @@
               </q-avatar>
             </q-item-label>
           </q-item-section>
+          <q-badge class="square top badge-left" floating color="cyan">{{ item?.id }}</q-badge>
         </q-item>
       </template>
 
