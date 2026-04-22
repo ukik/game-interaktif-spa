@@ -4,6 +4,7 @@ import routes_quiz_intro from "./routes_quiz_intro";
 import routes_account from "./routes_account";
 import routes_collection from "./routes_collection";
 import routes_activity from "./routes_activity";
+import routes_stats from "./routes_stats";
 
 const routes = [
   {
@@ -51,6 +52,7 @@ const routes = [
       ...routes_account,
       ...routes_collection,
       ...routes_activity,
+      ...routes_stats,
     ]
   },
 

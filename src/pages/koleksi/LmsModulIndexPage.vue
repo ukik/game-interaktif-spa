@@ -33,7 +33,7 @@
             </q-card-section>
 
             <q-card-section class="col-5 flex flex-center justify-end">
-              <q-img :height="is_mobile_size ? '' : '140px'" class="rounded-borders" :src="item?.user?.url_image" @error="item.url_image = global_url_image"
+              <q-img :height="is_mobile_size ? '' : '140px'" class="rounded-borders" :src="item?.url_image" @error="item.url_image = global_url_image"
                 error-src="global_url_image" />
             </q-card-section>
           </q-card-section>

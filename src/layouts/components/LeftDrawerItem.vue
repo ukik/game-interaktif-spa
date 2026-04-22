@@ -108,14 +108,14 @@ const statistik_items = [
     title: "MODUL",
     subtitle: "Hasil Tugas",
     icon: "fa-solid fa-chart-line",
-    route_name: 'lms-tugas-modul-index',
+    route_name: 'lms-tugas-modul-stats-index',
   },
   {
     id: 3,
     title: "QUIZ",
     subtitle: "Hasil Tugas",
     icon: "fa-solid fa-chart-line",
-    route_name: 'lms-tugas-quiz-index',
+    route_name: 'lms-tugas-quiz-stats-index',
   },
 ];
 
