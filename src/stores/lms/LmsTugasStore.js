@@ -32,6 +32,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     init: {
       index: true,
       show: true,
+      peserta: true,
     },
     index: {
       "payload": {
@@ -84,13 +85,20 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       },
       kelas: {},
     },
-    local: {
-      'loading': false,
+    persert: {
+      payload: {
+        payload: {}
+      },
+    },
+    loading: {
+      'local': false,
+      peserta: false,
     }
   }),
   getters: {
     get_init_index: ({ init }) => init?.index,
     get_init_show: ({ init }) => init?.show,
+    get_init_peserta: ({ init }) => init?.peserta,
 
     get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
     get_index_data: ({ index }) => index?.payload?.payload?.data,
@@ -111,21 +119,15 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     get_show_kelas: ({ show }) => show?.payload?.kelas,
     get_show_payload: ({ show }) => show?.payload?.payload,
 
-    get_loading: ({ local }) => local?.loading,
+    get_peserta_payload: ({ peserta }) => peserta?.payload?.payload,
+
+    get_loading: ({ loading }) => loading?.local,
+    get_loading_peserta: ({ loading }) => loading?.local,
   },
   actions: {
-    getNamaKelasList(kelasMap, kelasString) {
-      if(!kelasString) return null;
-      const object = kelasMap;
-      return kelasString
-        .split(',')                 // "1,4,5" → ["1","4","5"]
-        .map(id => object[id]?.trim()) // ambil dari object
-        .filter(Boolean)            // buang null/undefined
-        .join(', ')                 // gabung jadi string
-    },
     onChangePage(val) {
       console.log('action onChangePage', val)
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
       this.index.payload.payload.current_page = val
 
       this.router.push({
@@ -140,9 +142,9 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
     async onIndex(page = 1) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onIndex')
 
@@ -163,7 +165,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.index = false;
 
@@ -181,9 +183,9 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
     async onShow(slug = null) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onShow')
 
@@ -201,7 +203,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.show = false;
 
@@ -213,6 +215,46 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         console.log('onShow', data)
 
         this.show = data
+
+        return true
+      }
+    },
+    async onPeserta(slug = null, my_init = false) {
+
+      if(my_init) this.init.peserta = my_init
+      if(!this.init.peserta) return false
+
+      if (this.loading.peserta) return false;
+
+      this.loading.peserta = true;
+
+      console.log('onPeserta')
+
+      const resp = await axios({
+        url: host + '/lms/tugas-peserta/'+slug,
+        method: 'get',
+      })
+        .then((response) => {
+          return response
+        })
+        .catch((err) => {
+          console.log(err)
+          notifFailed()
+          return false
+        })
+
+      this.loading.peserta = false
+
+      this.init.peserta = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+
+        const data = resp?.data
+        console.log('onPeserta', data)
+
+        this.peserta = data
 
         return true
       }

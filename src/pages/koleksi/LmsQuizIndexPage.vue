@@ -4,61 +4,7 @@
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <q-card class="col-12" v-for="(item, index) in get_index_data" :key="index" flat bordered>
-
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar>
-                <q-img class="rounded-borders" :src="item?.user?.url_image"
-                  @error="item.user.url_image = global_url_image" error-src="global_url_image" />
-              </q-avatar>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label lines="1">{{ item?.user?.name }}</q-item-label>
-              <q-item-label caption>{{ item?.created_at_date }} </q-item-label>
-            </q-item-section>
-
-            <q-item-section side>
-              <q-badge class="q-pa-sm" :color="item?.status == 'draft' ? 'red' : 'green'" :label="item?.status" />
-            </q-item-section>
-          </q-item>
-          <q-separator></q-separator>
-          <q-card-section horizontal>
-            <q-card-section class="q-pt-xs col">
-              <div class="text-overline">{{ item?.mapel?.nama }}</div>
-              <div class="text-h6 text-capitalize q-mb-xs">{{ item?.kategori }} </div>
-              <q-item-label lines="2" class="text-captionX text-grey-7">
-                {{ item?.judul }}
-              </q-item-label>
-            </q-card-section>
-
-            <q-card-section class="col-5 flex flex-center justify-end">
-              <q-img :height="is_mobile_size ? '' : '140px'" class="rounded-borders" :src="item?.url_image" @error="item.url_image = global_url_image"
-                error-src="global_url_image" />
-            </q-card-section>
-          </q-card-section>
-
-          <q-separator />
-          <q-item>
-            <q-item-section>
-              <q-item-label lines="2" caption class="text-grey-7">
-                {{ !item?.topik ? '_ _ _' : item?.topik  }}
-              </q-item-label>
-              <q-item-label caption>{{ !item?.kelas ? '_ _ _' : getNamaKelasList(get_index_kelas, item?.kelas) }} </q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator />
-
-          <q-card-actions align="between">
-            <q-btn :to="{ name: 'lms-quiz-show', params: { slug: item?.id } }" outline icon="visibility" color="primary"
-              label="Detail"></q-btn>
-            <q-btn outline icon="play_circle" color="pink" label="Play"></q-btn>
-            <!-- <q-chip square icon="school">{{ item?.kelas?.nama }}</q-chip> -->
-            <!-- <q-btn flat round icon="event" /> -->
-            <!-- <q-btn flat> 7:30PM </q-btn> -->
-          </q-card-actions>
-        </q-card>
+        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-quiz-show"></IndexCard>
       </div>
     </template>
 
@@ -78,8 +24,12 @@ import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore";
+import IndexCard from "./components/IndexCard.vue";
 
 export default {
+  components: {
+    IndexCard
+  },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsBankQuizStore(store);
 
@@ -125,7 +75,7 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsBankQuizStore, ["onIndex", "onChangePage", "getNamaKelasList"]),
+    ...mapActions(useLmsBankQuizStore, ["onIndex", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

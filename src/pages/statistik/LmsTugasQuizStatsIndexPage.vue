@@ -45,9 +45,6 @@
                 <q-item-label caption>{{ item?.begin_date }}</q-item-label>
               </q-item-section>
 
-              <!-- <q-item-section side>
-                <q-icon name="info" color="green" />
-              </q-item-section> -->
             </q-item>
             <q-separator vertical></q-separator>
             <q-item>
@@ -60,9 +57,6 @@
                 <q-item-label caption>{{ item?.end_date }}</q-item-label>
               </q-item-section>
 
-              <!-- <q-item-section side>
-                <q-icon name="info" color="green" />
-              </q-item-section> -->
             </q-item>
           </q-card-actions>
 
@@ -71,10 +65,10 @@
             <q-card-section class="q-pt-xs col">
               <div class="text-overline">{{ item?.mapel?.nama }}</div>
               <div class="text-h6 text-capitalize q-mb-xs">{{ item?.tugasable?.kategori }} </div>
-              <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-captionX text-grey-7">
+              <q-item-label lines="2">
                 {{ item?.judul }}
               </q-item-label>
-              <q-item-label lines="2" class="text-grey-7" caption>
+              <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
                 {{ item?.tugasable?.judul }}
               </q-item-label>
             </q-card-section>
@@ -98,17 +92,16 @@
                       <q-icon name="fa-brands fa-web-awesome"></q-icon>
                     </q-badge>
                   </q-avatar>
-                  <q-item-label class="q-mt-sm" lines="1" caption>{{ item_0?.siswa?.name }} </q-item-label>
-                  <!-- <q-item-label class="q-mt-sm full-width text-center text-bold text-teal text-caption" lines="1" >( {{ item_0?.total_rank_point }} Poin )</q-item-label> -->
-                  <q-item-label class="q-mt-sm full-width text-center text-bold text-teal" lines="1">Rank {{
+                  <q-item-label class="q-mt-sm col-12 text-center" lines="1" caption>{{ item_0?.siswa?.name }} </q-item-label>
+                  <q-item-label class="q-mt-sm col-12 text-center text-bold text-teal" lines="1">Rank {{
                     Number(index + 1) }}  </q-item-label>
                 </q-card-actions>
               </q-card>
               <q-separator vertical />
             </template>
           </q-card-actions>
-          <q-separator />
 
+          <q-separator />
           <q-card-actions class="q-py-none" align="between">
 
             <q-item class="col-auto q-pl-sm" :class="[ item?.status_durasi?.status == 'selesai' ? 'text-red' : 'text-positive' ]">

@@ -192,15 +192,15 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsTugasQuizStatsStore, ["onShow", "onChangePage", "getNamaKelasList"]),
+    ...mapActions(useLmsTugasQuizStatsStore, ["onShow", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
     },
   },
   async mounted() {
-    await this.$nextTick();
-    this.$glightbox?.init();
+    // await this.$nextTick();
+    // this.$glightbox?.init();
   },
 };
 </script>

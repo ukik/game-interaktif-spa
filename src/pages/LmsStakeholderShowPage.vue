@@ -185,8 +185,8 @@ export default {
     },
   },
   async mounted() {
-    await this.$nextTick();
-    this.$glightbox?.init();
+    // await this.$nextTick();
+    // this.$glightbox?.init();
   },
 };
 </script>

@@ -11,146 +11,47 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="modul" class="q-pa-none">
           <template v-if="get_show_payload?.id">
-            <q-card-actions align="center" class="q-py-md">
-              <q-parallax :height="250">
-                <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  error-src="global_url_image" />
-              </q-parallax>
-            </q-card-actions>
-            <q-separator></q-separator>
-            <q-card-section class="q-pa-sm">
-              <q-list separator bordered class="text-dark">
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>ID</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.id
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <!-- <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>UUID</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark" lines="1">{{
-                      get_show_payload?.uuid
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item> -->
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Status</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">
-                      <q-badge class="q-pa-sm" :color="get_show_payload?.status == 'draft' ? 'red' : 'green'"
-                        :label="get_show_payload?.status" />
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Penerbit</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.user?.name
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kelas</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">
-                      {{ getNamaKelasList(get_show_kelas, get_show_payload?.kelas) }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Mapel</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.mapel?.nama
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kategori</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark text-capitalize">{{
-                      get_show_payload?.kategori
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Jenjang</q-item-label>
-                    <q-item-label class="text-dark" caption>{{
-                      get_show_payload?.mapel?.jenjang
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section avatar>
-                    <q-item-label lines="1" caption>Topik</q-item-label>
-                    <q-item-label class="text-dark" text-capitalize caption>{{
-                      get_show_payload?.topik
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section avatar>
-                    <q-item-label lines="1" caption>Sub Topik</q-item-label>
-                    <q-item-label class="text-dark text-capitalize" caption>{{
-                      get_show_payload?.subtopik
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-
-                <q-item>
-                  <q-item-section avatar>
-                    <q-item-label lines="1" caption>Judul</q-item-label>
-                    <q-item-label class="text-dark" caption>{{
-                      get_show_payload?.judul
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Dibuat</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.created_at_human
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Deskripsi</q-item-label>
-                    <q-item-label class="text-dark" caption v-html="get_show_payload?.deskripsi"></q-item-label>
-                  </q-item-section>
-                </q-item>
-
-
-              </q-list>
-            </q-card-section>
+            <ShowTab1Card :get_show_payload="get_show_payload" :get_show_kelas="get_show_kelas"></ShowTab1Card>
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+
+    <div style="height: 50px"></div>
+
+
+    <q-page-sticky position="bottom" :offset="[0, 0]">
+      <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth}px`">
+        <q-item @click="onOpenDialog" class="col-6 text-white bg-primary" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon text-color="white" name="post_add" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Buat Tugas</q-item-label>
+            <!-- <q-item-label class="text-white" caption>{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label> -->
+          </q-item-section>
+          <!-- <q-item-section avatar>
+            <q-icon text-color="white" name="navigate_next" />
+          </q-item-section> -->
+        </q-item>
+        <q-item class="col-6 text-white bg-positive" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon text-color="white" name="bar_chart" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Leaderboard</q-item-label>
+            <!-- <q-item-label class="text-white" caption>{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label> -->
+          </q-item-section>
+          <!-- <q-item-section avatar>
+            <q-icon text-color="white" name="navigate_next" />
+          </q-item-section> -->
+        </q-item>
+      </q-card-actions>
+    </q-page-sticky>
+
+    <FormCreateTugas ref="FormCreateTugas"></FormCreateTugas>
+
   </q-page>
 </template>
 
@@ -160,8 +61,13 @@ import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsBankModulStore } from "src/stores/lms/LmsBankModulStore";
+import ShowTab1Card from "./components/ShowTab1Card.vue";
+import FormCreateTugas from "../koleksi/components/FormCreateTugas.vue";
 
 export default {
+  components: {
+    ShowTab1Card, FormCreateTugas
+  },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsBankModulStore(store);
 
@@ -192,15 +98,18 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsBankModulStore, ["onShow", "onChangePage", "getNamaKelasList"]),
+    ...mapActions(useLmsBankModulStore, ["onShow", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
     },
+    onOpenDialog() {
+      this.$refs.FormCreateTugas?.onOpen()
+    }
   },
   async mounted() {
-    await this.$nextTick();
-    this.$glightbox?.init();
+    // await this.$nextTick();
+    // this.$glightbox?.init();
   },
 };
 </script>

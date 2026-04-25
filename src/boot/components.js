@@ -138,6 +138,9 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/InitLoading.vue'))
   )
 
+  // app.component("FormCreateTugas",
+  //   defineAsyncComponent(() => import('src/views/FormCreateTugas.vue'))
+  // )
 
 
   // app.component("RelatedImageSlide",

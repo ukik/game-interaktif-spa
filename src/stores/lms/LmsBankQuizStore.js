@@ -84,8 +84,8 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
       },
       kelas: {},
     },
-    local: {
-      'loading': false,
+    loading: {
+      'local': false,
     }
   }),
   getters: {
@@ -111,21 +111,12 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
     get_show_kelas: ({ show }) => show?.payload?.kelas,
     get_show_payload: ({ show }) => show?.payload?.payload,
 
-    get_loading: ({ local }) => local?.loading,
+    get_loading: ({ loading }) => loading?.local,
   },
   actions: {
-    getNamaKelasList(kelasMap, kelasString) {
-      if(!kelasString) return null;
-      const object = kelasMap;
-      return kelasString
-        .split(',')                 // "1,4,5" → ["1","4","5"]
-        .map(id => object[id]?.trim()) // ambil dari object
-        .filter(Boolean)            // buang null/undefined
-        .join(', ')                 // gabung jadi string
-    },
     onChangePage(val) {
       console.log('action onChangePage', val)
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
       this.index.payload.payload.current_page = val
 
       this.router.push({
@@ -140,9 +131,9 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
     },
     async onIndex(page = 1) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onIndex')
 
@@ -163,7 +154,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.index = false;
 
@@ -181,9 +172,9 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
     },
     async onShow(slug = null) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onShow')
 
@@ -201,7 +192,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.show = false;
 

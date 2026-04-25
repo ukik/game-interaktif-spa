@@ -42,3 +42,38 @@ a, a .router-link-active {
 .rounded-borders {
     border-radius: 4px !important;
 }
+
+
+.alert-primary-bootstrap {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+.alert-success-bootstrap {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-warning-bootstrap {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.bg-primary-bootstrap {
+    background-color: #007bff !important;
+}
+
+.bg-success-bootstrap {
+    background-color: #28a745 !important;
+}
+
+.bg-warning-bootstrap {
+    background-color: #ffc107 !important;
+}
+
+.scroll {
+  overflow-y: auto;
+}

@@ -149,6 +149,7 @@ export const useAuthStore = defineStore('AuthStore', {
     getAuthUser: state => state.auth?.data?.user,
     getAuth: state => state.auth,
     getIsLogin: state => state.auth.isLogin,
+    getRole: state => state.auth?.data?.roles,
     getLoadingInit: state => state.loading.init,
     getAccessToken: state => state.auth.data?.accessToken,
     getLoading: state => state.loading,

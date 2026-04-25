@@ -79,8 +79,8 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
         payload: {}
       }
     },
-    local: {
-      'loading': false,
+    loading: {
+      'local': false,
     }
   }),
   getters: {
@@ -102,12 +102,12 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
 
     get_show_payload: ({ show }) => show?.payload?.payload,
 
-    get_loading: ({ local }) => local?.loading,
+    get_loading: ({ loading }) => loading?.local,
   },
   actions: {
     onChangePage(val) {
       console.log('action onChangePage', val)
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
       this.index.payload.payload.current_page = val
 
       this.router.push({
@@ -122,9 +122,9 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
     },
     async onIndex(page = 1) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onIndex')
 
@@ -145,7 +145,7 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.index = false;
 
@@ -163,9 +163,9 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
     },
     async onShow(slug = null) {
 
-      if (this.local.loading) return false;
+      if (this.loading.local) return false;
 
-      this.local.loading = true;
+      this.loading.local = true;
 
       console.log('onShow')
 
@@ -183,7 +183,7 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
           return false
         })
 
-      this.local.loading = false
+      this.loading.local = false
 
       this.init.show = false;
 

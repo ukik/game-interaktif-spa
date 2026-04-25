@@ -2,57 +2,59 @@ import { boot } from 'quasar/wrappers'
 import GLightbox from 'glightbox'
 import 'glightbox/dist/css/glightbox.css'
 
-let lightbox = null
+let lightbox = null;
 
 function initLightbox() {
-  console.log('initLightbox')
+  console.log('GLightbox global init (.q-img)');
 
-  // 🚀 Bonus (biar cuma gambar tertentu aja)
+  document.addEventListener('click', function (e) {
+    const el = e.target.closest('.q-img'); // 🔥 tetap pakai .q-img
+    if (!el) return;
 
-  // Tambahkan class:
+    const container = el.closest('.q-tab-panel') || document;
 
-  // <q-img class="lightbox" :src="item.url_image" />
+    const images = container.querySelectorAll('.q-img');
 
-  // lalu ubah:
+    const elements = Array.from(images)
+      .map((item) => {
+        const img = item.querySelector('img');
+        const src = img?.getAttribute('src');
+        if (!src) return null;
 
-  // const images = document.querySelectorAll('.q-img.lightbox')
-
-
-  const images = document.querySelectorAll('.q-img')
-
-  const elements = []
-
-  images.forEach((el) => {
-    const img = el.querySelector('img')
-    if (!img) return
-
-    const src = img.getAttribute('src')
-    if (!src) return
-
-    elements.push({
-      href: src,
-      type: 'image'
-    })
-
-    // klik handler
-    el.onclick = () => {
-      console.log('glightbox')
-      if (lightbox) lightbox.destroy()
-
-      lightbox = GLightbox({
-        elements: elements,
-        startAt: elements.findIndex(e => e.href === src),
-        loop: true,
-        zoomable: true
+        return {
+          href: src,
+          type: 'image'
+        };
       })
+      .filter(Boolean);
 
-      lightbox.open()
+    const currentImg = el.querySelector('img');
+    const currentSrc = currentImg?.getAttribute('src');
+
+    const startIndex = elements.findIndex(e => e.href === currentSrc);
+
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
     }
-  })
+
+    lightbox = GLightbox({
+      elements,
+      startAt: startIndex,
+      loop: true,
+      zoomable: true
+    });
+
+    lightbox.open();
+  });
 }
 
-export default boot(({ app }) => {
-  app.config.globalProperties.$glightbox = {
-    init: initLightbox
-  }
-})
+// export default boot(({ app }) => {
+//   app.config.globalProperties.$glightbox = {
+//     init: initLightbox
+//   }
+// })
+
+export default boot(() => {
+  initLightbox(); // 🔥 cukup sekali, tidak perlu watcher lagi
+});
