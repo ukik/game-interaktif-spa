@@ -81,6 +81,14 @@ export default {
       },
     };
   },
+  watch: {
+    '$route.name'(val) {
+      console.log('watch')
+      this.$nextTick(() => {
+        // this.updateWidth() // agar selalu update
+      })
+    }
+  },
   beforeRouteLeave(to, from) {
     return;
     const answer = window.confirm('Do you really want to leave?')
@@ -94,19 +102,15 @@ export default {
     updateWidth() {
       const ui = useUiStore();
 
-      const mainEl = document.querySelector(".q-page-container > main");
-      const width = mainEl?.offsetWidth;
+      this.observer = new ResizeObserver((entries) => {
+        console.log('ResizeObserver')
+        // for (let entry of entries) {
+          // ui.setPageWidth(entry.contentRect.width) // kalo pake ini masih dikenakan padding
+        // }
+        ui.setPageWidth(document.querySelector(".q-page-container > main").offsetWidth);
+      });
 
-      ui.setPageWidth(width);
-
-      // this.observer = new ResizeObserver((entries) => {
-      //   for (let entry of entries) {
-      //     // ui.setPageWidth(entry.contentRect.width) // kalo pake ini masih dikenakan padding
-      //   }
-      //   ui.setPageWidth(width);
-      // });
-
-      // this.observer.observe(this.$refs?.pageContainer.$el);
+      this.observer.observe(this.$refs?.pageContainer.$el);
     },
   },
 
@@ -116,7 +120,7 @@ export default {
   },
 
   beforeUnmount() {
-    // this.observer?.disconnect()
+    this.observer?.disconnect()
   },
 
   beforeDestroy() {

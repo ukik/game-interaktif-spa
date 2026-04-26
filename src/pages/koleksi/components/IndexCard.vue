@@ -51,10 +51,6 @@
     <q-separator></q-separator>
     <q-card-section horizontal>
       <q-card-section class="q-pt-xs col">
-        <!-- <q-item-label lines="1" class="text-overline">
-          <q-badge color="cyan" class="q-pa-xs q-mr-sm q-my-xs" :label="'ID: ' + item?.id" /> {{ item?.mapel?.nama }}
-        </q-item-label> -->
-        <!-- <q-separator></q-separator> -->
         <div class="text-h6 text-capitalize q-mb-xs">{{ item?.kategori }} </div>
         <q-item-label caption lines="2" class="text-grey-7">
           {{ item?.subtopik }}

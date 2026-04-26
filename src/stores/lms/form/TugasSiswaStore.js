@@ -34,6 +34,15 @@ export const useTugasSiswaStore = defineStore('TugasSiswaStore', {
 
   },
   actions: {
+    onClearSiswa() {
+      this.siswa = {
+          "payload": {
+            "payload": {
+              data: []
+            }
+          },
+        }
+    },
     onSiswa(my_init = false) {
       if (my_init) this.init.siswa = my_init
       if (!this.init.siswa) return false

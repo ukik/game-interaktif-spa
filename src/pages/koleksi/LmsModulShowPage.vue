@@ -1,15 +1,15 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm">
     <q-card flat bordered>
       <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-        <q-tab name="modul" label="MODUL" />
+        <q-tab name="tab1" label="MODUL" />
       </q-tabs>
 
       <q-separator />
 
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="modul" class="q-pa-none">
+        <q-tab-panel name="tab1" class="q-pa-none">
           <template v-if="get_show_payload?.id">
             <ShowTab1Card :get_show_payload="get_show_payload" :get_show_kelas="get_show_kelas"></ShowTab1Card>
           </template>
@@ -19,21 +19,15 @@
     </q-card>
 
     <div style="height: 50px"></div>
-
-
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth}px`">
+      <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth()}px`">
         <q-item @click="onOpenDialog" class="col-6 text-white bg-primary" clickable v-ripple>
           <q-item-section avatar>
             <q-icon text-color="white" name="post_add" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Buat Tugas</q-item-label>
-            <!-- <q-item-label class="text-white" caption>{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label> -->
           </q-item-section>
-          <!-- <q-item-section avatar>
-            <q-icon text-color="white" name="navigate_next" />
-          </q-item-section> -->
         </q-item>
         <q-item class="col-6 text-white bg-positive" clickable v-ripple>
           <q-item-section avatar>
@@ -41,16 +35,12 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Leaderboard</q-item-label>
-            <!-- <q-item-label class="text-white" caption>{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label> -->
           </q-item-section>
-          <!-- <q-item-section avatar>
-            <q-icon text-color="white" name="navigate_next" />
-          </q-item-section> -->
         </q-item>
       </q-card-actions>
     </q-page-sticky>
 
-    <FormCreateTugas ref="FormCreateTugas"></FormCreateTugas>
+    <FormCreateTugas ref="FormCreateTugas" model="LmsModul"></FormCreateTugas>
 
   </q-page>
 </template>
@@ -78,7 +68,7 @@ export default {
   },
   data() {
     return {
-      tab: "modul",
+      tab: "tab1",
     };
   },
   watch: {

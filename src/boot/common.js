@@ -1,4 +1,4 @@
-import { mapState } from 'pinia';
+import { createPinia, mapActions, mapState } from 'pinia';
 import { boot } from 'quasar/wrappers'
 
 import { useAuthStore } from "src/stores/auth/AuthStore";
@@ -12,7 +12,7 @@ export const host = domain + MIX_API_ROUTE_PREFIX; //+"/v1"; // 'http://properti
 export const route_api = domain + MIX_API_ROUTE_PREFIX; // 'http://properti-backend.local/'; //
 
 export default boot(async ({ app, ssrContext, router, store }) => {
-
+  // app.use(createPinia())
   app.mixin({
     data() {
       return {
@@ -23,6 +23,7 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       };
     },
     methods: {
+      ...mapActions(useUiStore, ['getPageWidth']),
       getRanking(score) {
         score = parseInt(score);
 
@@ -108,6 +109,55 @@ export default boot(async ({ app, ssrContext, router, store }) => {
           .map(id => object[id]?.trim()) // ambil dari object
           .filter(Boolean)            // buang null/undefined
           .join(', ')                 // gabung jadi string
+      },
+      diffFromNow(startStr, endStr) {
+        if (!startStr || !endStr) return '-'
+
+        const now = new Date()
+
+        const start = this.parseYMD(startStr)
+        const end = this.parseYMD(endStr, true) // 🔥 end of day
+
+        let status, target
+
+        if (now < start) {
+          status = 'belum_mulai'
+          target = start
+        } else if (now > end) {
+          return {
+            status: 'selesai',
+            text: '0 menit'
+          }
+        } else {
+          status = 'berlangsung'
+          target = end
+        }
+
+        const diffMs = Math.abs(target - now)
+
+        const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24)
+        const minutes = Math.floor((diffMs / (1000 * 60)) % 60)
+
+        const parts = []
+
+        if (days > 0) parts.push(days + ' hari')
+        if (hours > 0) parts.push(hours + ' jam')
+        if (minutes > 0) parts.push(minutes + ' menit')
+
+        const text = parts.length ? parts.join(' ') : '0 menit'
+
+        return {
+          status,
+          text
+        }
+      },
+
+      parseYMD(str, endOfDay = false) {
+        const [y, m, d] = str.split('-').map(Number)
+        return endOfDay
+          ? new Date(y, m - 1, d, 23, 59, 59)
+          : new Date(y, m - 1, d, 0, 0, 0)
       }
     },
     computed: {
@@ -120,7 +170,6 @@ export default boot(async ({ app, ssrContext, router, store }) => {
         // 'getAccessToken',
         // 'getLoading',
       ]),
-      ...mapState(useUiStore, ['getPageWidth']),
       is_teacher() {
         return this.getRole == 'teacher' ? true : false
       },

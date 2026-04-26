@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm">
     <q-card flat bordered>
       <q-tabs v-model="tab" :key="tab" dense class="text-grey"
         active-color="primary" indicator-color="primary" align="justify">
@@ -43,7 +43,7 @@
     </q-card>
     <div style="height: 50px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <q-card-actions align="center" class="bg-primary q-pa-none" :style="`width: ${getPageWidth}px`">
+      <q-card-actions align="center" class="bg-primary q-pa-none" :style="`width: ${getPageWidth()}px`">
         <q-item class="col-12 text-white" clickable v-ripple>
           <q-item-section avatar>
             <q-icon text-color="white" name="bar_chart" />

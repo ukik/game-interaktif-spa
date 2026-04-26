@@ -5,6 +5,7 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useFormTugasStore } from './form/FormTugasStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -215,6 +216,12 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         console.log('onShow', data)
 
         this.show = data
+
+        const payload = data?.payload?.payload
+        console.log('onShow payload', payload)
+
+        const form_edit = useFormTugasStore();
+        form_edit.setFormTugasEdit(payload)
 
         return true
       }

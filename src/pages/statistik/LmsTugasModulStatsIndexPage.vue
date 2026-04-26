@@ -1,10 +1,10 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm">
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-tugas-modul-stats-show"></IndexCard>
+        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-tugas-modul-stats-show" leaderboard_key="tugas_modul_hasil"></IndexCard>
       </div>
     </template>
 

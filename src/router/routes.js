@@ -94,45 +94,47 @@ const routes = [
 
 
 
-      {
-        path: "/A",
-        component: () => import("pages/GradientAPage.vue"),
-      },
-      {
-        path: "/B",
-        component: () => import("pages/GradientBPage.vue"),
-      },
-      {
-        path: "/C",
-        component: () => import("pages/GradientCPage.vue"),
-      },
-      {
-        path: "/home",
-        name: "home",
-        component: () => import("pages/Home.vue"),
-        meta: {
-          title: "Beranda - Yuvoria SNACK",
-          meta: [{ name: "description", content: "Beranda produk." }],
-        },
-      },
-      {
-        path: "/product/:id?",
-        name: "product",
-        component: () => import("pages/Product.vue"),
-        meta: {
-          title: "Product - Yuvoria SNACK",
-          meta: [{ name: "description", content: "Deskripsi produk." }],
-        },
-      },
-      {
-        path: "/list",
-        name: "list",
-        component: () => import("pages/List.vue"),
-        meta: {
-          title: "List - Yuvoria SNACK",
-          meta: [{ name: "description", content: "List produk" }],
-        },
-      },
+      // {
+      //   path: "/A",
+      //   component: () => import("pages/GradientAPage.vue"),
+      // },
+      // {
+      //   path: "/B",
+      //   component: () => import("pages/GradientBPage.vue"),
+      // },
+      // {
+      //   path: "/C",
+      //   component: () => import("pages/GradientCPage.vue"),
+      // },
+      // {
+      //   path: "/home",
+      //   name: "home",
+      //   component: () => import("pages/Home.vue"),
+      //   meta: {
+      //     title: "Beranda - Yuvoria SNACK",
+      //     meta: [{ name: "description", content: "Beranda produk." }],
+      //   },
+      // },
+      // {
+      //   path: "/product/:id?",
+      //   name: "product",
+      //   component: () => import("pages/Product.vue"),
+      //   meta: {
+      //     title: "Product - Yuvoria SNACK",
+      //     meta: [{ name: "description", content: "Deskripsi produk." }],
+      //   },
+      // },
+      // {
+      //   path: "/list",
+      //   name: "list",
+      //   component: () => import("pages/List.vue"),
+      //   meta: {
+      //     title: "List - Yuvoria SNACK",
+      //     meta: [{ name: "description", content: "List produk" }],
+      //   },
+      // },
+
+
     ]
   },
 

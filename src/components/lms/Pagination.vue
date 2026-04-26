@@ -1,5 +1,5 @@
 <template>
-  <q-card-actions align="center" class="bg-primary" :style="`width: ${getPageWidth}px`">
+  <q-card-actions align="center" class="bg-primary" :style="`width: ${getPageWidth()}px`">
     <q-pagination
       :model-value="current_page"
       @update:model-value="onEmit"

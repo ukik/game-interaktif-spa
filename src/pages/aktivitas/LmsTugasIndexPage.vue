@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm">
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">

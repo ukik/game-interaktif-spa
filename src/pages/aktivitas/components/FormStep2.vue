@@ -4,12 +4,12 @@
 
     <!-- Kelas -->
     <div class="q-mb-lg">
-      <q-select clearable v-model="form_tugas_create.kelas_id" :options="get_kelas_payload"
+      <q-select clearable v-model="form_tugas_edit.kelas_id" :options="get_kelas_payload"
         option-label="nama" option-value="id" emit-value map-options label="Kelas" outlined hint="required" use-input
         input-debounce="100" :rules="[val => !!val || 'wajib diisi']" />
     </div>
 
-    <q-field label="Siswa" stack-label :model-value="form_tugas_create.siswa_ids" hint="required"
+    <q-field label="Siswa" stack-label :model-value="form_tugas_edit.siswa_ids" hint="required"
       :rules="[val => val.length > 0 || 'Minimal pilih 1 siswa']" borderless no-error-icon>
 
       <!-- LABEL CUSTOM -->
@@ -33,7 +33,7 @@
           <q-item v-if="get_siswa_payload?.data.length > 0" v-for="(item, index) in get_siswa_payload?.data" tag="label"
             v-ripple>
             <q-item-section avatar>
-              <q-checkbox v-model="form_tugas_create.siswa_ids" :val="item?.siswa?.id" color="teal" />
+              <q-checkbox v-model="form_tugas_edit.siswa_ids" :val="item?.siswa?.id" color="teal" />
             </q-item-section>
             <q-item-section avatar>
               <q-avatar>
@@ -67,13 +67,13 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(useFormTugasStore, ['form_tugas_create']),
+    ...mapWritableState(useFormTugasStore, ['form_tugas_edit']),
     ...mapState(useKelasStore, ['get_kelas_payload']),
     ...mapState(useTugasSiswaStore, ['get_siswa_payload', 'get_loading_siswa']),
     ...mapWritableState(useTugasSiswaStore, ['siswa']),
     isAllChecked() {
       const list = this.get_siswa_payload?.data || []
-      const selected = this.form_tugas_create.siswa_ids || []
+      const selected = this.form_tugas_edit.siswa_ids || []
 
       return list.length > 0 && list.every(item =>
         selected.includes(item.siswa?.id)
@@ -81,17 +81,17 @@ export default {
     }
   },
   watch: {
-    "form_tugas_create.kelas_id"(val) {
+    "form_tugas_edit.kelas_id"(val) {
       console.log(val)
       if (!val) {
-        this.form_tugas_create.siswa_ids = []
+        this.form_tugas_edit.siswa_ids = []
         this.onClearSiswa()
       }
       if (val) this.$q.loading.show();
       if (val) this.onSiswa(true)
     },
     "get_loading_siswa"(val) {
-      if (!val) this.form_tugas_create.siswa_ids = []
+      // if (!val) this.form_tugas_edit.siswa_ids = []
     }
   },
   methods: {
@@ -101,9 +101,9 @@ export default {
       const list = this.get_siswa_payload?.data || []
 
       if (val) {
-        this.form_tugas_create.siswa_ids = list.map(item => item.siswa?.id)
+        this.form_tugas_edit.siswa_ids = list.map(item => item.siswa?.id)
       } else {
-        this.form_tugas_create.siswa_ids = []
+        this.form_tugas_edit.siswa_ids = []
       }
     },
     // async onSubmit() {
@@ -123,7 +123,7 @@ export default {
   },
   mounted() {
     this.onKelas()
-    if(this.form_tugas_create.kelas_id) this.onSiswa()
+    if(this.form_tugas_edit.kelas_id) this.onSiswa()
   }
 }
 </script>

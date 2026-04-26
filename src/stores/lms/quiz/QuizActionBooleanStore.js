@@ -69,7 +69,7 @@ function formatLaravelError(error) {
   }
 }
 
-export const useFormTugasStore = defineStore('FormTugasStore', {
+export const useQuizActionBooleanStore = defineStore('QuizActionBooleanStore', {
   state: () => ({
     init: {
       edit: true,
@@ -353,5 +353,5 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useFormTugasStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useQuizActionBooleanStore, import.meta.hot))
 }

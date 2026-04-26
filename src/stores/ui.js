@@ -6,11 +6,14 @@ export const useUiStore = defineStore('ui', {
     pageWidth: 0
   }),
   getters: {
-    getPageWidth: (state) => state.pageWidth,
+    // getPageWidth: (state) => state.pageWidth,
   },
   actions: {
     setPageWidth(width) {
       this.pageWidth = width
+    },
+    getPageWidth() {
+      return this.pageWidth
     }
   }
 })

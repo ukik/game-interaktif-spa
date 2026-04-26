@@ -4,7 +4,7 @@
       <q-card :style="is_ipad_lower_size ? '' : `width: ${getPageWidth()}px; height: calc(100vh - 0px);`">
 
         <q-toolbar class="bg-primary text-white">
-          <q-toolbar-title> Buat Tugas </q-toolbar-title>
+          <q-toolbar-title> Edit Tugas </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
@@ -78,15 +78,15 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(useFormTugasStore, ['form_tugas_create'])
+    ...mapWritableState(useFormTugasStore, ['form_tugas_edit'])
   },
   methods: {
     ...mapActions(useFormTugasStore, {
-      onCreate: 'onCreate'
+      onUpdate: 'onUpdate'
     }),
     onOpen() {
       this.dialog = true;
-      this.form_tugas_create.aktivitas = this.model+'-'+this.$route.params?.slug
+      this.form_tugas_edit.aktivitas = this.model+'-'+this.$route.params?.slug
     },
     showValidationErrors() {
       const form = this.$refs.formRef
@@ -178,13 +178,15 @@ export default {
         return
       }
 
-      console.log('onSubmit', this.onCreate())
-      this.onCreate();
+      await this.onUpdate(this.$route?.params?.slug);
 
+      // karena bagian ini dari server, harus di update setelah sukses
+      this.form_tugas_edit.status_durasi = this.diffFromNow(this.form_tugas_edit?.begin_date, this.form_tugas_edit?.end_date)
+      this.step = 1
     }
-
   },
   mounted() {
+    // if(this.form_tugas_edit?.status_durasi?.status == 'selesai') return
     // this.onOpen()
   }
 }

@@ -23,7 +23,8 @@
       <!-- <q-item-label caption>ID: {{  }} / Tugas ID: {{ item?.tugasable_id }}</q-item-label> -->
       <!-- <q-item-label lines="1" caption class="text-capitalize"> -->
         <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="'ID: ' + item?.id" />
-        <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="'ID tugas: ' + item?.tugasable_id" />
+        <!-- <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="'ID tugas: ' + item?.tugas_id" /> -->
+        <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="`ID ${item?.model}: ` + item?.tugasable_id" />
         <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="'priority: ' + item?.priority" />
         <!-- <q-badge color="teal" class="q-pa-xs" :label="'visibility: '+item?.visibility" /> -->
         <q-space/>
@@ -58,6 +59,42 @@
       </q-item>
     </q-card-actions>
 
+    <q-separator />
+    <q-item dense>
+      <q-item-section avatar>
+        <q-avatar>
+          <q-icon name="group"></q-icon>
+        </q-avatar>
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label class="text-grey-8">Siswa Mengerjakan </q-item-label>
+      </q-item-section>
+
+      <q-item-section side>
+        <q-item-label class="items-center">
+          <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_hasil_count"></q-chip>
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-separator />
+    <q-item dense>
+      <q-item-section avatar>
+        <q-avatar>
+          <q-icon name="group"></q-icon>
+        </q-avatar>
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label class="text-grey-8">Siswa Partisipasi </q-item-label>
+      </q-item-section>
+
+      <q-item-section side>
+        <q-item-label class="items-center">
+          <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_siswa_count"></q-chip>
+        </q-item-label>
+      </q-item-section>
+    </q-item>
 
     <q-separator></q-separator>
     <q-card-section horizontal>
@@ -78,13 +115,13 @@
       </q-card-section>
     </q-card-section>
 
-    <q-separator />
-    <q-card-actions class="q-pa-none">
+    <q-separator v-if="item?.tugas_hasil_count > 0" />
+    <q-card-actions v-if="item?.tugas_hasil_count > 0" class="q-pa-none">
       <div class="col-12 text-center">
         <q-chip class="q-my-sm text-body2" color="blue" text-color="white" icon="star" label="Leaderboard"></q-chip>
         <q-separator class="col-12"></q-separator>
       </div>
-      <template v-for="(item_0, index) in item?.tugas_modul_hasil">
+      <template v-for="(item_0, index) in item[leaderboard_key]">
         <q-card flat class="col-4 q-pt-sm q-pb-xs">
           <q-card-actions align="center">
             <q-avatar size="75px">
@@ -141,6 +178,6 @@
 
 <script>
 export default {
-  props: ['get_index_data', 'get_index_kelas', 'route_name'],
+  props: ['get_index_data', 'get_index_kelas', 'route_name', 'leaderboard_key'],
 };
 </script>

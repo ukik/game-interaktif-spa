@@ -1,7 +1,7 @@
 <template>
   <q-form @submit="onSubmit">
     <q-dialog v-model="dialog" persistent maximized transition-show="slide-up" transition-hide="slide-down">
-      <q-card :style="is_ipad_lower_size ? '' : `width: ${getPageWidth}px; height: calc(100vh - 50px);`">
+      <q-card :style="is_ipad_lower_size ? '' : `width: ${getPageWidth()}px; height: calc(100vh - 50px);`">
 
         <!-- <q-bar class="bg-primary">
         <q-space />

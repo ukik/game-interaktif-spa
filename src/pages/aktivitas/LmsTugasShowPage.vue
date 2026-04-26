@@ -30,6 +30,29 @@
       </q-tab-panels>
     </q-card>
 
+    <div style="height: 50px"></div>
+    <q-page-sticky position="bottom" :offset="[0, 0]">
+      <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth()}px`">
+        <q-item @click="onOpenDialog" class="col-6 text-white" :class="[is_selesai ? 'bg-red' : 'bg-primary', is_hasil ? '' : '']" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon text-color="white" name="edit_note" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Edit Tugas</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item @click="gotoHasil" class="col text-white" :class="[is_hasil ? 'bg-teal' : 'bg-red']" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon text-color="white" name="task" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Hasil Tugas</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
+    </q-page-sticky>
+
+    <FormEditTugas ref="FormEditTugas"></FormEditTugas>
 
   </q-page>
 </template>
@@ -43,10 +66,12 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 import ShowTabTugasCard from "./components/ShowTabTugasCard.vue";
 import ShowTabAktivitasCard from "./components/ShowTabAktivitasCard.vue";
 import ShowTabPesertaCard from "./components/ShowTabPesertaCard.vue";
+import FormEditTugas from "./components/FormEditTugas.vue";
+
 
 export default {
   components: {
-    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabPesertaCard
+    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabPesertaCard, FormEditTugas
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasStore(store);
@@ -75,6 +100,16 @@ export default {
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
     ...mapState(useLmsTugasStore, ["get_show_payload", "get_init_show", "get_show_kelas"]),
+    is_selesai() {
+      if(this.get_show_payload?.status_durasi?.status == 'selesai') return true
+      return false
+    },
+    is_hasil() {
+      if(this.get_show_payload?.tugas_hasil_count > 0) return true
+      return false
+    },
+
+
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
@@ -83,7 +118,37 @@ export default {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
     },
-
+    onOpenDialog() {
+      if(this.is_selesai) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Tugas Selesai',
+          caption: 'tidak bisa diedit',
+          timeout: 2000,
+          position: 'top'
+        })
+        return
+      }
+      this.$refs.FormEditTugas?.onOpen()
+    },
+    gotoHasil() {
+      if(!this.is_hasil) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Hasil Kosong',
+          caption: 'belum ada mengerjakan',
+          timeout: 2000,
+          position: 'top'
+        })
+        return
+      }
+      this.$router.push({
+        name: `lms-tugas-${this.get_show_payload?.model}-stats-show`?.toLowerCase(),
+        params: {
+          slug: this.$route?.params?.slug
+        }
+      })
+    }
   },
   async mounted() {
     // await this.$nextTick();
