@@ -1,5 +1,6 @@
 import { createPinia, mapActions, mapState } from 'pinia';
 import { boot } from 'quasar/wrappers'
+import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useUiStore } from 'src/stores/ui';
@@ -24,6 +25,55 @@ export default boot(async ({ app, ssrContext, router, store }) => {
     },
     methods: {
       ...mapActions(useUiStore, ['getPageWidth']),
+      normalizeString(str) {
+        return str
+          .replace(/&quot;/g, '"')     // HTML entity
+          .replace(/\\+"/g, '"')      // escape berlebih
+          .replace(/\\+'/g, "'")
+          .trim();
+      },
+      parseUnknown(raw) {
+        const str = this.normalizeString(raw)
+        try {
+          return JSON.parse(str);
+        } catch { }
+
+        try {
+          return new Function("return " + str)();
+        } catch { }
+
+        try {
+          // fallback normalize + JSON
+          const fixed = str
+            .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":')
+            .replace(/'/g, '"')
+            .replace(/,\s*]/g, ']');
+
+          return JSON.parse(fixed);
+        } catch { }
+
+        return null;
+      },
+      notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
+        Notify.create({
+          color: 'positive',
+          position: 'top',
+          message: message,
+          caption: caption, //'data berhasil diproses',
+          icon: 'done'
+        })
+      },
+
+      notifFailed(caption = 'data gagal diproses', message = 'Loading failed') {
+        Notify.create({
+          color: 'negative',
+          position: 'top',
+          message: message,
+          caption: caption,
+          icon: 'report_problem'
+        })
+      },
+
       getRanking(score) {
         score = parseInt(score);
 

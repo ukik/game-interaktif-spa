@@ -30,24 +30,12 @@
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
+// import shake from "src/composables/quiz/shake";
 
 import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "src/stores/useTimerStore";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
-import { myMixin } from './mixinQuiz.js'
-
 export default {
-  mixins: [myMixin],
-  async preFetch({ store, currentRoute }) {
-    const preStore = useLmsBankQuizStore(store);
-
-    const slug = currentRoute.params?.slug || '';
-
-    console.log('mixin_quiz_action_arrange', slug)
-
-    await preStore.onShow(slug);
-  },
   computed: {
     ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
   },
@@ -57,97 +45,91 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'arrange') return this.notifFailed('data gagal diproses', 'Salah Quiz')
-
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
-
-    // return;
     /* ================= DATA ================= */
-    // const list_questions = [
-    //   // he / she
-    //   { w: ["he", "plays", "football"] },
-    //   { w: ["he", "reads", "books"] },
-    //   { w: ["he", "likes", "music"] },
-    //   { w: ["he", "watches", "tv"] },
-    //   { w: ["he", "drinks", "milk"] },
-    //   { w: ["he", "eats", "rice"] },
-    //   { w: ["he", "runs", "fast"] },
-    //   { w: ["he", "writes", "letters"] },
-    //   { w: ["he", "drives", "cars"] },
-    //   { w: ["he", "opens", "door"] },
+    const list_questions = [
+      // he / she
+      { w: ["he", "plays", "football"] },
+      { w: ["he", "reads", "books"] },
+      { w: ["he", "likes", "music"] },
+      { w: ["he", "watches", "tv"] },
+      { w: ["he", "drinks", "milk"] },
+      { w: ["he", "eats", "rice"] },
+      { w: ["he", "runs", "fast"] },
+      { w: ["he", "writes", "letters"] },
+      { w: ["he", "drives", "cars"] },
+      { w: ["he", "opens", "door"] },
 
-    //   { w: ["she", "plays", "piano"] },
-    //   { w: ["she", "reads", "stories"] },
-    //   { w: ["she", "likes", "flowers"] },
-    //   { w: ["she", "watches", "movies"] },
-    //   { w: ["she", "drinks", "juice"] },
-    //   { w: ["she", "eats", "fruit"] },
-    //   { w: ["she", "runs", "daily"] },
-    //   { w: ["she", "writes", "notes"] },
-    //   { w: ["she", "draws", "pictures"] },
-    //   { w: ["she", "sings", "songs"] },
+      { w: ["she", "plays", "piano"] },
+      { w: ["she", "reads", "stories"] },
+      { w: ["she", "likes", "flowers"] },
+      { w: ["she", "watches", "movies"] },
+      { w: ["she", "drinks", "juice"] },
+      { w: ["she", "eats", "fruit"] },
+      { w: ["she", "runs", "daily"] },
+      { w: ["she", "writes", "notes"] },
+      { w: ["she", "draws", "pictures"] },
+      { w: ["she", "sings", "songs"] },
 
-    //   // I
-    //   { w: ["I", "play", "games"] },
-    //   { w: ["I", "read", "books"] },
-    //   { w: ["I", "like", "music"] },
-    //   { w: ["I", "watch", "tv"] },
-    //   { w: ["I", "drink", "coffee"] },
-    //   { w: ["I", "eat", "noodles"] },
-    //   { w: ["I", "study", "english"] },
-    //   { w: ["I", "write", "homework"] },
-    //   { w: ["I", "use", "computer"] },
-    //   { w: ["I", "learn", "daily"] },
+      // I
+      { w: ["I", "play", "games"] },
+      { w: ["I", "read", "books"] },
+      { w: ["I", "like", "music"] },
+      { w: ["I", "watch", "tv"] },
+      { w: ["I", "drink", "coffee"] },
+      { w: ["I", "eat", "noodles"] },
+      { w: ["I", "study", "english"] },
+      { w: ["I", "write", "homework"] },
+      { w: ["I", "use", "computer"] },
+      { w: ["I", "learn", "daily"] },
 
-    //   // you
-    //   { w: ["you", "play", "football"] },
-    //   { w: ["you", "read", "news"] },
-    //   { w: ["you", "like", "coffee"] },
-    //   { w: ["you", "watch", "movies"] },
-    //   { w: ["you", "drink", "tea"] },
-    //   { w: ["you", "eat", "breakfast"] },
-    //   { w: ["you", "study", "math"] },
-    //   { w: ["you", "write", "email"] },
-    //   { w: ["you", "use", "phone"] },
-    //   { w: ["you", "open", "window"] },
+      // you
+      { w: ["you", "play", "football"] },
+      { w: ["you", "read", "news"] },
+      { w: ["you", "like", "coffee"] },
+      { w: ["you", "watch", "movies"] },
+      { w: ["you", "drink", "tea"] },
+      { w: ["you", "eat", "breakfast"] },
+      { w: ["you", "study", "math"] },
+      { w: ["you", "write", "email"] },
+      { w: ["you", "use", "phone"] },
+      { w: ["you", "open", "window"] },
 
-    //   // we
-    //   { w: ["we", "play", "together"] },
-    //   { w: ["we", "read", "books"] },
-    //   { w: ["we", "like", "games"] },
-    //   { w: ["we", "watch", "tv"] },
-    //   { w: ["we", "drink", "water"] },
-    //   { w: ["we", "eat", "lunch"] },
-    //   { w: ["we", "study", "english"] },
-    //   { w: ["we", "write", "notes"] },
-    //   { w: ["we", "use", "internet"] },
-    //   { w: ["we", "learn", "fast"] },
+      // we
+      { w: ["we", "play", "together"] },
+      { w: ["we", "read", "books"] },
+      { w: ["we", "like", "games"] },
+      { w: ["we", "watch", "tv"] },
+      { w: ["we", "drink", "water"] },
+      { w: ["we", "eat", "lunch"] },
+      { w: ["we", "study", "english"] },
+      { w: ["we", "write", "notes"] },
+      { w: ["we", "use", "internet"] },
+      { w: ["we", "learn", "fast"] },
 
-    //   // they
-    //   { w: ["they", "play", "games"] },
-    //   { w: ["they", "read", "books"] },
-    //   { w: ["they", "like", "music"] },
-    //   { w: ["they", "watch", "movies"] },
-    //   { w: ["they", "drink", "juice"] },
-    //   { w: ["they", "eat", "rice"] },
-    //   { w: ["they", "study", "together"] },
-    //   { w: ["they", "write", "letters"] },
-    //   { w: ["they", "use", "computers"] },
-    //   { w: ["they", "visit", "friends"] },
+      // they
+      { w: ["they", "play", "games"] },
+      { w: ["they", "read", "books"] },
+      { w: ["they", "like", "music"] },
+      { w: ["they", "watch", "movies"] },
+      { w: ["they", "drink", "juice"] },
+      { w: ["they", "eat", "rice"] },
+      { w: ["they", "study", "together"] },
+      { w: ["they", "write", "letters"] },
+      { w: ["they", "use", "computers"] },
+      { w: ["they", "visit", "friends"] },
 
-    //   // nouns (singular)
-    //   { w: ["the", "cat", "runs"] },
-    //   { w: ["the", "dog", "barks"] },
-    //   { w: ["the", "bird", "flies"] },
-    //   { w: ["the", "baby", "cries"] },
-    //   { w: ["the", "teacher", "teaches"] },
-    //   { w: ["the", "student", "studies"] },
-    //   { w: ["the", "boy", "plays"] },
-    //   { w: ["the", "girl", "smiles"] },
-    //   { w: ["the", "sun", "shines"] },
-    //   { w: ["the", "clock", "ticks"] },
-    // ];
+      // nouns (singular)
+      { w: ["the", "cat", "runs"] },
+      { w: ["the", "dog", "barks"] },
+      { w: ["the", "bird", "flies"] },
+      { w: ["the", "baby", "cries"] },
+      { w: ["the", "teacher", "teaches"] },
+      { w: ["the", "student", "studies"] },
+      { w: ["the", "boy", "plays"] },
+      { w: ["the", "girl", "smiles"] },
+      { w: ["the", "sun", "shines"] },
+      { w: ["the", "clock", "ticks"] },
+    ];
 
     let questions = [];
     const max_questions = 10;

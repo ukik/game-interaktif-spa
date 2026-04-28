@@ -50,25 +50,13 @@
 <script>
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
-// import list_questions from "src/composables/quiz/soalEssay";
+import list_questions from "src/composables/quiz/soalEssay";
+// import shake from "src/composables/quiz/shake";
 
 import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "src/stores/useTimerStore";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
-import { myMixin } from './mixinQuiz.js'
-
 export default {
-  mixins: [myMixin],
-  async preFetch({ store, currentRoute }) {
-    const preStore = useLmsBankQuizStore(store);
-
-    const slug = currentRoute.params?.slug || '';
-
-    console.log('mixin_quiz_action_arrange', slug)
-
-    await preStore.onShow(slug);
-  },
   computed: {
     ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
   },
@@ -76,12 +64,9 @@ export default {
     ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
+    // this.resetTimer();
+
     const vm = this;
-
-    if(this.get_show_payload?.kategori != 'essay') return this.notifFailed('data gagal diproses', 'Salah Quiz')
-
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
 
     /* ================= INPUT FILTER ================= */
     const textarea = document.getElementById("answer");

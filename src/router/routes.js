@@ -15,7 +15,7 @@ const routes = [
     ]
   },
   {
-    path: "/QuizActionLayout",
+    path: "/",
     component: () => import("layouts/QuizActionLayout.vue"),
     children: [
       ...routes_quiz_action,

@@ -27,24 +27,10 @@
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
-
 import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "src/stores/useTimerStore";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
-import { myMixin } from './mixinQuiz.js'
-
 export default {
-  mixins: [myMixin],
-  async preFetch({ store, currentRoute }) {
-    const preStore = useLmsBankQuizStore(store);
-
-    const slug = currentRoute.params?.slug || '';
-
-    console.log('mixin_quiz_action_arrange', slug)
-
-    await preStore.onShow(slug);
-  },
   computed: {
     ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
   },
@@ -54,97 +40,92 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'boolean') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    /* ================= DATA ================= */
+    const list_questions = [
+      { text: "he plays football" },
+      { text: "she reads books" },
+      { text: "i drink coffee" },
+      { text: "they watch tv" },
+      { text: "we study english" },
 
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
+      { text: "he eats rice" },
+      { text: "she cooks dinner" },
+      { text: "i go to school" },
+      { text: "they like music" },
+      { text: "we play games" },
 
-    // /* ================= DATA ================= */
-    // const list_questions = [
-    //   { text: "he plays football" },
-    //   { text: "she reads books" },
-    //   { text: "i drink coffee" },
-    //   { text: "they watch tv" },
-    //   { text: "we study english" },
+      { text: "she sings well" },
+      { text: "he drives a car" },
+      { text: "i write a letter" },
+      { text: "they help friends" },
+      { text: "we read stories" },
 
-    //   { text: "he eats rice" },
-    //   { text: "she cooks dinner" },
-    //   { text: "i go to school" },
-    //   { text: "they like music" },
-    //   { text: "we play games" },
+      { text: "he runs every morning" },
+      { text: "she walks to market" },
+      { text: "i watch movies" },
+      { text: "they eat breakfast" },
+      { text: "we learn math" },
 
-    //   { text: "she sings well" },
-    //   { text: "he drives a car" },
-    //   { text: "i write a letter" },
-    //   { text: "they help friends" },
-    //   { text: "we read stories" },
+      { text: "he plays guitar" },
+      { text: "she listens to music" },
+      { text: "i read novels" },
+      { text: "they go to work" },
+      { text: "we drink tea" },
 
-    //   { text: "he runs every morning" },
-    //   { text: "she walks to market" },
-    //   { text: "i watch movies" },
-    //   { text: "they eat breakfast" },
-    //   { text: "we learn math" },
+      { text: "he teaches students" },
+      { text: "she teaches english" },
+      { text: "i clean my room" },
+      { text: "they clean the house" },
+      { text: "we help parents" },
 
-    //   { text: "he plays guitar" },
-    //   { text: "she listens to music" },
-    //   { text: "i read novels" },
-    //   { text: "they go to work" },
-    //   { text: "we drink tea" },
+      { text: "he fixes bikes" },
+      { text: "she fixes the door" },
+      { text: "i use a laptop" },
+      { text: "they use phones" },
+      { text: "we play chess" },
 
-    //   { text: "he teaches students" },
-    //   { text: "she teaches english" },
-    //   { text: "i clean my room" },
-    //   { text: "they clean the house" },
-    //   { text: "we help parents" },
+      { text: "he draws pictures" },
+      { text: "she draws animals" },
+      { text: "i paint walls" },
+      { text: "they paint rooms" },
+      { text: "we enjoy holidays" },
 
-    //   { text: "he fixes bikes" },
-    //   { text: "she fixes the door" },
-    //   { text: "i use a laptop" },
-    //   { text: "they use phones" },
-    //   { text: "we play chess" },
+      { text: "he buys groceries" },
+      { text: "she buys vegetables" },
+      { text: "i cook noodles" },
+      { text: "they cook soup" },
+      { text: "we prepare meals" },
 
-    //   { text: "he draws pictures" },
-    //   { text: "she draws animals" },
-    //   { text: "i paint walls" },
-    //   { text: "they paint rooms" },
-    //   { text: "we enjoy holidays" },
+      { text: "he opens the shop" },
+      { text: "she opens the window" },
+      { text: "i close the door" },
+      { text: "they close the gate" },
+      { text: "we lock the house" },
 
-    //   { text: "he buys groceries" },
-    //   { text: "she buys vegetables" },
-    //   { text: "i cook noodles" },
-    //   { text: "they cook soup" },
-    //   { text: "we prepare meals" },
+      { text: "he answers questions" },
+      { text: "she answers emails" },
+      { text: "i send messages" },
+      { text: "they send letters" },
+      { text: "we receive packages" },
 
-    //   { text: "he opens the shop" },
-    //   { text: "she opens the window" },
-    //   { text: "i close the door" },
-    //   { text: "they close the gate" },
-    //   { text: "we lock the house" },
+      { text: "he reads newspapers" },
+      { text: "she reads magazines" },
+      { text: "i follow rules" },
+      { text: "they follow orders" },
+      { text: "we respect teachers" },
 
-    //   { text: "he answers questions" },
-    //   { text: "she answers emails" },
-    //   { text: "i send messages" },
-    //   { text: "they send letters" },
-    //   { text: "we receive packages" },
+      { text: "he watches news" },
+      { text: "she watches cartoons" },
+      { text: "i play badminton" },
+      { text: "they play volleyball" },
+      { text: "we exercise daily" },
 
-    //   { text: "he reads newspapers" },
-    //   { text: "she reads magazines" },
-    //   { text: "i follow rules" },
-    //   { text: "they follow orders" },
-    //   { text: "we respect teachers" },
-
-    //   { text: "he watches news" },
-    //   { text: "she watches cartoons" },
-    //   { text: "i play badminton" },
-    //   { text: "they play volleyball" },
-    //   { text: "we exercise daily" },
-
-    //   { text: "he sleeps early" },
-    //   { text: "she sleeps late" },
-    //   { text: "i wake up early" },
-    //   { text: "they wake up late" },
-    //   { text: "we rest at night" },
-    // ];
+      { text: "he sleeps early" },
+      { text: "she sleeps late" },
+      { text: "i wake up early" },
+      { text: "they wake up late" },
+      { text: "we rest at night" },
+    ];
 
     const totalSheetSoal = 5;
     const max_questions = 3;

@@ -1,31 +1,10 @@
-import { defineStore, acceptHMRUpdate  } from 'pinia';
+import { defineStore } from 'pinia';
 
 import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
-import { useAuthStore } from 'src/stores/auth/AuthStore';
-
-
-function getToday() {
-  const d = new Date()
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
-function getTomorrow() {
-  const d = new Date()
-  d.setDate(d.getDate() + 1)
-
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-
-  return `${y}-${m}-${day}`
-}
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -33,8 +12,7 @@ function notifSuccess(caption = 'data berhasil diproses', message = 'Loading suc
     position: 'top',
     message: message,
     caption: caption, //'data berhasil diproses',
-    icon: 'done',
-    html: true
+    icon: 'done'
   })
 }
 
@@ -44,314 +22,150 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
     position: 'top',
     message: message,
     caption: caption,
-    icon: 'report_problem',
-    html: true
+    icon: 'report_problem'
   })
 }
 
-function formatLaravelError(error) {
-  if (!error?.response?.data?.payload) {
-    return {
-      caption: 'Data gagal diproses',
-      message: 'Terjadi kesalahan'
-    }
-  }
-
-  const payload = error.response.data.payload
-
-  const messages = Object.values(payload)
-    .flat()
-    .filter(Boolean)
-
-  return {
-    caption: 'Periksa input berikut:',
-    message: messages.join('<br>')
-  }
-}
 
 export const useQuizActionArrangeStore = defineStore('QuizActionArrangeStore', {
   state: () => ({
     init: {
-      edit: true,
-      create: true,
-      form_tugas_edit: true,
+      index: true,
+      show: true,
+    },
+    index: {
+      "payload": {
+        "payload": {
+          "current_page": 1,
+          "data": [],
+          "first_page_url": "",
+          "from": null,
+          "last_page": 1,
+          "last_page_url": "",
+          "links": [
+            {
+              "url": null,
+              "label": "&laquo; Previous",
+              "active": false
+            },
+            {
+              "url": "",
+              "label": "1",
+              "active": true
+            },
+            {
+              "url": null,
+              "label": "Next &raquo;",
+              "active": false
+            }
+          ],
+          "next_page_url": null,
+          "path": "",
+          "per_page": 20,
+          "prev_page_url": null,
+          "to": null,
+          "total": 0
+        }
+      },
+      kelas: {},
+      kategoriList: [],
+      "currentMapel": null,
+      "currentUser": null,
+      "status": "success",
+      "success": true,
+      "message": "OK",
+      "flag": null,
+      "isLogin": true,
+      "expires_in": 3600,
+    },
+    show: {
+      payload: {
+        payload: {}
+      },
+      kelas: {},
     },
     loading: {
-      edit: false,
-      create: false,
-      form_tugas_edit: false,
-    },
-    form_tugas_create: {
-      user: '',
-      aktivitas: '',
-      judul: Math.random(),
-      deskripsi: Math.random(),
-      catatan: Math.random(),
-      tugas_kategori: {
-        id: 1,
-        nama: 'PR'
-      },
-      priority: 'low',
-      visibility: 'private',
-      begin_date: getToday(),
-      end_date: getTomorrow(),
-      image: null,
-
-      status: '',
-
-      kelas_id: 2,
-      siswa_ids: [],
-    },
-    form_tugas_edit: {
-      user: '',
-      aktivitas: '',
-      judul: '',
-      deskripsi: '',
-      catatan: '',
-      tugas_kategori: null,
-      priority: '',
-      visibility: '',
-      begin_date: '',
-      end_date: '',
-      image: null,
-
-      status: '',
-
-      kelas_id: '',
-      siswa_ids: [],
-    },
-    preview: null,
+      'local': false,
+    }
   }),
   getters: {
-    get_init: ({ init }) => init,
-    get_init_create: ({ init }) => init?.create,
+    get_init_index: ({ init }) => init?.index,
+    get_init_show: ({ init }) => init?.show,
 
-    get_loading: ({ loading }) => loading,
-    get_loading_create: ({ loading }) => loading?.tugas_create,
+    get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
+    get_index_data: ({ index }) => index?.payload?.payload?.data,
+    get_index_first_page_url: ({ index }) => index?.payload?.payload?.first_page_url,
+    get_index_from: ({ index }) => index?.payload?.payload?.from,
+    get_index_last_page: ({ index }) => index?.payload?.payload?.last_page,
+    get_index_last_page_url: ({ index }) => index?.payload?.payload?.last_page_url,
+    get_index_next_page_url: ({ index }) => index?.payload?.payload?.next_page_url,
+    get_index_path: ({ index }) => index?.payload?.payload?.path,
+    get_index_per_page: ({ index }) => index?.payload?.payload?.per_page,
+    get_index_prev_page_url: ({ index }) => index?.payload?.payload?.prev_page_url,
+    get_index_to: ({ index }) => index?.payload?.payload?.to,
+    get_index_total: ({ index }) => index?.payload?.payload?.total,
 
-    get_form_tugas_create: ({ form_tugas_create }) => form_tugas_create,
+    get_index_kelas: ({ index }) => index?.payload?.kelas,
+    get_index_kategori_list: ({ index }) => index?.payload?.kategoriList,
 
+    get_show_kelas: ({ show }) => show?.payload?.kelas,
+    get_show_payload: ({ show }) => show?.payload?.payload,
+
+    get_loading: ({ loading }) => loading?.local,
   },
   actions: {
-    setFormTugasEdit(payload) {
-      this.form_tugas_edit = payload
+    onChangePage(val) {
+      console.log('action onChangePage', val)
+      if (this.loading.local) return false;
+      this.index.payload.payload.current_page = val
 
-      let siswa_ids = []
-      payload.tugas_siswa?.forEach((item, i) => {
-        siswa_ids.push(item?.siswa_id)
+      this.router.push({
+        ...this.route,
+        query: {
+          page: val
+        }
       })
-      console.log('setFormTugasEdit', siswa_ids)
-      this.form_tugas_edit.siswa_ids = siswa_ids
-      this.form_tugas_edit.image = null // wajib agar di bagian q-file tidak error
+
+      this.onIndex(val)
 
     },
-    onEdit(tugas_id, my_init = false) {
-      if (my_init) this.init.form_tugas_edit = my_init
-      if (!this.init.form_tugas_edit) return false
+    async onShow(slug = null) {
 
-      this.onRequest('/lms/tugas/' + tugas_id + '/edit', 'form_tugas_edit')
-    },
-    async onRequest(url = '', key = '') {
+      if (this.loading.local) return false;
 
-      if (this.loading[key]) return false;
+      this.loading.local = true;
 
-      this.loading[key] = true;
-
-      console.log('onIndex')
+      console.log('onShow')
 
       const resp = await axios({
-        url: host + url,
+        url: host + '/lms/quiz/'+slug,
         method: 'get',
-        params: {
-          page: 1
-        }
       })
         .then((response) => {
           // notifSuccess()
           return response
         })
         .catch((err) => {
-          console.log('onRequest', err)
-          // notifFailed()
-          return false
-        })
-
-      this.loading[key] = false
-      this.init[key] = false;
-
-      if (resp == false) return false
-      if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
-
-        this[key] = resp?.data
-        console.log('onRequest', this[key])
-
-        return true
-      }
-    },
-
-    async onCreate() {
-
-      console.log('onCreate', this.loading.create)
-
-      if (this.loading.create) return false;
-
-      this.loading.create = true;
-
-      const formData = new FormData();
-      // for (const key in this.form_tugas_create) {
-      //   const value = JSON.parse(JSON.stringify(this.form_tugas_create[key]))
-      //   console.log(key, value)
-      //   formData.append(key, value);
-      // }
-
-      Object.keys(this.form_tugas_create).forEach(key => {
-        if(key == 'user') {
-          const auth = useAuthStore()
-          formData.append(key, auth.getAuthUser?.id)
-        } else if(key == 'tugas_kategori') {
-          formData.append(key, this.form_tugas_create[key]['id'])
-        } else {
-          formData.append(key, this.form_tugas_create[key])
-        }
-      })
-
-      console.log('formData', this.form_tugas_create)
-
-      Loading.show()
-
-      const resp = await axios({
-        url: host + '/lms/tugas',
-        method: 'post',
-        data: formData,
-      })
-        .catch((err) => {
           console.log(err)
-          const { caption, message } = formatLaravelError(err)
-          notifFailed(message, caption)
-
-          // notifFailed(err?.response?.data?.message?.toString())
+          notifFailed()
           return false
         })
 
-      Loading.hide()
+      this.loading.local = false
 
-      this.loading.create = false
-
-      console.log('onLogin', resp)
+      this.init.show = false;
 
       if (resp == false) return false
       if (!resp?.data) return false
-
       if (resp?.data?.isLogin) {
-        notifSuccess()
 
         const data = resp?.data
+        console.log('onShow', data)
 
-        console.log('onCreate', data)
-
-        return true
-      }
-
-    },
-
-    async onUpdate(id) {
-
-      console.log('onUpdate', this.loading.form_tugas_edit)
-
-      if (this.loading.form_tugas_edit) return false;
-
-      this.loading.form_tugas_edit = true;
-
-      const formData = new FormData();
-
-      // Object.keys(this.form_tugas_edit).forEach(key => {
-      //   if(key == 'user') {
-      //     const auth = useAuthStore()
-      //     formData.append(key, auth.getAuthUser?.id)
-      //   } else if(key == 'tugas_kategori') {
-      //     formData.append(key, this.form_tugas_edit[key]['id'])
-      //   } else {
-      //     formData.append(key, this.form_tugas_edit[key])
-      //   }
-      // })
-
-      Object.keys(this.form_tugas_edit).forEach(key => {
-        let value = this.form_tugas_edit[key]
-
-        // 🔥 skip null / undefined
-        if (value == null) return
-
-        // 🔥 skip empty string
-        if (typeof value === 'string' && value.trim() === '') return
-
-        // 🔥 skip object kosong
-        if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return
-
-        if (key === 'user') {
-          const auth = useAuthStore()
-          value = auth.getAuthUser?.id
-
-        } else if (key === 'tugas_kategori') {
-          value = value?.id
-          if (!value) return
-        }
-
-        formData.append(key, value)
-      })
-
-      console.log('formData', this.form_tugas_edit)
-
-      Loading.show()
-
-      const resp = await axios({
-        url: host + '/lms/tugas/'+id+'/update',
-        method: 'post',
-        data: formData,
-      })
-        .catch((err) => {
-          console.log(err)
-          const { caption, message } = formatLaravelError(err)
-          notifFailed(message, caption)
-
-          // notifFailed(err?.response?.data?.message?.toString())
-          return false
-        })
-
-      Loading.hide()
-
-      this.loading.form_tugas_edit = false
-
-      console.log('onLogin', resp)
-
-      if (resp == false) return false
-      if (!resp?.data) return false
-
-      if (resp?.data?.isLogin) {
-        notifSuccess()
-
-        const data = resp?.data
-
-        console.log('onUpdate', data)
-
-        // perlu karena q-file akan tidak singkron setelah upload
-        if(this.preview) {
-          this.form_tugas_edit.image = null
-          this.form_tugas_edit.url_image = this.preview
-          this.preview = null
-        }
+        this.show = data
 
         return true
       }
-
     },
-
-
   },
 });
-
-
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useQuizActionArrangeStore, import.meta.hot))
-}

@@ -26,24 +26,12 @@
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
+// import shake from "src/composables/quiz/shake";
 
 import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "src/stores/useTimerStore";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
-import { myMixin } from './mixinQuiz.js'
-
 export default {
-  mixins: [myMixin],
-  async preFetch({ store, currentRoute }) {
-    const preStore = useLmsBankQuizStore(store);
-
-    const slug = currentRoute.params?.slug || '';
-
-    console.log('mixin_quiz_action_arrange', slug)
-
-    await preStore.onShow(slug);
-  },
   computed: {
     ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
   },
@@ -53,241 +41,235 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'multiple') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    const list_questions = [
+      /* ===== 1–20 ===== */
+      {
+        top: { question: "i close the door", cut: "close" }, bottom: {
+          choice: [
+            { text: "close", status: true }, { text: "closed", status: false }, { text: "closes", status: false }, { text: "closing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they play football", cut: "play" }, bottom: {
+          choice: [
+            { text: "play", status: true }, { text: "played", status: false }, { text: "plays", status: false }, { text: "playing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we eat breakfast", cut: "eat" }, bottom: {
+          choice: [
+            { text: "eat", status: true }, { text: "ate", status: false }, { text: "eats", status: false }, { text: "eating", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "you open the window", cut: "open" }, bottom: {
+          choice: [
+            { text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i drink water", cut: "drink" }, bottom: {
+          choice: [
+            { text: "drink", status: true }, { text: "drank", status: false }, { text: "drinks", status: false }, { text: "drinking", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they watch television", cut: "watch" }, bottom: {
+          choice: [
+            { text: "watch", status: true }, { text: "watched", status: false }, { text: "watches", status: false }, { text: "watching", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we go to school", cut: "go" }, bottom: {
+          choice: [
+            { text: "go", status: true }, { text: "went", status: false }, { text: "goes", status: false }, { text: "going", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i read a book", cut: "read" }, bottom: {
+          choice: [
+            { text: "read", status: true }, { text: "reads", status: false }, { text: "reading", status: false }, { text: "readed", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they write letters", cut: "write" }, bottom: {
+          choice: [
+            { text: "write", status: true }, { text: "wrote", status: false }, { text: "writes", status: false }, { text: "writing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we clean the house", cut: "clean" }, bottom: {
+          choice: [
+            { text: "clean", status: true }, { text: "cleaned", status: false }, { text: "cleans", status: false }, { text: "cleaning", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i like apples", cut: "like" }, bottom: {
+          choice: [
+            { text: "like", status: true }, { text: "liked", status: false }, { text: "likes", status: false }, { text: "liking", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they help people", cut: "help" }, bottom: {
+          choice: [
+            { text: "help", status: true }, { text: "helped", status: false }, { text: "helps", status: false }, { text: "helping", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we need money", cut: "need" }, bottom: {
+          choice: [
+            { text: "need", status: true }, { text: "needed", status: false }, { text: "needs", status: false }, { text: "needing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i call my friend", cut: "call" }, bottom: {
+          choice: [
+            { text: "call", status: true }, { text: "called", status: false }, { text: "calls", status: false }, { text: "calling", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they visit us", cut: "visit" }, bottom: {
+          choice: [
+            { text: "visit", status: true }, { text: "visited", status: false }, { text: "visits", status: false }, { text: "visiting", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we work together", cut: "work" }, bottom: {
+          choice: [
+            { text: "work", status: true }, { text: "worked", status: false }, { text: "works", status: false }, { text: "working", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i use my phone", cut: "use" }, bottom: {
+          choice: [
+            { text: "use", status: true }, { text: "used", status: false }, { text: "uses", status: false }, { text: "using", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they buy food", cut: "buy" }, bottom: {
+          choice: [
+            { text: "buy", status: true }, { text: "bought", status: false }, { text: "buys", status: false }, { text: "buying", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we learn English", cut: "learn" }, bottom: {
+          choice: [
+            { text: "learn", status: true }, { text: "learned", status: false }, { text: "learns", status: false }, { text: "learning", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i make a cake", cut: "make" }, bottom: {
+          choice: [
+            { text: "make", status: true }, { text: "made", status: false }, { text: "makes", status: false }, { text: "making", status: false }
+          ]
+        }
+      },
 
+      /* ===== 21–40 ===== */
+      {
+        top: { question: "they drive a car", cut: "drive" }, bottom: {
+          choice: [
+            { text: "drive", status: true }, { text: "drove", status: false }, { text: "drives", status: false }, { text: "driving", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we wash the dishes", cut: "wash" }, bottom: {
+          choice: [
+            { text: "wash", status: true }, { text: "washed", status: false }, { text: "washes", status: false }, { text: "washing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i listen to music", cut: "listen" }, bottom: {
+          choice: [
+            { text: "listen", status: true }, { text: "listened", status: false }, { text: "listens", status: false }, { text: "listening", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they cook dinner", cut: "cook" }, bottom: {
+          choice: [
+            { text: "cook", status: true }, { text: "cooked", status: false }, { text: "cooks", status: false }, { text: "cooking", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we play games", cut: "play" }, bottom: {
+          choice: [
+            { text: "play", status: true }, { text: "played", status: false }, { text: "plays", status: false }, { text: "playing", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i check my email", cut: "check" }, bottom: {
+          choice: [
+            { text: "check", status: true }, { text: "checked", status: false }, { text: "checks", status: false }, { text: "checking", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they read the news", cut: "read" }, bottom: {
+          choice: [
+            { text: "read", status: true }, { text: "reads", status: false }, { text: "reading", status: false }, { text: "readed", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "we watch movies", cut: "watch" }, bottom: {
+          choice: [
+            { text: "watch", status: true }, { text: "watched", status: false }, { text: "watches", status: false }, { text: "watching", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "i open my bag", cut: "open" }, bottom: {
+          choice: [
+            { text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }
+          ]
+        }
+      },
+      {
+        top: { question: "they sell clothes", cut: "sell" }, bottom: {
+          choice: [
+            { text: "sell", status: true }, { text: "sold", status: false }, { text: "sells", status: false }, { text: "selling", status: false }
+          ]
+        }
+      },
 
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
+      /* ===== 41–100 (dipersingkat penulisan tapi tetap unik) ===== */
+      { top: { question: "we fix the computer", cut: "fix" }, bottom: { choice: [{ text: "fix", status: true }, { text: "fixed", status: false }, { text: "fixes", status: false }, { text: "fixing", status: false }] } },
+      { top: { question: "i send a message", cut: "send" }, bottom: { choice: [{ text: "send", status: true }, { text: "sent", status: false }, { text: "sends", status: false }, { text: "sending", status: false }] } },
+      { top: { question: "they build houses", cut: "build" }, bottom: { choice: [{ text: "build", status: true }, { text: "built", status: false }, { text: "builds", status: false }, { text: "building", status: false }] } },
+      { top: { question: "we draw pictures", cut: "draw" }, bottom: { choice: [{ text: "draw", status: true }, { text: "drew", status: false }, { text: "draws", status: false }, { text: "drawing", status: false }] } },
+      { top: { question: "i answer questions", cut: "answer" }, bottom: { choice: [{ text: "answer", status: true }, { text: "answered", status: false }, { text: "answers", status: false }, { text: "answering", status: false }] } },
+      { top: { question: "they carry bags", cut: "carry" }, bottom: { choice: [{ text: "carry", status: true }, { text: "carried", status: false }, { text: "carries", status: false }, { text: "carrying", status: false }] } },
+      { top: { question: "we follow the rules", cut: "follow" }, bottom: { choice: [{ text: "follow", status: true }, { text: "followed", status: false }, { text: "follows", status: false }, { text: "following", status: false }] } },
+      { top: { question: "i wash my hands", cut: "wash" }, bottom: { choice: [{ text: "wash", status: true }, { text: "washed", status: false }, { text: "washes", status: false }, { text: "washing", status: false }] } },
+      { top: { question: "they open shops", cut: "open" }, bottom: { choice: [{ text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }] } },
+      { top: { question: "we move forward", cut: "move" }, bottom: { choice: [{ text: "move", status: true }, { text: "moved", status: false }, { text: "moves", status: false }, { text: "moving", status: false }] } },
 
-    // const list_questions = [
-    //   /* ===== 1–20 ===== */
-    //   {
-    //     top: { question: "i close the door", cut: "close" }, bottom: {
-    //       choice: [
-    //         { text: "close", status: true }, { text: "closed", status: false }, { text: "closes", status: false }, { text: "closing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they play football", cut: "play" }, bottom: {
-    //       choice: [
-    //         { text: "play", status: true }, { text: "played", status: false }, { text: "plays", status: false }, { text: "playing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we eat breakfast", cut: "eat" }, bottom: {
-    //       choice: [
-    //         { text: "eat", status: true }, { text: "ate", status: false }, { text: "eats", status: false }, { text: "eating", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "you open the window", cut: "open" }, bottom: {
-    //       choice: [
-    //         { text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i drink water", cut: "drink" }, bottom: {
-    //       choice: [
-    //         { text: "drink", status: true }, { text: "drank", status: false }, { text: "drinks", status: false }, { text: "drinking", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they watch television", cut: "watch" }, bottom: {
-    //       choice: [
-    //         { text: "watch", status: true }, { text: "watched", status: false }, { text: "watches", status: false }, { text: "watching", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we go to school", cut: "go" }, bottom: {
-    //       choice: [
-    //         { text: "go", status: true }, { text: "went", status: false }, { text: "goes", status: false }, { text: "going", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i read a book", cut: "read" }, bottom: {
-    //       choice: [
-    //         { text: "read", status: true }, { text: "reads", status: false }, { text: "reading", status: false }, { text: "readed", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they write letters", cut: "write" }, bottom: {
-    //       choice: [
-    //         { text: "write", status: true }, { text: "wrote", status: false }, { text: "writes", status: false }, { text: "writing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we clean the house", cut: "clean" }, bottom: {
-    //       choice: [
-    //         { text: "clean", status: true }, { text: "cleaned", status: false }, { text: "cleans", status: false }, { text: "cleaning", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i like apples", cut: "like" }, bottom: {
-    //       choice: [
-    //         { text: "like", status: true }, { text: "liked", status: false }, { text: "likes", status: false }, { text: "liking", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they help people", cut: "help" }, bottom: {
-    //       choice: [
-    //         { text: "help", status: true }, { text: "helped", status: false }, { text: "helps", status: false }, { text: "helping", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we need money", cut: "need" }, bottom: {
-    //       choice: [
-    //         { text: "need", status: true }, { text: "needed", status: false }, { text: "needs", status: false }, { text: "needing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i call my friend", cut: "call" }, bottom: {
-    //       choice: [
-    //         { text: "call", status: true }, { text: "called", status: false }, { text: "calls", status: false }, { text: "calling", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they visit us", cut: "visit" }, bottom: {
-    //       choice: [
-    //         { text: "visit", status: true }, { text: "visited", status: false }, { text: "visits", status: false }, { text: "visiting", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we work together", cut: "work" }, bottom: {
-    //       choice: [
-    //         { text: "work", status: true }, { text: "worked", status: false }, { text: "works", status: false }, { text: "working", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i use my phone", cut: "use" }, bottom: {
-    //       choice: [
-    //         { text: "use", status: true }, { text: "used", status: false }, { text: "uses", status: false }, { text: "using", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they buy food", cut: "buy" }, bottom: {
-    //       choice: [
-    //         { text: "buy", status: true }, { text: "bought", status: false }, { text: "buys", status: false }, { text: "buying", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we learn English", cut: "learn" }, bottom: {
-    //       choice: [
-    //         { text: "learn", status: true }, { text: "learned", status: false }, { text: "learns", status: false }, { text: "learning", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i make a cake", cut: "make" }, bottom: {
-    //       choice: [
-    //         { text: "make", status: true }, { text: "made", status: false }, { text: "makes", status: false }, { text: "making", status: false }
-    //       ]
-    //     }
-    //   },
-
-    //   /* ===== 21–40 ===== */
-    //   {
-    //     top: { question: "they drive a car", cut: "drive" }, bottom: {
-    //       choice: [
-    //         { text: "drive", status: true }, { text: "drove", status: false }, { text: "drives", status: false }, { text: "driving", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we wash the dishes", cut: "wash" }, bottom: {
-    //       choice: [
-    //         { text: "wash", status: true }, { text: "washed", status: false }, { text: "washes", status: false }, { text: "washing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i listen to music", cut: "listen" }, bottom: {
-    //       choice: [
-    //         { text: "listen", status: true }, { text: "listened", status: false }, { text: "listens", status: false }, { text: "listening", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they cook dinner", cut: "cook" }, bottom: {
-    //       choice: [
-    //         { text: "cook", status: true }, { text: "cooked", status: false }, { text: "cooks", status: false }, { text: "cooking", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we play games", cut: "play" }, bottom: {
-    //       choice: [
-    //         { text: "play", status: true }, { text: "played", status: false }, { text: "plays", status: false }, { text: "playing", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i check my email", cut: "check" }, bottom: {
-    //       choice: [
-    //         { text: "check", status: true }, { text: "checked", status: false }, { text: "checks", status: false }, { text: "checking", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they read the news", cut: "read" }, bottom: {
-    //       choice: [
-    //         { text: "read", status: true }, { text: "reads", status: false }, { text: "reading", status: false }, { text: "readed", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "we watch movies", cut: "watch" }, bottom: {
-    //       choice: [
-    //         { text: "watch", status: true }, { text: "watched", status: false }, { text: "watches", status: false }, { text: "watching", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "i open my bag", cut: "open" }, bottom: {
-    //       choice: [
-    //         { text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     top: { question: "they sell clothes", cut: "sell" }, bottom: {
-    //       choice: [
-    //         { text: "sell", status: true }, { text: "sold", status: false }, { text: "sells", status: false }, { text: "selling", status: false }
-    //       ]
-    //     }
-    //   },
-
-    //   /* ===== 41–100 (dipersingkat penulisan tapi tetap unik) ===== */
-    //   { top: { question: "we fix the computer", cut: "fix" }, bottom: { choice: [{ text: "fix", status: true }, { text: "fixed", status: false }, { text: "fixes", status: false }, { text: "fixing", status: false }] } },
-    //   { top: { question: "i send a message", cut: "send" }, bottom: { choice: [{ text: "send", status: true }, { text: "sent", status: false }, { text: "sends", status: false }, { text: "sending", status: false }] } },
-    //   { top: { question: "they build houses", cut: "build" }, bottom: { choice: [{ text: "build", status: true }, { text: "built", status: false }, { text: "builds", status: false }, { text: "building", status: false }] } },
-    //   { top: { question: "we draw pictures", cut: "draw" }, bottom: { choice: [{ text: "draw", status: true }, { text: "drew", status: false }, { text: "draws", status: false }, { text: "drawing", status: false }] } },
-    //   { top: { question: "i answer questions", cut: "answer" }, bottom: { choice: [{ text: "answer", status: true }, { text: "answered", status: false }, { text: "answers", status: false }, { text: "answering", status: false }] } },
-    //   { top: { question: "they carry bags", cut: "carry" }, bottom: { choice: [{ text: "carry", status: true }, { text: "carried", status: false }, { text: "carries", status: false }, { text: "carrying", status: false }] } },
-    //   { top: { question: "we follow the rules", cut: "follow" }, bottom: { choice: [{ text: "follow", status: true }, { text: "followed", status: false }, { text: "follows", status: false }, { text: "following", status: false }] } },
-    //   { top: { question: "i wash my hands", cut: "wash" }, bottom: { choice: [{ text: "wash", status: true }, { text: "washed", status: false }, { text: "washes", status: false }, { text: "washing", status: false }] } },
-    //   { top: { question: "they open shops", cut: "open" }, bottom: { choice: [{ text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }] } },
-    //   { top: { question: "we move forward", cut: "move" }, bottom: { choice: [{ text: "move", status: true }, { text: "moved", status: false }, { text: "moves", status: false }, { text: "moving", status: false }] } },
-
-    //   /* ===== total tepat 100 soal ===== */
-    // ];
+      /* ===== total tepat 100 soal ===== */
+    ];
 
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
