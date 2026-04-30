@@ -2,7 +2,7 @@
   <q-page id="QuizActionEssay" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -494,7 +494,7 @@ export default {
 
     /* ================= NEXT QUESTION ================= */
     function lihatHasil() {
-      window.location.href = "result.html";
+      // window.location.href = "result.html";
     }
     function nextQuestion() {
       if (current >= questions.length) {
@@ -577,9 +577,6 @@ export default {
           "<br><br><b>Keyword belum disebut:</b><br>" +
           (missedKeywords?.slice(0, 10).join(", ") || "-");
 
-        // "<br><br><b>Referensi jawaban:</b><br>" +
-        // q?.referenceAnswer;
-
         const _answer = !answer ? "-" : answer;
 
         checking +=
@@ -599,7 +596,7 @@ export default {
     }
 
     /* ================= TIMER ================= */
-    let timeDefault = 120;
+    let timeDefault = 10; //120;
     let timeLeft = timeDefault;
     let timerInterval = null;
 
@@ -667,16 +664,11 @@ export default {
 
       document.getElementById("nextBtn").style.display = "none";
 
-      // document.body.style.height = "100vh";
-
       document.getElementById("answer").style.pointerEvents = "auto";
       const btn = document.getElementById("checkAnswer").style;
       btn.pointerEvents = "auto";
       btn.display = "block";
 
-      // console.log(111);
-
-      // updateLabelScore();
       updateLife();
 
       setTimeout(() => {
@@ -688,26 +680,9 @@ export default {
 
     /* ================= SNACKBAR ================= */
     function showSnackbar(msg, type = "success", payload = {}) {
-      // const container = document.getElementById("snackbar-container");
-      // if (!container) return;
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-
-      // container.prepend(bar);
-      // bar.getBoundingClientRect(); // trigger reflow
-      // bar.classList.add("show");
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 400);
-      // }, 1600);
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
         color: "white",
         textColor: "dark",
         group: type,
@@ -765,10 +740,6 @@ export default {
 
     /* ================= LOCAL STORAGE ================= */
     function getFinalRank() {
-      // const total_point = record_quiz.total_rank_point;
-      // const total_question = record_quiz.total_question;
-
-      // let final_point = total_point / total_question;
       let final_point = totalRankPoint / current;
 
       let rank = "E";
@@ -799,7 +770,7 @@ export default {
           current_minus_score: minusThisQuestion,
           rank: rank,
           rank_point: rank_point,
-          checking: checking,
+          checking: document.getElementById("quizCard").outerHTML, // checking,
           current_rank: getFinalRank()?.rank,
           current_rank_point: getFinalRank()?.rank_point,
         };
@@ -812,7 +783,7 @@ export default {
         record_quiz.question[qIndex].current_minus_score = minusThisQuestion;
         record_quiz.question[qIndex].rank = rank;
         record_quiz.question[qIndex].rank_point = rank_point;
-        record_quiz.question[qIndex].checking = checking;
+        record_quiz.question[qIndex].checking = document.getElementById("quizCard").outerHTML; //checking;
         record_quiz.question[qIndex].current_rank = getFinalRank()?.rank;
         record_quiz.question[qIndex].current_rank_point = getFinalRank()?.rank_point;
       }
@@ -837,6 +808,7 @@ export default {
 
       // simpan persisten
       localStorage.setItem("record_quiz_essay", JSON.stringify(record_quiz));
+      vm.setForm(record_quiz)
     }
     localStorage.removeItem("record_quiz_essay");
 

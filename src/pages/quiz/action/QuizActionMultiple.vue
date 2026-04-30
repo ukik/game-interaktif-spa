@@ -2,7 +2,7 @@
   <q-page id="QuizActionMultiple" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -60,7 +60,6 @@ export default {
     const list_questions = this.get_show_payload?.konten
 
     // const list_questions = [
-    //   /* ===== 1–20 ===== */
     //   {
     //     top: { question: "i close the door", cut: "close" }, bottom: {
     //       choice: [
@@ -202,7 +201,6 @@ export default {
     //     }
     //   },
 
-    //   /* ===== 21–40 ===== */
     //   {
     //     top: { question: "they drive a car", cut: "drive" }, bottom: {
     //       choice: [
@@ -274,7 +272,6 @@ export default {
     //     }
     //   },
 
-    //   /* ===== 41–100 (dipersingkat penulisan tapi tetap unik) ===== */
     //   { top: { question: "we fix the computer", cut: "fix" }, bottom: { choice: [{ text: "fix", status: true }, { text: "fixed", status: false }, { text: "fixes", status: false }, { text: "fixing", status: false }] } },
     //   { top: { question: "i send a message", cut: "send" }, bottom: { choice: [{ text: "send", status: true }, { text: "sent", status: false }, { text: "sends", status: false }, { text: "sending", status: false }] } },
     //   { top: { question: "they build houses", cut: "build" }, bottom: { choice: [{ text: "build", status: true }, { text: "built", status: false }, { text: "builds", status: false }, { text: "building", status: false }] } },
@@ -286,7 +283,6 @@ export default {
     //   { top: { question: "they open shops", cut: "open" }, bottom: { choice: [{ text: "open", status: true }, { text: "opened", status: false }, { text: "opens", status: false }, { text: "opening", status: false }] } },
     //   { top: { question: "we move forward", cut: "move" }, bottom: { choice: [{ text: "move", status: true }, { text: "moved", status: false }, { text: "moves", status: false }, { text: "moving", status: false }] } },
 
-    //   /* ===== total tepat 100 soal ===== */
     // ];
 
     function shuffleArray(array) {
@@ -338,7 +334,10 @@ export default {
       currentSheetSoal++;
 
       if (currentSheetSoal > totalSheetSoal) {
-        window.location.href = "result.html";
+
+        clearTimeout(autoResetTimer);
+        // window.location.href = "result.html";
+
         return;
       }
 
@@ -475,7 +474,7 @@ export default {
       );
     }
 
-    let timeDefault = 30;
+    let timeDefault = 10;
     let timeLeft = timeDefault;
     let timerInterval = null;
     function startTimer(card, question) {
@@ -566,23 +565,9 @@ export default {
     }
 
     function showSnackbar(msg, type = "success", payload = {}) {
-      // const container = document.getElementById("snackbar-container");
-      // if (!container) return;
-
-      // updateLifeLabel();
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-      // container.appendChild(bar);
-
-      // bar.getBoundingClientRect();
-      // bar.classList.add("show");
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
         color: "white",
         textColor: "dark",
         group: type,
@@ -602,14 +587,6 @@ export default {
           playErrorFX('error');     // ❌ salah
         }
       }
-
-      /* 🔥 SAVE LOCALSTORAGE TETAP DI SINI */
-      // saveBySnackbar(type, payload);
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 450);
-      // }, 1800);
 
       /* === RECORD SAAT SNACKBAR MUNCUL === */
       const currentItems = questions.filter(
@@ -644,42 +621,42 @@ export default {
     }
 
 
-    function saveBySnackbar(type, payload) {
-      let data = JSON.parse(localStorage.getItem(LS_KEY));
+    // function saveBySnackbar(type, payload) {
+    //   let data = JSON.parse(localStorage.getItem(LS_KEY));
 
-      if (!data) return;
+    //   if (!data) return;
 
-      const blockId = (currentSheetSoal - 1) * max_questions + 1;
+    //   const blockId = (currentSheetSoal - 1) * max_questions + 1;
 
-      // update global
-      data.total_current_score = score;
+    //   // update global
+    //   data.total_current_score = score;
 
-      const index = data.question.findIndex(
-        q => q.current_block_question === blockId
-      );
-      if (index === -1) return;
+    //   const index = data.question.findIndex(
+    //     q => q.current_block_question === blockId
+    //   );
+    //   if (index === -1) return;
 
-      const q = data.question[index];
+    //   const q = data.question[index];
 
-      if (type === "success") {
-        data.total_time_left += timeLeft;
+    //   if (type === "success") {
+    //     data.total_time_left += timeLeft;
 
-        q.status_question = "berhasil";
-        q.time_left = timeLeft;
+    //     q.status_question = "berhasil";
+    //     q.time_left = timeLeft;
 
-        q.current_score = score; // ✅ FIX DI SINI
-      }
+    //     q.current_score = score; // ✅ FIX DI SINI
+    //   }
 
-      if (type === "error") {
-        data.total_check_trail += 1;
+    //   if (type === "error") {
+    //     data.total_check_trail += 1;
 
-        q.status_question = "salah";
-        q.check_trial += 1;
-        q.current_minus_score += payload.minus || 0;
-      }
+    //     q.status_question = "salah";
+    //     q.check_trial += 1;
+    //     q.current_minus_score += payload.minus || 0;
+    //   }
 
-      localStorage.setItem(LS_KEY, JSON.stringify(data));
-    }
+    //   localStorage.setItem(LS_KEY, JSON.stringify(data));
+    // }
 
     /* ================== LOCAL STORAGE QUIZ (DRAG) ================== */
     const LS_KEY = "record_quiz_multiple";
@@ -699,7 +676,8 @@ export default {
               current_score: 0,
               time_left: 0,
               check_trial: 0,
-              current_minus_score: 0
+              current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block++;
           }
@@ -756,6 +734,7 @@ export default {
 
         if (prev.status_question === "berhasil" && status_question === "salah") {
           localStorage.setItem(LS_KEY, JSON.stringify(data));
+          vm.setForm(data)
           return;
         }
 
@@ -766,10 +745,12 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       }
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
+      vm.setForm(data)
     }
 
 
@@ -833,7 +814,7 @@ export default {
             nextBtn.addEventListener("click", (e) => {
               console.log(e)
               e.stopPropagation();
-              window.location.href = "result.html";
+              // window.location.href = "result.html";
             });
           } else {
             nextBtn.textContent = "➡️ Next Soal";

@@ -12,6 +12,6 @@ export default function playErrorFX(type) {
   snd.volume = type === "error" ? 0.65 : 0.4;
 
   try {
-    snd.play();
+    snd?.play();
   } catch (e) { }
 }

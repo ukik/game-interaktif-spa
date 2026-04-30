@@ -3,7 +3,7 @@
     <QuizMediaComponent />
 
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <div class="question">Seret salah satu ke soal</div>
@@ -54,7 +54,7 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'boolean') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    if (this.get_show_payload?.kategori != 'boolean') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
     // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
     const list_questions = this.get_show_payload?.konten
@@ -306,7 +306,11 @@ export default {
     function cleanup() {
       ghost?.remove();
       ghost = null;
-      dragged?.classList.remove("dragging");
+
+      if (dragged) {
+        dragged.classList.remove("dragging");
+      }
+
       dragged = null;
     }
 
@@ -385,7 +389,7 @@ export default {
     const timer = document.getElementById("timer");
     const scoreEl = document.getElementById("score");
 
-    const default_timeLeft = 100;
+    const default_timeLeft = 10; //100;
     let timeLeft = default_timeLeft;
     let countdown = null;
 
@@ -397,6 +401,12 @@ export default {
         timer.textContent = "⏱️ " + timeLeft;
         if (timeLeft <= 0) {
           clearInterval(countdown);
+
+          forceCancelDrag(); // 🔥 WAJIB
+
+          finalizeUnansweredAsWrong(); // 🔥 TAMBAHAN
+
+
           score -= 50;
           updateScoreBar();
           showSnackbar("⏰ Waktu Habis! -50", "error");
@@ -406,11 +416,38 @@ export default {
     }
     startCountdown();
 
+    function forceCancelDrag() {
+      try {
+        dragged?.releasePointerCapture?.(0);
+      } catch (e) { }
+
+      ghost?.remove();
+      ghost = null;
+
+      if (dragged) {
+        dragged.classList.remove("dragging");
+      }
+
+      dragged = null;
+    }
+
     /* ================= NEXT ================= */
     function nextSoal() {
+      forceCancelDrag(); // 🔥 WAJIB
+
+      // 🔥 TAMBAHAN WAJIB
+      finalizeUnansweredAsWrong();
+
       currentSheetSoal++;
+
+      clearInterval(countdown);
+
       if (currentSheetSoal > totalSheetSoal) {
-        location.href = "result.html";
+        // location.href = "result.html";
+
+        forceCancelDrag(); // bersihin ghost biar gak nyangkut
+        removeAllDragEvents(); // 🔥 STOP TOTAL
+
         return;
       }
       timeLeft = default_timeLeft;
@@ -426,31 +463,9 @@ export default {
     /* ================= SNACKBAR ================= */
     let sb;
     function showSnackbar(msg, type = "success", duration = 1800) {
-      // const container = document.getElementById("snackbar-container");
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-
-      // // ⬇️ JANGAN SET INLINE STYLE
-      // container.appendChild(bar);
-
-      // // ⛔ PAKSA BROWSER BACA STATE AWAL (.snackbar)
-      // bar.getBoundingClientRect();
-
-      // // ⬆️ BARU TRANSISI KE .show
-      // bar.classList.add("show");
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 450);
-      // }, duration);
-
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
         color: "white",
         textColor: "dark",
         group: type,
@@ -474,12 +489,40 @@ export default {
       });
     }
 
+    function finalizeUnansweredAsWrong() {
+      let data = JSON.parse(localStorage.getItem(LS_KEY));
+
+      if (!data || !Array.isArray(data.question)) return;
+
+      data.question = data.question.map((q) => {
+        // hanya untuk sheet aktif & yang belum dijawab
+        if (
+          q.current_question === currentSheetSoal &&
+          q.status_question === null
+        ) {
+          return {
+            ...q,
+            status_question: "salah",
+            current_minus_score: -20,
+            check_trial: 1,
+            checking: document.getElementById("quizCard").outerHTML,
+          };
+        }
+        return q;
+      });
+
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      vm.setForm(data);
+    }
+
     /* ================== LOCAL STORAGE QUIZ BOOLEAN (NEW LOGIC) ================== */
     const LS_KEY = "record_quiz_boolean";
 
     let blockIndexPerSoal = {};
     /* === INIT STORAGE === */
     function initQuizRecord() {
+      localStorage.removeItem(LS_KEY);
+
       if (!localStorage.getItem(LS_KEY)) {
         const allQuestions = [];
 
@@ -489,11 +532,12 @@ export default {
             allQuestions.push({
               current_question: sheet,
               current_block_question: block, // 🔑 UNIK 1–15
-              status_question: "salah",
+              status_question: null,
               current_score: 0,
               time_left: 0,
               check_trial: 0,
               current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block++;
           }
@@ -545,8 +589,14 @@ export default {
       if (index > -1) {
         const prev = data.question[index];
 
-        if (prev.status_question === "berhasil" && status_question === "salah") {
-          localStorage.setItem(LS_KEY, JSON.stringify(data));
+        // if (prev.status_question === "berhasil" && status_question === "salah") {
+        //   localStorage.setItem(LS_KEY, JSON.stringify(data));
+        //   vm.setForm(data)
+        //   return;
+        // }
+
+        // 🔒 kalau sudah pernah dijawab → jangan timpa
+        if (prev.status_question !== null) {
           return;
         }
 
@@ -557,11 +607,78 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       }
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
+      vm.setForm(data)
     }
+
+
+    function bindDrag(el) {
+
+      const onDown = (e) => {
+        activeBlockId = (currentSheetSoal - 1) * max_questions + Number(el.dataset.index);
+
+        if (el.classList.contains("matched")) return;
+
+        const card = el.closest(".tf-card");
+        if (card && card.classList.contains("locked")) return;
+
+        dragged = el;
+        el.classList.add("dragging");
+
+        ghost = el.cloneNode(true);
+        ghost.className = "drag-ghost";
+        document.body.appendChild(ghost);
+        moveGhost(e);
+        el.setPointerCapture(e.pointerId);
+      };
+
+      const onMove = (e) => {
+        ghost && moveGhost(e);
+      };
+
+      const onUp = (e) => {
+        if (!ghost) return;
+
+        ghost.style.display = "none";
+        const t = document.elementFromPoint(e.clientX, e.clientY);
+        ghost.style.display = "";
+
+        if (
+          t &&
+          t.classList.contains("tf-question") &&
+          dragged.dataset.type === "a" &&
+          t.dataset.index === dragged.dataset.index
+        ) {
+          checkMatch(dragged, t);
+        }
+
+        cleanup();
+      };
+
+      el.addEventListener("pointerdown", onDown);
+      el.addEventListener("pointermove", onMove);
+      el.addEventListener("pointerup", onUp);
+
+      // 🔥 simpan handler
+      el._dragHandlers = { onDown, onMove, onUp };
+    }
+
+    function removeAllDragEvents() {
+      const all = document.querySelectorAll(".block");
+
+      all.forEach(el => {
+        if (!el._dragHandlers) return;
+
+        el.removeEventListener("pointerdown", el._dragHandlers.onDown);
+        el.removeEventListener("pointermove", el._dragHandlers.onMove);
+        el.removeEventListener("pointerup", el._dragHandlers.onUp);
+      });
+    }
+
   },
 };
 </script>

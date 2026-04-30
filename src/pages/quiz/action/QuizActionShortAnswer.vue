@@ -2,7 +2,7 @@
   <q-page id="QuizActionShortAnswer" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -205,7 +205,7 @@ export default {
     /* ================= TIMER ================= */
     let life = 3;
 
-    let timeDefault = 90;
+    let timeDefault = 15;
     let timeLeft = timeDefault;
     let timerInterval = null;
 
@@ -247,7 +247,8 @@ export default {
           if (btnNext) btnNext.style.display = "block";
 
           if (life <= 0) {
-            setTimeout(() => window.location.href = "result.html", 1200);
+            clearInterval(timerInterval);
+            // setTimeout(() => window.location.href = "result.html", 1200);
           } else {
             // AutoReset();
           }
@@ -449,7 +450,8 @@ export default {
       } else {
         nextBtn.textContent = "📊 Lihat Result";
         nextBtn.onclick = () => {
-          window.location.href = "result.html";
+          clearInterval(timerInterval)
+          // window.location.href = "result.html";
         };
       }
 
@@ -491,7 +493,8 @@ export default {
         currentSheetSoal++;
 
         if (currentSheetSoal > totalSheetSoal) {
-          window.location.href = "result.html";
+          clearInterval(timerInterval)
+          // window.location.href = "result.html";
         } else {
           init();
         }
@@ -553,7 +556,8 @@ export default {
               current_score: 0,
               time_left: timeDefault,
               check_trial: 0,
-              current_minus_score: 0
+              current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block++;
           }
@@ -612,7 +616,8 @@ export default {
           current_score,
           time_left,
           check_trial: prev.check_trial + check_trial,
-          current_minus_score: -(prev.current_minus_score + current_minus_score)
+          current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
 
       } else {
@@ -624,31 +629,21 @@ export default {
           current_score,
           time_left,
           check_trial,
-          current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score
+          current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+          checking: document.getElementById("quizCard").outerHTML,
         });
       }
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
+      vm.setForm(data)
     }
 
 
     /* ================== TAMBAHAN DI SHOWSNACKBAR ================== */
     function showSnackbar(msg, type = "success", payload = {}) {
-      // const container = document.getElementById("snackbar-container");
-      // if (!container) return;
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-
-      // container.prepend(bar);
-      // bar.getBoundingClientRect(); // trigger reflow
-      // bar.classList.add("show");
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
         color: "white",
         textColor: "dark",
         group: type,
@@ -667,9 +662,6 @@ export default {
 
         score += 100;       // ⬅️ kurangi score global
 
-        // setTimeout(() => {
-        //     AutoReset();
-        // }, 1200);
         AutoReset();
 
         confetti();
@@ -716,12 +708,6 @@ export default {
           current_minus_score: type === "success" ? 0 : Math.abs(payload.scoreChange)
         });
       }
-
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 400);
-      // }, 1600);
     }
 
   }

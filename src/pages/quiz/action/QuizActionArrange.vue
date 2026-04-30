@@ -2,7 +2,7 @@
   <q-page id="QuizActionArrange" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -150,11 +150,11 @@ export default {
     // ];
 
     let questions = [];
-    const max_questions = 10;
+    const max_questions = 9; // karena index dimulai dari 0-9 = 10
 
     const shuffled = [...list_questions].sort(() => Math.random() - 0.5);
 
-    for (let i = 0; i < max_questions; i++) {
+    for (let i = 0; i <= max_questions; i++) {
       questions.push(shuffled[i]);
     }
 
@@ -162,7 +162,7 @@ export default {
 
     const totalSoal = questions.length;
     let current = 0,
-      currentSoal = 1,
+      currentSoal = 0,
       score = 0;
     let dragged = null,
       ghost = null,
@@ -181,7 +181,7 @@ export default {
     };
 
     /* ================= TIMER ================= */
-    const default_timer = 60;
+    const default_timer = 10;
     let time = default_timer,
       timerInterval = null;
     const timerEl = document.getElementById("timer");
@@ -203,7 +203,7 @@ export default {
 
     /* ================= ELEMENT ================= */
     const answerEl = document.getElementById("answer");
-    const questionEl = document.getElementById("question");
+    // const questionEl = document.getElementById("question");
     const scoreEl = document.getElementById("score");
     const btnCheck = document.getElementById("btnCheck");
     const btnReset = document.getElementById("btnReset");
@@ -257,13 +257,8 @@ export default {
       el.addEventListener("pointercancel", cleanup);
     }
     function moveGhost(e) {
-      //ghost.style.left=e.clientX+"px";
-      //ghost.style.top=e.clientY+"px";
 
       const isTouch = e.pointerType === "touch";
-
-      //  const offsetY = isTouch ? 60 : 0; // 👆 naik 60px di mobile
-      //  const offsetX = isTouch ? 0 : 0;
 
       const offsetY = isTouch ? 50 : 0;
       const offsetX = isTouch ? -10 : 0;
@@ -287,7 +282,7 @@ export default {
 
     /* ================= GAME ================= */
     function updateScore() {
-      scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${currentSoal}/${totalSoal}`;
+      scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${currentSoal + 1}/${totalSoal}`;
     }
 
     function recordQuizEvent(status, minusScore) {
@@ -302,6 +297,7 @@ export default {
           time_left: time,
           check_trial: checkTrial,
           current_minus_score: minusScore,
+          checking: document.getElementById("quizCard").outerHTML,
         };
       } else {
         // update nilai soal yang sama (jika user salah lagi)
@@ -310,6 +306,7 @@ export default {
         record_quiz.question[qIndex].time_left = time;
         record_quiz.question[qIndex].check_trial = checkTrial;
         record_quiz.question[qIndex].current_minus_score = minusScore;
+        record_quiz.question[qIndex].checking = document.getElementById("quizCard").outerHTML;
       }
 
       // total summary
@@ -323,7 +320,9 @@ export default {
       });
 
       // simpan persisten
-      localStorage.setItem("record_quiz", JSON.stringify(record_quiz));
+      localStorage.setItem("record_quiz_arrange", JSON.stringify(record_quiz));
+
+      vm.setForm(record_quiz)
     }
 
     function resetAnswerOnly() {
@@ -343,13 +342,15 @@ export default {
     }
 
     function loadQuestion() {
-      if (currentSoal > totalSoal) {
+      if (currentSoal >= totalSoal) {
         // soal terakhir sudah selesai, tampilkan snackbar khusus
         showSnackbar("🎉 Quiz Selesai!", "success", 2000);
 
         // beri delay sebelum redirect supaya snackbar terlihat
+        clearInterval(timerInterval); // ⛔ stop timer langsung
+
         setTimeout(() => {
-          window.location.href = "result.html";
+          // window.location.href = "result.html";
         }, 2000);
 
         return;
@@ -430,6 +431,8 @@ export default {
     }
 
     /* ===== CHECK ANSWER ===== */
+    var total_question_true = 0;
+    var total_question_false = 0;
     function checkAnswer() {
       if (!questions[current]) return;
 
@@ -445,6 +448,8 @@ export default {
 
         showSnackbar("✔️ Jawaban Benar! +100", "success");
 
+        total_question_true++;
+
         setTimeout(loadQuestion, 700);
       } else {
         score -= 20;
@@ -453,6 +458,8 @@ export default {
         playErrorFX("error");
 
         showSnackbar("❌ Jawaban Salah! -20", "error");
+
+        total_question_false++;
       }
     }
 
@@ -466,31 +473,16 @@ export default {
     }
 
     /* ================= INIT ================= */
-    localStorage.removeItem("record_quiz");
+    localStorage.removeItem("record_quiz_arrange");
     updateScore();
     loadQuestion();
 
     /* ===== SNACKBAR ===== */
     let sb;
     function showSnackbar(msg, type = "success", duration = 1800) {
-      // const container = document.getElementById("snackbar-container");
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-
-      // container.appendChild(bar);
-
-      // // force browser baca state awal (.snackbar)
-      // bar.getBoundingClientRect();
-
-      // // transisi ke .show
-      // bar.classList.add("show");
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
         color: "white",
         textColor: "dark",
         group: type,
@@ -498,11 +490,6 @@ export default {
 
       // ✅ Simpan record hanya saat snackbar muncul
       recordQuizEvent(type === "success" ? "benar" : "salah", minusThisQuestion);
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 450);
-      // }, duration);
     }
 
     document.getElementById("btnCheck").addEventListener("click", safeCheck);

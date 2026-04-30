@@ -2,7 +2,7 @@
   <q-page id="QuizActionMatch" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card class="quiz-card">
+      <q-card id="quizCard" class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -15,7 +15,7 @@
         </q-card-actions>
 
         <q-card-section>
-          <div class="match-grid">
+          <div id="blockQ" class="match-grid">
             <div class="quiz-col" id="colQ">
               <!-- <h4>SOAL</h4> -->
             </div>
@@ -177,8 +177,10 @@ export default {
     /* ================= INIT ================= */
     function init() {
       matched = 0;
-      // document.getElementById("colQ").innerHTML = "<h4>SOAL</h4>";
-      // document.getElementById("colA").innerHTML = "<h4>JAWABAN</h4>";
+
+      // 🧹 HAPUS BLOCK LAMA DULU
+      document.getElementById("colQ").innerHTML = "";
+      document.getElementById("colA").innerHTML = "";
 
       // 🔑 FILTER HANYA SOAL UNTUK SHEET AKTIF
       const currentQuestions = questions.filter(
@@ -235,9 +237,19 @@ export default {
         const t = document.elementFromPoint(e.clientX, e.clientY);
         ghost.style.display = ""; // ⬅️ BALIKKAN
 
-        if (t && t.classList.contains("block") && t !== dragged) {
+        // if (t && t.classList.contains("block") && t !== dragged) {
+        //   checkMatch(dragged, t);
+        // }
+
+        if (
+          t &&
+          t.classList.contains("block") &&
+          t !== dragged &&
+          !t.classList.contains("matched") // ⬅️ BLOCK TARGET YANG SUDAH BENAR
+        ) {
           checkMatch(dragged, t);
         }
+
         cleanup();
       });
     }
@@ -260,6 +272,12 @@ export default {
 
     /* ================= LOGIC ================= */
     function checkMatch(a, b) {
+
+      // 🔒 Jangan proses kalau salah satu sudah matched
+      if (a.classList.contains("matched") || b.classList.contains("matched")) {
+        return;
+      }
+
       if (a.dataset.match === b.textContent) {
         a.classList.add("matched");
         b.classList.add("matched");
@@ -293,25 +311,6 @@ export default {
 
     /* ================= SNACKBAR ================= */
     function showSnackbar(msg, type = "success", duration = 1800) {
-      // const container = document.getElementById("snackbar-container");
-
-      // const bar = document.createElement("div");
-      // bar.className = `snackbar ${type}`;
-      // bar.textContent = msg;
-
-      // // ⬇️ JANGAN SET INLINE STYLE
-      // container?.appendChild(bar);
-
-      // // ⛔ PAKSA BROWSER BACA STATE AWAL (.snackbar)
-      // bar.getBoundingClientRect();
-
-      // // ⬆️ BARU TRANSISI KE .show
-      // bar.classList.add("show");
-
-      // setTimeout(() => {
-      //   bar.classList.remove("show");
-      //   setTimeout(() => bar.remove(), 450);
-      // }, duration);
 
       vm.$q.notify({
         message: "Jawaban: " + msg,
@@ -341,7 +340,7 @@ export default {
     }
 
     /* ================== TAMBAHAN: COUNTDOWN 120 DETIK ================== */
-    const default_timeLeft = 180;
+    const default_timeLeft = 30;
     let timeLeft = default_timeLeft;
     const timerEl = document.getElementById("timer");
 
@@ -370,16 +369,52 @@ export default {
 
           showSnackbar("⏰ Waktu Habis! -50", "error");
 
+
+          // ⬅️ AUTO NILAI YANG BELUM MATCH = SALAH
+          const currentItems = questions.filter(
+            (q) => q.current_question === currentSheetSoal
+          );
+
+          currentItems.forEach((item) => {
+            const dataLS = JSON.parse(localStorage.getItem(LS_KEY));
+
+            const existing = JSON.parse(localStorage.getItem(LS_KEY)).question
+              .find(q => q.current_block_question === item.id);
+
+            // 🔒 JANGAN TIMPA kalau sudah berhasil
+            if (existing && existing.status_question === "berhasil") return;
+
+
+            // ⬅️ kalau belum pernah dijawab / belum berhasil
+            if (!existing || existing.status_question !== "berhasil") {
+              recordQuizEvent({
+                current_question: currentSheetSoal,
+                current_block_question: item.id,
+                status_question: "salah",
+                current_score: score,
+                time_left: 0,
+                check_trial: 0,
+                current_minus_score: 0,
+              });
+            }
+          });
+
           setTimeout(nextSoal, 900);
         }
       }, 1000);
     }
     function nextSoal() {
       currentSheetSoal++;
-      blockIndexPerSoal[currentSheetSoal] = 0;
+      // blockIndexPerSoal[currentSheetSoal] = 0;
 
       if (currentSheetSoal > totalSheetSoal) {
-        window.location.href = "result.html";
+
+        clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
+
+        // 🔒 freeze seluruh area quiz
+        document.getElementById('quizCard').style.pointerEvents = 'none';
+
+        // window.location.href = "result.html";
         return;
       }
 
@@ -405,6 +440,7 @@ export default {
 
     /* ================== LOCAL STORAGE QUIZ MATCHING (NEW LOGIC) ================== */
     const LS_KEY = "record_quiz_matching";
+    localStorage.removeItem(LS_KEY);
 
     let blockIndexPerSoal = {};
     /* === INIT STORAGE === */
@@ -418,6 +454,7 @@ export default {
             total_check_trail: 0,
             total_current_score: 0,
             question: [],
+            checking: '', //
           })
         );
       }
@@ -451,8 +488,8 @@ export default {
       if (index > -1) {
         const prev = data.question[index];
 
-        // 🔒 JANGAN TURUNKAN STATUS DARI BERHASIL KE SALAH
-        if (prev.status_question === "berhasil" && status_question === "salah") {
+        // 🔒 LOCK kalau sudah berhasil
+        if (prev.status_question === "berhasil") {
           return;
         }
 
@@ -464,6 +501,7 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       } else {
         /* === INSERT BARU === */
@@ -475,16 +513,22 @@ export default {
           time_left,
           check_trial,
           current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+          checking: document.getElementById("quizCard").outerHTML,
         });
       }
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
+      vm.setForm(data)
     }
   },
 };
 </script>
 
 <style lang="scss">
+.block.matched {
+  pointer-events: none; /* ⬅️ AUTO DISABLE INTERAKSI */
+}
+
 .block.dragging {
   opacity: 0.8;
   transform: scale(1.15);

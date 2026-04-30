@@ -6,6 +6,6 @@ export default function playTrueFX() {
   snd.volume = 0.7;
   confetti();
   try {
-    snd.play();
+    snd?.play();
   } catch (e) { }
 }
