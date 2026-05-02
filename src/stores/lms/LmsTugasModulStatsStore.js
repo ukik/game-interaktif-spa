@@ -32,6 +32,7 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     init: {
       index: true,
       show: true,
+      report: true,
     },
     index: {
       "payload": {
@@ -92,7 +93,13 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
       },
       kelas: {},
     },
+    report: {
+      payload: {
+        payload: {},
+      },
+    },
     loading: {
+      report: false,
       'local': false,
     }
   }),
@@ -125,6 +132,8 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     get_show_payload: ({ show }) => show?.payload?.payload,
     get_show_top: ({ show }) => show?.payload?.top?.data,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
+
+    get_report: ({ report }) => report?.payload?.payload,
 
     get_loading: ({ loading }) => loading?.local,
   },
@@ -223,5 +232,46 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
         return true
       }
     },
+
+    async onReport(tugas_id = null) {
+      this.onRequest('/lms/tugas-modul-stats/' + tugas_id + '/report/' + useAuthStore().getAuthUser?.id, 'report')
+    },
+    async onRequest(url = '', key = '') {
+
+      if (this.loading[key]) return false;
+      this.loading[key] = true;
+      console.log('onIndex')
+
+      const resp = await axios({
+        url: host + url,
+        method: 'get',
+        params: {
+          page: 1
+        }
+      })
+        .then((response) => {
+          // notifSuccess()
+          return response
+        })
+        .catch((err) => {
+          console.log('onRequest', err)
+          // notifFailed()
+          return false
+        })
+
+      this.loading[key] = false
+      this.init[key] = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+
+        this[key] = resp?.data
+        console.log('onRequest', this[key])
+
+        return true
+      }
+    },
+
   },
 });

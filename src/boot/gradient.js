@@ -70,6 +70,7 @@ export default boot(({ app }) => {
 
         ];
 
+        // "linear-gradient(135deg,#22d3ee,#38bdf8)",
         return gradients[Math.floor(Math.random() * gradients.length)];
 
       },

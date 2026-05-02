@@ -16,7 +16,7 @@ const routes_quiz_action = [
     name: 'quiz_action_boolean',
     component: () => import('pages/quiz/action/QuizActionBoolean.vue'),
     meta: {
-      logged: false,
+      logged: true,
       title: 'QuizActionBoolean - Yuvoria GAME',
       meta: [
         { name: 'description', content: 'QuizActionBoolean - Yuvoria GAME' }
@@ -28,7 +28,7 @@ const routes_quiz_action = [
     name: 'quiz_action_essay',
     component: () => import('pages/quiz/action/QuizActionEssay.vue'),
     meta: {
-      logged: false,
+      logged: true,
       title: 'QuizActionEssay - Yuvoria GAME',
       meta: [
         { name: 'description', content: 'QuizActionEssay - Yuvoria GAME' }
@@ -40,7 +40,7 @@ const routes_quiz_action = [
     name: 'quiz_action_match',
     component: () => import('pages/quiz/action/QuizActionMatch.vue'),
     meta: {
-      logged: false,
+      logged: true,
       title: 'QuizActionMatch - Yuvoria GAME',
       meta: [
         { name: 'description', content: 'QuizActionMatch - Yuvoria GAME' }
@@ -52,7 +52,7 @@ const routes_quiz_action = [
     name: 'quiz_action_multiple',
     component: () => import('pages/quiz/action/QuizActionMultiple.vue'),
     meta: {
-      logged: false,
+      logged: true,
       title: 'QuizActionMultiple - Yuvoria GAME',
       meta: [
         { name: 'description', content: 'QuizActionMultiple - Yuvoria GAME' }
@@ -64,7 +64,7 @@ const routes_quiz_action = [
     name: 'quiz_action_short_answer',
     component: () => import('pages/quiz/action/QuizActionShortAnswer.vue'),
     meta: {
-      logged: false,
+      logged: true,
       title: 'QuizActionShortAnswer - Yuvoria GAME',
       meta: [
         { name: 'description', content: 'QuizActionShortAnswer - Yuvoria GAME' }

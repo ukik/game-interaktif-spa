@@ -6,6 +6,8 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useFormTugasStore } from './form/FormTugasStore';
+import { useLmsBankQuizStore } from './LmsBankQuizStore';
+import { useLmsBankModulStore } from './LmsBankModulStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -86,7 +88,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       },
       kelas: {},
     },
-    persert: {
+    aktivitas: {
       payload: {
         payload: {}
       },
@@ -178,6 +180,48 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         console.log('onIndex', data)
 
         this.index = data
+
+        return true
+      }
+    },
+    // dipakai oleh Quiz saat dimainkan: QuizActionArrange, QuizActionBoolean, QuizActionEssay, QuizActionMatch, QuizActionMultiple, QuizActionShortAnswer
+    async onAktivitas(slug = null) {
+
+      if (this.loading.local) return false;
+      this.loading.local = true;
+      console.log('onAktivitas')
+
+      const resp = await axios({
+        url: host + '/lms/tugas/'+slug+'/aktivitas',
+        method: 'get',
+      })
+        .catch((err) => {
+          console.log(err)
+          notifFailed()
+          return false
+        })
+
+      this.loading.local = false
+      // this.init.show = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+
+        const data = resp?.data
+
+        switch (data?.payload?.payload?.model?.toLowerCase()) {
+          case 'quiz':
+            useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
+            break;
+          case 'modul':
+            useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
+            break;
+        }
+
+        this.aktivitas = data
+        // useLmsBankQuizStore(onSetShow)
+        // console.log('onAktivitas', data?.payload?.payload?.model?.toLowerCase())
 
         return true
       }

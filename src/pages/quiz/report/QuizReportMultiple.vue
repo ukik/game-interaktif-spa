@@ -66,7 +66,15 @@
 
 <script>
 
+import { useLmsTugasQuizStatsStore } from 'src/stores/lms/LmsTugasQuizStatsStore.js';
+import { myMixin } from './mixinReport.js'
+
 export default {
+  mixins: [myMixin],
+  async preFetch({ store, currentRoute }) {
+    const slug = currentRoute.params?.slug || ''; // tugas_id
+    await useLmsTugasQuizStatsStore(store).onReport(slug)
+  },
   mounted() {
     const data = JSON.parse(localStorage.getItem("record_quiz_multiple"));
     console.log(data)

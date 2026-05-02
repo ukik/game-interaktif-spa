@@ -30,28 +30,33 @@ import confetti from "src/composables/quiz/confetti";
 
 import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
     QuizActionBeforeRouteLeave(next)
   },
-  created() {
-    this.dummyOnCreate('shortanswer')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
     const vm = this;
@@ -160,8 +165,6 @@ export default {
     //   { top: { question: "Dia (Laki-laki) mengangguk" }, bottom: { answers: ["he nods", "he bows", "he assents"] } },
     //   { top: { question: "Kami menunduk" }, bottom: { answers: ["we bow", "we lean", "we bend"] } }
     // ];
-
-    let checkingHTML = [];
 
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -445,14 +448,11 @@ export default {
           init();
         };
       } else {
-        nextBtn.className = "hide";
-
-        // nextBtn.textContent = "📊 Lihat Result";
-        // nextBtn.onclick = () => {
-        //   clearInterval(timerInterval)
-        //   // window.location.href = "result.html";
-        // };
-        return
+        nextBtn.textContent = "📊 Lihat Result";
+        nextBtn.onclick = () => {
+          clearInterval(timerInterval)
+          // window.location.href = "result.html";
+        };
       }
 
       choices.appendChild(nextBtn);
@@ -484,7 +484,6 @@ export default {
     let autoResetTimeout = null; // GLOBAL, di luar fungsi
 
     function AutoReset() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
 
       stopTimer();
 
@@ -494,15 +493,9 @@ export default {
         currentSheetSoal++;
 
         if (currentSheetSoal > totalSheetSoal) {
-
-          console.log('GAME OVER')
-          vm.onCreate('shortanswer')
-
           clearInterval(timerInterval)
-
           // window.location.href = "result.html";
         } else {
-
           init();
         }
 
@@ -564,6 +557,7 @@ export default {
               time_left: timeDefault,
               check_trial: 0,
               current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block_quiz++;
           }
@@ -623,6 +617,7 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
 
       } else {
@@ -635,10 +630,9 @@ export default {
           time_left,
           check_trial,
           current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+          checking: document.getElementById("quizCard").outerHTML,
         });
       }
-
-      data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       vm.setForm(data)

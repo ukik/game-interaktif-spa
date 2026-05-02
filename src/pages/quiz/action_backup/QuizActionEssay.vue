@@ -52,23 +52,28 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 // import list_questions from "src/composables/quiz/soalEssay";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
-  created() {
-    this.dummyOnCreate('essay')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
     const vm = this;
@@ -100,8 +105,6 @@ export default {
     });
 
     /* ================= SOAL ================= */
-
-    let checkingHTML = [];
 
     let questions = [];
     const max_questions = 5;
@@ -494,21 +497,11 @@ export default {
       // window.location.href = "result.html";
     }
     function nextQuestion() {
-        checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
-      if (current >= totalSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('essay')
-        // GAME OVER
-
+      if (current >= questions.length) {
         // semua soal selesai
         document.getElementById("nextBtn").style.display = "none";
-
-        // document.getElementById("btnResult").style.display = "inline-block";
-
+        document.getElementById("btnResult").style.display = "inline-block";
       } else {
-
         loadQuestion();
       }
     }
@@ -640,10 +633,10 @@ export default {
     /* ================= LOAD ================= */
 
     function loadQuestion() {
-      // if (current >= totalSoal) {
-      //   finishQuiz();
-      //   return;
-      // }
+      if (current >= questions.length) {
+        finishQuiz();
+        return;
+      }
 
       const q = questions[current];
       if (!q) return;
@@ -777,6 +770,7 @@ export default {
           current_minus_score: minusThisQuestion,
           rank: rank,
           rank_point: rank_point,
+          checking: document.getElementById("quizCard").outerHTML, // checking,
           current_rank: getFinalRank()?.rank,
           current_rank_point: getFinalRank()?.rank_point,
         };
@@ -789,11 +783,10 @@ export default {
         record_quiz.question[qIndex].current_minus_score = minusThisQuestion;
         record_quiz.question[qIndex].rank = rank;
         record_quiz.question[qIndex].rank_point = rank_point;
+        record_quiz.question[qIndex].checking = document.getElementById("quizCard").outerHTML; //checking;
         record_quiz.question[qIndex].current_rank = getFinalRank()?.rank;
         record_quiz.question[qIndex].current_rank_point = getFinalRank()?.rank_point;
       }
-
-      record_quiz.checking = checkingHTML;
 
       // total summary
       record_quiz.total_time_left = 0;

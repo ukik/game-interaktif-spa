@@ -5,6 +5,27 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useAuthStore } from 'src/stores/auth/AuthStore';
+
+function formatLaravelError(error) {
+  if (!error?.response?.data?.payload) {
+    return {
+      caption: 'Data gagal diproses',
+      message: 'Terjadi kesalahan'
+    }
+  }
+
+  const payload = error.response.data.payload
+
+  const messages = Object.values(payload)
+    .flat()
+    .filter(Boolean)
+
+  return {
+    caption: 'Periksa input berikut:',
+    message: messages.join('<br>')
+  }
+}
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -28,6 +49,9 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useQuizStore = defineStore('QuizStore', {
   state: () => ({
+    local: {
+      dialog_result: false,
+    },
     init: {
       show: true,
       form: true,
@@ -64,6 +88,8 @@ export const useQuizStore = defineStore('QuizStore', {
     }
   }),
   getters: {
+    get_dialog_result: ({ local }) => local?.dialog_result,
+
     get_init_form: ({ init }) => init?.form,
     get_init_show: ({ init }) => init?.show,
 
@@ -86,10 +112,10 @@ export const useQuizStore = defineStore('QuizStore', {
         total_question_false: 0,
 
         total_rank_point: val?.total_rank_point ?? 0,      // ESSAY
-        final_rank: val?.final_rank ?? '',                  // ESSAY
+        final_rank: val?.final_rank ?? 'E',                  // ESSAY
         final_rank_point: val?.final_rank_point ?? 0,      // ESSAY
 
-        json: val
+        json: JSON.stringify(val)
       }
 
       val?.question.forEach(element => {
@@ -100,41 +126,35 @@ export const useQuizStore = defineStore('QuizStore', {
         }
       });
 
-      console.log(val?.question?.length)
-
       this.form = temp
+      console.log('setForm', this.form)
 
-
-      console.log('setForm', val, this.form)
     },
-    async onCreate() {
+    async onCreate(tipe_aktivitas, tugas_id) {
 
-      console.log('onCreate', this.loading.create)
+      console.log('onCreate', this.loading.form)
 
-      if (this.loading.create) return false;
+      if (this.loading.form) return false;
 
-      this.loading.create = true;
+      this.loading.form = true;
 
       const formData = new FormData();
 
-
-      Object.keys(this.form_tugas_create).forEach(key => {
-        if(key == 'user') {
-          const auth = useAuthStore()
-          formData.append(key, auth.getAuthUser?.id)
-        } else if(key == 'tugas_kategori') {
-          formData.append(key, this.form_tugas_create[key]['id'])
-        } else {
-          formData.append(key, this.form_tugas_create[key])
-        }
+      Object.keys(this.form).forEach(key => {
+        formData.append(key, this.form[key])
       })
 
-      console.log('formData', this.form_tugas_create)
+      const auth = useAuthStore()
+      formData.append('siswa_id', auth.getAuthUser?.id)
+
+      formData.append('tugas_id', tugas_id)
+
+      console.log('formData', host + '/lms/tugas-quiz-hasil', this.form)
 
       Loading.show()
 
       const resp = await axios({
-        url: host + '/lms/tugas',
+        url: host + '/lms/tugas-quiz-hasil',
         method: 'post',
         data: formData,
       })
@@ -149,7 +169,7 @@ export const useQuizStore = defineStore('QuizStore', {
 
       Loading.hide()
 
-      this.loading.create = false
+      this.loading.form = false
 
       console.log('onLogin', resp)
 
@@ -159,9 +179,39 @@ export const useQuizStore = defineStore('QuizStore', {
       if (resp?.data?.isLogin) {
         notifSuccess()
 
-        const data = resp?.data
+        // const data = resp?.data
 
-        console.log('onCreate', data)
+        // console.log('onCreate', data)
+
+        let name_route = '';
+
+        switch (tipe_aktivitas) {
+          case 'arrange':
+            name_route = 'quiz_action_arrange'
+            break;
+          case 'boolean':
+            name_route = 'quiz_action_boolean'
+            break;
+          case 'essay':
+            name_route = 'quiz_action_essay'
+            break;
+          case 'match':
+            name_route = 'quiz_action_match'
+            break;
+          case 'multiple':
+            name_route = 'quiz_action_multiple'
+            break;
+          case 'shortanswer':
+            name_route = 'quiz_action_short_answer'
+            break;
+        }
+
+        this.router.push({
+          name: name_route,
+          query: {
+            slug: tugas_id
+          }
+        })
 
         return true
       }

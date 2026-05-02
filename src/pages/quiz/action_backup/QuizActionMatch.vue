@@ -34,23 +34,28 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
-  created() {
-    this.dummyOnCreate('match')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
     const vm = this;
@@ -135,7 +140,6 @@ export default {
     //   { q: "they wait patiently", a: "mereka menunggu dengan sabar" },
     // ];
 
-    let checkingHTML = [];
 
     // TOTAL SOAL (round)
     const totalSheetSoal = 3;
@@ -400,16 +404,10 @@ export default {
       }, 1000);
     }
     function nextSoal() {
-
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
       currentSheetSoal++;
       // blockIndexPerSoal[currentSheetSoal] = 0;
 
       if (currentSheetSoal > totalSheetSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('match')
 
         clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
 
@@ -503,6 +501,7 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       } else {
         /* === INSERT BARU === */
@@ -514,10 +513,9 @@ export default {
           time_left,
           check_trial,
           current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+          checking: document.getElementById("quizCard").outerHTML,
         });
       }
-
-      data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       vm.setForm(data)

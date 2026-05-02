@@ -114,6 +114,10 @@ export const useLmsBankModulStore = defineStore('LmsBankModulStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    // dipanggil LmsTugasStore
+    onSetShow(tugasable) {
+      this.show.payload.payload = tugasable
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;

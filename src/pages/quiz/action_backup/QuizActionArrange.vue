@@ -31,26 +31,30 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
-  created() {
-    this.dummyOnCreate('arrange')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
-
-    console.log('this.get_show_payload?.konten', this.get_show_payload?.konten)
-
     const vm = this;
 
     if(this.get_show_payload?.kategori != 'arrange') return this.notifFailed('data gagal diproses', 'Salah Quiz')
@@ -144,8 +148,6 @@ export default {
     //   { w: ["the", "sun", "shines"] },
     //   { w: ["the", "clock", "ticks"] },
     // ];
-
-    let checkingHTML = [];
 
     let questions = [];
     const max_questions = 9; // karena index dimulai dari 0-9 = 10
@@ -295,6 +297,7 @@ export default {
           time_left: time,
           check_trial: checkTrial,
           current_minus_score: minusScore,
+          checking: document.getElementById("quizCard").outerHTML,
         };
       } else {
         // update nilai soal yang sama (jika user salah lagi)
@@ -303,13 +306,13 @@ export default {
         record_quiz.question[qIndex].time_left = time;
         record_quiz.question[qIndex].check_trial = checkTrial;
         record_quiz.question[qIndex].current_minus_score = minusScore;
+        record_quiz.question[qIndex].checking = document.getElementById("quizCard").outerHTML;
       }
 
       // total summary
       record_quiz.total_time_left = 0;
       record_quiz.total_check_trail = 0;
       record_quiz.total_current_score = score;
-      record_quiz.checking = checkingHTML
 
       record_quiz.question.forEach((q) => {
         record_quiz.total_time_left += q.time_left;
@@ -339,14 +342,7 @@ export default {
     }
 
     function loadQuestion() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
       if (currentSoal >= totalSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('arrange')
-        // GAME OVER
-
         // soal terakhir sudah selesai, tampilkan snackbar khusus
         showSnackbar("🎉 Quiz Selesai!", "success", 2000);
 
@@ -420,7 +416,7 @@ export default {
         checkTrial++;
 
         // ⏸️ PAUSE TIMER
-        // clearInterval(timerInterval); // tidak perlu ini
+        clearInterval(timerInterval);
 
         lockButtons(800);
         checkAnswer();
@@ -455,7 +451,6 @@ export default {
         total_question_true++;
 
         setTimeout(loadQuestion, 700);
-
       } else {
         score -= 20;
         minusThisQuestion += 20;

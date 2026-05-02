@@ -27,28 +27,34 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
-  created() {
-    this.dummyOnCreate('multiple')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
     const vm = this;
 
     if(this.get_show_payload?.kategori != 'multiple') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+
 
     // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
     const list_questions = this.get_show_payload?.konten
@@ -279,8 +285,6 @@ export default {
 
     // ];
 
-    let checkingHTML = [];
-
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -325,17 +329,11 @@ export default {
 
     /* ================= NEXT ================= */
     function nextSoal() {
-
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
       stopTimer();
       clearTimeout(autoResetTimer);
       currentSheetSoal++;
 
       if (currentSheetSoal > totalSheetSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('multiple')
 
         clearTimeout(autoResetTimer);
         // window.location.href = "result.html";
@@ -679,6 +677,7 @@ export default {
               time_left: 0,
               check_trial: 0,
               current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block_quiz++;
           }
@@ -746,10 +745,9 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       }
-
-      data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       vm.setForm(data)
@@ -812,15 +810,12 @@ export default {
 
           // 🔥 JIKA SOAL TERAKHIR
           if (currentSheetSoal === totalSheetSoal) {
-            nextBtn.className = "hide";
-
-            // nextBtn.textContent = "📊 Lihat Hasil";
-            // nextBtn.addEventListener("click", (e) => {
-            //   console.log(e)
-            //   e.stopPropagation();
-            //   // window.location.href = "result.html";
-            // });
-            return
+            nextBtn.textContent = "📊 Lihat Hasil";
+            nextBtn.addEventListener("click", (e) => {
+              console.log(e)
+              e.stopPropagation();
+              // window.location.href = "result.html";
+            });
           } else {
             nextBtn.textContent = "➡️ Next Soal";
             nextBtn.onclick = nextSoal;

@@ -24,6 +24,8 @@
         :class="[is_mobile_size ? '' : 'q-card--bordered']"
       />
     </q-page-container>
+
+    <DialogResult />
   </q-layout>
 </template>
 

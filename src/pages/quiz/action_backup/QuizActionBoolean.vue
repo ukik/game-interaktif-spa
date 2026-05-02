@@ -28,23 +28,28 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
 
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "src/stores/useTimerStore";
+
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
+    const preStore = useLmsBankQuizStore(store);
 
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const slug = currentRoute.params?.slug || '';
+
+    console.log('mixin_quiz_action_arrange', slug)
+
+    await preStore.onShow(slug);
   },
-  created() {
-    this.dummyOnCreate('boolean')
+  computed: {
+    ...mapState(useTimerStore, ["timeDefault", "timeLeft"]),
+  },
+  methods: {
+    ...mapActions(useTimerStore, ["startTimer", "resetTimer"]),
   },
   mounted() {
     const vm = this;
@@ -140,8 +145,6 @@ export default {
     //   { text: "they wake up late" },
     //   { text: "we rest at night" },
     // ];
-
-    let checkingHTML = [];
 
     const totalSheetSoal = 5;
     const max_questions = 3;
@@ -430,8 +433,6 @@ export default {
 
     /* ================= NEXT ================= */
     function nextSoal() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
       forceCancelDrag(); // 🔥 WAJIB
 
       // 🔥 TAMBAHAN WAJIB
@@ -442,12 +443,6 @@ export default {
       clearInterval(countdown);
 
       if (currentSheetSoal > totalSheetSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('boolean')
-
-        // GAME OVER
-
         // location.href = "result.html";
 
         forceCancelDrag(); // bersihin ghost biar gak nyangkut
@@ -455,7 +450,6 @@ export default {
 
         return;
       }
-
       timeLeft = default_timeLeft;
       init();
       updateScoreBar();
@@ -511,6 +505,7 @@ export default {
             status_question: "salah",
             current_minus_score: -20,
             check_trial: 1,
+            checking: document.getElementById("quizCard").outerHTML,
           };
         }
         return q;
@@ -542,6 +537,7 @@ export default {
               time_left: 0,
               check_trial: 0,
               current_minus_score: 0,
+              checking: '', // document.getElementById("quizCard").outerHTML,
             });
             block_quiz++;
           }
@@ -611,10 +607,9 @@ export default {
           time_left,
           check_trial: prev.check_trial + check_trial,
           current_minus_score: -(prev.current_minus_score + current_minus_score),
+          checking: document.getElementById("quizCard").outerHTML,
         };
       }
-
-      data.checking = checkingHTML
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       vm.setForm(data)

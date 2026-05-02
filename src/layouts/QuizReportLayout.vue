@@ -13,31 +13,22 @@
       <!-- </div> -->
     </q-header>
 
-    <q-drawer
-      show-if-above
-      v-model="leftDrawerOpen"
-      side="left"
-      behavior="mobile"
-      bordered
-    >
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" behavior="mobile" bordered>
       <!-- drawer content -->
     </q-drawer>
 
-    <q-drawer
-      show-if-above
-      v-model="rightDrawerOpen"
-      side="right"
-      behavior="mobile"
-      bordered
-    >
+    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" behavior="mobile" bordered>
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container class="row justify-center q-px-sm">
-      <router-view
+    <q-page-container class="row justify-center">
+      <!-- <router-view
         class="col-12 col-xl-6 col-lg-6 col-md-9 col-sm-12 bg-white rounded-borders"
         :class="[is_mobile_size ? '' : 'q-card--borderedX']"
-      />
+      /> -->
+      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
+        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" />
+
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
@@ -56,6 +47,10 @@
 
 <script>
 import { ref } from "vue";
+
+import { mapActions } from "pinia";
+
+import { useUiStore } from 'src/stores/ui'
 
 export default {
   setup() {
@@ -77,6 +72,34 @@ export default {
   beforeRouteLeave(to, from) {
     const answer = window.confirm('Do you really want to leave?')
     if (!answer) return false // Cancels the back navigation
-  }
+  },
+  methods: {
+    updateWidth() {
+      const ui = useUiStore();
+
+      this.observer = new ResizeObserver((entries) => {
+        console.log('ResizeObserver')
+        // for (let entry of entries) {
+        // ui.setPageWidth(entry.contentRect.width) // kalo pake ini masih dikenakan padding
+        // }
+        ui.setPageWidth(document.querySelector(".q-page-container > main").offsetWidth);
+      });
+
+      this.observer.observe(this.$refs?.pageContainer.$el);
+    },
+  },
+
+  mounted() {
+    this.updateWidth()
+    window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
+  },
+
+  beforeUnmount() {
+    this.observer?.disconnect()
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("resize", this.updateWidth);
+  },
 };
 </script>

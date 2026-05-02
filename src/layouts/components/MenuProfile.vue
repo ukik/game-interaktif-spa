@@ -9,7 +9,7 @@
         <q-card-section class="q-py-md">
           <div class="row no-wrap">
             <div class="column">
-              <div class="text-h6">PROFIL</div>
+              <div class="text-h6">PROFIL ({{ getAuthUser?.id }})</div>
               <q-item class="q-px-none">
                 <q-item-section>
                   <q-item-label caption lines="1">email</q-item-label>

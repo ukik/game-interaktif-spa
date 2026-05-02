@@ -114,6 +114,11 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    // dipanggil LmsTugasStore
+    onSetShow(tugasable) {
+      this.show.payload.payload = tugasable
+      console.log('tugasable', tugasable, this.show.payload.payload, this.get_show_payload)
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;

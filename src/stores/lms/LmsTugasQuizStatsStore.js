@@ -5,6 +5,7 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useAuthStore } from '../auth/AuthStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -32,6 +33,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     init: {
       index: true,
       show: true,
+      report: true,
     },
     index: {
       "payload": {
@@ -90,17 +92,22 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           data:[],
         },
       },
-      tugas:[],
-      top:{},
       kelas: {},
     },
+    report: {
+      payload: {
+        payload: {},
+      },
+    },
     loading: {
+      report: false,
       'local': false,
     }
   }),
   getters: {
     get_init_index: ({ init }) => init?.index,
     get_init_show: ({ init }) => init?.show,
+    get_init_report: ({ init }) => init?.report,
 
     get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
     get_index_data: ({ index }) => index?.payload?.payload?.data,
@@ -127,6 +134,43 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_show_payload: ({ show }) => show?.payload?.payload,
     get_show_top: ({ show }) => show?.payload?.top,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
+
+    get_report: ({ report }) => report?.payload,
+    get_report_unsubmit: ({ report }) => {
+      let json = {}
+      report?.payload?.report?.forEach(el => {
+        console.log('get_report_unsubmit', el)
+        if(el.is_submit == 'N') {
+          json = el?.json
+        }
+      });
+      return json
+    },
+    get_report_unsubmit_checking() {
+      let checking = []
+      useLmsTugasQuizStatsStore()?.get_report_unsubmit?.question?.forEach(el => {
+        checking.push(el.checking)
+      });
+      return checking
+    },
+
+    get_report_submit: ({ report }) => {
+      let json = {}
+      report?.payload?.report?.forEach(el => {
+        console.log('get_report_submit', el)
+        if(el.is_submit == 'Y') {
+          json = el?.json
+        }
+      });
+      return json
+    },
+    get_report_submit_checking() {
+      let checking = []
+      useLmsTugasQuizStatsStore()?.get_report_submit?.question?.forEach(el => {
+        checking.push(el.checking)
+      });
+      return checking
+    },
 
     get_loading: ({ loading }) => loading?.local,
   },
@@ -196,7 +240,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       console.log('onShow')
 
       const resp = await axios({
-        url: host + '/lms/tugas-quiz-stats/'+slug,
+        url: host + '/lms/tugas-quiz-stats/' + slug,
         method: 'get',
       })
         .then((response) => {
@@ -225,5 +269,42 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
         return true
       }
     },
+
+    async onReport(tugas_id, key = 'report') {
+
+      if (this.loading[key]) return false;
+      this.loading[key] = true;
+      console.log('onIndex')
+
+      const resp = await axios({
+        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + useAuthStore().getAuthUser?.id,
+        method: 'get',
+        params: {}
+      })
+        .then((response) => {
+          // notifSuccess()
+          return response
+        })
+        .catch((err) => {
+          console.log('onRequest', err)
+          // notifFailed()
+          return false
+        })
+
+      this.loading[key] = false
+      this.init[key] = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+
+        this[key] = resp?.data
+        console.log('onRequest', this[key])
+
+        return true
+      }
+    },
+
+
   },
 });

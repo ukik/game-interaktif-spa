@@ -37,6 +37,8 @@
 
     <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
 
+    <DialogResult></DialogResult>
+
     <!-- <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
         <q-toolbar-title>

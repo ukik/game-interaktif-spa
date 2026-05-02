@@ -172,7 +172,7 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
 
 }, function (error) {
   // Loading.hide()
-  console.log('boot/axios.js C', error?.response)
+  console.log('boot/axios.js D', error?.response)
 
   try {
     if (error?.response?.status == 401) {
