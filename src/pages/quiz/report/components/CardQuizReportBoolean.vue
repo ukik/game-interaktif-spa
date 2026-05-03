@@ -1,10 +1,10 @@
 <template>
-  <q-page id="Report" class="q-my-smX q-card--borderedX card-border-radiusX">
+  <q-page id="Report" class="q-my-sm q-card--bordered card-border-radius">
     <!-- Toolbar di dalam page -->
 
     <div class="q-pa-sm q-pt-md">
       <div class="title">🎉 Quiz Result</div>
-      <div class="subtitle">Hasil Arrange Progress</div>
+      <div class="subtitle">Hasil Boolean Progress</div>
     </div>
     <q-separator class="q-mt-md"></q-separator>
     <div class="q-pa-sm">
@@ -36,7 +36,6 @@
           <div class="card bg-teal-2">Total Percobaan<span id="sumCheck">-</span></div>
         </div>
       </div>
-
 
       <table>
         <thead>
@@ -78,9 +77,8 @@ export default {
   },
   methods: {
     onCreate() {
-
       const data = this.record_quiz //JSON.parse(localStorage.getItem("record_quiz"));
-console.log('mounted', data)
+      console.log('mounted', data)
       if (!data || Object.keys(data).length === 0) {
         this.$q.notify("Data quiz tidak ditemukan!");
         throw new Error("Data kosong");
@@ -88,12 +86,12 @@ console.log('mounted', data)
 
       /* SUMMARY */
       sumSoal.textContent = data.total_question;
+      sumAnswered.textContent = data.question.length;
       sumScore.textContent = data.total_current_score;
       sumTime.textContent = data.total_time_left + ' s';
-      sumCheck.textContent = data.total_check_trail;
 
-      const salahCount = data.question.filter((q) => q.status_question === "salah").length;
-      document.getElementById('sumTimeout').textContent = salahCount;
+      const salahCount = data.question.filter(q => q.status_question === "salah").length;
+      sumTimeout.textContent = salahCount;
 
       /* TABLE */
       const tbody = document.getElementById("tableBody");

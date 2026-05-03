@@ -25,7 +25,11 @@
       />
     </q-page-container>
 
-    <DialogResult />
+    <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
+    <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog>
+
+    <!-- <DialogResult /> -->
+
   </q-layout>
 </template>
 

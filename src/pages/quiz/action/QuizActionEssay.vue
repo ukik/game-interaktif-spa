@@ -2,7 +2,7 @@
   <q-page id="QuizActionEssay" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -10,7 +10,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
         </q-card-actions>
 
@@ -50,7 +50,7 @@
 <script>
 import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
-// import list_questions from "src/composables/quiz/soalEssay";
+import list_questionsX from "src/composables/quiz/soalEssay";
 
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
@@ -73,7 +73,7 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'essay') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    if (this.get_show_payload?.kategori != 'essay') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
     // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
     const list_questions = this.get_show_payload?.konten
@@ -101,7 +101,7 @@ export default {
 
     /* ================= SOAL ================= */
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     let questions = [];
     const max_questions = 5;
@@ -191,7 +191,6 @@ export default {
         document.getElementById("result").innerHTML = message;
 
         showSnackbar("❌ Jawaban belum diisi!", "error", {
-          // questionIndex: currentSheetSoal,
           correct: true,
           scoreChange: -20,
         });
@@ -467,6 +466,7 @@ export default {
         console.log(1)
       }
 
+
       if (timeLeft <= 0) {
         totalRankPoint += rank_point;
         recordQuizEvent("Time-out", checking);
@@ -494,7 +494,7 @@ export default {
       // window.location.href = "result.html";
     }
     function nextQuestion() {
-        checkingHTML.push(document.getElementById("quizCard").outerHTML)
+
 
       if (current >= totalSoal) {
 
@@ -625,10 +625,8 @@ export default {
           // question.classList.add("wrong", "locked");
 
           showSnackbar("⏰ Waktu Habis! -50", "timeout", {
-            // questionIndex: currentSheetSoal,
             correct: false,
             timeout: true,
-            // scoreChange: -50
           });
 
           stopTimer();
@@ -763,6 +761,23 @@ export default {
       };
     }
 
+    function captureCleanHTMLTextarea() {
+      const clone = document.getElementById("quizCard").cloneNode(true);
+
+      const textarea = clone.querySelector("#answer");
+      if (textarea) {
+        textarea.innerHTML = textarea.value;
+        textarea.style.pointerEvents = "auto";
+      }
+
+      const growWrap = clone.querySelector(".grow-wrap");
+      if (growWrap) {
+        growWrap.removeAttribute("data-replicated-value");
+      }
+
+      return clone.outerHTML;
+    }
+
     function recordQuizEvent(status, checking) {
       const qIndex = current - 1; // index soal saat ini
 
@@ -793,6 +808,7 @@ export default {
         record_quiz.question[qIndex].current_rank_point = getFinalRank()?.rank_point;
       }
 
+      checkingHTML[qIndex] = captureCleanHTMLTextarea(); //document.getElementById("quizCard").outerHTML;
       record_quiz.checking = checkingHTML;
 
       // total summary
@@ -923,7 +939,7 @@ export default {
   textarea {
     box-sizing: border-box;
     width: 100%;
-    min-height: 150px;
+    min-height: 200px;
     padding: 10px;
     font-size: 16px;
     border-radius: 10px;

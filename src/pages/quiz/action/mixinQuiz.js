@@ -31,9 +31,9 @@ export const myMixin = {
 
       // this.dialog_result = true;
 
-      return;
+      // return;
 
-      const local = localStorage.getItem('record_quiz_'+tipe_aktivitas+'1')
+      const local = localStorage.getItem('record_quiz_'+tipe_aktivitas+'2')
 
       console.log('local', JSON.parse(local))
 

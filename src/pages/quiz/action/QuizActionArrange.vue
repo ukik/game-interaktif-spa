@@ -2,7 +2,7 @@
   <q-page id="QuizActionArrange" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -10,7 +10,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
         </q-card-actions>
 
@@ -145,7 +145,7 @@ export default {
     //   { w: ["the", "clock", "ticks"] },
     // ];
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     let questions = [];
     const max_questions = 9; // karena index dimulai dari 0-9 = 10
@@ -309,6 +309,8 @@ export default {
       record_quiz.total_time_left = 0;
       record_quiz.total_check_trail = 0;
       record_quiz.total_current_score = score;
+
+      checkingHTML[currentSoal] = document.getElementById("quizCard").outerHTML;
       record_quiz.checking = checkingHTML
 
       record_quiz.question.forEach((q) => {
@@ -339,7 +341,6 @@ export default {
     }
 
     function loadQuestion() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
 
       if (currentSoal >= totalSoal) {
 
@@ -379,6 +380,7 @@ export default {
           bindDrag(el);
         });
       updateScore();
+
     }
 
     /* ===== TIME OUT ===== */

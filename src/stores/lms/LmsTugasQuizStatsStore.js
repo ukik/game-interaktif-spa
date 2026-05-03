@@ -147,11 +147,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       return json
     },
     get_report_unsubmit_checking() {
-      let checking = []
-      useLmsTugasQuizStatsStore()?.get_report_unsubmit?.question?.forEach(el => {
-        checking.push(el.checking)
-      });
-      return checking
+      useLmsTugasQuizStatsStore()?.get_report_unsubmit?.checking
     },
 
     get_report_submit: ({ report }) => {
@@ -165,11 +161,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       return json
     },
     get_report_submit_checking() {
-      let checking = []
-      useLmsTugasQuizStatsStore()?.get_report_submit?.question?.forEach(el => {
-        checking.push(el.checking)
-      });
-      return checking
+      useLmsTugasQuizStatsStore()?.get_report_submit?.checking
     },
 
     get_loading: ({ loading }) => loading?.local,

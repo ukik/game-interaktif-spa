@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionArrange" class="flex flex-center q-pa-sm bg-transparent">
+  <div id="QuizActionArrange" class="q-pa-sm bg-dark">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -7,37 +7,29 @@
 <script>
 export default {
   props: ['checking'],
-  // data() {
-  //   return {
-  //     checking_html: '',
-  //   }
-  // },
-  // mounted() {
-  //   const lc = JSON.parse(localStorage.getItem('record_quiz_arrange2'))
-  //   this.checking_html = lc.checking
-  // }
 }
 </script>
 
 <style lang="scss">
-.word {
-  background: linear-gradient(135deg, #34d399, #60a5fa);
-  padding: 20px 25px;
-  border-radius: 999px;
-  font-weight: bold;
-  cursor: grab;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
-  width: auto;
-}
-
-.word.dragging {
-  opacity: 0.8;
-  transform: scale(1.15);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
-}
-
-
 #QuizActionArrange {
+
+
+  .word {
+    background: linear-gradient(135deg, #34d399, #60a5fa);
+    padding: 20px 25px;
+    border-radius: 999px;
+    font-weight: bold;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    width: auto;
+  }
+
+  .word.dragging {
+    opacity: 0.8;
+    transform: scale(1.15);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  }
+
+
 
   .answer {
     display: flex;
@@ -93,7 +85,6 @@ export default {
   #btnCheck,
   #btnReset {
     display: none;
-    user-select: none;
   }
 }
 </style>

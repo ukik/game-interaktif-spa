@@ -61,8 +61,8 @@ const routes_quiz_report = [
     }
   },
   {
-    path: '/quiz/report/short-answer/:slug', // tugas_id
-    name: 'quiz_report_short_answer',
+    path: '/quiz/report/shortanswer/:slug', // tugas_id
+    name: 'quiz_report_shortanswer',
     component: () => import('pages/quiz/report/QuizReportShortAnswer.vue'),
     meta: {
       logged: false,

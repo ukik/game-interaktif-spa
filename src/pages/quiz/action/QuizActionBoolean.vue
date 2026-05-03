@@ -3,7 +3,7 @@
     <QuizMediaComponent />
 
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <div class="question">Seret salah satu ke soal</div>
@@ -11,7 +11,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/5</div>
         </q-card-actions>
         <q-card-section>
@@ -141,7 +141,7 @@ export default {
     //   { text: "we rest at night" },
     // ];
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     const totalSheetSoal = 5;
     const max_questions = 3;
@@ -393,7 +393,7 @@ export default {
     function startCountdown() {
       clearInterval(countdown);
       countdown = setInterval(() => {
-        if (!document.getElementById("timer")) return clearInterval(timerInterval);
+        if (!document.getElementById("timer")) return clearInterval(countdown);
         timeLeft--;
         timer.textContent = "⏱️ " + timeLeft;
         if (timeLeft <= 0) {
@@ -430,7 +430,6 @@ export default {
 
     /* ================= NEXT ================= */
     function nextSoal() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
 
       forceCancelDrag(); // 🔥 WAJIB
 
@@ -614,6 +613,7 @@ export default {
         };
       }
 
+      checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
       data.checking = checkingHTML
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));

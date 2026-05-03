@@ -60,8 +60,8 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/short-answer/:slug',
-    name: 'quiz_action_short_answer',
+    path: '/quiz/action/shortanswer/:slug',
+    name: 'quiz_action_shortanswer',
     component: () => import('pages/quiz/action/QuizActionShortAnswer.vue'),
     meta: {
       logged: true,

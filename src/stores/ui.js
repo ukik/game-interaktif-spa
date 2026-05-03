@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 
 export const useUiStore = defineStore('ui', {
   state: () => ({
-    pageWidth: 0
+    pageWidth: 0,
+    report_confirm_dialog: false,
   }),
   getters: {
     // getPageWidth: (state) => state.pageWidth,

@@ -142,6 +142,10 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/DialogResult.vue'))
   )
 
+  app.component("ReportConfirmDialog",
+    defineAsyncComponent(() => import('src/components/lms/ReportConfirmDialog.vue'))
+  )
+
 
   // app.component("RelatedImageSlide",
   //   defineAsyncComponent(() => import('src/components/RelatedImageSlide.vue'))

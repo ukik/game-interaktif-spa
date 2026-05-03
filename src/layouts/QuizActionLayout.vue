@@ -36,8 +36,9 @@
     </q-page-container>
 
     <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
+    <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog>
 
-    <DialogResult></DialogResult>
+    <!-- <DialogResult></DialogResult> -->
 
     <!-- <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>

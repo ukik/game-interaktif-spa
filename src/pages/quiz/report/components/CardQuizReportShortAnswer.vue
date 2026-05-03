@@ -1,10 +1,10 @@
 <template>
-  <q-page id="Report" class="q-my-smX q-card--borderedX card-border-radiusX">
+  <q-page id="Report" class="q-my-sm q-card--bordered card-border-radius">
     <!-- Toolbar di dalam page -->
 
     <div class="q-pa-sm q-pt-md">
       <div class="title">🎉 Quiz Result</div>
-      <div class="subtitle">Hasil Arrange Progress</div>
+      <div class="subtitle">Hasil Short Answer Progress</div>
     </div>
     <q-separator class="q-mt-md"></q-separator>
     <div class="q-pa-sm">
@@ -18,10 +18,10 @@
 
       <div class="summary row q-col-gutter-sm justify-center">
         <div class="col-3 col-lg-3 col-md-3 col-sm-3 col-xs-6">
-          <div class="card bg-red-2">Total Soal<span id="sumSoal">-</span></div>
+          <div class="card bg-red-2">Total Unit Soal<span id="sumAnswered">-</span></div>
         </div>
         <div class="col-3 col-lg-3 col-md-3 col-sm-3 col-xs-6">
-          <div class="card bg-green-2">Total Terjawab<span id="sumAnswered">-</span></div>
+          <div class="card bg-green-2">Total Benar<span id="sumCorrect">-</span></div>
         </div>
         <div class="col-3 col-lg-3 col-md-3 col-sm-3 col-xs-6">
           <div class="card bg-purple-2">Total Salah<span id="sumTimeout">-</span></div>
@@ -33,7 +33,7 @@
           <div class="card bg-cyan-2">Total Sisa Waktu<span id="sumTime">-</span></div>
         </div>
         <div class="col-3 col-lg-3 col-md-3 col-sm-3 col-xs-6">
-          <div class="card bg-teal-2">Total Percobaan<span id="sumCheck">-</span></div>
+          <div class="card bg-teal-2">Total Percobaan Jawab<span id="sumCheck">-</span></div>
         </div>
       </div>
 
@@ -41,12 +41,12 @@
       <table>
         <thead>
           <tr>
-            <th>No</th>
+            <th>Urutan Soal</th>
             <th>Status</th>
             <th>Perubahan Score</th>
             <th>Sisa Waktu</th>
-            <th>Percobaan</th>
-            <th>Minus Score</th>
+            <th>Percobaan Jawab</th>
+            <th>Score Minus</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -54,8 +54,8 @@
 
       <canvas id="scoreChart"></canvas>
       <canvas id="timeChart"></canvas>
-      <canvas id="checkChart"></canvas>
       <canvas id="minusChart"></canvas>
+      <canvas id="checkChart"></canvas>
       <canvas id="statusChart"></canvas>
 
       <!-- <div class="retry-wrap">
@@ -78,60 +78,56 @@ export default {
   },
   methods: {
     onCreate() {
-
       const data = this.record_quiz //JSON.parse(localStorage.getItem("record_quiz"));
-console.log('mounted', data)
+      console.log('mounted', data)
+
       if (!data || Object.keys(data).length === 0) {
         this.$q.notify("Data quiz tidak ditemukan!");
         throw new Error("Data kosong");
       }
 
+      /* ===== SORT BLOCK QUESTION 1–15 ===== */
+      //data.question.sort((a, b) => a.current_block_question - b.current_block_question);
+
       /* SUMMARY */
-      sumSoal.textContent = data.total_question;
+      sumAnswered.textContent = data.question.length;
       sumScore.textContent = data.total_current_score;
       sumTime.textContent = data.total_time_left + ' s';
       sumCheck.textContent = data.total_check_trail;
 
-      const salahCount = data.question.filter((q) => q.status_question === "salah").length;
-      document.getElementById('sumTimeout').textContent = salahCount;
+      const salahCount = data.question.filter(q => q.status_question === "salah").length;
+      sumTimeout.textContent = salahCount;
 
       /* TABLE */
       const tbody = document.getElementById("tableBody");
       data.question.forEach((q, i) => {
         tbody.innerHTML += `
-        <tr>
-          <td>${i + 1}</td>
-          <td class="status-${q.status_question}">${q.status_question}</td>
-          <td>${q.current_score}</td>
-          <td>${q.time_left} s</td>
-          <td>${q.check_trial}</td>
-          <td>-${q.current_minus_score}</td>
-        </tr>`;
+      <tr>
+        <td>${q.current_block_question}</td>
+        <td class="status-${q.status_question === "berhasil" ? "benar" : "salah"}">
+          ${q.status_question}
+        </td>
+        <td>${q.current_score}</td>
+        <td>${q.time_left} s</td>
+        <td>${q.check_trial}</td>
+        <td>${q.current_minus_score}</td>
+      </tr>`;
       });
 
-      /* DATA */
+      /* DATA CHART */
       const labels = data.question.map((_, i) => `Soal ${i + 1}`);
       const scores = data.question.map(q => q.current_score);
       const times = data.question.map(q => q.time_left);
       const checks = data.question.map(q => q.check_trial);
-      const minus = data.question.map(q => q.current_minus_score);
+      const minus = data.question.map(q => -Math.abs(q.current_minus_score));
 
-      /* 🔽 TAMBAHAN: MINUS JADI NEGATIF */
-      const minusNegative = minus.map(v => -Math.abs(v));
-
-      /* CHART */
       new Chart(scoreChart, {
-        type: "line",
-        data: {
+        type: "line", data: {
           labels, datasets: [{
-            label: "Distribusi Score",
-            data: scores,
-            borderColor: "#f97316",
-            backgroundColor: "rgba(251,191,24,.3)",
-            tension: .35,
-            fill: true
+            label: "Distribusi Score", data: scores, borderColor: "#f97316", fill: true
           }]
-        }, options: {
+        },
+        options: {
           plugins: {
             legend: {
               labels: { font: { size: 14, weight: "normal" } }
@@ -143,37 +139,13 @@ console.log('mounted', data)
           }
         }
       });
-
       new Chart(timeChart, {
-        type: "bar",
-        data: {
+        type: "bar", data: {
           labels, datasets: [{
-            label: "Distribusi Sisa Waktu",
-            data: times,
-            backgroundColor: "#3b82f6"
+            label: "Distribusi Sisa Waktu", data: times, backgroundColor: "#3b82f6"
           }]
-        }, options: {
-          plugins: {
-            legend: {
-              labels: { font: { size: 14, weight: "normal" } }
-            }
-          },
-          scales: {
-            x: { ticks: { font: { size: 14 } } },
-            y: { ticks: { font: { size: 14 } } }
-          }
-        }
-      });
-
-      new Chart(checkChart, {
-        type: "bar",
-        data: {
-          labels, datasets: [{
-            label: "Distribusi Percobaan",
-            data: checks,
-            backgroundColor: "#22c55e"
-          }]
-        }, options: {
+        },
+        options: {
           plugins: {
             legend: {
               labels: { font: { size: 14, weight: "normal" } }
@@ -187,20 +159,12 @@ console.log('mounted', data)
       });
 
       new Chart(minusChart, {
-        type: "bar",
-        data: {
+        type: "bar", data: {
           labels, datasets: [{
-            label: "Distribusi Minus Score",
-            data: minusNegative,
-            backgroundColor: "#ef4444"
+            label: "Distribusi Minus Score", data: minus, backgroundColor: "#ef4444"
           }]
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
           plugins: {
             legend: {
               labels: { font: { size: 14, weight: "normal" } }
@@ -213,52 +177,8 @@ console.log('mounted', data)
         }
       });
 
-      /* ===== COBA LAGI ===== */
-      function retryQuiz() {
-        localStorage.removeItem("record_quiz");
-        window.location.href = "index.html";
-      }
-
-      /* ===== RANKING SYSTEM (10 SOAL) ===== */
-      function getRank(correct) {
-        if (correct === 10) return { g: "A+", d: "Perfect! Semua soal benar" };
-        if (correct === 9) return { g: "A", d: "Hampir sempurna" };
-        if (correct === 8) return { g: "B+", d: "Sangat bagus" };
-        if (correct === 7) return { g: "B", d: "Bagus" };
-        if (correct === 6) return { g: "C+", d: "Cukup" };
-        if (correct === 5) return { g: "C", d: "Perlu latihan" };
-        if (correct === 4) return { g: "D+", d: "Kurang" };
-        if (correct === 3) return { g: "D", d: "Sangat kurang" };
-        if (correct === 2) return { g: "E", d: "Perlu belajar lagi" };
-        return { g: "E", d: "Perlu belajar lagi" };
-      }
-
-      /* ===== TOTAL SOAL TIMEOUT ===== */
-      /* Timeout = check_trial <= 0 */
-      const totalTimeout = data.question.filter(q =>
-        q.status_question === "salah"
-      ).length;
-      document.getElementById("sumTimeout").textContent = totalTimeout;
-
-
-      /* ===== TOTAL SOAL TERJAWAB ===== */
-      /* Terjawab = status_question ada (benar / salah) */
-      const totalAnswered = data.question.filter(q =>
-        q.status_question === "benar"
-      ).length;
-      document.getElementById("sumAnswered").textContent = totalAnswered;
-
-      /* HITUNG JUMLAH BENAR */
-      const correctCount = data.question.filter(q => q.status_question === "benar").length;
-      const rank = getRank(correctCount);
-
-      /* TAMPILKAN */
-      document.getElementById("rankGrade").textContent = rank.g;
-      document.getElementById("rankDesc").textContent =
-        `${correctCount} / ${data.total_question} soal benar — ${rank.d}`;
-
-      /* ===== STATUS BENAR / SALAH ===== */
-      const benarCount = data.question.filter(q => q.status_question === "benar").length;
+      const benarCount = data.question.filter(q => q.status_question === "berhasil").length;
+      sumCorrect.textContent = benarCount;
 
       new Chart(statusChart, {
         type: "doughnut",
@@ -290,6 +210,93 @@ console.log('mounted', data)
           },
           cutout: "55%"
         }
+      });
+
+      new Chart(checkChart, {
+        type: "line",
+        data: {
+          labels, datasets: [{
+            label: "Distribusi Percobaan Jawab",
+            data: checks,
+            backgroundColor: "#f97316", fill: true
+          }]
+        }, options: {
+          plugins: {
+            legend: {
+              labels: { font: { size: 14, weight: "normal" } }
+            }
+          },
+          scales: {
+            x: { ticks: { font: { size: 14 } } },
+            y: { ticks: { font: { size: 14 } } }
+          }
+        }
+      });
+
+
+      /* RANK */
+      function getRank(correct) {
+        const max = data.question.length; // nilai maksimal
+        const steps = 9; // jumlah grade: +A, A, +B, B, +C, C, +D, D, E
+        const interval = max / (steps - 1); // jarak tiap tangga
+
+        // buat array batas tiap grade (rounded ke atas supaya aman)
+        const limits = Array.from({ length: steps }, (_, i) =>
+          Math.round(i * interval)
+        );
+
+        // grade labels sesuai pola
+        const grades = ["A+", "A", "B+", "B", "C+", "C", "D+", "D", "E"];
+        const descriptions = [
+          "Perfect! Semua soal benar",
+          "Hampir sempurna",
+          "Sangat bagus",
+          "Bagus",
+          "Cukup",
+          "Perlu latihan",
+          "Kurang",
+          "Sangat kurang",
+          "Perlu belajar lagi",
+        ];
+
+        // cari grade sesuai correct
+        for (let i = 0; i < steps; i++) {
+          if (correct >= limits[steps - 1 - i]) {
+            return { g: grades[i], d: descriptions[i] };
+          }
+        }
+
+        return { g: "E", d: "Perlu belajar lagi" };
+      }
+
+      const rank = getRank(benarCount);
+
+      rankGrade.textContent = rank.g;
+      rankDesc.textContent = `${benarCount} soal benar`;
+      rankDesc.textContent =
+        `${benarCount} / ${data.question.length} soal benar — ${rank.d}`;
+
+      function retryQuiz() {
+        localStorage.removeItem("record_quiz_matching");
+        location.href = "index.html";
+      }
+
+      /* ===== AGGREGATE DATA PER current_question ===== */
+      const agg = {};
+
+      data.question.forEach(q => {
+        const k = q.current_question;
+        if (!agg[k]) {
+          agg[k] = {
+            score: 0,
+            time: 0,
+            check: 0,
+            minus: 0
+          };
+        }
+        agg[k].score += q.current_score;
+        agg[k].time += q.time_left;
+        agg[k].minus += q.current_minus_score;
       });
     }
   },

@@ -2,7 +2,7 @@
   <q-page id="QuizActionShortAnswer" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -10,7 +10,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
         </q-card-actions>
 
@@ -56,7 +56,7 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'shortanswer') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    if (this.get_show_payload?.kategori != 'shortanswer') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
     // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
     const list_questions = this.get_show_payload?.konten
@@ -161,7 +161,7 @@ export default {
     //   { top: { question: "Kami menunduk" }, bottom: { answers: ["we bow", "we lean", "we bend"] } }
     // ];
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -241,7 +241,7 @@ export default {
           if (btnCheck) btnCheck.style.display = "none";
 
           const btnNext = document.getElementById("btnNext");
-          if (btnNext) btnNext.style.display = "block_quiz";
+          if (btnNext) btnNext.style.display = "block";
 
           if (life <= 0) {
             clearInterval(timerInterval);
@@ -266,7 +266,7 @@ export default {
         question.classList.add("correct", "locked");
 
         const next = document.getElementById("btnNext");
-        if (next) next.style.display = "block_quiz";
+        if (next) next.style.display = "block";
 
         card.classList.add("locked");
 
@@ -300,7 +300,7 @@ export default {
         if (btnCheck) btnCheck.style.display = "none";
 
         const btnNext = document.getElementById("btnNext");
-        if (btnNext) btnNext.style.display = "block_quiz";
+        if (btnNext) btnNext.style.display = "block";
 
         card.classList.add("locked");
         // stopTimer();
@@ -379,7 +379,7 @@ export default {
             if (btnCheck) btnCheck.style.display = "none";
 
             const btnNext = document.getElementById("btnNext");
-            if (btnNext) btnNext.style.display = "block_quiz";
+            if (btnNext) btnNext.style.display = "block";
           }
           return;
         }
@@ -484,7 +484,7 @@ export default {
     let autoResetTimeout = null; // GLOBAL, di luar fungsi
 
     function AutoReset() {
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
+
 
       stopTimer();
 
@@ -504,6 +504,7 @@ export default {
         } else {
 
           init();
+
         }
 
         autoResetTimeout = null;
@@ -542,7 +543,7 @@ export default {
 
       hint.textContent = text;
       hint.style.whiteSpace = "pre-line"; // supaya \n jadi baris baru
-      hint.style.display = "block_quiz";
+      hint.style.display = "block";
 
     }
 
@@ -638,6 +639,7 @@ export default {
         });
       }
 
+      checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
       data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
@@ -721,9 +723,9 @@ export default {
 </script>
 
 <style lang="scss">
-  .animate__animated {
-    animation: inherit !important;
-  }
+.animate__animated {
+  animation: inherit !important;
+}
 
 #QuizActionShortAnswer {
   .block_quiz {
@@ -793,7 +795,7 @@ export default {
   }
 
   .next-btn-2 {
-    margin-top: 10px;
+    margin-top: 40px;
     padding: 10px 16px;
     border-radius: 14px;
     border: none;
@@ -856,11 +858,17 @@ export default {
 
   input.correct-input {
     background: #dcfce7;
-    border: 2px solid #16a34a;
+    border: 2px solid #16a34a !important;
   }
 
   input.wrong-input {
-    background: #fee2e2;
+    background: #fff;
+    border: 2px solid #dc2626;
+  }
+
+  input[disabled] {
+    background-color: #fff !important;
+    opacity: 1 !important;
     border: 2px solid #dc2626;
   }
 }

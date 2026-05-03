@@ -2,7 +2,7 @@
   <q-page id="QuizActionMatch" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -10,7 +10,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
         </q-card-actions>
 
@@ -135,7 +135,7 @@ export default {
     //   { q: "they wait patiently", a: "mereka menunggu dengan sabar" },
     // ];
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     // TOTAL SOAL (round)
     const totalSheetSoal = 3;
@@ -401,8 +401,6 @@ export default {
     }
     function nextSoal() {
 
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
-
       currentSheetSoal++;
       // blockIndexPerSoal[currentSheetSoal] = 0;
 
@@ -441,7 +439,7 @@ export default {
     updateScoreBar();
 
     /* ================== LOCAL STORAGE QUIZ MATCHING (NEW LOGIC) ================== */
-    const LS_KEY = "record_quiz_matching";
+    const LS_KEY = "record_quiz_match";
     localStorage.removeItem(LS_KEY);
 
     let blockIndexPerSoal = {};
@@ -517,6 +515,7 @@ export default {
         });
       }
 
+      checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
       data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));

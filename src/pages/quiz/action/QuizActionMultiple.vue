@@ -2,7 +2,7 @@
   <q-page id="QuizActionMultiple" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <div class="game">
-      <q-card id="quizCard" class="quiz-card">
+      <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
           <!-- <div class="subtitle">Match - Present Tense!</div> -->
@@ -10,7 +10,7 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ {{ timeLeft }}</div>
+          <div class="timer" id="timer">⏱️ 0</div>
           <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
         </q-card-actions>
 
@@ -48,7 +48,7 @@ export default {
   mounted() {
     const vm = this;
 
-    if(this.get_show_payload?.kategori != 'multiple') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+    if (this.get_show_payload?.kategori != 'multiple') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
     // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
     const list_questions = this.get_show_payload?.konten
@@ -279,7 +279,7 @@ export default {
 
     // ];
 
-    let checkingHTML = [];
+    let checkingHTML = {};
 
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -325,8 +325,6 @@ export default {
 
     /* ================= NEXT ================= */
     function nextSoal() {
-
-      checkingHTML.push(document.getElementById("quizCard").outerHTML)
 
       stopTimer();
       clearTimeout(autoResetTimer);
@@ -410,6 +408,8 @@ export default {
 
         stopTimer();
         return;
+      } else {
+        choice.classList.add("wrong-choice"); // ⬅️ DI SINI
       }
 
       trial++;
@@ -429,6 +429,13 @@ export default {
         console.log('2');
 
         DRAG_LOCKED = true;
+
+        // 🔥 tandai jawaban benar
+        card.querySelectorAll('.choices .block_quiz').forEach(el => {
+          if (el.dataset.correct === "true") {
+            el.classList.add("correct-choice");
+          }
+        });
 
         showSnackbar("❌ Jawaban Salah! -20", "error", {
           minus: 20
@@ -491,6 +498,13 @@ export default {
 
         if (timeLeft <= 0) {
           DRAG_LOCKED = true;
+
+        // 🔥 tandai jawaban benar
+        card.querySelectorAll('.choices .block_quiz').forEach(el => {
+          if (el.dataset.correct === "true") {
+            el.classList.add("correct-choice");
+          }
+        });
 
           showSnackbar("⏰ Waktu Habis!", "error", {
             minus: 50,
@@ -618,7 +632,7 @@ export default {
       if (currentSheetSoal < totalSheetSoal) {
         autoResetTimer = setTimeout(() => {
           nextSoal();
-        }, 5000);
+        }, 3000);
       }
     }
 
@@ -749,6 +763,7 @@ export default {
         };
       }
 
+      checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
       data.checking = checkingHTML;
 
       localStorage.setItem(LS_KEY, JSON.stringify(data));
@@ -811,7 +826,7 @@ export default {
           nextBtn.className = "next-btn";
 
           // 🔥 JIKA SOAL TERAKHIR
-          if (currentSheetSoal === totalSheetSoal) {
+          if (currentSheetSoal > totalSheetSoal) {
             nextBtn.className = "hide";
 
             // nextBtn.textContent = "📊 Lihat Hasil";
@@ -883,8 +898,8 @@ export default {
 
 #QuizActionMultiple {
 
-  .choices .block_quiz  {
-    background: #b7fff9 !important;
+  .choices .block_quiz {
+    // background: #b7fff9 !important;
   }
 
   .tf-card {
@@ -949,12 +964,16 @@ export default {
   }
 
   .next-btn.show {
-    display: block_quiz
+    display: block;
   }
 
   .correct-choice {
     border: 2px solid #22c55e !important;
     box-shadow: 0 0 0 3px rgba(34, 197, 94, .25);
+
+    background: #22c55e;
+    color: white;
+
   }
 
 
@@ -963,6 +982,7 @@ export default {
     font-weight: bold;
   }
 
+  .tf-question.wrong .fill-wrong,
   .fill-wrong-final {
     color: white;
     font-weight: bold;
@@ -971,6 +991,13 @@ export default {
   .fill-correct {
     color: white;
     font-weight: bold;
+  }
+
+  .wrong-choice {
+    background: #ef4444 !important;
+    color: #fff !important;
+    border: 2px solid #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
   }
 }
 </style>

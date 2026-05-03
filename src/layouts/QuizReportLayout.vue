@@ -32,6 +32,10 @@
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
+    <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
+    <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog>
+
+
     <!-- <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
         <q-toolbar-title>
