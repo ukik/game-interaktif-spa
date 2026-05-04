@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore, acceptHMRUpdate } from 'pinia';
 
 import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
@@ -6,6 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from '../auth/AuthStore';
+
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -34,6 +35,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       index: true,
       show: true,
       report: true,
+      rank: true,
     },
     index: {
       "payload": {
@@ -84,15 +86,20 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     },
     show: {
       payload: {
-        payload: {
-          data:[],
-        },
         tugas:[],
         top:{
           data:[],
         },
       },
       kelas: {},
+    },
+    rank: {
+      payload: {
+        payload: null,
+        top: {
+          data: null,
+        },
+      },
     },
     report: {
       payload: {
@@ -102,6 +109,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     loading: {
       report: false,
       'local': false,
+      form: false,
     }
   }),
   getters: {
@@ -131,13 +139,17 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_index_current_kategori: ({ index }) => index?.payload?.currentKategori,
 
     get_show_kelas: ({ show }) => show?.payload?.kelas,
-    get_show_payload: ({ show }) => show?.payload?.payload,
     get_show_top: ({ show }) => show?.payload?.top,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
 
-    get_report: ({ report }) => report?.payload,
+    get_rank_payload: ({ rank }) => rank?.payload?.payload,
+    get_rank_top: ({ rank }) => rank?.payload?.top,
+
+    get_report: ({ report }) => report?.payload?.report,
+    get_report_tugas: ({ report }) => report?.payload?.tugas,
+
     get_report_unsubmit: ({ report }) => {
-      let json = {}
+      let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_unsubmit', el)
         if(el.is_submit == 'N') {
@@ -146,12 +158,9 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       });
       return json
     },
-    get_report_unsubmit_checking() {
-      useLmsTugasQuizStatsStore()?.get_report_unsubmit?.checking
-    },
 
     get_report_submit: ({ report }) => {
-      let json = {}
+      let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_submit', el)
         if(el.is_submit == 'Y') {
@@ -161,7 +170,24 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       return json
     },
     get_report_submit_checking() {
-      useLmsTugasQuizStatsStore()?.get_report_submit?.checking
+      const obj = useLmsTugasQuizStatsStore()?.get_report_submit?.checking ?? null
+      console.log('obj', obj)
+      let html = [];
+      for (const key in obj) {
+        if (!Object.hasOwn(obj, key)) continue;
+        html.push(obj[key]);
+      }
+      return html.length > 0 ? html : null
+    },
+    get_report_unsubmit_checking() {
+      const obj = useLmsTugasQuizStatsStore()?.get_report_unsubmit?.checking ?? null
+      console.log('obj', obj)
+      let html = [];
+      for (const key in obj) {
+        if (!Object.hasOwn(obj, key)) continue;
+        html.push(obj[key]);
+      }
+      return html.length > 0 ? html : null
     },
 
     get_loading: ({ loading }) => loading?.local,
@@ -262,14 +288,14 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       }
     },
 
-    async onReport(tugas_id, key = 'report') {
+    async onReport(tugas_id, siswa_id, key = 'report') {
 
       if (this.loading[key]) return false;
       this.loading[key] = true;
       console.log('onIndex')
 
       const resp = await axios({
-        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + useAuthStore().getAuthUser?.id,
+        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + siswa_id,
         method: 'get',
         params: {}
       })
@@ -297,6 +323,89 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       }
     },
 
+    async onRank(tugas_id = null, init = false) {
+
+      if(init) this.init.rank = true
+      if(!this.init.rank) return
+
+      if (this.loading.rank) return false;
+      this.loading.rank = true;
+      console.log('onRank')
+
+      const resp = await axios({
+        url: host + '/lms/tugas-quiz-stats/' + tugas_id +'/rank',
+        method: 'get',
+      })
+        .catch((err) => {
+          console.log(err)
+          notifFailed()
+          return false
+        })
+
+      this.loading.rank = false
+      this.init.rank = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+
+        const data = resp?.data
+        console.log('onRank', data)
+
+        this.rank = data
+
+        return true
+      }
+    },
+
+    async onReplace(siswa_id) {
+
+      let report = null
+      this.report?.payload?.report?.forEach(el => {
+        console.log('get_report_unsubmit', el)
+        if(el.is_submit == 'N') {
+          report = el
+        }
+      });
+
+      // console.log('onReplace', report, this.get_report_tugas?.id, siswa_id)
+      // return;
+
+      if (this.loading.form) return false;
+      this.loading.form = true;
+
+      Loading.show()
+      const resp = await axios({
+        url: host + '/lms/tugas-quiz-stats/' + report?.id +'/replace',
+        method: 'post'
+      })
+        .catch((err) => {
+          console.log('err', err?.response?.data)
+          const { caption, message } = (err?.response?.data)
+          notifFailed(message, caption)
+          return false
+        })
+
+      Loading.hide()
+      this.loading.form = false
+      console.log('onLogin', resp)
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+        notifSuccess()
+
+        await this.onReport(this.get_report_tugas?.id, siswa_id);
+        await this.onRank(this.get_report_tugas?.id, true)
+
+        return true
+      }
+    },
+
 
   },
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useLmsTugasQuizStatsStore, import.meta.hot))
+}

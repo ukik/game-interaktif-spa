@@ -74,6 +74,79 @@ export default boot(async ({ app, ssrContext, router, store }) => {
         })
       },
 
+      getDateOnly(date) {
+        return date.split(" ")[0];
+      },
+
+      getRankModel_1(correct, questions) {
+        const max = questions; // nilai maksimal
+        const steps = 9; // jumlah grade: +A, A, +B, B, +C, C, +D, D, E
+        const interval = max / (steps - 1); // jarak tiap tangga
+
+        // buat array batas tiap grade (rounded ke atas supaya aman)
+        const limits = Array.from({ length: steps }, (_, i) =>
+          Math.round(i * interval)
+        );
+
+        // grade labels sesuai pola
+        const grades = ["A+", "A", "B+", "B", "C+", "C", "D+", "D", "E"];
+        const descriptions = [
+          "Perfect! Semua soal benar",
+          "Hampir sempurna",
+          "Sangat bagus",
+          "Bagus",
+          "Cukup",
+          "Perlu latihan",
+          "Kurang",
+          "Sangat kurang",
+          "Perlu belajar lagi",
+        ];
+
+        // cari grade sesuai correct
+        for (let i = 0; i < steps; i++) {
+          if (correct >= limits[steps - 1 - i]) {
+            return { g: grades[i], d: descriptions[i] };
+          }
+        }
+
+        return { g: "E", d: "Perlu belajar lagi" };
+      },
+
+      getRankModel_2(number) {
+
+        let ranking = ""
+        let msg = ""
+
+        if (number >= 4.5) {
+          ranking = "A"
+          msg = "Sangat memuaskan"
+        }
+        else if (number >= 3.5) {
+          ranking = "B"
+          msg = "Bagus"
+        }
+        else if (number >= 2.5) {
+          ranking = "C"
+          msg = "Cukup"
+        }
+        else if (number >= 1.5) {
+          ranking = "D"
+          msg = "Kurang"
+        }
+        else {
+          ranking = "E"
+          msg = "Perlu belajar lagi"
+        }
+
+        return {
+          d: msg,
+          g: ranking,
+          s: number
+        }
+
+      },
+
+
       getRanking(score) {
         score = parseInt(score);
 

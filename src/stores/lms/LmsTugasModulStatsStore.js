@@ -33,6 +33,7 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
       index: true,
       show: true,
       report: true,
+      rank: true,
     },
     index: {
       "payload": {
@@ -83,15 +84,20 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     },
     show: {
       payload: {
-        payload: {
-          data:[],
-        },
         tugas:[],
         top:{
           data:[],
         },
       },
       kelas: {},
+    },
+    rank: {
+      payload: {
+        payload: null,
+        top: {
+          data: null,
+        },
+      },
     },
     report: {
       payload: {
@@ -129,12 +135,54 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     get_index_current_kategori: ({ index }) => index?.payload?.currentKategori,
 
     get_show_kelas: ({ show }) => show?.payload?.kelas,
-    get_show_payload: ({ show }) => show?.payload?.payload,
     get_show_top: ({ show }) => show?.payload?.top?.data,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
 
-    get_report: ({ report }) => report?.payload?.payload,
+    get_rank_payload: ({ rank }) => rank?.payload?.payload,
+    get_rank_top: ({ rank }) => rank?.payload?.top,
 
+    get_report: ({ report }) => report?.payload?.payload,
+get_report_unsubmit: ({ report }) => {
+      let json = null
+      report?.payload?.report?.forEach(el => {
+        console.log('get_report_unsubmit', el)
+        if(el.is_submit == 'N') {
+          json = el?.json
+        }
+      });
+      return json
+    },
+
+    get_report_submit: ({ report }) => {
+      let json = null
+      report?.payload?.report?.forEach(el => {
+        console.log('get_report_submit', el)
+        if(el.is_submit == 'Y') {
+          json = el?.json
+        }
+      });
+      return json
+    },
+    get_report_submit_checking() {
+      const obj = useLmsTugasQuizStatsStore()?.get_report_submit?.checking ?? null
+      console.log('obj', obj)
+      let html = [];
+      for (const key in obj) {
+        if (!Object.hasOwn(obj, key)) continue;
+        html.push(obj[key]);
+      }
+      return html.length > 0 ? html : null
+    },
+    get_report_unsubmit_checking() {
+      const obj = useLmsTugasQuizStatsStore()?.get_report_unsubmit?.checking ?? null
+      console.log('obj', obj)
+      let html = [];
+      for (const key in obj) {
+        if (!Object.hasOwn(obj, key)) continue;
+        html.push(obj[key]);
+      }
+      return html.length > 0 ? html : null
+    },
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
@@ -233,21 +281,16 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
       }
     },
 
-    async onReport(tugas_id = null) {
-      this.onRequest('/lms/tugas-modul-stats/' + tugas_id + '/report/' + useAuthStore().getAuthUser?.id, 'report')
-    },
-    async onRequest(url = '', key = '') {
+    async onReport(tugas_id, siswa_id, key = 'report') {
 
       if (this.loading[key]) return false;
       this.loading[key] = true;
       console.log('onIndex')
 
       const resp = await axios({
-        url: host + url,
+        url: '/lms/tugas-modul-stats/' + tugas_id + '/report/' + siswa_id,
         method: 'get',
-        params: {
-          page: 1
-        }
+        params: {}
       })
         .then((response) => {
           // notifSuccess()
@@ -273,5 +316,36 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
       }
     },
 
+    async onReplace(stats_id, siswa_id) {
+
+      if (this.loading.form) return false;
+      this.loading.form = true;
+
+      const resp = await axios({
+        url: host + '/lms/tugas-modul-stats/' + stats_id +'/replace',
+        method: 'post'
+      })
+        .catch((err) => {
+          console.log('err', err?.response?.data)
+          const { caption, message } = (err?.response?.data)
+          notifFailed(message, caption)
+          return false
+        })
+
+      Loading.hide()
+      this.loading.form = false
+      console.log('onLogin', resp)
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      if (resp?.data?.isLogin) {
+        notifSuccess()
+
+        await this.onReport(this.get_show_tugas?.id, siswa_id);
+        await this.onRank(this.get_show_tugas?.id, true)
+
+        return true
+      }
+    },
   },
 });

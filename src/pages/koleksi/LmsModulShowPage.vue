@@ -21,7 +21,7 @@
     <div style="height: 50px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
       <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth()}px`">
-        <q-item @click="onOpenDialog" class="col-6 text-white bg-primary" clickable v-ripple>
+        <q-item @click="onOpenDialog" class="col text-white bg-primary" clickable v-ripple>
           <q-item-section avatar>
             <q-icon text-color="white" name="post_add" />
           </q-item-section>
@@ -29,14 +29,14 @@
             <q-item-label>Buat Tugas</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item class="col-6 text-white bg-positive" clickable v-ripple>
+        <!-- <q-item class="col-6 text-white bg-positive" clickable v-ripple>
           <q-item-section avatar>
             <q-icon text-color="white" name="bar_chart" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Leaderboard</q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item> -->
       </q-card-actions>
     </q-page-sticky>
 

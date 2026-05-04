@@ -15,11 +15,13 @@ export const myMixin = {
     ...mapState(useLmsTugasQuizStatsStore, [
       'get_init_report',
       "get_report",
+      "get_report_tugas",
       "get_report_unsubmit",
+      "get_report_unsubmit_checking",
       "get_report_submit",
-      // "get_report_unsubmit_checking"
+      "get_report_submit_checking"
     ]),
-    get_report_unsubmit_checking() { // DUMMY
+    get_report_unsubmit_checkingX() { // DUMMY
       let stg = '';
       if(this.pathContains('arrange')) stg = 'record_quiz_arrange2'
       if(this.pathContains('boolean')) stg = 'record_quiz_boolean2'

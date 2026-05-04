@@ -12,10 +12,10 @@
 
       <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels keep-alive v-model="tab" animated>
         <q-tab-panel name="tab1" class="q-pa-none">
-          <ShowTabHasilCard v-if="get_show_payload?.data.length > 0" @onRefresh="onRefreshShow"
-            :get_show_payload="get_show_payload" :get_show_top="get_show_top"></ShowTabHasilCard>
+          <ShowTabModulHasilCard v-if="get_show_payload?.data.length > 0" @onRefresh="onRefreshShow"
+            :payload="get_show_payload" :top="get_show_top"></ShowTabModulHasilCard>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="tab2" class="q-pa-none">
@@ -70,12 +70,12 @@ import { useLmsTugasModulStatsStore } from "src/stores/lms/LmsTugasModulStatsSto
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 import ShowTabTugasCard from "./components/ShowTabTugasCard.vue";
 import ShowTabAktivitasCard from "./components/ShowTabAktivitasCard.vue";
-import ShowTabHasilCard from "./components/ShowTabHasilCard.vue";
+import ShowTabModulHasilCard from "./components/ShowTabQuizHasilCard.vue";
 import ShowTabPesertaCard from "./components/ShowTabPesertaCard.vue";
 
 export default {
   components: {
-    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabHasilCard, ShowTabPesertaCard
+    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabModulHasilCard, ShowTabPesertaCard
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasModulStatsStore(store);

@@ -41,7 +41,7 @@
 
         <q-item-section>
           <q-item-label lines="1">Jadwal Mulai</q-item-label>
-          <q-item-label caption>{{ item?.begin_date }}</q-item-label>
+          <q-item-label caption>{{ getDateOnly(item?.begin_date) }}</q-item-label>
         </q-item-section>
 
       </q-item>
@@ -53,7 +53,7 @@
 
         <q-item-section>
           <q-item-label lines="1">Jadwal Selesai</q-item-label>
-          <q-item-label caption>{{ item?.end_date }}</q-item-label>
+          <q-item-label caption>{{ getDateOnly(item?.end_date) }}</q-item-label>
         </q-item-section>
 
       </q-item>

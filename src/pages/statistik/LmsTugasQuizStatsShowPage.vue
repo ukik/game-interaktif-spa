@@ -4,7 +4,7 @@
     <q-card flat bordered>
       <q-tabs v-model="tab" :key="tab" dense class="text-grey"
         active-color="primary" indicator-color="primary" align="justify">
-        <q-tab :key="1" name="tab1" label="Hasil" />
+        <q-tab :key="1" name="tab1" label="Ranking" />
         <q-tab :key="2" name="tab2" label="Tugas" />
         <q-tab :key="3" name="tab3" label="Aktivitas" />
         <q-tab :key="4" name="tab4" label="Peserta" />
@@ -12,10 +12,10 @@
 
       <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels keep-alive v-model="tab" animated>
         <q-tab-panel name="tab1" class="q-pa-none">
-          <ShowTabHasilCard v-if="get_show_payload?.data.length > 0" @onRefresh="onRefreshShow"
-            :get_show_payload="get_show_payload" :get_show_top="get_show_top"></ShowTabHasilCard>
+          <ShowTabQuizHasilCard v-if="get_show_payload?.data.length > 0" @onRefresh="onRefreshShow"
+            :payload="get_show_payload" :top="get_show_top"></ShowTabQuizHasilCard>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="tab2" class="q-pa-none">
@@ -70,12 +70,12 @@ import { useLmsTugasQuizStatsStore } from "src/stores/lms/LmsTugasQuizStatsStore
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 import ShowTabTugasCard from "./components/ShowTabTugasCard.vue";
 import ShowTabAktivitasCard from "./components/ShowTabAktivitasCard.vue";
-import ShowTabHasilCard from "./components/ShowTabHasilCard.vue";
+import ShowTabQuizHasilCard from "./components/ShowTabQuizHasilCard.vue";
 import ShowTabPesertaCard from "./components/ShowTabPesertaCard.vue";
 
 export default {
   components: {
-    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabHasilCard, ShowTabPesertaCard
+    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabQuizHasilCard, ShowTabPesertaCard
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasQuizStatsStore(store);

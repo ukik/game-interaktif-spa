@@ -2,8 +2,8 @@
 
   <div class="q-pa-sm">
 
-    <div class="text-right q-mb-sm">
-      <q-btn @click="onRefresh" dense icon="refresh" round unelevated color="positive"></q-btn>
+    <div class="text-center q-mb-sm">
+      <q-btn @click="onRefresh" outline dense icon="refresh" class="q-px-sm" rounded label="refresh" unelevated color="positive"></q-btn>
     </div>
 
     <q-list separator bordered class="text-dark">
@@ -15,7 +15,7 @@
         </div>
 
 
-        <template v-for="(item, index) in get_show_top">
+        <template v-for="(item, index) in top">
           <q-card flat square class="col-4">
             <!-- <q-card-actions align="between" class="q-mb-sm q-px-md" :class="['bg-' + getRankColor(index)]">
               <q-item-label class="text-white" lines="1">Score </q-item-label>
@@ -31,7 +31,7 @@
                 <q-badge :color="getRankColor(index)" class="badge-left round q-pa-sm flex flex-center text-body2"
                   style="width:30px; height:30px; " floating>
                   <!-- <q-icon name="fa-brands fa-web-awesome"></q-icon> -->
-                  {{ getRanking(item?.score)?.grade }}
+                  {{ getRankModel_2(item?.final_rank_point)?.g }}
                 </q-badge>
               </q-avatar>
 
@@ -61,7 +61,7 @@
               <div class="text-bold">
                 <q-icon name="fa-brands fa-web-awesome"></q-icon>
               </div>
-              <div class="text-caption">({{ item?.score }} / 100) </div>
+              <div class="text-caption">{{item?.total_question_true}} / {{item?.total_question }} </div>
             </q-card-actions>
 
 
@@ -80,7 +80,12 @@
           label="Leaderboard"></q-chip>
         <q-separator></q-separator>
       </div>
-      <q-item v-for="(item, index) in get_show_payload?.data">
+      <q-item v-for="(item, index) in payload?.data">
+        <q-item-section avatar>
+          <q-avatar :color="getRankColor(index)" class="text-white">
+            {{ getRankModel_2(item?.final_rank_point)?.g }}
+          </q-avatar>
+        </q-item-section>
         <q-item-section avatar>
           <q-avatar color="dark">
             <q-img class="rounded-borders" :src="item?.siswa?.url_image"
@@ -89,11 +94,9 @@
         </q-item-section>
         <q-item-section>
           <q-item-label lines="1">{{ item?.siswa?.name }}</q-item-label>
-          <q-item-label caption>({{ item?.score }} / 100) </q-item-label>
+          <q-item-label caption>({{item?.total_question_true}} / {{item?.total_question }}) Soal</q-item-label>
         </q-item-section>
-
         <q-item-section side>
-          <!-- <q-badge class="q-pa-sm" :color="item?.status == 'draft' ? 'red' : 'green'" :label="item?.status" /> -->
           <q-avatar color="grey-2" class="text-dark">
             {{ index + 1 }}
             <q-badge color="transparent" class="round flex flex-center" style="right: -7px;"
@@ -109,7 +112,7 @@
 
 <script>
 export default {
-  props: ['get_show_payload', 'get_show_top'],
+  props: ['payload', 'top'],
   emits: ['onRefresh'],
   methods: {
     onRefresh() {
