@@ -1,7 +1,8 @@
 <template>
   <q-page id="QuizActionMatch" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
-    <div class="game">
+    <WinLottie />
+    <div v-show="!is_quiz_done" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -34,7 +35,7 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
+// import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
@@ -49,485 +50,500 @@ export default {
     const slug = currentRoute.params?.slug || ''; // tugas_id
     await useLmsTugasStore(store).onAktivitas(slug)
   },
+  beforeRouteLeave(to, from, next) {
+    // const answer = window.confirm('Do you really want to leave?')
+    // if (!answer) return false // Cancels the back navigation
+    if (this.is_quiz_done) return next()
+    return QuizActionBeforeRouteLeave(next)
+  },
+
+  mounted() {
+    this.onStart();
+  },
   created() {
     this.dummyOnCreate('match')
   },
-  mounted() {
-    const vm = this;
+  methods: {
+    onStart() {
+      const vm = this;
 
-    if(this.get_show_payload?.kategori != 'match') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+      if (this.get_show_payload?.kategori != 'match') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
+      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
+      const list_questions = this.get_show_payload?.konten
 
-    /* ================= DATA ================= */
-    // const list_questions = [
-    //   { q: "he plays football", a: "dia bermain bola" },
-    //   { q: "she reads books", a: "dia membaca buku" },
-    //   { q: "I drink coffee", a: "saya minum kopi" },
-    //   { q: "we study english", a: "kami belajar bahasa inggris" },
-    //   { q: "they watch tv", a: "mereka menonton tv" },
+      /* ================= DATA ================= */
+      // const list_questions = [
+      //   { q: "he plays football", a: "dia bermain bola" },
+      //   { q: "she reads books", a: "dia membaca buku" },
+      //   { q: "I drink coffee", a: "saya minum kopi" },
+      //   { q: "we study english", a: "kami belajar bahasa inggris" },
+      //   { q: "they watch tv", a: "mereka menonton tv" },
 
-    //   { q: "he eats rice", a: "dia makan nasi" },
-    //   { q: "she cooks dinner", a: "dia memasak makan malam" },
-    //   { q: "I go to school", a: "saya pergi ke sekolah" },
-    //   { q: "we play games", a: "kami bermain permainan" },
-    //   { q: "they like music", a: "mereka menyukai musik" },
+      //   { q: "he eats rice", a: "dia makan nasi" },
+      //   { q: "she cooks dinner", a: "dia memasak makan malam" },
+      //   { q: "I go to school", a: "saya pergi ke sekolah" },
+      //   { q: "we play games", a: "kami bermain permainan" },
+      //   { q: "they like music", a: "mereka menyukai musik" },
 
-    //   { q: "he runs fast", a: "dia berlari cepat" },
-    //   { q: "she sings well", a: "dia bernyanyi dengan baik" },
-    //   { q: "I write a letter", a: "saya menulis surat" },
-    //   { q: "we read stories", a: "kami membaca cerita" },
-    //   { q: "they help friends", a: "mereka membantu teman" },
+      //   { q: "he runs fast", a: "dia berlari cepat" },
+      //   { q: "she sings well", a: "dia bernyanyi dengan baik" },
+      //   { q: "I write a letter", a: "saya menulis surat" },
+      //   { q: "we read stories", a: "kami membaca cerita" },
+      //   { q: "they help friends", a: "mereka membantu teman" },
 
-    //   { q: "he drives a car", a: "dia mengemudi mobil" },
-    //   { q: "she cleans the room", a: "dia membersihkan kamar" },
-    //   { q: "I open the door", a: "saya membuka pintu" },
-    //   { q: "we close the window", a: "kami menutup jendela" },
-    //   { q: "they answer questions", a: "mereka menjawab pertanyaan" },
+      //   { q: "he drives a car", a: "dia mengemudi mobil" },
+      //   { q: "she cleans the room", a: "dia membersihkan kamar" },
+      //   { q: "I open the door", a: "saya membuka pintu" },
+      //   { q: "we close the window", a: "kami menutup jendela" },
+      //   { q: "they answer questions", a: "mereka menjawab pertanyaan" },
 
-    //   { q: "he buys food", a: "dia membeli makanan" },
-    //   { q: "she sells clothes", a: "dia menjual pakaian" },
-    //   { q: "I call my mother", a: "saya menelepon ibu saya" },
-    //   { q: "we visit our family", a: "kami mengunjungi keluarga kami" },
-    //   { q: "they travel together", a: "mereka bepergian bersama" },
+      //   { q: "he buys food", a: "dia membeli makanan" },
+      //   { q: "she sells clothes", a: "dia menjual pakaian" },
+      //   { q: "I call my mother", a: "saya menelepon ibu saya" },
+      //   { q: "we visit our family", a: "kami mengunjungi keluarga kami" },
+      //   { q: "they travel together", a: "mereka bepergian bersama" },
 
-    //   { q: "he teaches math", a: "dia mengajar matematika" },
-    //   { q: "she learns english", a: "dia belajar bahasa inggris" },
-    //   { q: "I listen to music", a: "saya mendengarkan musik" },
-    //   { q: "we practice speaking", a: "kami berlatih berbicara" },
-    //   { q: "they understand lessons", a: "mereka memahami pelajaran" },
+      //   { q: "he teaches math", a: "dia mengajar matematika" },
+      //   { q: "she learns english", a: "dia belajar bahasa inggris" },
+      //   { q: "I listen to music", a: "saya mendengarkan musik" },
+      //   { q: "we practice speaking", a: "kami berlatih berbicara" },
+      //   { q: "they understand lessons", a: "mereka memahami pelajaran" },
 
-    //   { q: "he wakes up early", a: "dia bangun pagi" },
-    //   { q: "she sleeps late", a: "dia tidur larut" },
-    //   { q: "I wash my hands", a: "saya mencuci tangan" },
-    //   { q: "we brush our teeth", a: "kami menyikat gigi" },
-    //   { q: "they take a bath", a: "mereka mandi" },
+      //   { q: "he wakes up early", a: "dia bangun pagi" },
+      //   { q: "she sleeps late", a: "dia tidur larut" },
+      //   { q: "I wash my hands", a: "saya mencuci tangan" },
+      //   { q: "we brush our teeth", a: "kami menyikat gigi" },
+      //   { q: "they take a bath", a: "mereka mandi" },
 
-    //   { q: "he opens the book", a: "dia membuka buku" },
-    //   { q: "she closes the bag", a: "dia menutup tas" },
-    //   { q: "I carry the bag", a: "saya membawa tas" },
-    //   { q: "we share food", a: "kami berbagi makanan" },
-    //   { q: "they bring water", a: "mereka membawa air" },
+      //   { q: "he opens the book", a: "dia membuka buku" },
+      //   { q: "she closes the bag", a: "dia menutup tas" },
+      //   { q: "I carry the bag", a: "saya membawa tas" },
+      //   { q: "we share food", a: "kami berbagi makanan" },
+      //   { q: "they bring water", a: "mereka membawa air" },
 
-    //   { q: "he draws pictures", a: "dia menggambar gambar" },
-    //   { q: "she paints flowers", a: "dia melukis bunga" },
-    //   { q: "I color the paper", a: "saya mewarnai kertas" },
-    //   { q: "we make toys", a: "kami membuat mainan" },
-    //   { q: "they build houses", a: "mereka membangun rumah" },
+      //   { q: "he draws pictures", a: "dia menggambar gambar" },
+      //   { q: "she paints flowers", a: "dia melukis bunga" },
+      //   { q: "I color the paper", a: "saya mewarnai kertas" },
+      //   { q: "we make toys", a: "kami membuat mainan" },
+      //   { q: "they build houses", a: "mereka membangun rumah" },
 
-    //   { q: "he jumps high", a: "dia melompat tinggi" },
-    //   { q: "she dances happily", a: "dia menari dengan gembira" },
-    //   { q: "I smile often", a: "saya sering tersenyum" },
-    //   { q: "we laugh together", a: "kami tertawa bersama" },
-    //   { q: "they clap hands", a: "mereka bertepuk tangan" },
+      //   { q: "he jumps high", a: "dia melompat tinggi" },
+      //   { q: "she dances happily", a: "dia menari dengan gembira" },
+      //   { q: "I smile often", a: "saya sering tersenyum" },
+      //   { q: "we laugh together", a: "kami tertawa bersama" },
+      //   { q: "they clap hands", a: "mereka bertepuk tangan" },
 
-    //   { q: "he drinks water", a: "dia minum air" },
-    //   { q: "she eats fruit", a: "dia makan buah" },
-    //   { q: "I like chocolate", a: "saya suka cokelat" },
-    //   { q: "we love animals", a: "kami menyukai hewan" },
-    //   { q: "they care about nature", a: "mereka peduli pada alam" },
+      //   { q: "he drinks water", a: "dia minum air" },
+      //   { q: "she eats fruit", a: "dia makan buah" },
+      //   { q: "I like chocolate", a: "saya suka cokelat" },
+      //   { q: "we love animals", a: "kami menyukai hewan" },
+      //   { q: "they care about nature", a: "mereka peduli pada alam" },
 
-    //   { q: "he studies hard", a: "dia belajar dengan giat" },
-    //   { q: "she works at home", a: "dia bekerja di rumah" },
-    //   { q: "I play with friends", a: "saya bermain dengan teman" },
-    //   { q: "we enjoy holidays", a: "kami menikmati liburan" },
-    //   { q: "they wait patiently", a: "mereka menunggu dengan sabar" },
-    // ];
+      //   { q: "he studies hard", a: "dia belajar dengan giat" },
+      //   { q: "she works at home", a: "dia bekerja di rumah" },
+      //   { q: "I play with friends", a: "saya bermain dengan teman" },
+      //   { q: "we enjoy holidays", a: "kami menikmati liburan" },
+      //   { q: "they wait patiently", a: "mereka menunggu dengan sabar" },
+      // ];
 
-    let checkingHTML = {};
+      let checkingHTML = {};
 
-    // TOTAL SOAL (round)
-    const totalSheetSoal = 3;
-    let currentSheetSoal = 1;
+      // TOTAL SOAL (round)
+      const totalSheetSoal = 3;
+      let currentSheetSoal = 1;
 
-    const max_questions = 5;
-    let questions = [];
+      const max_questions = 5;
+      let questions = [];
 
-    let blockId = 1;
-    let poolIndex = 0;
+      let blockId = 1;
+      let poolIndex = 0;
 
-    for (let q = 1; q <= totalSheetSoal; q++) {
-      // ⬅️ FIX: totalSheetSoal
-      for (let i = 0; i < max_questions; i++) {
-        const item = list_questions[poolIndex];
+      for (let q = 1; q <= totalSheetSoal; q++) {
+        // ⬅️ FIX: totalSheetSoal
+        for (let i = 0; i < max_questions; i++) {
+          const item = list_questions[poolIndex];
 
-        questions.push({
-          id: blockId, // ⬅️ GLOBAL BLOCK ID
-          current_question: q,
-          q: item.q, // ⬅️ WAJIB ADA
-          a: item.a, // ⬅️ WAJIB ADA
-        });
+          questions.push({
+            id: blockId, // ⬅️ GLOBAL BLOCK ID
+            current_question: q,
+            q: item.q, // ⬅️ WAJIB ADA
+            a: item.a, // ⬅️ WAJIB ADA
+          });
 
-        blockId++;
-        poolIndex++;
+          blockId++;
+          poolIndex++;
+        }
       }
-    }
 
-    let activeBlockId = null;
-    let dragged = null,
-      ghost = null;
-    let score = 0,
-      matched = 0;
+      let activeBlockId = null;
+      let dragged = null,
+        ghost = null;
+      let score = 0,
+        matched = 0;
 
-    /* ================= INIT ================= */
-    function init() {
-      matched = 0;
+      /* ================= INIT ================= */
+      function init() {
+        matched = 0;
 
-      // 🧹 HAPUS BLOCK LAMA DULU
-      document.getElementById("colQ").innerHTML = "";
-      document.getElementById("colA").innerHTML = "";
+        // 🧹 HAPUS BLOCK LAMA DULU
+        document.getElementById("colQ").innerHTML = "";
+        document.getElementById("colA").innerHTML = "";
 
-      // 🔑 FILTER HANYA SOAL UNTUK SHEET AKTIF
-      const currentQuestions = questions.filter(
-        (q) => q.current_question === currentSheetSoal
-      );
-
-      const q = [...currentQuestions].sort(() => Math.random() - 0.5);
-      const a = [...currentQuestions].sort(() => Math.random() - 0.5);
-
-      q.forEach((d) => addItem(d.q, "q", d.a));
-      a.forEach((d) => addItem(d.a, "a", d.q));
-    }
-    init();
-
-    /* ================= ITEM ================= */
-    function addItem(text, type, match) {
-      const el = document.createElement("div");
-      el.className = "block_quiz";
-      el.textContent = text;
-      el.dataset.type = type;
-      el.dataset.match = match;
-      bindDrag(el);
-      document.getElementById(type === "q" ? "colQ" : "colA").appendChild(el);
-    }
-
-    /* ================= DRAG ================= */
-    function bindDrag(el) {
-      el.addEventListener("pointerdown", (e) => {
-        if (el.classList.contains("matched")) return;
-
-        dragged = el;
-        el.classList.add("dragging");
-
-        // 🔑 SIMPAN BLOCK ID YANG DI-DRAG
-        const currentItems = questions.filter(
+        // 🔑 FILTER HANYA SOAL UNTUK SHEET AKTIF
+        const currentQuestions = questions.filter(
           (q) => q.current_question === currentSheetSoal
         );
-        const idx = currentItems.findIndex(
-          (q) => q.q === el.textContent || q.a === el.textContent
-        );
-        activeBlockId = currentItems[idx]?.id;
 
-        ghost = el.cloneNode(true);
-        ghost.className = "drag-ghost";
-        document.body.appendChild(ghost);
-        moveGhost(e);
-        el.setPointerCapture(e.pointerId);
-      });
-      el.addEventListener("pointermove", (e) => ghost && moveGhost(e));
-      el.addEventListener("pointerup", (e) => {
-        if (!ghost) return;
+        const q = [...currentQuestions].sort(() => Math.random() - 0.5);
+        const a = [...currentQuestions].sort(() => Math.random() - 0.5);
 
-        ghost.style.display = "none"; // ⬅️ SEMENTARA HILANGKAN
-        const t = document.elementFromPoint(e.clientX, e.clientY);
-        ghost.style.display = ""; // ⬅️ BALIKKAN
+        q.forEach((d) => addItem(d.q, "q", d.a));
+        a.forEach((d) => addItem(d.a, "a", d.q));
+      }
+      init();
 
-        // if (t && t.classList.contains("block_quiz") && t !== dragged) {
-        //   checkMatch(dragged, t);
-        // }
-
-        if (
-          t &&
-          t.classList.contains("block_quiz") &&
-          t !== dragged &&
-          !t.classList.contains("matched") // ⬅️ BLOCK TARGET YANG SUDAH BENAR
-        ) {
-          checkMatch(dragged, t);
-        }
-
-        cleanup();
-      });
-    }
-    function moveGhost(e) {
-      const isTouch = e.pointerType === "touch";
-
-      // Offset khusus mobile agar ghost tidak ketutup jari
-      const offsetX = isTouch ? 0 : 0;
-      const offsetY = isTouch ? 70 : 0;
-
-      ghost.style.left = e.clientX + offsetX + "px";
-      ghost.style.top = e.clientY - offsetY + "px";
-    }
-    function cleanup() {
-      ghost && ghost.remove();
-      ghost = null;
-      dragged && dragged.classList.remove("dragging");
-      dragged = null;
-    }
-
-    /* ================= LOGIC ================= */
-    function checkMatch(a, b) {
-
-      // 🔒 Jangan proses kalau salah satu sudah matched
-      if (a.classList.contains("matched") || b.classList.contains("matched")) {
-        return;
+      /* ================= ITEM ================= */
+      function addItem(text, type, match) {
+        const el = document.createElement("div");
+        el.className = "block_quiz";
+        el.textContent = text;
+        el.dataset.type = type;
+        el.dataset.match = match;
+        bindDrag(el);
+        document.getElementById(type === "q" ? "colQ" : "colA").appendChild(el);
       }
 
-      if (a.dataset.match === b.textContent) {
-        a.classList.add("matched");
-        b.classList.add("matched");
-        matched += 2;
-        score += 100;
-        showSnackbar("✅ Cocok! +100", "success");
-        playTrueFX();
+      /* ================= DRAG ================= */
+      function bindDrag(el) {
+        el.addEventListener("pointerdown", (e) => {
+          if (el.classList.contains("matched")) return;
 
-        const totalInThisSheetSoal =
-          questions.filter((q) => q.current_question === currentSheetSoal).length * 2;
+          dragged = el;
+          el.classList.add("dragging");
 
-        if (matched === totalInThisSheetSoal) {
-          showSnackbar("🎉 Semua Cocok!", "success");
-
-          clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
-
-          setTimeout(() => {
-            nextSoal(); // ⬅️ SATU-SATUNYA JALUR PINDAH SOAL
-          }, 900);
-        }
-      } else {
-        score -= 20;
-        shake();
-        showSnackbar("❌ Salah! -20", "error");
-        playErrorFX("error");
-      }
-      document.getElementById(
-        "score"
-      ).textContent = `Score: ${score} | Lembar: ${currentSheetSoal}/${totalSheetSoal}`;
-    }
-
-    /* ================= SNACKBAR ================= */
-    function showSnackbar(msg, type = "success", duration = 1800) {
-
-      vm.$q.notify({
-        message: "Jawaban: " + msg,
-        // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
-        // color: type == "success" ? 'positive' : 'negative',
-        color: "white",
-        textColor: "dark",
-        group: type,
-      });
-
-      /* === RECORD SAAT SNACKBAR MUNCUL === */
-      const currentItems = questions.filter(
-        (q) => q.current_question === currentSheetSoal
-      );
-
-      const currentBlockId = activeBlockId;
-
-      recordQuizEvent({
-        current_question: currentSheetSoal,
-        current_block_question: currentBlockId,
-        status_question: type === "success" ? "berhasil" : "salah",
-        current_score: score,
-        time_left: timeLeft,
-        check_trial: type === "error" ? 1 : 0,
-        current_minus_score: type === "error" ? 20 : 0,
-      });
-    }
-
-    /* ================== TAMBAHAN: COUNTDOWN 120 DETIK ================== */
-    const default_timeLeft = 30;
-    let timeLeft = default_timeLeft;
-    const timerEl = document.getElementById("timer");
-
-    let countdown = null;
-
-    function startCountdown() {
-      clearInterval(countdown);
-
-      countdown = setInterval(() => {
-        if (!document.getElementById("timer")) return clearInterval(countdown);
-        timeLeft--;
-        timerEl.textContent = "⏱️ " + timeLeft;
-
-        if (timeLeft <= 0) {
-          clearInterval(countdown);
-
-          // ⛔ penalti waktu habis
-          score -= 50;
-
-          // update score UI
-          updateScoreBar();
-
-          // efek & suara
-          shake();
-          playErrorFX("timeout");
-
-          showSnackbar("⏰ Waktu Habis! -50", "error");
-
-
-          // ⬅️ AUTO NILAI YANG BELUM MATCH = SALAH
+          // 🔑 SIMPAN BLOCK ID YANG DI-DRAG
           const currentItems = questions.filter(
             (q) => q.current_question === currentSheetSoal
           );
+          const idx = currentItems.findIndex(
+            (q) => q.q === el.textContent || q.a === el.textContent
+          );
+          activeBlockId = currentItems[idx]?.id;
 
-          currentItems.forEach((item) => {
-            const dataLS = JSON.parse(localStorage.getItem(LS_KEY));
+          ghost = el.cloneNode(true);
+          ghost.className = "drag-ghost";
+          document.body.appendChild(ghost);
+          moveGhost(e);
+          el.setPointerCapture(e.pointerId);
+        });
+        el.addEventListener("pointermove", (e) => ghost && moveGhost(e));
+        el.addEventListener("pointerup", (e) => {
+          if (!ghost) return;
 
-            const existing = JSON.parse(localStorage.getItem(LS_KEY)).question
-              .find(q => q.current_block_question === item.id);
+          ghost.style.display = "none"; // ⬅️ SEMENTARA HILANGKAN
+          const t = document.elementFromPoint(e.clientX, e.clientY);
+          ghost.style.display = ""; // ⬅️ BALIKKAN
 
-            // 🔒 JANGAN TIMPA kalau sudah berhasil
-            if (existing && existing.status_question === "berhasil") return;
+          // if (t && t.classList.contains("block_quiz") && t !== dragged) {
+          //   checkMatch(dragged, t);
+          // }
 
+          if (
+            t &&
+            t.classList.contains("block_quiz") &&
+            t !== dragged &&
+            !t.classList.contains("matched") // ⬅️ BLOCK TARGET YANG SUDAH BENAR
+          ) {
+            checkMatch(dragged, t);
+          }
 
-            // ⬅️ kalau belum pernah dijawab / belum berhasil
-            if (!existing || existing.status_question !== "berhasil") {
-              recordQuizEvent({
-                current_question: currentSheetSoal,
-                current_block_question: item.id,
-                status_question: "salah",
-                current_score: score,
-                time_left: 0,
-                check_trial: 0,
-                current_minus_score: 0,
-              });
-            }
-          });
+          cleanup();
+        });
+      }
+      function moveGhost(e) {
+        const isTouch = e.pointerType === "touch";
 
-          setTimeout(nextSoal, 900);
-        }
-      }, 1000);
-    }
-    function nextSoal() {
+        // Offset khusus mobile agar ghost tidak ketutup jari
+        const offsetX = isTouch ? 0 : 0;
+        const offsetY = isTouch ? 70 : 0;
 
-      currentSheetSoal++;
-      // blockIndexPerSoal[currentSheetSoal] = 0;
-
-      if (currentSheetSoal > totalSheetSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('match')
-
-        clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
-
-        // 🔒 freeze seluruh area quiz
-        document.getElementById('quizCard').style.pointerEvents = 'none';
-
-        // window.location.href = "result.html";
-        return;
+        ghost.style.left = e.clientX + offsetX + "px";
+        ghost.style.top = e.clientY - offsetY + "px";
+      }
+      function cleanup() {
+        ghost && ghost.remove();
+        ghost = null;
+        dragged && dragged.classList.remove("dragging");
+        dragged = null;
       }
 
-      matched = 0;
-      timeLeft = default_timeLeft; // ✅ RESET WAKTU
-      init(); // ✅ LOAD SOAL BARU
-      updateScoreBar();
-      startCountdown(); // ✅ TIMER BARU
-    }
-    startCountdown();
+      /* ================= LOGIC ================= */
+      function checkMatch(a, b) {
 
-    /* ================== TAMBAHAN LOGIKA SOAL ================== */
-
-    // update score + soal
-    function updateScoreBar() {
-      document.getElementById(
-        "score"
-      ).textContent = `Score: ${score} | Lembar: ${currentSheetSoal}/${totalSheetSoal}`;
-    }
-
-    // panggil sekali saat awal
-    updateScoreBar();
-
-    /* ================== LOCAL STORAGE QUIZ MATCHING (NEW LOGIC) ================== */
-    const LS_KEY = "record_quiz_match";
-    localStorage.removeItem(LS_KEY);
-
-    let blockIndexPerSoal = {};
-    /* === INIT STORAGE === */
-    function initQuizRecord() {
-      if (!localStorage.getItem(LS_KEY)) {
-        localStorage.setItem(
-          LS_KEY,
-          JSON.stringify({
-            total_question: totalSheetSoal,
-            total_time_left: 0,
-            total_check_trail: 0,
-            total_current_score: 0,
-            question: [],
-            checking: '', //
-          })
-        );
-      }
-    }
-    initQuizRecord();
-
-    /* === RECORD EVENT (TRIGGERED WITH SNACKBAR) === */
-    function recordQuizEvent({
-      current_block_question,
-      current_question,
-      status_question,
-      current_score,
-      time_left,
-      check_trial,
-      current_minus_score,
-    }) {
-      const data = JSON.parse(localStorage.getItem(LS_KEY));
-
-      /* === UPDATE TOTAL === */
-      data.total_current_score = current_score;
-      data.total_check_trail += check_trial;
-
-      if (status_question === "berhasil") {
-        data.total_time_left += time_left;
-      }
-
-      const index = data.question.findIndex(
-        (q) => q.current_block_question === current_block_question
-      );
-
-      if (index > -1) {
-        const prev = data.question[index];
-
-        // 🔒 LOCK kalau sudah berhasil
-        if (prev.status_question === "berhasil") {
+        // 🔒 Jangan proses kalau salah satu sudah matched
+        if (a.classList.contains("matched") || b.classList.contains("matched")) {
           return;
         }
 
-        /* === UPDATE + AKUMULASI MINUS === */
-        data.question[index] = {
-          ...prev,
-          status_question,
-          current_score,
-          time_left,
-          check_trial: prev.check_trial + check_trial,
-          current_minus_score: -(prev.current_minus_score + current_minus_score),
-        };
-      } else {
-        /* === INSERT BARU === */
-        data.question.push({
-          current_question,
-          current_block_question,
-          status_question,
-          current_score,
-          time_left,
-          check_trial,
-          current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+        if (a.dataset.match === b.textContent) {
+          a.classList.add("matched");
+          b.classList.add("matched");
+          matched += 2;
+          score += 100;
+          showSnackbar("✅ Cocok! +100", "success");
+          playTrueFX();
+
+          const totalInThisSheetSoal =
+            questions.filter((q) => q.current_question === currentSheetSoal).length * 2;
+
+          if (matched === totalInThisSheetSoal) {
+            showSnackbar("🎉 Semua Cocok!", "success");
+
+            clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
+
+            setTimeout(() => {
+              nextSoal(); // ⬅️ SATU-SATUNYA JALUR PINDAH SOAL
+            }, 900);
+          }
+        } else {
+          score -= 20;
+          shake();
+          showSnackbar("❌ Salah! -20", "error");
+          playErrorFX("error");
+        }
+        document.getElementById(
+          "score"
+        ).textContent = `Score: ${score} | Lembar: ${currentSheetSoal}/${totalSheetSoal}`;
+      }
+
+      /* ================= SNACKBAR ================= */
+      function showSnackbar(msg, type = "success", duration = 1800) {
+
+        vm.$q.notify({
+          message: "Jawaban: " + msg,
+          // icon: type == "success" ? 'ion-checkmark-circle' : 'ion-close-circle',
+          // color: type == "success" ? 'positive' : 'negative',
+          color: "white",
+          textColor: "dark",
+          group: type,
+        });
+
+        /* === RECORD SAAT SNACKBAR MUNCUL === */
+        const currentItems = questions.filter(
+          (q) => q.current_question === currentSheetSoal
+        );
+
+        const currentBlockId = activeBlockId;
+
+        recordQuizEvent({
+          current_question: currentSheetSoal,
+          current_block_question: currentBlockId,
+          status_question: type === "success" ? "berhasil" : "salah",
+          current_score: score,
+          time_left: timeLeft,
+          check_trial: type === "error" ? 1 : 0,
+          current_minus_score: type === "error" ? 20 : 0,
         });
       }
 
-      checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
-      data.checking = checkingHTML;
+      /* ================== TAMBAHAN: COUNTDOWN 120 DETIK ================== */
+      const default_timeLeft = 30;
+      let timeLeft = default_timeLeft;
+      const timerEl = document.getElementById("timer");
 
-      localStorage.setItem(LS_KEY, JSON.stringify(data));
-      vm.setForm(data)
+      let countdown = null;
+
+      function startCountdown() {
+        clearInterval(countdown);
+
+        countdown = setInterval(() => {
+          if(vm.is_quiz_done) return clearInterval(countdown);
+
+          if (!document.getElementById("timer")) return clearInterval(countdown);
+          timeLeft--;
+          timerEl.textContent = "⏱️ " + timeLeft;
+
+          if (timeLeft <= 0) {
+            clearInterval(countdown);
+
+            // ⛔ penalti waktu habis
+            score -= 50;
+
+            // update score UI
+            updateScoreBar();
+
+            // efek & suara
+            shake();
+            playErrorFX("timeout");
+
+            showSnackbar("⏰ Waktu Habis! -50", "error");
+
+
+            // ⬅️ AUTO NILAI YANG BELUM MATCH = SALAH
+            const currentItems = questions.filter(
+              (q) => q.current_question === currentSheetSoal
+            );
+
+            currentItems.forEach((item) => {
+              const dataLS = JSON.parse(localStorage.getItem(LS_KEY));
+
+              const existing = JSON.parse(localStorage.getItem(LS_KEY)).question
+                .find(q => q.current_block_question === item.id);
+
+              // 🔒 JANGAN TIMPA kalau sudah berhasil
+              if (existing && existing.status_question === "berhasil") return;
+
+
+              // ⬅️ kalau belum pernah dijawab / belum berhasil
+              if (!existing || existing.status_question !== "berhasil") {
+                recordQuizEvent({
+                  current_question: currentSheetSoal,
+                  current_block_question: item.id,
+                  status_question: "salah",
+                  current_score: score,
+                  time_left: 0,
+                  check_trial: 0,
+                  current_minus_score: 0,
+                });
+              }
+            });
+
+            setTimeout(nextSoal, 900);
+          }
+        }, 1000);
+      }
+      function nextSoal() {
+
+        currentSheetSoal++;
+        // blockIndexPerSoal[currentSheetSoal] = 0;
+
+        if (currentSheetSoal > totalSheetSoal) {
+
+          console.log('GAME OVER')
+          vm.onCreate('match')
+
+          clearInterval(countdown); // ⬅️ STOP TIMER SOAL INI
+
+          // 🔒 freeze seluruh area quiz
+          document.getElementById('quizCard').style.pointerEvents = 'none';
+
+          // window.location.href = "result.html";
+          return;
+        }
+
+        matched = 0;
+        timeLeft = default_timeLeft; // ✅ RESET WAKTU
+        init(); // ✅ LOAD SOAL BARU
+        updateScoreBar();
+        startCountdown(); // ✅ TIMER BARU
+      }
+      startCountdown();
+
+      /* ================== TAMBAHAN LOGIKA SOAL ================== */
+
+      // update score + soal
+      function updateScoreBar() {
+        document.getElementById(
+          "score"
+        ).textContent = `Score: ${score} | Lembar: ${currentSheetSoal}/${totalSheetSoal}`;
+      }
+
+      // panggil sekali saat awal
+      updateScoreBar();
+
+      /* ================== LOCAL STORAGE QUIZ MATCHING (NEW LOGIC) ================== */
+      const LS_KEY = "record_quiz_match";
+      localStorage.removeItem(LS_KEY);
+
+      let blockIndexPerSoal = {};
+      /* === INIT STORAGE === */
+      function initQuizRecord() {
+        if (!localStorage.getItem(LS_KEY)) {
+          localStorage.setItem(
+            LS_KEY,
+            JSON.stringify({
+              total_question: totalSheetSoal,
+              total_time_left: 0,
+              total_check_trail: 0,
+              total_current_score: 0,
+              question: [],
+              checking: '', //
+            })
+          );
+        }
+      }
+      initQuizRecord();
+
+      /* === RECORD EVENT (TRIGGERED WITH SNACKBAR) === */
+      function recordQuizEvent({
+        current_block_question,
+        current_question,
+        status_question,
+        current_score,
+        time_left,
+        check_trial,
+        current_minus_score,
+      }) {
+        const data = JSON.parse(localStorage.getItem(LS_KEY));
+
+        /* === UPDATE TOTAL === */
+        data.total_current_score = current_score;
+        data.total_check_trail += check_trial;
+
+        if (status_question === "berhasil") {
+          data.total_time_left += time_left;
+        }
+
+        const index = data.question.findIndex(
+          (q) => q.current_block_question === current_block_question
+        );
+
+        if (index > -1) {
+          const prev = data.question[index];
+
+          // 🔒 LOCK kalau sudah berhasil
+          if (prev.status_question === "berhasil") {
+            return;
+          }
+
+          /* === UPDATE + AKUMULASI MINUS === */
+          data.question[index] = {
+            ...prev,
+            status_question,
+            current_score,
+            time_left,
+            check_trial: prev.check_trial + check_trial,
+            current_minus_score: -(prev.current_minus_score + current_minus_score),
+          };
+        } else {
+          /* === INSERT BARU === */
+          data.question.push({
+            current_question,
+            current_block_question,
+            status_question,
+            current_score,
+            time_left,
+            check_trial,
+            current_minus_score: current_minus_score <= 0 ? 0 : -current_minus_score,
+          });
+        }
+
+        checkingHTML[currentSheetSoal] = document.getElementById("quizCard").outerHTML;
+        data.checking = checkingHTML;
+
+        localStorage.setItem(LS_KEY, JSON.stringify(data));
+        vm.setForm(data)
+      }
     }
-  },
+  }
 };
 </script>
 
 <style lang="scss">
 .block_quiz.matched {
-  pointer-events: none; /* ⬅️ AUTO DISABLE INTERAKSI */
+  pointer-events: none;
+  /* ⬅️ AUTO DISABLE INTERAKSI */
 }
 
 .block_quiz.dragging {

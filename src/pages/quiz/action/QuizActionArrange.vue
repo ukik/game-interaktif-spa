@@ -1,7 +1,8 @@
 <template>
   <q-page id="QuizActionArrange" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
-    <div class="game">
+    <WinLottie />
+    <div v-show="!is_quiz_done" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -31,7 +32,7 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
 
-import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
+// import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
@@ -44,465 +45,479 @@ export default {
     const slug = currentRoute.params?.slug || ''; // tugas_id
     await useLmsTugasStore(store).onAktivitas(slug)
   },
+  beforeRouteLeave(to, from, next) {
+    // const answer = window.confirm('Do you really want to leave?')
+    // if (!answer) return false // Cancels the back navigation
+    if (this.is_quiz_done) return next()
+    return QuizActionBeforeRouteLeave(next)
+  },
+
+  mounted() {
+    this.onStart();
+  },
   created() {
     this.dummyOnCreate('arrange')
   },
-  mounted() {
+  methods: {
+    onStart() {
 
-    console.log('this.get_show_payload?.konten', this.get_show_payload?.konten)
+      console.log('this.get_show_payload?.konten', this.get_show_payload?.konten)
 
-    const vm = this;
+      const vm = this;
 
-    if(this.get_show_payload?.kategori != 'arrange') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+      if (this.get_show_payload?.kategori != 'arrange') return this.notifFailed('data gagal diproses', 'Salah Quiz')
 
-    // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-    const list_questions = this.get_show_payload?.konten
+      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
+      const list_questions = this.get_show_payload?.konten
 
-    // return;
-    /* ================= DATA ================= */
-    // const list_questions = [
-    //   // he / she
-    //   { w: ["he", "plays", "football"] },
-    //   { w: ["he", "reads", "books"] },
-    //   { w: ["he", "likes", "music"] },
-    //   { w: ["he", "watches", "tv"] },
-    //   { w: ["he", "drinks", "milk"] },
-    //   { w: ["he", "eats", "rice"] },
-    //   { w: ["he", "runs", "fast"] },
-    //   { w: ["he", "writes", "letters"] },
-    //   { w: ["he", "drives", "cars"] },
-    //   { w: ["he", "opens", "door"] },
+      // return;
+      /* ================= DATA ================= */
+      // const list_questions = [
+      //   // he / she
+      //   { w: ["he", "plays", "football"] },
+      //   { w: ["he", "reads", "books"] },
+      //   { w: ["he", "likes", "music"] },
+      //   { w: ["he", "watches", "tv"] },
+      //   { w: ["he", "drinks", "milk"] },
+      //   { w: ["he", "eats", "rice"] },
+      //   { w: ["he", "runs", "fast"] },
+      //   { w: ["he", "writes", "letters"] },
+      //   { w: ["he", "drives", "cars"] },
+      //   { w: ["he", "opens", "door"] },
 
-    //   { w: ["she", "plays", "piano"] },
-    //   { w: ["she", "reads", "stories"] },
-    //   { w: ["she", "likes", "flowers"] },
-    //   { w: ["she", "watches", "movies"] },
-    //   { w: ["she", "drinks", "juice"] },
-    //   { w: ["she", "eats", "fruit"] },
-    //   { w: ["she", "runs", "daily"] },
-    //   { w: ["she", "writes", "notes"] },
-    //   { w: ["she", "draws", "pictures"] },
-    //   { w: ["she", "sings", "songs"] },
+      //   { w: ["she", "plays", "piano"] },
+      //   { w: ["she", "reads", "stories"] },
+      //   { w: ["she", "likes", "flowers"] },
+      //   { w: ["she", "watches", "movies"] },
+      //   { w: ["she", "drinks", "juice"] },
+      //   { w: ["she", "eats", "fruit"] },
+      //   { w: ["she", "runs", "daily"] },
+      //   { w: ["she", "writes", "notes"] },
+      //   { w: ["she", "draws", "pictures"] },
+      //   { w: ["she", "sings", "songs"] },
 
-    //   // I
-    //   { w: ["I", "play", "games"] },
-    //   { w: ["I", "read", "books"] },
-    //   { w: ["I", "like", "music"] },
-    //   { w: ["I", "watch", "tv"] },
-    //   { w: ["I", "drink", "coffee"] },
-    //   { w: ["I", "eat", "noodles"] },
-    //   { w: ["I", "study", "english"] },
-    //   { w: ["I", "write", "homework"] },
-    //   { w: ["I", "use", "computer"] },
-    //   { w: ["I", "learn", "daily"] },
+      //   // I
+      //   { w: ["I", "play", "games"] },
+      //   { w: ["I", "read", "books"] },
+      //   { w: ["I", "like", "music"] },
+      //   { w: ["I", "watch", "tv"] },
+      //   { w: ["I", "drink", "coffee"] },
+      //   { w: ["I", "eat", "noodles"] },
+      //   { w: ["I", "study", "english"] },
+      //   { w: ["I", "write", "homework"] },
+      //   { w: ["I", "use", "computer"] },
+      //   { w: ["I", "learn", "daily"] },
 
-    //   // you
-    //   { w: ["you", "play", "football"] },
-    //   { w: ["you", "read", "news"] },
-    //   { w: ["you", "like", "coffee"] },
-    //   { w: ["you", "watch", "movies"] },
-    //   { w: ["you", "drink", "tea"] },
-    //   { w: ["you", "eat", "breakfast"] },
-    //   { w: ["you", "study", "math"] },
-    //   { w: ["you", "write", "email"] },
-    //   { w: ["you", "use", "phone"] },
-    //   { w: ["you", "open", "window"] },
+      //   // you
+      //   { w: ["you", "play", "football"] },
+      //   { w: ["you", "read", "news"] },
+      //   { w: ["you", "like", "coffee"] },
+      //   { w: ["you", "watch", "movies"] },
+      //   { w: ["you", "drink", "tea"] },
+      //   { w: ["you", "eat", "breakfast"] },
+      //   { w: ["you", "study", "math"] },
+      //   { w: ["you", "write", "email"] },
+      //   { w: ["you", "use", "phone"] },
+      //   { w: ["you", "open", "window"] },
 
-    //   // we
-    //   { w: ["we", "play", "together"] },
-    //   { w: ["we", "read", "books"] },
-    //   { w: ["we", "like", "games"] },
-    //   { w: ["we", "watch", "tv"] },
-    //   { w: ["we", "drink", "water"] },
-    //   { w: ["we", "eat", "lunch"] },
-    //   { w: ["we", "study", "english"] },
-    //   { w: ["we", "write", "notes"] },
-    //   { w: ["we", "use", "internet"] },
-    //   { w: ["we", "learn", "fast"] },
+      //   // we
+      //   { w: ["we", "play", "together"] },
+      //   { w: ["we", "read", "books"] },
+      //   { w: ["we", "like", "games"] },
+      //   { w: ["we", "watch", "tv"] },
+      //   { w: ["we", "drink", "water"] },
+      //   { w: ["we", "eat", "lunch"] },
+      //   { w: ["we", "study", "english"] },
+      //   { w: ["we", "write", "notes"] },
+      //   { w: ["we", "use", "internet"] },
+      //   { w: ["we", "learn", "fast"] },
 
-    //   // they
-    //   { w: ["they", "play", "games"] },
-    //   { w: ["they", "read", "books"] },
-    //   { w: ["they", "like", "music"] },
-    //   { w: ["they", "watch", "movies"] },
-    //   { w: ["they", "drink", "juice"] },
-    //   { w: ["they", "eat", "rice"] },
-    //   { w: ["they", "study", "together"] },
-    //   { w: ["they", "write", "letters"] },
-    //   { w: ["they", "use", "computers"] },
-    //   { w: ["they", "visit", "friends"] },
+      //   // they
+      //   { w: ["they", "play", "games"] },
+      //   { w: ["they", "read", "books"] },
+      //   { w: ["they", "like", "music"] },
+      //   { w: ["they", "watch", "movies"] },
+      //   { w: ["they", "drink", "juice"] },
+      //   { w: ["they", "eat", "rice"] },
+      //   { w: ["they", "study", "together"] },
+      //   { w: ["they", "write", "letters"] },
+      //   { w: ["they", "use", "computers"] },
+      //   { w: ["they", "visit", "friends"] },
 
-    //   // nouns (singular)
-    //   { w: ["the", "cat", "runs"] },
-    //   { w: ["the", "dog", "barks"] },
-    //   { w: ["the", "bird", "flies"] },
-    //   { w: ["the", "baby", "cries"] },
-    //   { w: ["the", "teacher", "teaches"] },
-    //   { w: ["the", "student", "studies"] },
-    //   { w: ["the", "boy", "plays"] },
-    //   { w: ["the", "girl", "smiles"] },
-    //   { w: ["the", "sun", "shines"] },
-    //   { w: ["the", "clock", "ticks"] },
-    // ];
+      //   // nouns (singular)
+      //   { w: ["the", "cat", "runs"] },
+      //   { w: ["the", "dog", "barks"] },
+      //   { w: ["the", "bird", "flies"] },
+      //   { w: ["the", "baby", "cries"] },
+      //   { w: ["the", "teacher", "teaches"] },
+      //   { w: ["the", "student", "studies"] },
+      //   { w: ["the", "boy", "plays"] },
+      //   { w: ["the", "girl", "smiles"] },
+      //   { w: ["the", "sun", "shines"] },
+      //   { w: ["the", "clock", "ticks"] },
+      // ];
 
-    let checkingHTML = {};
+      let checkingHTML = {};
 
-    let questions = [];
-    const max_questions = 9; // karena index dimulai dari 0-9 = 10
+      let questions = [];
+      const max_questions = 9; // karena index dimulai dari 0-9 = 10
 
-    const shuffled = [...list_questions].sort(() => Math.random() - 0.5);
+      const shuffled = [...list_questions].sort(() => Math.random() - 0.5);
 
-    for (let i = 0; i <= max_questions; i++) {
-      questions.push(shuffled[i]);
-    }
+      for (let i = 0; i <= max_questions; i++) {
+        questions.push(shuffled[i]);
+      }
 
-    console.log(questions);
+      console.log(questions);
 
-    const totalSoal = questions.length;
-    let current = 0,
-      currentSoal = 0,
-      score = 0;
-    let dragged = null,
-      ghost = null,
-      startPos = new Map();
-    let checkTrial = 0;
-    let minusThisQuestion = 0;
-    let questionRecorded = false;
+      const totalSoal = questions.length;
+      let current = 0,
+        currentSoal = 0,
+        score = 0;
+      let dragged = null,
+        ghost = null,
+        startPos = new Map();
+      let checkTrial = 0;
+      let minusThisQuestion = 0;
+      let questionRecorded = false;
 
-    /* ================= RECORD ================= */
-    let record_quiz = {
-      total_question: totalSoal,
-      total_time_left: 0,
-      total_check_trail: 0,
-      total_current_score: 0,
-      question: [],
-    };
+      /* ================= RECORD ================= */
+      let record_quiz = {
+        total_question: totalSoal,
+        total_time_left: 0,
+        total_check_trail: 0,
+        total_current_score: 0,
+        question: [],
+      };
 
-    /* ================= TIMER ================= */
-    const default_timer = 10;
-    let time = default_timer,
-      timerInterval = null;
-    const timerEl = document.getElementById("timer");
+      /* ================= TIMER ================= */
+      const default_timer = 10;
+      let time = default_timer,
+        timerInterval = null;
+      const timerEl = document.getElementById("timer");
 
-    function startTimer() {
-      clearInterval(timerInterval);
-      timerEl.textContent = "⏱️ " + time;
-      timerInterval = setInterval(() => {
-        if (!document.getElementById("timer")) return clearInterval(timerInterval);
-        time--;
+      function startTimer() {
+        clearInterval(timerInterval);
         timerEl.textContent = "⏱️ " + time;
-        if (time <= 0) {
-          clearInterval(timerInterval);
-          timerEl.textContent = "⏱️ 0";
-          timeOutReset();
+        timerInterval = setInterval(() => {
+          if(vm.is_quiz_done) return clearInterval(timerInterval);
+
+          if (!document.getElementById("timer")) return clearInterval(timerInterval);
+          time--;
+          timerEl.textContent = "⏱️ " + time;
+          if (time <= 0) {
+            clearInterval(timerInterval);
+            timerEl.textContent = "⏱️ 0";
+            timeOutReset();
+          }
+        }, 1000);
+      }
+
+      /* ================= ELEMENT ================= */
+      const answerEl = document.getElementById("answer");
+      // const questionEl = document.getElementById("question");
+      const scoreEl = document.getElementById("score");
+      const btnCheck = document.getElementById("btnCheck");
+      const btnReset = document.getElementById("btnReset");
+
+      /* ================= DRAG ================= */
+      function record() {
+        startPos.clear();
+        [...answerEl.children].forEach((el) =>
+          startPos.set(el, el.getBoundingClientRect())
+        );
+      }
+      function animate() {
+        [...answerEl.children].forEach((el) => {
+          const f = startPos.get(el);
+          if (!f) return;
+          const l = el.getBoundingClientRect();
+          const dx = f.left - l.left,
+            dy = f.top - l.top;
+          if (dx || dy) {
+            el.style.transform = `translate(${dx}px,${dy}px)`;
+            el.style.transition = "none";
+            requestAnimationFrame(() => {
+              el.style.transform = "";
+              el.style.transition = "transform .35s cubic-bezier(.4,0,.2,1)";
+            });
+          }
+        });
+      }
+
+      function bindDrag(el) {
+        el.addEventListener("pointerdown", (e) => {
+          dragged = el;
+          el.classList.add("dragging");
+          record();
+          ghost = el.cloneNode(true);
+          ghost.className = "word drag-ghost";
+          document.body.appendChild(ghost);
+          moveGhost(e);
+          el.setPointerCapture(e.pointerId);
+        });
+        el.addEventListener("pointermove", (e) => ghost && moveGhost(e));
+        el.addEventListener("pointerup", (e) => {
+          if (!ghost) return;
+          const t = document.elementFromPoint(e.clientX, e.clientY);
+          if (t && t.classList.contains("word") && t !== dragged) {
+            swap(t);
+            animate();
+          }
+          cleanup();
+        });
+        el.addEventListener("pointercancel", cleanup);
+      }
+      function moveGhost(e) {
+
+        const isTouch = e.pointerType === "touch";
+
+        const offsetY = isTouch ? 50 : 0;
+        const offsetX = isTouch ? -10 : 0;
+
+        ghost.style.left = e.clientX + offsetX + "px";
+        ghost.style.top = e.clientY - offsetY + "px";
+      }
+      function cleanup() {
+        ghost && ghost.remove();
+        ghost = null;
+        dragged && dragged.classList.remove("dragging");
+        dragged = null;
+      }
+      function swap(target) {
+        const items = [...answerEl.children];
+        const a = items.indexOf(dragged),
+          b = items.indexOf(target);
+        if (a < 0 || b < 0) return;
+        answerEl.insertBefore(dragged, a < b ? target.nextSibling : target);
+      }
+
+      /* ================= GAME ================= */
+      function updateScore() {
+        scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${currentSoal + 1}/${totalSoal}`;
+      }
+
+      function recordQuizEvent(status, minusScore) {
+        const qIndex = currentSoal - 1; // index soal saat ini
+
+        // jika belum ada object soal ini, buat baru
+        if (!record_quiz.question[qIndex]) {
+          record_quiz.question[qIndex] = {
+            status_question: status,
+            current_score: score,
+            current_question: currentSoal,
+            time_left: time,
+            check_trial: checkTrial,
+            current_minus_score: minusScore,
+          };
+        } else {
+          // update nilai soal yang sama (jika user salah lagi)
+          record_quiz.question[qIndex].status_question = status;
+          record_quiz.question[qIndex].current_score = score;
+          record_quiz.question[qIndex].time_left = time;
+          record_quiz.question[qIndex].check_trial = checkTrial;
+          record_quiz.question[qIndex].current_minus_score = minusScore;
         }
-      }, 1000);
-    }
 
-    /* ================= ELEMENT ================= */
-    const answerEl = document.getElementById("answer");
-    // const questionEl = document.getElementById("question");
-    const scoreEl = document.getElementById("score");
-    const btnCheck = document.getElementById("btnCheck");
-    const btnReset = document.getElementById("btnReset");
+        // total summary
+        record_quiz.total_time_left = 0;
+        record_quiz.total_check_trail = 0;
+        record_quiz.total_current_score = score;
 
-    /* ================= DRAG ================= */
-    function record() {
-      startPos.clear();
-      [...answerEl.children].forEach((el) =>
-        startPos.set(el, el.getBoundingClientRect())
-      );
-    }
-    function animate() {
-      [...answerEl.children].forEach((el) => {
-        const f = startPos.get(el);
-        if (!f) return;
-        const l = el.getBoundingClientRect();
-        const dx = f.left - l.left,
-          dy = f.top - l.top;
-        if (dx || dy) {
-          el.style.transform = `translate(${dx}px,${dy}px)`;
-          el.style.transition = "none";
-          requestAnimationFrame(() => {
-            el.style.transform = "";
-            el.style.transition = "transform .35s cubic-bezier(.4,0,.2,1)";
+        checkingHTML[currentSoal] = document.getElementById("quizCard").outerHTML;
+        record_quiz.checking = checkingHTML
+
+        record_quiz.question.forEach((q) => {
+          record_quiz.total_time_left += q.time_left;
+          record_quiz.total_check_trail += q.check_trial;
+        });
+
+        // simpan persisten
+        localStorage.setItem("record_quiz_arrange", JSON.stringify(record_quiz));
+
+        vm.setForm(record_quiz)
+      }
+
+      function resetAnswerOnly() {
+        const q = questions[current];
+        if (!q) return;
+
+        answerEl.innerHTML = "";
+        [...q.w]
+          .sort(() => Math.random() - 0.5)
+          .forEach((w) => {
+            const el = document.createElement("div");
+            el.className = "word";
+            el.textContent = w;
+            answerEl.appendChild(el);
+            bindDrag(el);
           });
+      }
+
+      function loadQuestion() {
+
+        if (currentSoal >= totalSoal) {
+
+          console.log('GAME OVER')
+          vm.onCreate('arrange')
+          // GAME OVER
+
+          // soal terakhir sudah selesai, tampilkan snackbar khusus
+          showSnackbar("🎉 Quiz Selesai!", "success", 2000);
+
+          // beri delay sebelum redirect supaya snackbar terlihat
+          clearInterval(timerInterval); // ⛔ stop timer langsung
+
+          setTimeout(() => {
+            // window.location.href = "result.html";
+          }, 2000);
+
+          return;
         }
-      });
-    }
 
-    function bindDrag(el) {
-      el.addEventListener("pointerdown", (e) => {
-        dragged = el;
-        el.classList.add("dragging");
-        record();
-        ghost = el.cloneNode(true);
-        ghost.className = "word drag-ghost";
-        document.body.appendChild(ghost);
-        moveGhost(e);
-        el.setPointerCapture(e.pointerId);
-      });
-      el.addEventListener("pointermove", (e) => ghost && moveGhost(e));
-      el.addEventListener("pointerup", (e) => {
-        if (!ghost) return;
-        const t = document.elementFromPoint(e.clientX, e.clientY);
-        if (t && t.classList.contains("word") && t !== dragged) {
-          swap(t);
-          animate();
-        }
-        cleanup();
-      });
-      el.addEventListener("pointercancel", cleanup);
-    }
-    function moveGhost(e) {
+        questionRecorded = false;
+        checkTrial = 0;
+        minusThisQuestion = 0; // ✅ FIX PENTING
+        time = default_timer;
 
-      const isTouch = e.pointerType === "touch";
-
-      const offsetY = isTouch ? 50 : 0;
-      const offsetX = isTouch ? -10 : 0;
-
-      ghost.style.left = e.clientX + offsetX + "px";
-      ghost.style.top = e.clientY - offsetY + "px";
-    }
-    function cleanup() {
-      ghost && ghost.remove();
-      ghost = null;
-      dragged && dragged.classList.remove("dragging");
-      dragged = null;
-    }
-    function swap(target) {
-      const items = [...answerEl.children];
-      const a = items.indexOf(dragged),
-        b = items.indexOf(target);
-      if (a < 0 || b < 0) return;
-      answerEl.insertBefore(dragged, a < b ? target.nextSibling : target);
-    }
-
-    /* ================= GAME ================= */
-    function updateScore() {
-      scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${currentSoal + 1}/${totalSoal}`;
-    }
-
-    function recordQuizEvent(status, minusScore) {
-      const qIndex = currentSoal - 1; // index soal saat ini
-
-      // jika belum ada object soal ini, buat baru
-      if (!record_quiz.question[qIndex]) {
-        record_quiz.question[qIndex] = {
-          status_question: status,
-          current_score: score,
-          current_question: currentSoal,
-          time_left: time,
-          check_trial: checkTrial,
-          current_minus_score: minusScore,
-        };
-      } else {
-        // update nilai soal yang sama (jika user salah lagi)
-        record_quiz.question[qIndex].status_question = status;
-        record_quiz.question[qIndex].current_score = score;
-        record_quiz.question[qIndex].time_left = time;
-        record_quiz.question[qIndex].check_trial = checkTrial;
-        record_quiz.question[qIndex].current_minus_score = minusScore;
-      }
-
-      // total summary
-      record_quiz.total_time_left = 0;
-      record_quiz.total_check_trail = 0;
-      record_quiz.total_current_score = score;
-
-      checkingHTML[currentSoal] = document.getElementById("quizCard").outerHTML;
-      record_quiz.checking = checkingHTML
-
-      record_quiz.question.forEach((q) => {
-        record_quiz.total_time_left += q.time_left;
-        record_quiz.total_check_trail += q.check_trial;
-      });
-
-      // simpan persisten
-      localStorage.setItem("record_quiz_arrange", JSON.stringify(record_quiz));
-
-      vm.setForm(record_quiz)
-    }
-
-    function resetAnswerOnly() {
-      const q = questions[current];
-      if (!q) return;
-
-      answerEl.innerHTML = "";
-      [...q.w]
-        .sort(() => Math.random() - 0.5)
-        .forEach((w) => {
-          const el = document.createElement("div");
-          el.className = "word";
-          el.textContent = w;
-          answerEl.appendChild(el);
-          bindDrag(el);
-        });
-    }
-
-    function loadQuestion() {
-
-      if (currentSoal >= totalSoal) {
-
-        console.log('GAME OVER')
-        vm.onCreate('arrange')
-        // GAME OVER
-
-        // soal terakhir sudah selesai, tampilkan snackbar khusus
-        showSnackbar("🎉 Quiz Selesai!", "success", 2000);
-
-        // beri delay sebelum redirect supaya snackbar terlihat
-        clearInterval(timerInterval); // ⛔ stop timer langsung
-
-        setTimeout(() => {
-          // window.location.href = "result.html";
-        }, 2000);
-
-        return;
-      }
-
-      questionRecorded = false;
-      checkTrial = 0;
-      minusThisQuestion = 0; // ✅ FIX PENTING
-      time = default_timer;
-
-      startTimer();
-      const q = questions[current];
-      //questionEl.textContent=q.q;
-      answerEl.innerHTML = "";
-      [...q.w]
-        .sort(() => Math.random() - 0.5)
-        .forEach((w) => {
-          const el = document.createElement("div");
-          el.className = "word";
-          el.textContent = w;
-          answerEl.appendChild(el);
-          bindDrag(el);
-        });
-      updateScore();
-
-    }
-
-    /* ===== TIME OUT ===== */
-    function timeOutReset() {
-      forceCancelDrag(); // ⬅️ FIX UTAMA (STOP DRAG AKTIF)
-
-      minusThisQuestion += 50;
-      score -= 50;
-      playErrorFX("timeout");
-      current++;
-      currentSoal++;
-
-      showSnackbar("⏰ Waktu Habis! -50", "error");
-
-      loadQuestion();
-    }
-
-    /* ===== BUTTON LOCK ===== */
-    let locked = false;
-    function lockButtons(ms) {
-      locked = true;
-      btnCheck.disabled = true;
-      btnReset.disabled = true;
-      setTimeout(() => {
-        locked = false;
-        btnCheck.disabled = false;
-        btnReset.disabled = false;
-
-        // ▶️ LANJUTKAN TIMER SETELAH PAUSE
-        if (questions[current] && !questionRecorded) {
-          startTimer();
-        }
-      }, ms);
-    }
-
-    /* ===== BUTTON ACTION ===== */
-    function safeCheck() {
-      if (!locked) {
-        checkTrial++;
-
-        // ⏸️ PAUSE TIMER
-        // clearInterval(timerInterval); // tidak perlu ini
-
-        lockButtons(800);
-        checkAnswer();
-      }
-    }
-
-    function safeReset() {
-      if (!locked) {
-        lockButtons(600);
-        resetAnswerOnly(); // timer tetap berjalan
-      }
-    }
-
-    /* ===== CHECK ANSWER ===== */
-    var total_question_true = 0;
-    var total_question_false = 0;
-    function checkAnswer() {
-      if (!questions[current]) return;
-
-      const user = [...answerEl.children].map((e) => e.textContent);
-      if (user.every((w, i) => w === questions[current].w[i])) {
-        score += 100;
+        startTimer();
+        const q = questions[current];
+        //questionEl.textContent=q.q;
+        answerEl.innerHTML = "";
+        [...q.w]
+          .sort(() => Math.random() - 0.5)
+          .forEach((w) => {
+            const el = document.createElement("div");
+            el.className = "word";
+            el.textContent = w;
+            answerEl.appendChild(el);
+            bindDrag(el);
+          });
         updateScore();
-        playTrueFX();
 
+      }
+
+      /* ===== TIME OUT ===== */
+      function timeOutReset() {
+        forceCancelDrag(); // ⬅️ FIX UTAMA (STOP DRAG AKTIF)
+
+        minusThisQuestion += 50;
+        score -= 50;
+        playErrorFX("timeout");
         current++;
         currentSoal++;
-        confetti();
 
-        showSnackbar("✔️ Jawaban Benar! +100", "success");
+        showSnackbar("⏰ Waktu Habis! -50", "error");
 
-        total_question_true++;
-
-        setTimeout(loadQuestion, 700);
-
-      } else {
-        score -= 20;
-        minusThisQuestion += 20;
-        updateScore();
-        playErrorFX("error");
-
-        showSnackbar("❌ Jawaban Salah! -20", "error");
-
-        total_question_false++;
+        loadQuestion();
       }
-    }
 
-    function forceCancelDrag() {
-      if (dragged) {
-        try {
-          dragged.releasePointerCapture?.(0);
-        } catch (e) { }
+      /* ===== BUTTON LOCK ===== */
+      let locked = false;
+      function lockButtons(ms) {
+        locked = true;
+        btnCheck.disabled = true;
+        btnReset.disabled = true;
+        setTimeout(() => {
+          locked = false;
+          btnCheck.disabled = false;
+          btnReset.disabled = false;
+
+          // ▶️ LANJUTKAN TIMER SETELAH PAUSE
+          if (questions[current] && !questionRecorded) {
+            startTimer();
+          }
+        }, ms);
       }
-      cleanup(); // hapus ghost & state drag
+
+      /* ===== BUTTON ACTION ===== */
+      function safeCheck() {
+        if (!locked) {
+          checkTrial++;
+
+          // ⏸️ PAUSE TIMER
+          // clearInterval(timerInterval); // tidak perlu ini
+
+          lockButtons(800);
+          checkAnswer();
+        }
+      }
+
+      function safeReset() {
+        if (!locked) {
+          lockButtons(600);
+          resetAnswerOnly(); // timer tetap berjalan
+        }
+      }
+
+      /* ===== CHECK ANSWER ===== */
+      var total_question_true = 0;
+      var total_question_false = 0;
+      function checkAnswer() {
+        if (!questions[current]) return;
+
+        const user = [...answerEl.children].map((e) => e.textContent);
+        if (user.every((w, i) => w === questions[current].w[i])) {
+          score += 100;
+          updateScore();
+          playTrueFX();
+
+          current++;
+          currentSoal++;
+          confetti();
+
+          showSnackbar("✔️ Jawaban Benar! +100", "success");
+
+          total_question_true++;
+
+          setTimeout(loadQuestion, 700);
+
+        } else {
+          score -= 20;
+          minusThisQuestion += 20;
+          updateScore();
+          playErrorFX("error");
+
+          showSnackbar("❌ Jawaban Salah! -20", "error");
+
+          total_question_false++;
+        }
+      }
+
+      function forceCancelDrag() {
+        if (dragged) {
+          try {
+            dragged.releasePointerCapture?.(0);
+          } catch (e) { }
+        }
+        cleanup(); // hapus ghost & state drag
+      }
+
+      /* ================= INIT ================= */
+      localStorage.removeItem("record_quiz_arrange");
+      updateScore();
+      loadQuestion();
+
+      /* ===== SNACKBAR ===== */
+      let sb;
+      function showSnackbar(msg, type = "success", duration = 1800) {
+
+        vm.$q.notify({
+          message: "Jawaban: " + msg,
+          color: "white",
+          textColor: "dark",
+          group: type,
+        });
+
+        // ✅ Simpan record hanya saat snackbar muncul
+        recordQuizEvent(type === "success" ? "benar" : "salah", minusThisQuestion);
+      }
+
+      document.getElementById("btnCheck").addEventListener("click", safeCheck);
+
+      document.getElementById("btnReset").addEventListener("click", safeReset);
     }
-
-    /* ================= INIT ================= */
-    localStorage.removeItem("record_quiz_arrange");
-    updateScore();
-    loadQuestion();
-
-    /* ===== SNACKBAR ===== */
-    let sb;
-    function showSnackbar(msg, type = "success", duration = 1800) {
-
-      vm.$q.notify({
-        message: "Jawaban: " + msg,
-        color: "white",
-        textColor: "dark",
-        group: type,
-      });
-
-      // ✅ Simpan record hanya saat snackbar muncul
-      recordQuizEvent(type === "success" ? "benar" : "salah", minusThisQuestion);
-    }
-
-    document.getElementById("btnCheck").addEventListener("click", safeCheck);
-
-    document.getElementById("btnReset").addEventListener("click", safeReset);
-  },
+  }
 };
 </script>
 

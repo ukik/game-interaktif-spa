@@ -70,14 +70,29 @@
 
 export default {
   props: ['record_quiz'],
-  async mounted() {
-    console.log('')
+  data() {
+    return {
+      initTimeout: null
+    }
+  },
 
-    setTimeout(() => {
+  async mounted() {
+    this.initTimeout = setTimeout(() => {
       this.onCreate()
     }, 500)
   },
+
+  beforeUnmount() {
+    this.onStop()
+  },
   methods: {
+    onStop() {
+      if (this.initTimeout) {
+        console.log('this.initTimeout')
+        clearTimeout(this.initTimeout)
+        this.initTimeout = null
+      }
+    },
     onCreate() {
       const data = this.record_quiz //JSON.parse(localStorage.getItem("record_quiz"));
       console.log('mounted', data)
@@ -124,6 +139,8 @@ export default {
         }
 
       }
+
+      if(!document?.getElementById("sumAnswered")?.textContent) return
 
       /* SUMMARY */
       sumAnswered.textContent = data.question.length;

@@ -36,7 +36,7 @@
     </q-page-container>
 
     <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
-    <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog>
+    <!-- <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog> -->
 
     <!-- <DialogResult></DialogResult> -->
 

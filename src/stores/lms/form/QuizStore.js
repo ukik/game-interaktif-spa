@@ -6,6 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
+import { useRouterStore } from 'src/stores/auth/RouterStore';
 
 function formatLaravelError(error) {
   if (!error?.response?.data?.payload) {
@@ -49,6 +50,16 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useQuizStore = defineStore('QuizStore', {
   state: () => ({
+    is_quiz_done: false,
+    is_quiz_start: false,
+    router_push: {
+      name: '',
+      params: {
+        slug: '',
+        quiz: '',
+        siswa_id: '',
+      }
+    },
     local: {
       dialog_result: false,
     },
@@ -102,6 +113,8 @@ export const useQuizStore = defineStore('QuizStore', {
   actions: {
     async setForm(val) {
 
+      if(useRouterStore().getQuery?.demo == 'true') return;
+
       let temp = {
         total_question: val?.total_question,
         total_time_left: val?.total_time_left,
@@ -119,7 +132,7 @@ export const useQuizStore = defineStore('QuizStore', {
       }
 
       val?.question.forEach(element => {
-        if(element.status_question == 'benar' || element.status_question == 'berhasil' || element.current_rank == "A" || element.current_rank == "B" || element.current_rank == "C") {
+        if (element.status_question == 'benar' || element.status_question == 'berhasil' || element.current_rank == "A" || element.current_rank == "B" || element.current_rank == "C") {
           temp.total_question_true++
         } else {
           temp.total_question_false++
@@ -130,12 +143,26 @@ export const useQuizStore = defineStore('QuizStore', {
       console.log('setForm', this.form)
 
     },
-    async onCreate(tipe_aktivitas, tugas_id) {
+    async onCreate(quiz, tugas_id) {
+
+      if(useRouterStore().getQuery?.demo == 'true') {
+        this.is_quiz_done = true;
+        this.router_push = {
+          name: 'quiz_report',
+          params: {
+            slug: tugas_id,
+            quiz: quiz,
+            siswa_id: '',
+          },
+          query: {
+            demo: true
+          }
+        }
+        return
+      }
 
       console.log('onCreate', this.loading.form)
-
       if (this.loading.form) return false;
-
       this.loading.form = true;
 
       const formData = new FormData();
@@ -144,11 +171,10 @@ export const useQuizStore = defineStore('QuizStore', {
         formData.append(key, this.form[key])
       })
 
-      const auth = useAuthStore()
-      formData.append('siswa_id', auth.getAuthUser?.id)
+      const siswa_id = useAuthStore().getAuthUser?.id
+      formData.append('siswa_id', siswa_id)
 
       formData.append('tugas_id', tugas_id)
-
       console.log('formData', host + '/lms/tugas-quiz-hasil', this.form)
 
       Loading.show()
@@ -168,9 +194,7 @@ export const useQuizStore = defineStore('QuizStore', {
         })
 
       Loading.hide()
-
       this.loading.form = false
-
       console.log('onLogin', resp)
 
       if (resp == false) return false
@@ -179,41 +203,36 @@ export const useQuizStore = defineStore('QuizStore', {
       if (resp?.data?.isLogin) {
         notifSuccess()
 
-        // const data = resp?.data
+        this.is_quiz_done = true;
 
-        // console.log('onCreate', data)
+        const data = resp?.data
 
-        let name_route = '';
+        console.log('onCreate', data)
 
-        switch (tipe_aktivitas) {
-          case 'arrange':
-            name_route = 'quiz_action_arrange'
-            break;
-          case 'boolean':
-            name_route = 'quiz_action_boolean'
-            break;
-          case 'essay':
-            name_route = 'quiz_action_essay'
-            break;
-          case 'match':
-            name_route = 'quiz_action_match'
-            break;
-          case 'multiple':
-            name_route = 'quiz_action_multiple'
-            break;
-          case 'shortanswer':
-            name_route = 'quiz_action_short_answer'
-            break;
+        // DIKIRIM KE components/lms/WinLottie
+        this.router_push = {
+          name: 'quiz_report',
+          params: {
+            slug: tugas_id,
+            quiz: quiz,
+            siswa_id: siswa_id,
+          },
+          query: {
+            success: true
+          }
         }
 
+        return true
+
         this.router.push({
-          name: name_route,
-          query: {
-            slug: tugas_id
+          name: 'quiz_report',
+          params: {
+            slug: tugas_id,
+            quiz: quiz,
+            siswa_id: siswa_id,
           }
         })
 
-        return true
       }
 
     },

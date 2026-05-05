@@ -19,14 +19,14 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
-      <router-view
+      <router-view ref="pageContainer"
         class="col-12 col-lg-7 col-md-9 col-sm-12"
         :class="[is_mobile_size ? '' : 'q-card--bordered']"
       />
     </q-page-container>
 
     <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
-    <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog>
+    <!-- <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog> -->
 
     <!-- <DialogResult /> -->
 

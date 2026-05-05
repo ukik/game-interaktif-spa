@@ -5,10 +5,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionArrange.vue'),
     meta: {
       logged: false,
-      title: 'QuizActionArrange - Yuvoria GAME',
+      title: 'Quiz Arrange',
       meta: [
         { name: 'description', content: 'QuizActionArrange - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -17,10 +18,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionBoolean.vue'),
     meta: {
       logged: true,
-      title: 'QuizActionBoolean - Yuvoria GAME',
+      title: 'Quiz Boolean',
       meta: [
         { name: 'description', content: 'QuizActionBoolean - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -29,10 +31,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionEssay.vue'),
     meta: {
       logged: true,
-      title: 'QuizActionEssay - Yuvoria GAME',
+      title: 'Quiz Essay',
       meta: [
         { name: 'description', content: 'QuizActionEssay - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -41,10 +44,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionMatch.vue'),
     meta: {
       logged: true,
-      title: 'QuizActionMatch - Yuvoria GAME',
+      title: 'Quiz Match',
       meta: [
         { name: 'description', content: 'QuizActionMatch - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -53,10 +57,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionMultiple.vue'),
     meta: {
       logged: true,
-      title: 'QuizActionMultiple - Yuvoria GAME',
+      title: 'Quiz Multiple',
       meta: [
         { name: 'description', content: 'QuizActionMultiple - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -65,10 +70,11 @@ const routes_quiz_action = [
     component: () => import('pages/quiz/action/QuizActionShortAnswer.vue'),
     meta: {
       logged: true,
-      title: 'QuizActionShortAnswer - Yuvoria GAME',
+      title: 'Quiz ShortAnswer',
       meta: [
         { name: 'description', content: 'QuizActionShortAnswer - Yuvoria GAME' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
 ]

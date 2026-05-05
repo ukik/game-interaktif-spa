@@ -4,21 +4,71 @@
   <q-page v-else class="justify-start items-start q-pa-sm">
     <q-card flat bordered>
       <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-        <q-tab name="tab1" label="FINAL" />
-        <q-tab name="tab2" label="PENDING" />
+        <q-tab name="tab1" v-if="get_report_unsubmit" label="PENDING" />
+        <q-tab name="tab2" label="FINAL" />
         <q-tab name="tab3" label="RANK" />
-        <q-tab name="tab4" label="PESERTA" />
+        <q-tab name="tab4" label="TUGAS" />
       </q-tabs>
 
       <q-separator />
 
       <keep-alive>
         <q-tab-panels keep-alive v-model="tab" animated>
-          <q-tab-panel name="tab1" class="q-pa-none">
+          <q-tab-panel v-if="get_report_unsubmit" name="tab1" class="q-pa-none">
+
+            <!-- TAB 1 -->
+
             <q-tabs key="tab1_sub" v-model="tab1_sub" dense inline-label indicator-color="transparent"
               active-color="white" class="bg-teal text-grey-4 shadow-2">
               <q-tab name="tab1_sub1" label="STATISTIK" icon="analytics" />
-              <q-tab name="tab1_sub2" label="checking" icon="archive" />
+              <q-tab name="tab1_sub2" label="RIWAYAT" icon="archive" />
+            </q-tabs>
+
+            <TimeupInfo :tugas="get_report_tugas"></TimeupInfo>
+
+            <q-banner class="bg-primary q-ma-sm text-white rounded-borders">
+              <template v-slot:avatar>
+                <q-icon name="info_outline" color="white" />
+              </template>
+              <div class="text-h6">PENDING</div>
+              <div class="q-mb-sm">
+                Kamu bisa mengganti data yang sudah <b>Terkirim</b> dengan data ini, selama tugas belum tertutup.
+                Proses tidak bisa dibatalkan
+              </div>
+              <template v-if="get_report_unsubmit && get_report_tugas?.status_durasi?.status !== 'selesai'"
+                v-slot:action>
+                <div style="height:60px"></div>
+                <q-btn @click="onOpen" outline icon-right="send" color="white" label="kirim" />
+              </template>
+            </q-banner>
+
+            <q-tab-panels keep-alive v-model="tab1_sub" animated>
+              <q-tab-panel name="tab1_sub1" class="q-pa-none q-px-sm">
+                <template v-if="get_report_unsubmit">
+                  <component ref="unsubmit" v-if="tab == 'tab1'" v-bind:is="component.statistik"
+                    :record_quiz="get_report_unsubmit">
+                  </component>
+                </template>
+                <EmptyBlock v-else></EmptyBlock>
+              </q-tab-panel>
+              <q-tab-panel name="tab1_sub2" class="q-pa-none">
+                <template v-if="get_report_unsubmit_checking">
+                  <component v-bind:is="component.checking" :checking="get_report_unsubmit_checking"></component>
+                </template>
+                <EmptyBlock v-else></EmptyBlock>
+              </q-tab-panel>
+            </q-tab-panels>
+
+          </q-tab-panel>
+
+          <q-tab-panel name="tab2" class="q-pa-none">
+
+            <!-- TAB 2 -->
+
+            <q-tabs key="tab2_sub" v-model="tab2_sub" dense inline-label indicator-color="transparent"
+              active-color="white" class="bg-teal text-grey-4 shadow-2">
+              <q-tab name="tab2_sub1" label="STATISTIK" icon="analytics" />
+              <q-tab name="tab2_sub2" label="RIWAYAT" icon="archive" />
             </q-tabs>
 
             <TimeupInfo :tugas="get_report_tugas"></TimeupInfo>
@@ -35,60 +85,17 @@
               </div>
             </q-banner>
 
-            <q-tab-panels keep-alive v-model="tab1_sub" animated>
-              <q-tab-panel name="tab1_sub1" class="q-pa-none q-px-sm">
+            <q-tab-panels keep-alive v-model="tab2_sub" animated>
+              <q-tab-panel name="tab2_sub1" class="q-pa-none q-px-sm">
                 <template v-if="get_report_submit">
-                  <component v-if="tab == 'tab1'" v-bind:is="component.statistik" class=""
+                  <component ref="submit" v-if="tab == 'tab2'" v-bind:is="component.statistik" class=""
                     :record_quiz="get_report_submit"></component>
                 </template>
                 <EmptyBlock v-else></EmptyBlock>
               </q-tab-panel>
-              <q-tab-panel name="tab1_sub2" class="q-pa-none">
+              <q-tab-panel name="tab2_sub2" class="q-pa-none">
                 <template v-if="get_report_submit_checking">
                   <component v-bind:is="component.checking" :checking="get_report_submit_checking"></component>
-                </template>
-                <EmptyBlock v-else></EmptyBlock>
-              </q-tab-panel>
-            </q-tab-panels>
-
-          </q-tab-panel>
-
-          <q-tab-panel name="tab2" class="q-pa-none">
-            <q-tabs key="tab2_sub" v-model="tab2_sub" dense inline-label indicator-color="transparent"
-              active-color="white" class="bg-teal text-grey-4 shadow-2">
-              <q-tab name="tab2_sub1" label="STATISTIK" icon="analytics" />
-              <q-tab name="tab2_sub2" label="checking" icon="archive" />
-            </q-tabs>
-
-            <TimeupInfo :tugas="get_report_tugas"></TimeupInfo>
-
-
-            <q-banner class="bg-primary q-ma-sm text-white rounded-borders">
-              <template v-slot:avatar>
-                <q-icon name="info_outline" color="white" />
-              </template>
-              <div class="text-h6">PENDING</div>
-              <div class="q-mb-sm">
-                Kamu bisa mengganti data yang sudah <b>Terkirim</b> dengan data ini, selama tugas belum tertutup.
-                Proses tidak bisa dibatalkan
-              </div>
-              <template v-if="get_report_unsubmit && get_report_tugas?.status_durasi?.status !== 'selesai'" v-slot:action>
-                <div style="height:60px"></div>
-                <q-btn @click="onOpen" outline icon-right="send" color="white" label="kirim" />
-              </template>
-            </q-banner>
-
-            <q-tab-panels keep-alive v-model="tab2_sub" animated>
-              <q-tab-panel name="tab2_sub1" class="q-pa-none q-px-sm">
-                <template v-if="get_report_unsubmit">
-                  <component v-if="tab == 'tab2'" v-bind:is="component.statistik" :record_quiz="get_report_unsubmit">
-                  </component>
-                </template>
-                <EmptyBlock v-else></EmptyBlock>
-              </q-tab-panel>
-              <q-tab-panel name="tab2_sub2" class="q-pa-none">
-                <template v-if="get_report_unsubmit_checking">
-                  <component v-bind:is="component.checking" :checking="get_report_unsubmit_checking"></component>
                 </template>
                 <EmptyBlock v-else></EmptyBlock>
               </q-tab-panel>
@@ -112,17 +119,42 @@
 
 
           <q-tab-panel name="tab4" class="q-pa-none">
-            <template v-if="get_peserta_payload?.id && !get_init_peserta">
-              <ShowTabPesertaCard @onRefresh="onRefreshPeserta" :get_peserta_payload="get_peserta_payload?.tugas_siswa">
-              </ShowTabPesertaCard>
-            </template>
-            <InitLoading v-else-if="get_init_peserta"></InitLoading>
-            <EmptyBlock v-else></EmptyBlock>
+
+            <q-tabs key="tab4_sub" v-model="tab4_sub" dense inline-label indicator-color="transparent"
+              active-color="white" class="bg-teal text-grey-4 shadow-2">
+              <q-tab name="tab4_sub1" label="PESERTA" icon="person" />
+              <q-tab name="tab4_sub2" label="DESKRIPSI" icon="description" />
+            </q-tabs>
+
+            <q-tab-panels keep-alive v-model="tab4_sub" animated>
+              <q-tab-panel name="tab4_sub1" class="q-pa-none q-px-sm">
+
+                <template v-if="get_peserta_payload?.id && !get_init_peserta">
+                  <ShowTabPesertaCard @onRefresh="onRefreshPeserta"
+                    :get_peserta_payload="get_peserta_payload?.tugas_siswa">
+                  </ShowTabPesertaCard>
+                </template>
+                <InitLoading v-else-if="get_init_peserta"></InitLoading>
+                <EmptyBlock v-else></EmptyBlock>
+
+              </q-tab-panel>
+              <q-tab-panel name="tab4_sub2" class="q-pa-none">
+                <template v-if="get_report_tugas">
+                  <ShowTabTugasCard :payload="get_report_tugas"></ShowTabTugasCard>
+                </template>
+                <EmptyBlock v-else></EmptyBlock>
+              </q-tab-panel>
+            </q-tab-panels>
+
+
+
           </q-tab-panel>
         </q-tab-panels>
       </keep-alive>
     </q-card>
 
+    <ReportLottie />
+    <!-- <WinLottie /> -->
     <ReportConfirmDialog ref="ReportConfirmDialog" @onBubbleEvent="onBubbleEvent"></ReportConfirmDialog>
   </q-page>
 </template>
@@ -149,6 +181,7 @@ import ShowTabHasilCard from "./components/ShowTabHasilCard.vue";
 import ReportConfirmDialog from "./components/ReportConfirmDialog.vue";
 import ShowTabHasilCardEssay from "./components/ShowTabHasilCardEssay.vue";
 import TimeupInfo from "./components/TimeupInfo.vue";
+import ShowTabTugasCard from "./components/ShowTabTugasCard.vue";
 
 
 
@@ -161,6 +194,7 @@ export default {
   },
   components: {
     TimeupInfo,
+    ShowTabTugasCard,
     ReportConfirmDialog,
     ShowTabHasilCard,
     ShowTabHasilCardEssay,
@@ -180,9 +214,34 @@ export default {
   },
   watch: {
     tab(val) {
-      if (val == "tab3") this.onRank(this.$route.params?.slug);
-      if (val == "tab4") this.onPeserta(this.$route.params?.slug);
+      if (val == 'tab1') {
+        this.$refs.submit?.onStop()
+      }
+      if (val == 'tab2') {
+        this.$refs.unsubmit?.onStop()
+      }
+      if (val == "tab3") {
+        this.$refs.submit?.onStop();
+        this.$refs.unsubmit?.onStop();
+        this.onRank(this.$route.params?.slug);
+      }
+      if (val == "tab4") {
+        this.$refs.submit?.onStop();
+        this.$refs.unsubmit?.onStop();
+        this.onPeserta(this.$route.params?.slug);
+      }
     },
+    // tab1_sub(val) {
+    //   if (val == 'tab1_sub2') {
+    //     this.$refs.unsubmit?.onStop()
+    //   }
+    // },
+    // tab2_sub(val) {
+    //   if (val == 'tab2_sub2') {
+    //     this.$refs.submit?.onStop()
+    //   }
+    // }
+
   },
   computed: {
     ...mapState(useLmsTugasStore, ["get_peserta_payload", "get_init_peserta"]),
@@ -190,7 +249,7 @@ export default {
   },
   methods: {
     ...mapActions(useLmsTugasStore, ["onPeserta"]),
-    ...mapActions(useLmsTugasQuizStatsStore, ["onRank", "onReplace"]),
+    ...mapActions(useLmsTugasQuizStatsStore, ["onRank", "onReplace", "onShow"]),
     onRefreshPeserta() {
       this.onPeserta(this.$route.params?.slug, true);
     },
@@ -205,7 +264,11 @@ export default {
     }
   },
   created() {
+
+    if (!this.get_report_unsubmit) this.tab = 'tab2'
+
     const val = this.$route?.params?.quiz;
+
     if (val == "arrange")
       this.component = {
         statistik: "CardQuizReportArrange",
@@ -239,6 +302,7 @@ export default {
   },
   data() {
     return {
+      initTimeout: null,
       component: {
         statistik: "",
         checking: "",
@@ -246,6 +310,9 @@ export default {
       tab: "tab1",
       tab1_sub: "tab1_sub1",
       tab2_sub: "tab2_sub1",
+      tab4_sub: "tab4_sub1",
+
+
     };
   },
 };

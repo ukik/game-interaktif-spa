@@ -68,14 +68,29 @@
 
 export default {
   props: ['record_quiz'],
-  async mounted() {
-    console.log('')
+  data() {
+    return {
+      initTimeout: null
+    }
+  },
 
-    setTimeout(() => {
+  async mounted() {
+    this.initTimeout = setTimeout(() => {
       this.onCreate()
     }, 500)
   },
+
+  beforeUnmount() {
+    this.onStop()
+  },
   methods: {
+    onStop() {
+      if (this.initTimeout) {
+        console.log('this.initTimeout')
+        clearTimeout(this.initTimeout)
+        this.initTimeout = null
+      }
+    },
     onCreate() {
       const data = this.record_quiz //JSON.parse(localStorage.getItem("record_quiz"));
       console.log('mounted', data)
@@ -84,6 +99,8 @@ export default {
         this.$q.notify("Data quiz tidak ditemukan!");
         throw new Error("Data kosong");
       }
+
+      if(!document?.getElementById("sumAnswered")?.textContent) return
 
       /* ===== SORT BLOCK QUESTION 1–15 ===== */
       //data.question.sort((a, b) => a.current_block_question - b.current_block_question);

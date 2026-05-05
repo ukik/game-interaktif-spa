@@ -96,3 +96,20 @@ a .router-link-active {
 .hide {
   display: none;
 }
+
+
+/* paksa tombol swal horizontal */
+.swal2-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+/* biar tombol tidak full width */
+.swal2-actions button {
+  width: auto !important;
+  flex: 0 0 auto !important;
+}

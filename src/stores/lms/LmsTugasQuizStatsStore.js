@@ -376,7 +376,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       Loading.show()
       const resp = await axios({
-        url: host + '/lms/tugas-quiz-stats/' + report?.id +'/replace',
+        url: host + '/lms/tugas-quiz-stats/' + this.get_report_tugas?.id +'/replace/'+ report?.id +'/'+siswa_id,
         method: 'post'
       })
         .catch((err) => {

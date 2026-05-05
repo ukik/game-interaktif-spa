@@ -146,6 +146,16 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/ReportConfirmDialog.vue'))
   )
 
+  app.component("WinLottie",
+    defineAsyncComponent(() => import('src/components/lms/WinLottie.vue'))
+  )
+
+  app.component("ReportLottie",
+    defineAsyncComponent(() => import('src/components/lms/ReportLottie.vue'))
+  )
+
+
+
 
   // app.component("RelatedImageSlide",
   //   defineAsyncComponent(() => import('src/components/RelatedImageSlide.vue'))
