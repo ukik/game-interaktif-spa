@@ -1,8 +1,8 @@
 <template>
-  <q-page id="QuizActionBoolean" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <WinLottie />
-    <div v-show="!is_quiz_done" class="game">
+    <div v-show="!is_quiz_done && is_not_error" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -19,7 +19,9 @@
         </q-card-section>
       </q-card>
     </div>
-
+    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 
@@ -28,6 +30,8 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
 
+import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
+
 // import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
@@ -35,18 +39,14 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
-
     const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const mystore = useLmsTugasStore(store)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done) return next()
+    if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
 
@@ -60,97 +60,13 @@ export default {
     onStart() {
       const vm = this;
 
-      if (this.get_show_payload?.kategori != 'boolean') return this.notifFailed('data gagal diproses', 'Salah Quiz')
-
-      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-      const list_questions = this.get_show_payload?.konten
-
-      // /* ================= DATA ================= */
-      // const list_questions = [
-      //   { text: "he plays football" },
-      //   { text: "she reads books" },
-      //   { text: "i drink coffee" },
-      //   { text: "they watch tv" },
-      //   { text: "we study english" },
-
-      //   { text: "he eats rice" },
-      //   { text: "she cooks dinner" },
-      //   { text: "i go to school" },
-      //   { text: "they like music" },
-      //   { text: "we play games" },
-
-      //   { text: "she sings well" },
-      //   { text: "he drives a car" },
-      //   { text: "i write a letter" },
-      //   { text: "they help friends" },
-      //   { text: "we read stories" },
-
-      //   { text: "he runs every morning" },
-      //   { text: "she walks to market" },
-      //   { text: "i watch movies" },
-      //   { text: "they eat breakfast" },
-      //   { text: "we learn math" },
-
-      //   { text: "he plays guitar" },
-      //   { text: "she listens to music" },
-      //   { text: "i read novels" },
-      //   { text: "they go to work" },
-      //   { text: "we drink tea" },
-
-      //   { text: "he teaches students" },
-      //   { text: "she teaches english" },
-      //   { text: "i clean my room" },
-      //   { text: "they clean the house" },
-      //   { text: "we help parents" },
-
-      //   { text: "he fixes bikes" },
-      //   { text: "she fixes the door" },
-      //   { text: "i use a laptop" },
-      //   { text: "they use phones" },
-      //   { text: "we play chess" },
-
-      //   { text: "he draws pictures" },
-      //   { text: "she draws animals" },
-      //   { text: "i paint walls" },
-      //   { text: "they paint rooms" },
-      //   { text: "we enjoy holidays" },
-
-      //   { text: "he buys groceries" },
-      //   { text: "she buys vegetables" },
-      //   { text: "i cook noodles" },
-      //   { text: "they cook soup" },
-      //   { text: "we prepare meals" },
-
-      //   { text: "he opens the shop" },
-      //   { text: "she opens the window" },
-      //   { text: "i close the door" },
-      //   { text: "they close the gate" },
-      //   { text: "we lock the house" },
-
-      //   { text: "he answers questions" },
-      //   { text: "she answers emails" },
-      //   { text: "i send messages" },
-      //   { text: "they send letters" },
-      //   { text: "we receive packages" },
-
-      //   { text: "he reads newspapers" },
-      //   { text: "she reads magazines" },
-      //   { text: "i follow rules" },
-      //   { text: "they follow orders" },
-      //   { text: "we respect teachers" },
-
-      //   { text: "he watches news" },
-      //   { text: "she watches cartoons" },
-      //   { text: "i play badminton" },
-      //   { text: "they play volleyball" },
-      //   { text: "we exercise daily" },
-
-      //   { text: "he sleeps early" },
-      //   { text: "she sleeps late" },
-      //   { text: "i wake up early" },
-      //   { text: "they wake up late" },
-      //   { text: "we rest at night" },
-      // ];
+      if (this.get_aktivitas_tugasable?.kategori != 'boolean') {
+        this.notifFailed('data gagal diproses', 'Salah Quiz')
+        this.is_not_error = false;
+        return
+      }
+      // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
+      const list_questions = this.get_aktivitas_tugasable?.konten
 
       let checkingHTML = {};
 
@@ -404,7 +320,7 @@ export default {
       function startCountdown() {
         clearInterval(countdown);
         countdown = setInterval(() => {
-          if(vm.is_quiz_done) return clearInterval(countdown);
+          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(countdown);
 
           if (!document.getElementById("timer")) return clearInterval(countdown);
           timeLeft--;
@@ -748,7 +664,7 @@ export default {
   white-space: nowrap;
 }
 
-#QuizActionBoolean {
+#QuizAction {
   .controls {
     display: flex;
     gap: 12px;

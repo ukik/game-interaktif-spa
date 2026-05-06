@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionMatch" class="q-pa-sm bg-dark">
+  <div id="QuizReport" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 
 
 <style lang="scss">
-#QuizActionMatch {
+#QuizReport {
 
   /* === GHOST === */
   .drag-ghost {

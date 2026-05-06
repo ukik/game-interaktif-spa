@@ -143,9 +143,12 @@ export const useQuizStore = defineStore('QuizStore', {
       console.log('setForm', this.form)
 
     },
-    async onCreate(quiz, tugas_id) {
+    async onCreate(quiz) {
+      const route = useRouterStore()
 
-      if(useRouterStore().getQuery?.demo == 'true') {
+      const tugas_id = route?.getParams?.slug
+
+      if(route.getQuery?.demo == 'true') {
         this.is_quiz_done = true;
         this.router_push = {
           name: 'quiz_report',

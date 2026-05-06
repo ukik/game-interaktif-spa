@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionArrange" class="q-pa-sm bg-dark">
+  <div id="QuizReport" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="scss">
-#QuizActionArrange {
+#QuizReport {
 
 
   .word {

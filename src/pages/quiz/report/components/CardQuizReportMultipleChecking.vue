@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionMultiple" class="q-pa-sm bg-dark">
+  <div id="QuizReport" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 
 
 <style lang="scss">
-#QuizActionMultiple {
+#QuizReport {
 
   .block_quiz {
     border: 0px dashed #60a5fa;

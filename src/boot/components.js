@@ -154,6 +154,19 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/ReportLottie.vue'))
   )
 
+  app.component("Lottie_4_404",
+    defineAsyncComponent(() => import('src/components/lms/Lottie_4_404.vue'))
+  )
+  app.component("Lottie_3_404",
+    defineAsyncComponent(() => import('src/components/lms/Lottie_3_404.vue'))
+  )
+  app.component("Lottie_2_404",
+    defineAsyncComponent(() => import('src/components/lms/Lottie_2_404.vue'))
+  )
+  app.component("Lottie_1_404",
+    defineAsyncComponent(() => import('src/components/lms/Lottie_1_404.vue'))
+  )
+
 
 
 

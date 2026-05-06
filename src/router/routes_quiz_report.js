@@ -1,13 +1,13 @@
 const routes_quiz_report = [
   {
-    path: '/quiz/report/:quiz/:slug/:siswa_id', // tugas_id
+    path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:siswa_id', // tugas_id
     name: 'quiz_report',
     component: () => import('pages/quiz/report/QuizReport.vue'),
     meta: {
       logged: false,
-      title: 'QuizReport - Yuvoria GAME',
+      title: 'Report Quiz',
       meta: [
-        { name: 'description', content: 'QuizReport - Yuvoria GAME' }
+        { name: 'description', content: 'Report Quiz' }
       ]
     }
   },

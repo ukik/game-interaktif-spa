@@ -1,8 +1,8 @@
 <template>
-  <q-page id="QuizActionArrange" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <WinLottie />
-    <div v-show="!is_quiz_done" class="game">
+    <div v-show="!is_quiz_done && is_not_error" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -21,9 +21,13 @@
             <button class="check" id="btnCheck">✔️&nbsp;&nbsp;CEK</button>
             <button class="reset" id="btnReset">❌&nbsp;&nbsp;RESET</button>
           </div>
+          <div class="life">❤️ Peluang x <span id="lifeCount">3</span></div>
         </q-card-section>
       </q-card>
     </div>
+    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 
@@ -32,6 +36,8 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import confetti from "src/composables/quiz/confetti";
 
+import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
+
 // import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
@@ -39,16 +45,14 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // await preStore.onShow(slug);
-
     const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const mystore = useLmsTugasStore(store)
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done) return next()
+    if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
 
@@ -61,101 +65,20 @@ export default {
   methods: {
     onStart() {
 
-      console.log('this.get_show_payload?.konten', this.get_show_payload?.konten)
+      console.log('this.get_aktivitas_tugasable?.konten', this.get_aktivitas_tugasable?.kategori, this.get_aktivitas_tugasable?.konten)
 
       const vm = this;
 
-      if (this.get_show_payload?.kategori != 'arrange') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+      if (this.get_aktivitas_tugasable?.kategori != 'arrange') {
+        this.notifFailed('data gagal diproses', 'Salah Quiz')
+        this.is_not_error = false;
+        return
+      }
+      // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
 
-      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-      const list_questions = this.get_show_payload?.konten
+      const list_questions = this.get_aktivitas_tugasable?.konten
 
-      // return;
-      /* ================= DATA ================= */
-      // const list_questions = [
-      //   // he / she
-      //   { w: ["he", "plays", "football"] },
-      //   { w: ["he", "reads", "books"] },
-      //   { w: ["he", "likes", "music"] },
-      //   { w: ["he", "watches", "tv"] },
-      //   { w: ["he", "drinks", "milk"] },
-      //   { w: ["he", "eats", "rice"] },
-      //   { w: ["he", "runs", "fast"] },
-      //   { w: ["he", "writes", "letters"] },
-      //   { w: ["he", "drives", "cars"] },
-      //   { w: ["he", "opens", "door"] },
-
-      //   { w: ["she", "plays", "piano"] },
-      //   { w: ["she", "reads", "stories"] },
-      //   { w: ["she", "likes", "flowers"] },
-      //   { w: ["she", "watches", "movies"] },
-      //   { w: ["she", "drinks", "juice"] },
-      //   { w: ["she", "eats", "fruit"] },
-      //   { w: ["she", "runs", "daily"] },
-      //   { w: ["she", "writes", "notes"] },
-      //   { w: ["she", "draws", "pictures"] },
-      //   { w: ["she", "sings", "songs"] },
-
-      //   // I
-      //   { w: ["I", "play", "games"] },
-      //   { w: ["I", "read", "books"] },
-      //   { w: ["I", "like", "music"] },
-      //   { w: ["I", "watch", "tv"] },
-      //   { w: ["I", "drink", "coffee"] },
-      //   { w: ["I", "eat", "noodles"] },
-      //   { w: ["I", "study", "english"] },
-      //   { w: ["I", "write", "homework"] },
-      //   { w: ["I", "use", "computer"] },
-      //   { w: ["I", "learn", "daily"] },
-
-      //   // you
-      //   { w: ["you", "play", "football"] },
-      //   { w: ["you", "read", "news"] },
-      //   { w: ["you", "like", "coffee"] },
-      //   { w: ["you", "watch", "movies"] },
-      //   { w: ["you", "drink", "tea"] },
-      //   { w: ["you", "eat", "breakfast"] },
-      //   { w: ["you", "study", "math"] },
-      //   { w: ["you", "write", "email"] },
-      //   { w: ["you", "use", "phone"] },
-      //   { w: ["you", "open", "window"] },
-
-      //   // we
-      //   { w: ["we", "play", "together"] },
-      //   { w: ["we", "read", "books"] },
-      //   { w: ["we", "like", "games"] },
-      //   { w: ["we", "watch", "tv"] },
-      //   { w: ["we", "drink", "water"] },
-      //   { w: ["we", "eat", "lunch"] },
-      //   { w: ["we", "study", "english"] },
-      //   { w: ["we", "write", "notes"] },
-      //   { w: ["we", "use", "internet"] },
-      //   { w: ["we", "learn", "fast"] },
-
-      //   // they
-      //   { w: ["they", "play", "games"] },
-      //   { w: ["they", "read", "books"] },
-      //   { w: ["they", "like", "music"] },
-      //   { w: ["they", "watch", "movies"] },
-      //   { w: ["they", "drink", "juice"] },
-      //   { w: ["they", "eat", "rice"] },
-      //   { w: ["they", "study", "together"] },
-      //   { w: ["they", "write", "letters"] },
-      //   { w: ["they", "use", "computers"] },
-      //   { w: ["they", "visit", "friends"] },
-
-      //   // nouns (singular)
-      //   { w: ["the", "cat", "runs"] },
-      //   { w: ["the", "dog", "barks"] },
-      //   { w: ["the", "bird", "flies"] },
-      //   { w: ["the", "baby", "cries"] },
-      //   { w: ["the", "teacher", "teaches"] },
-      //   { w: ["the", "student", "studies"] },
-      //   { w: ["the", "boy", "plays"] },
-      //   { w: ["the", "girl", "smiles"] },
-      //   { w: ["the", "sun", "shines"] },
-      //   { w: ["the", "clock", "ticks"] },
-      // ];
+      console.log('list_questions', list_questions)
 
       let checkingHTML = {};
 
@@ -191,7 +114,7 @@ export default {
       };
 
       /* ================= TIMER ================= */
-      const default_timer = 10;
+      const default_timer = 2;
       let time = default_timer,
         timerInterval = null;
       const timerEl = document.getElementById("timer");
@@ -200,7 +123,7 @@ export default {
         clearInterval(timerInterval);
         timerEl.textContent = "⏱️ " + time;
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done) return clearInterval(timerInterval);
+          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           time--;
@@ -211,6 +134,29 @@ export default {
             timeOutReset();
           }
         }, 1000);
+      }
+
+      let maxLife = 3;
+
+      function updateLife() {
+        maxLife--
+        if (maxLife < 0) {
+          maxLife = 3
+
+          current++;
+          currentSoal++;
+
+          showSnackbar("💀 Kesempatan habis!", "out");
+
+          forceCancelDrag(); // ⬅️ FIX UTAMA (STOP DRAG AKTIF)
+          playErrorFX("timeout");
+          // loadQuestion();
+          setTimeout(loadQuestion, 700);
+        }
+
+        const el = document.getElementById("lifeCount");
+        if (el) el.textContent = maxLife;
+
       }
 
       /* ================= ELEMENT ================= */
@@ -435,6 +381,7 @@ export default {
         if (!locked) {
           checkTrial++;
 
+          updateLife()
           // ⏸️ PAUSE TIMER
           // clearInterval(timerInterval); // tidak perlu ini
 
@@ -470,9 +417,12 @@ export default {
 
           total_question_true++;
 
+          maxLife = 3
+
           setTimeout(loadQuestion, 700);
 
         } else {
+
           score -= 20;
           minusThisQuestion += 20;
           updateScore();
@@ -553,7 +503,7 @@ export default {
 }
 
 
-#QuizActionArrange {
+#QuizAction {
 
   .answer {
     display: flex;

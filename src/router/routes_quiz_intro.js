@@ -1,14 +1,17 @@
 const routes_quiz_intro = [
   {
-    path: '/quiz/intro/arrange',
-    name: 'quiz_intro_arrange',
+    path: '/quiz/intro/:slug', // slug = tugas_id
+    name: 'quiz_intro',
     component: () => import('pages/quiz/intro/QuizIntro.vue'),
     meta: {
-      title: 'QuizIntro - Yuvoria GAME',
+      logged: false,
+      title: 'Intro Quiz',
       meta: [
-        { name: 'description', content: 'QuizIntro - Yuvoria GAME' }
-      ]
+        { name: 'description', content: 'Intro Quiz' }
+      ],
+      page_type: 'show',
     }
+
   },
 ]
 

@@ -1,8 +1,8 @@
 <template>
-  <q-page id="QuizActionMatch" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <WinLottie />
-    <div v-show="!is_quiz_done" class="game">
+    <div v-show="!is_quiz_done && is_not_error" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -27,6 +27,9 @@
         </q-card-section>
       </q-card>
     </div>
+    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 
@@ -35,6 +38,8 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import shake from "src/composables/quiz/shake";
 
+import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
+
 // import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
@@ -42,18 +47,14 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
-
     const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const mystore = useLmsTugasStore(store)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done) return next()
+    if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
 
@@ -67,85 +68,14 @@ export default {
     onStart() {
       const vm = this;
 
-      if (this.get_show_payload?.kategori != 'match') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+      if (this.get_aktivitas_tugasable?.kategori != 'match') {
+        this.notifFailed('data gagal diproses', 'Salah Quiz')
+        this.is_not_error = false;
+        return
+      }
+      // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
+      const list_questions = this.get_aktivitas_tugasable?.konten
 
-      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-      const list_questions = this.get_show_payload?.konten
-
-      /* ================= DATA ================= */
-      // const list_questions = [
-      //   { q: "he plays football", a: "dia bermain bola" },
-      //   { q: "she reads books", a: "dia membaca buku" },
-      //   { q: "I drink coffee", a: "saya minum kopi" },
-      //   { q: "we study english", a: "kami belajar bahasa inggris" },
-      //   { q: "they watch tv", a: "mereka menonton tv" },
-
-      //   { q: "he eats rice", a: "dia makan nasi" },
-      //   { q: "she cooks dinner", a: "dia memasak makan malam" },
-      //   { q: "I go to school", a: "saya pergi ke sekolah" },
-      //   { q: "we play games", a: "kami bermain permainan" },
-      //   { q: "they like music", a: "mereka menyukai musik" },
-
-      //   { q: "he runs fast", a: "dia berlari cepat" },
-      //   { q: "she sings well", a: "dia bernyanyi dengan baik" },
-      //   { q: "I write a letter", a: "saya menulis surat" },
-      //   { q: "we read stories", a: "kami membaca cerita" },
-      //   { q: "they help friends", a: "mereka membantu teman" },
-
-      //   { q: "he drives a car", a: "dia mengemudi mobil" },
-      //   { q: "she cleans the room", a: "dia membersihkan kamar" },
-      //   { q: "I open the door", a: "saya membuka pintu" },
-      //   { q: "we close the window", a: "kami menutup jendela" },
-      //   { q: "they answer questions", a: "mereka menjawab pertanyaan" },
-
-      //   { q: "he buys food", a: "dia membeli makanan" },
-      //   { q: "she sells clothes", a: "dia menjual pakaian" },
-      //   { q: "I call my mother", a: "saya menelepon ibu saya" },
-      //   { q: "we visit our family", a: "kami mengunjungi keluarga kami" },
-      //   { q: "they travel together", a: "mereka bepergian bersama" },
-
-      //   { q: "he teaches math", a: "dia mengajar matematika" },
-      //   { q: "she learns english", a: "dia belajar bahasa inggris" },
-      //   { q: "I listen to music", a: "saya mendengarkan musik" },
-      //   { q: "we practice speaking", a: "kami berlatih berbicara" },
-      //   { q: "they understand lessons", a: "mereka memahami pelajaran" },
-
-      //   { q: "he wakes up early", a: "dia bangun pagi" },
-      //   { q: "she sleeps late", a: "dia tidur larut" },
-      //   { q: "I wash my hands", a: "saya mencuci tangan" },
-      //   { q: "we brush our teeth", a: "kami menyikat gigi" },
-      //   { q: "they take a bath", a: "mereka mandi" },
-
-      //   { q: "he opens the book", a: "dia membuka buku" },
-      //   { q: "she closes the bag", a: "dia menutup tas" },
-      //   { q: "I carry the bag", a: "saya membawa tas" },
-      //   { q: "we share food", a: "kami berbagi makanan" },
-      //   { q: "they bring water", a: "mereka membawa air" },
-
-      //   { q: "he draws pictures", a: "dia menggambar gambar" },
-      //   { q: "she paints flowers", a: "dia melukis bunga" },
-      //   { q: "I color the paper", a: "saya mewarnai kertas" },
-      //   { q: "we make toys", a: "kami membuat mainan" },
-      //   { q: "they build houses", a: "mereka membangun rumah" },
-
-      //   { q: "he jumps high", a: "dia melompat tinggi" },
-      //   { q: "she dances happily", a: "dia menari dengan gembira" },
-      //   { q: "I smile often", a: "saya sering tersenyum" },
-      //   { q: "we laugh together", a: "kami tertawa bersama" },
-      //   { q: "they clap hands", a: "mereka bertepuk tangan" },
-
-      //   { q: "he drinks water", a: "dia minum air" },
-      //   { q: "she eats fruit", a: "dia makan buah" },
-      //   { q: "I like chocolate", a: "saya suka cokelat" },
-      //   { q: "we love animals", a: "kami menyukai hewan" },
-      //   { q: "they care about nature", a: "mereka peduli pada alam" },
-
-      //   { q: "he studies hard", a: "dia belajar dengan giat" },
-      //   { q: "she works at home", a: "dia bekerja di rumah" },
-      //   { q: "I play with friends", a: "saya bermain dengan teman" },
-      //   { q: "we enjoy holidays", a: "kami menikmati liburan" },
-      //   { q: "they wait patiently", a: "mereka menunggu dengan sabar" },
-      // ];
 
       let checkingHTML = {};
 
@@ -358,7 +288,7 @@ export default {
         clearInterval(countdown);
 
         countdown = setInterval(() => {
-          if(vm.is_quiz_done) return clearInterval(countdown);
+          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(countdown);
 
           if (!document.getElementById("timer")) return clearInterval(countdown);
           timeLeft--;
@@ -574,7 +504,7 @@ export default {
   white-space: nowrap;
 }
 
-#QuizActionMatch {
+#QuizAction {
   .controls {
     display: flex;
     gap: 12px;

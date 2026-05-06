@@ -1,8 +1,8 @@
 <template>
-  <q-page id="QuizActionShortAnswer" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <WinLottie />
-    <div v-show="!is_quiz_done" class="game">
+    <div v-show="!is_quiz_done && is_not_error" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -21,6 +21,9 @@
         </q-card-section>
       </q-card>
     </div>
+    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 
@@ -38,18 +41,14 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
-
     const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const mystore = useLmsTugasStore(store)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done) return next()
+    if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
   mounted() {
@@ -62,110 +61,16 @@ export default {
     onStart() {
       const vm = this;
 
-      if (this.get_show_payload?.kategori != 'shortanswer') return this.notifFailed('data gagal diproses', 'Salah Quiz')
+      console.log('this.get_aktivitas_tugasable', this.get_aktivitas_tugasable)
 
-      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-      const list_questions = this.get_show_payload?.konten
+      if (this.get_aktivitas_tugasable?.kategori != 'shortanswer') {
+        this.notifFailed('data gagal diproses', 'Salah Quiz')
+        this.is_not_error = false;
+        return
+      }
 
+      const list_questions = this.get_aktivitas_tugasable?.konten
 
-      // const list_questions = [
-      //   { top: { question: "Saya tidur" }, bottom: { answers: ["i sleep", "i rest", "i nap"] } },
-      //   { top: { question: "Kamu makan" }, bottom: { answers: ["you eat", "you dine", "you snack"] } },
-      //   { top: { question: "Dia (Laki-laki) tertawa" }, bottom: { answers: ["he laughs", "he chuckles", "he giggles"] } },
-      //   { top: { question: "Dia (Perempuan) menangis" }, bottom: { answers: ["she cries", "she weeps", "she sobs"] } },
-      //   { top: { question: "Kami berlari" }, bottom: { answers: ["we run", "we jog", "we sprint"] } },
-      //   { top: { question: "Mereka berjalan" }, bottom: { answers: ["they walk", "they stroll", "they march"] } },
-      //   { top: { question: "Itu jatuh" }, bottom: { answers: ["it falls", "it drops", "it tumbles"] } },
-      //   { top: { question: "Saya bangun" }, bottom: { answers: ["i wake up", "i get up", "i rise"] } },
-      //   { top: { question: "Kamu tidur larut" }, bottom: { answers: ["you sleep late", "you stay up late", "you rest late"] } },
-      //   { top: { question: "Dia (Perempuan) tersenyum" }, bottom: { answers: ["she smiles", "she grins", "she beams"] } },
-      //   { top: { question: "Dia (Laki-laki) berpikir" }, bottom: { answers: ["he thinks", "he ponders", "he reflects"] } },
-      //   { top: { question: "Kami menunggu" }, bottom: { answers: ["we wait", "we linger", "we pause"] } },
-      //   { top: { question: "Mereka mendengar" }, bottom: { answers: ["they hear", "they listen", "they perceive"] } },
-      //   { top: { question: "Itu bersinar" }, bottom: { answers: ["it shines", "it glows", "it gleams"] } },
-      //   { top: { question: "Saya belajar" }, bottom: { answers: ["i study", "i learn", "i practice"] } },
-      //   { top: { question: "Kamu bermain" }, bottom: { answers: ["you play", "you engage", "you have fun"] } },
-      //   { top: { question: "Dia (Perempuan) bergerak" }, bottom: { answers: ["she moves", "she shifts", "she steps"] } },
-      //   { top: { question: "Dia (Laki-laki) bekerja" }, bottom: { answers: ["he works", "he labors", "he toils"] } },
-      //   { top: { question: "Kami tertawa" }, bottom: { answers: ["we laugh", "we chuckle", "we giggle"] } },
-      //   { top: { question: "Mereka menang" }, bottom: { answers: ["they win", "they succeed", "they triumph"] } },
-      //   { top: { question: "Itu jatuh" }, bottom: { answers: ["it drops", "it falls", "it plunges"] } },
-      //   { top: { question: "Saya minum" }, bottom: { answers: ["i drink", "i sip", "i gulp"] } },
-      //   { top: { question: "Kamu berbicara" }, bottom: { answers: ["you speak", "you talk", "you chat"] } },
-      //   { top: { question: "Dia (Perempuan) bernyanyi" }, bottom: { answers: ["she sings", "she hums", "she warbles"] } },
-      //   { top: { question: "Dia (Laki-laki) membaca" }, bottom: { answers: ["he reads", "he scans", "he peruses"] } },
-      //   { top: { question: "Kami bergerak cepat" }, bottom: { answers: ["we move fast", "we dash", "we sprint"] } },
-      //   { top: { question: "Mereka diam" }, bottom: { answers: ["they are silent", "they are quiet", "they hush"] } },
-      //   { top: { question: "Itu terlihat" }, bottom: { answers: ["it appears", "it seems", "it looks"] } },
-      //   { top: { question: "Saya berpikir" }, bottom: { answers: ["i think", "i ponder", "i reflect"] } },
-      //   { top: { question: "Kamu tersenyum" }, bottom: { answers: ["you smile", "you grin", "you beam"] } },
-      //   { top: { question: "Dia (Perempuan) tertidur" }, bottom: { answers: ["she sleeps", "she naps", "she rests"] } },
-      //   { top: { question: "Dia (Laki-laki) memikirkan" }, bottom: { answers: ["he considers", "he thinks", "he ponders"] } },
-      //   { top: { question: "Kami mendengar" }, bottom: { answers: ["we hear", "we listen", "we perceive"] } },
-      //   { top: { question: "Mereka menatap" }, bottom: { answers: ["they look", "they gaze", "they stare"] } },
-      //   { top: { question: "Itu bergetar" }, bottom: { answers: ["it shakes", "it trembles", "it quivers"] } },
-      //   { top: { question: "Saya berdiri" }, bottom: { answers: ["i stand", "i rise", "i get up"] } },
-      //   { top: { question: "Kamu duduk" }, bottom: { answers: ["you sit", "you take a seat", "you settle"] } },
-      //   { top: { question: "Dia (Perempuan) melompat" }, bottom: { answers: ["she jumps", "she leaps", "she hops"] } },
-      //   { top: { question: "Dia (Laki-laki) berlari" }, bottom: { answers: ["he runs", "he sprints", "he jogs"] } },
-      //   { top: { question: "Kami bersorak" }, bottom: { answers: ["we cheer", "we shout", "we exclaim"] } },
-      //   { top: { question: "Mereka menangis" }, bottom: { answers: ["they cry", "they weep", "they sob"] } },
-      //   { top: { question: "Itu melayang" }, bottom: { answers: ["it floats", "it hovers", "it drifts"] } },
-      //   { top: { question: "Saya tersandung" }, bottom: { answers: ["i stumble", "i trip", "i falter"] } },
-      //   { top: { question: "Kamu tersesat" }, bottom: { answers: ["you get lost", "you wander", "you stray"] } },
-      //   { top: { question: "Dia (Perempuan) beristirahat" }, bottom: { answers: ["she rests", "she relaxes", "she reclines"] } },
-      //   { top: { question: "Dia (Laki-laki) tersenyum" }, bottom: { answers: ["he smiles", "he grins", "he beams"] } },
-      //   { top: { question: "Kami berteriak" }, bottom: { answers: ["we shout", "we yell", "we scream"] } },
-      //   { top: { question: "Mereka bergerak" }, bottom: { answers: ["they move", "they shift", "they step"] } },
-      //   { top: { question: "Itu berputar" }, bottom: { answers: ["it spins", "it rotates", "it twirls"] } },
-      //   { top: { question: "Saya menunduk" }, bottom: { answers: ["i bow", "i bend", "i lean"] } },
-      //   { top: { question: "Kamu melambaikan tangan" }, bottom: { answers: ["you wave", "you gesture", "you signal"] } },
-      //   { top: { question: "Dia (Perempuan) berlari" }, bottom: { answers: ["she runs", "she sprints", "she jogs"] } },
-      //   { top: { question: "Dia (Laki-laki) melompat" }, bottom: { answers: ["he jumps", "he leaps", "he hops"] } },
-      //   { top: { question: "Kami tersenyum" }, bottom: { answers: ["we smile", "we grin", "we beam"] } },
-      //   { top: { question: "Mereka menatap" }, bottom: { answers: ["they look", "they gaze", "they stare"] } },
-      //   { top: { question: "Itu berlari" }, bottom: { answers: ["it runs", "it sprints", "it dashes"] } },
-      //   { top: { question: "Saya menggigil" }, bottom: { answers: ["i shiver", "i tremble", "i shake"] } },
-      //   { top: { question: "Kamu menguap" }, bottom: { answers: ["you yawn", "you gape", "you open your mouth wide"] } },
-      //   { top: { question: "Dia (Perempuan) mendesis" }, bottom: { answers: ["she hisses", "she whispers", "she murmurs"] } },
-      //   { top: { question: "Dia (Laki-laki) melamun" }, bottom: { answers: ["he daydreams", "he drifts off", "he zones out"] } },
-      //   { top: { question: "Kami bersantai" }, bottom: { answers: ["we relax", "we rest", "we recline", "we chill"] } },
-      //   { top: { question: "Mereka berteriak keras" }, bottom: { answers: ["they shout loudly", "they scream", "they yell"] } },
-      //   { top: { question: "Itu mengalir" }, bottom: { answers: ["it flows", "it streams", "it runs"] } },
-      //   { top: { question: "Saya mendesis" }, bottom: { answers: ["i hiss", "i whisper", "i murmur"] } },
-      //   { top: { question: "Kamu tersandung" }, bottom: { answers: ["you stumble", "you trip", "you falter"] } },
-      //   { top: { question: "Dia (Perempuan) tertawa" }, bottom: { answers: ["she laughs", "she giggles", "she chuckles"] } },
-      //   { top: { question: "Dia (Laki-laki) menunduk" }, bottom: { answers: ["he bows", "he leans", "he bends"] } },
-      //   { top: { question: "Kami berbisik" }, bottom: { answers: ["we whisper", "we murmur", "we hiss"] } },
-      //   { top: { question: "Mereka melompat" }, bottom: { answers: ["they jump", "they leap", "they hop"] } },
-      //   { top: { question: "Itu bergerak perlahan" }, bottom: { answers: ["it moves slowly", "it drifts", "it creeps"] } },
-      //   { top: { question: "Saya memutar" }, bottom: { answers: ["i turn", "i rotate", "i spin"] } },
-      //   { top: { question: "Kamu menunduk" }, bottom: { answers: ["you bow", "you lean", "you bend"] } },
-      //   { top: { question: "Dia (Perempuan) bersinar" }, bottom: { answers: ["she shines", "she glows", "she gleams"] } },
-      //   { top: { question: "Dia (Laki-laki) bergetar" }, bottom: { answers: ["he shakes", "he trembles", "he quivers"] } },
-      //   { top: { question: "Kami mengangguk" }, bottom: { answers: ["we nod", "we bow", "we assent"] } },
-      //   { top: { question: "Mereka tersenyum" }, bottom: { answers: ["they smile", "they grin", "they beam"] } },
-      //   { top: { question: "Itu melayang tinggi" }, bottom: { answers: ["it floats high", "it soars", "it hovers"] } },
-      //   { top: { question: "Saya menghela napas" }, bottom: { answers: ["i sigh", "i exhale", "i breathe out"] } },
-      //   { top: { question: "Kamu menatap" }, bottom: { answers: ["you look", "you gaze", "you stare"] } },
-      //   { top: { question: "Dia (Perempuan) menguap" }, bottom: { answers: ["she yawns", "she stretches", "she gapes"] } },
-      //   { top: { question: "Dia (Laki-laki) tersenyum lebar" }, bottom: { answers: ["he smiles", "he grins", "he beams"] } },
-      //   { top: { question: "Kami terkejut" }, bottom: { answers: ["we are surprised", "we are shocked", "we are startled", "we gasp", "we exclaim"] } },
-      //   { top: { question: "Mereka menunduk" }, bottom: { answers: ["they bow", "they lean", "they bend"] } },
-      //   { top: { question: "Itu berputar cepat" }, bottom: { answers: ["it spins fast", "it twirls", "it rotates quickly"] } },
-      //   { top: { question: "Saya menggeliat" }, bottom: { answers: ["i wriggle", "i twist", "i squirm"] } },
-      //   { top: { question: "Kamu tertawa kecil" }, bottom: { answers: ["you giggle", "you chuckle", "you laugh softly"] } },
-      //   { top: { question: "Dia (Perempuan) menunduk" }, bottom: { answers: ["she bows", "she leans", "she bends"] } },
-      //   { top: { question: "Dia (Laki-laki) menguap" }, bottom: { answers: ["he yawns", "he stretches", "he gapes"] } },
-      //   { top: { question: "Kami bersorak" }, bottom: { answers: ["we cheer", "we shout", "we exclaim"] } },
-      //   { top: { question: "Mereka beristirahat" }, bottom: { answers: ["they rest", "they relax", "they recline"] } },
-      //   { top: { question: "Itu meluncur" }, bottom: { answers: ["it slides", "it glides", "it slips"] } },
-      //   { top: { question: "Saya berjalan perlahan" }, bottom: { answers: ["i walk slowly", "i stroll", "i saunter"] } },
-      //   { top: { question: "Kamu berlari cepat" }, bottom: { answers: ["you run fast", "you sprint", "you dash"] } },
-      //   { top: { question: "Dia (Perempuan) tersenyum lebar" }, bottom: { answers: ["she beams", "she grins", "she smiles"] } },
-      //   { top: { question: "Dia (Laki-laki) mengangguk" }, bottom: { answers: ["he nods", "he bows", "he assents"] } },
-      //   { top: { question: "Kami menunduk" }, bottom: { answers: ["we bow", "we lean", "we bend"] } }
-      // ];
 
       let checkingHTML = {};
 
@@ -222,7 +127,7 @@ export default {
         document.getElementById("timer").textContent = "⏱️ " + timeLeft;
 
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done) return clearInterval(timerInterval);
+          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           timeLeft--;
@@ -736,7 +641,7 @@ export default {
   animation: inherit !important;
 }
 
-#QuizActionShortAnswer {
+#QuizAction {
   .block_quiz {
     padding: 16px;
     border-radius: 14px;

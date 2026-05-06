@@ -90,7 +90,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
     aktivitas: {
       payload: {
-        payload: {}
+        payload: null
       },
     },
     loading: {
@@ -123,6 +123,9 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     get_show_payload: ({ show }) => show?.payload?.payload,
 
     get_peserta_payload: ({ peserta }) => peserta?.payload?.payload,
+
+    get_aktivitas_payload: ({ aktivitas }) => aktivitas?.payload?.payload,
+    get_aktivitas_tugasable: ({ aktivitas }) => aktivitas?.payload?.payload?.tugasable,
 
     get_loading: ({ loading }) => loading?.local,
     get_loading_peserta: ({ loading }) => loading?.local,
@@ -189,6 +192,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       if (this.loading.local) return false;
       this.loading.local = true;
+
       console.log('onAktivitas')
 
       const resp = await axios({
@@ -210,16 +214,19 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
         const data = resp?.data
 
-        switch (data?.payload?.payload?.model?.toLowerCase()) {
-          case 'quiz':
-            useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
-            break;
-          case 'modul':
-            useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
-            break;
-        }
+        // TIDAK PERLU SEBENARNYA
+        // switch (data?.payload?.payload?.model?.toLowerCase()) {
+        //   case 'quiz':
+        //     useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
+        //     break;
+        //   case 'modul':
+        //     useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
+        //     break;
+        // }
 
-        this.aktivitas = data
+        this.aktivitas = data //?.payload?.payload?.tugasable
+        console.log('data', this.aktivitas)
+
         // useLmsBankQuizStore(onSetShow)
         // console.log('onAktivitas', data?.payload?.payload?.model?.toLowerCase())
 

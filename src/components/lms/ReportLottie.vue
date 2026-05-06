@@ -3,8 +3,8 @@
     <div class="flex flex-center">
       <q-card class="bg-transparent" flat>
         <q-card-actions style="overflow-x:hidden;" class="q-pa-none" align="center">
-          <DotLottieVue :loop="false" ref="lottieRef" style="height: auto; width: 650px; " autoplay
-            src="/lottie/star-success-transparent.json" />
+          <DotLottieVue :loop="false" ref="lottieRef" style="height: auto; width: 850px; " autoplay
+            src="/lottie/used_star_success_transparent.json" />
         </q-card-actions>
       </q-card>
     </div>

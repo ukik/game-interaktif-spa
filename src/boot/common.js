@@ -25,6 +25,16 @@ export default boot(async ({ app, ssrContext, router, store }) => {
     },
     methods: {
       ...mapActions(useUiStore, ['getPageWidth']),
+      removeAllEventsInGame() {
+        const root = document.querySelector(`#QuizAction .game`);
+        if (!root) return;
+
+        const clean = root.cloneNode(true);
+        root.replaceWith(clean);
+
+        console.log('removeAllEventsInGame')
+      },
+
       normalizeString(str) {
         return str
           .replace(/&quot;/g, '"')     // HTML entity

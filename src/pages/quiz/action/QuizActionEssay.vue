@@ -1,8 +1,8 @@
 <template>
-  <q-page id="QuizActionEssay" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
     <QuizMediaComponent />
     <WinLottie />
-    <div v-show="!is_quiz_done" class="game">
+    <div v-show="!is_quiz_done && is_not_error" class="game">
       <q-card id="quizCard" bordered class="quiz-card">
         <q-card-section>
           <div class="title">🚀 Quiz Action</div>
@@ -45,6 +45,9 @@
         </q-card-section>
       </q-card>
     </div>
+    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 
@@ -53,6 +56,8 @@ import playErrorFX from "src/composables/quiz/playErrorFX";
 import playTrueFX from "src/composables/quiz/playTrueFX";
 import list_questionsX from "src/composables/quiz/soalEssay";
 
+import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
+
 // import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
 import { myMixin } from './mixinQuiz.js'
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
@@ -60,18 +65,14 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    // const preStore = useLmsBankQuizStore(store);
-    // const slug = currentRoute.params?.slug || '';
-    // console.log('mixin_quiz_action_arrange', slug)
-    // await preStore.onShow(slug);
-
     const slug = currentRoute.params?.slug || ''; // tugas_id
-    await useLmsTugasStore(store).onAktivitas(slug)
+    const mystore = useLmsTugasStore(store)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done) return next()
+    if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
 
@@ -85,10 +86,13 @@ export default {
     onStart() {
       const vm = this;
 
-      if (this.get_show_payload?.kategori != 'essay') return this.notifFailed('data gagal diproses', 'Salah Quiz')
-
-      // const list_questions = this.parseUnknown(this.get_show_payload?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
-      const list_questions = this.get_show_payload?.konten
+      if (this.get_aktivitas_tugasable?.kategori != 'essay') {
+        this.notifFailed('data gagal diproses', 'Salah Quiz')
+        this.is_not_error = false;
+        return
+      }
+      // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
+      const list_questions = this.get_aktivitas_tugasable?.konten
 
       /* ================= INPUT FILTER ================= */
       const textarea = document.getElementById("answer");
@@ -629,7 +633,7 @@ export default {
         document.getElementById("timer").textContent = "⏱️ " + timeLeft;
 
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done) return clearInterval(timerInterval);
+          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           timeLeft--;
@@ -864,7 +868,7 @@ export default {
 
 <!-- ===== STYLE ASLI TIDAK DIUBAH ===== -->
 <style>
-#QuizActionEssay {
+#QuizAction {
 
   .tf-card {
     background: #ffd4005e;

@@ -1,10 +1,11 @@
 <template>
   <InitLoading v-if="get_init_report"></InitLoading>
 
-  <q-page v-else class="justify-start items-start q-pa-sm">
+  <q-page v-else-if="!get_init_report && get_report_tugas" class="justify-start items-start q-pa-sm">
+
     <q-card flat bordered>
       <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-        <q-tab name="tab1" v-if="get_report_unsubmit" label="PENDING" />
+        <q-tab name="tab1" label="PENDING" />
         <q-tab name="tab2" label="FINAL" />
         <q-tab name="tab3" label="RANK" />
         <q-tab name="tab4" label="TUGAS" />
@@ -14,7 +15,7 @@
 
       <keep-alive>
         <q-tab-panels keep-alive v-model="tab" animated>
-          <q-tab-panel v-if="get_report_unsubmit" name="tab1" class="q-pa-none">
+          <q-tab-panel name="tab1" class="q-pa-none">
 
             <!-- TAB 1 -->
 
@@ -153,9 +154,16 @@
       </keep-alive>
     </q-card>
 
+    <!-- ?success=true jika ingin ini muncul -->
     <ReportLottie />
-    <!-- <WinLottie /> -->
+
     <ReportConfirmDialog ref="ReportConfirmDialog" @onBubbleEvent="onBubbleEvent"></ReportConfirmDialog>
+  </q-page>
+
+  <q-page v-else class="flex flex-center q-pa-sm bg-transparent">
+    <Lottie_1_404>
+      <q-btn round to="/" color="pink" size="xl" icon="home" />
+    </Lottie_1_404>
   </q-page>
 </template>
 

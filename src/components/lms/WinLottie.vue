@@ -6,11 +6,12 @@
           <DotLottieVue style="height: auto; width: 500px; margin-top: 0px;" autoplay loop src="/lottie/used_trophy.json" />
         </q-card-actions>
         <q-card-actions align="center">
-          <DotLottieVue style="height: auto; width: 550px; margin-top: -250px;" autoplay loop
+          <DotLottieVue style="height: auto; width: 550px; margin-top: -200px;" autoplay loop
             src="/lottie/used_exploding_ribbon_and_confetti.json" />
         </q-card-actions>
         <q-card-actions v-if="is_next" align="center">
-          <q-btn rounded @click="gotoReport" color="primary" style="width: 220px; margin-top:0px;" size="xl" icon-right="description" label="Laporan" />
+          <q-btn style="margin-top: -40px;" round @click="gotoReport" color="orange" size="xl" icon="arrow_forward" />
+          <!-- <q-btn rounded @click="gotoReport" color="primary" style="width: 220px; margin-top:0px;" size="xl" icon-right="description" label="Laporan" /> -->
         </q-card-actions>
       </q-card>
     </div>
@@ -42,6 +43,7 @@ export default {
   },
   methods: {
     gotoReport() {
+        this.removeAllEventsInGame()
         this.$router.push(this.router_push)
     },
     handleComplete() {

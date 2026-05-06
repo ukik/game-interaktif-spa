@@ -1,6 +1,6 @@
 const routes_quiz_action = [
   {
-    path: '/quiz/action/arrange/:slug',
+    path: '/quiz/action/arrange/:slug', // slug == tugas_id
     name: 'quiz_action_arrange',
     component: () => import('pages/quiz/action/QuizActionArrange.vue'),
     meta: {
@@ -13,7 +13,7 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/boolean/:slug',
+    path: '/quiz/action/boolean/:slug', // slug == tugas_id
     name: 'quiz_action_boolean',
     component: () => import('pages/quiz/action/QuizActionBoolean.vue'),
     meta: {
@@ -26,7 +26,7 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/essay/:slug',
+    path: '/quiz/action/essay/:slug', // slug == tugas_id
     name: 'quiz_action_essay',
     component: () => import('pages/quiz/action/QuizActionEssay.vue'),
     meta: {
@@ -39,7 +39,7 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/match/:slug',
+    path: '/quiz/action/match/:slug', // slug == tugas_id
     name: 'quiz_action_match',
     component: () => import('pages/quiz/action/QuizActionMatch.vue'),
     meta: {
@@ -52,7 +52,7 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/multiple/:slug',
+    path: '/quiz/action/multiple/:slug', // slug == tugas_id
     name: 'quiz_action_multiple',
     component: () => import('pages/quiz/action/QuizActionMultiple.vue'),
     meta: {
@@ -65,7 +65,7 @@ const routes_quiz_action = [
     }
   },
   {
-    path: '/quiz/action/shortanswer/:slug',
+    path: '/quiz/action/shortanswer/:slug', // slug == tugas_id
     name: 'quiz_action_shortanswer',
     component: () => import('pages/quiz/action/QuizActionShortAnswer.vue'),
     meta: {

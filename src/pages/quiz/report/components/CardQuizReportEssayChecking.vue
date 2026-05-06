@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionEssay" class="q-pa-sm bg-dark">
+  <div id="QuizReport" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -13,7 +13,7 @@ export default {
 
 <!-- ===== STYLE ASLI TIDAK DIUBAH ===== -->
 <style>
-#QuizActionEssay {
+#QuizReport {
 
   .tf-card {
     background: #ffd4005e;

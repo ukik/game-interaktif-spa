@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizActionShortAnswer" class="q-pa-sm bg-dark">
+  <div id="QuizReport" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   animation: inherit !important;
 }
 
-#QuizActionShortAnswer {
+#QuizReport {
   .block_quiz {
     padding: 16px;
     border-radius: 14px;
