@@ -3,9 +3,10 @@
     class="flex flex-center bg-transparent row q-pa-sm animate__animated animate__bounce animate__faster">
 
     <q-card v-if="get_init_show && get_aktivitas_tugasable?.kategori" class="card-shadow card-border-radius game">
-      <q-card-section>
-        <div class="title">📘 Present Tense</div>
-        <div class="subtitle">Belajar Bahasa Inggris Jadi Seru!</div>
+      <q-card-section class="text-center">
+        <div class="title">📘 <br> {{get_aktivitas_tugasable?.mapel?.nama}}</div>
+        <div class="subtitle">{{ get_aktivitas_tugasable?.judul }}</div>
+        <!-- <div class="text-body2">{{ get_aktivitas_tugasable?.topik }}</div> -->
       </q-card-section>
 
       <q-separator></q-separator>
@@ -15,7 +16,12 @@
       </q-card-section> -->
 
       <q-card-section>
-        <div class="stats" v-html="info"></div>
+        <div class="stats">
+          <template v-for="(item, index) in get_aktivitas_payload?.intro?.konten">
+            <div class="text-body2">{{ item?.icon }} {{ item?.label }} <span class="text-body2">{{ item?.value }}</span>
+            </div>
+          </template>
+        </div>
 
         <!-- <button @click="startQuiz">🚀 MULAI BELAJAR</button> -->
 
@@ -132,8 +138,10 @@ export default {
   }
 
 
-
-
+  .stats div {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 
   .footer {
     font-size: 13px;
@@ -141,9 +149,6 @@ export default {
     // margin-top: 14px;
   }
 
-  /* FIX SWEETALERT2 FLEX CENTER BUG */
-  body.swal2-height-auto {
-    height: 100vh !important;
-  }
+
 }
 </style>
