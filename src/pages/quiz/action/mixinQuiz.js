@@ -23,7 +23,7 @@ export const myMixin = {
   },
   methods: {
     ...mapActions(useQuizStore, ["setForm", "onCreate"]),
-    ...mapActions(useLmsTugasStore, ["onAktivitas"]),
+    ...mapActions(useLmsTugasStore, ["onAktivitasTugas"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
     },
@@ -32,7 +32,7 @@ export const myMixin = {
 
       // this.dialog_result = true;
 
-      return;
+      // return;
 
       const local = localStorage.getItem('record_quiz_' + quiz + '2')
 

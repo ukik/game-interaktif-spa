@@ -6,6 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from '../auth/AuthStore';
+import { useRouterStore } from '../auth/RouterStore';
 
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
@@ -73,10 +74,10 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       },
       kelas: {},
       kategoriList: [],
-      "currentMapel":null,
-      "currentUser":null,
-      "currentSiswa":null,
-      "currentKategori":null,
+      "currentMapel": null,
+      "currentUser": null,
+      "currentSiswa": null,
+      "currentKategori": null,
       "status": "success",
       "success": true,
       "message": "OK",
@@ -86,9 +87,9 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     },
     show: {
       payload: {
-        tugas:[],
-        top:{
-          data:[],
+        tugas: [],
+        top: {
+          data: [],
         },
       },
       kelas: {},
@@ -145,14 +146,14 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_rank_payload: ({ rank }) => rank?.payload?.payload,
     get_rank_top: ({ rank }) => rank?.payload?.top,
 
-    get_report: ({ report }) => report?.payload?.report,
+    // get_report: ({ report }) => report?.payload?.report,
     get_report_tugas: ({ report }) => report?.payload?.tugas,
 
     get_report_unsubmit: ({ report }) => {
       let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_unsubmit', el)
-        if(el.is_submit == 'N') {
+        if (el.is_submit == 'N') {
           json = el?.json
         }
       });
@@ -163,7 +164,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_submit', el)
-        if(el.is_submit == 'Y') {
+        if (el.is_submit == 'Y') {
           json = el?.json
         }
       });
@@ -288,14 +289,21 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       }
     },
 
-    async onReport(tugas_id, siswa_id, key = 'report') {
+    async onReport(key = 'report') {
+
+      const route = useRouterStore()
+
+      const tugas_id = route?.getParams?.slug
+      const quiz = route?.getParams?.quiz
+      const mode = route?.getParams?.mode
+      const siswa_id = route?.getParams?.siswa_id
 
       if (this.loading[key]) return false;
       this.loading[key] = true;
       console.log('onIndex')
 
       const resp = await axios({
-        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + siswa_id,
+        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + siswa_id + '/student',
         method: 'get',
         params: {}
       })
@@ -325,15 +333,15 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
     async onRank(tugas_id = null, init = false) {
 
-      if(init) this.init.rank = true
-      if(!this.init.rank) return
+      if (init) this.init.rank = true
+      if (!this.init.rank) return
 
       if (this.loading.rank) return false;
       this.loading.rank = true;
       console.log('onRank')
 
       const resp = await axios({
-        url: host + '/lms/tugas-quiz-stats/' + tugas_id +'/rank',
+        url: host + '/lms/tugas-quiz-stats/' + tugas_id + '/rank',
         method: 'get',
       })
         .catch((err) => {
@@ -363,7 +371,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       let report = null
       this.report?.payload?.report?.forEach(el => {
         console.log('get_report_unsubmit', el)
-        if(el.is_submit == 'N') {
+        if (el.is_submit == 'N') {
           report = el
         }
       });
@@ -376,7 +384,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       Loading.show()
       const resp = await axios({
-        url: host + '/lms/tugas-quiz-stats/' + this.get_report_tugas?.id +'/replace/'+ report?.id +'/'+siswa_id,
+        url: host + '/lms/tugas-quiz-hasil/' + this.get_report_tugas?.id + '/replace/' + report?.id + '/' + siswa_id,
         method: 'post'
       })
         .catch((err) => {

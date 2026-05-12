@@ -51,8 +51,11 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 export default {
   async preFetch({ store, currentRoute }) {
     const slug = currentRoute.params?.slug || ''; // tugas_id
+    const mode = currentRoute.params?.mode || ''; // tugas_id
+
     const mystore = useLmsTugasStore(store)
-    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
+
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
   },
   computed: {
     ...mapState(useLmsTugasStore, {
@@ -81,24 +84,28 @@ export default {
 
       const quiz = vm.get_aktivitas_tugasable?.kategori
       const slug = vm.$route?.params?.slug
+      const mode = vm.$route?.params?.mode
 
       const route = {
-        name: 'quiz_action_' + quiz,
+        name: mode == 'student' ? 'quiz_action_' + quiz : 'quiz_action_public_' + quiz,
         params: {
           slug,
+          quiz,
+          mode,
         }
       }
 
       console.log(route)
 
+
       Swal.fire({
         title: "🎉 Siap bermain?",
         text: "Kerjakan quiz hingga tuntas",
         icon: "question",
-        confirmButtonText: "AYO...!!! MULAI",
-        cancelButtonText: "NANTI DULU",
-        confirmButtonColor: "#22c55e",
-        cancelButtonColor: "#f97316"
+        confirmButtonText: "SETUJU",
+        // cancelButtonText: "NANTI DULU",
+        confirmButtonColor: "green", // "#22c55e",
+        // cancelButtonColor: "#f97316"
       }).then(result => {
         if (result.isConfirmed) {
 

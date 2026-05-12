@@ -43,8 +43,10 @@ export default {
   },
   methods: {
     gotoReport() {
-        this.removeAllEventsInGame()
-        this.$router.push(this.router_push)
+      console.log('this.router_push', this.router_push)
+
+      this.removeAllEventsInGame()
+      this.$router.push(this.router_push)
     },
     handleComplete() {
       console.log('Animasi selesai');

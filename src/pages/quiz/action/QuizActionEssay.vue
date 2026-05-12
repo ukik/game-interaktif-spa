@@ -66,8 +66,10 @@ export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     const slug = currentRoute.params?.slug || ''; // tugas_id
+    const mode = currentRoute.params?.mode || '';
+
     const mystore = useLmsTugasStore(store)
-    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
@@ -515,7 +517,7 @@ export default {
         if (current >= totalSoal) {
 
           console.log('GAME OVER')
-          vm.onCreate('essay')
+          vm.onCreate()
           // GAME OVER
 
           // semua soal selesai
@@ -633,7 +635,7 @@ export default {
         document.getElementById("timer").textContent = "⏱️ " + timeLeft;
 
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(timerInterval);
+          if(vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'essay')  return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           timeLeft--;

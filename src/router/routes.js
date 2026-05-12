@@ -1,3 +1,4 @@
+import routes_quiz_action_public from "./routes_quiz_action_public";
 import routes_quiz_action from "./routes_quiz_action";
 import routes_quiz_report from "./routes_quiz_report";
 import routes_quiz_intro from "./routes_quiz_intro";
@@ -19,6 +20,7 @@ const routes = [
     component: () => import("layouts/QuizActionLayout.vue"),
     children: [
       ...routes_quiz_action,
+      ...routes_quiz_action_public,
       ...routes_quiz_intro,
       {
         path: '/quiz/index',

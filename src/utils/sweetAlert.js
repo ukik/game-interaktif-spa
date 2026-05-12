@@ -6,10 +6,10 @@ export function QuizActionBeforeRouteLeave(next) {
     text: "Kamu harus mengulang dari awal jika keluar sekarang.",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: "Lanjut",
-    cancelButtonText: "Keluar",
-    confirmButtonColor: "#22c55e",
-    cancelButtonColor: "#f97316",
+    confirmButtonText: "KELUAR",
+    cancelButtonText: "TUTUP",
+    confirmButtonColor: "red", //"#22c55e",
+    cancelButtonColor: "green", //"#f97316",
 
     // ✅ ini kunci
     reverseButtons: true,

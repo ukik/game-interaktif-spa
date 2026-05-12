@@ -1,5 +1,5 @@
 <template>
-  <div id="QuizReport" class="q-pa-sm bg-darkX">
+  <div id="CardQuizReportBooleanChecking" class="q-pa-sm bg-darkX">
     <div v-html="checking"></div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 
 
 <style lang="scss">
-#QuizReport {
+#CardQuizReportBooleanChecking {
 
   /* === MATCH GRID === */
   .block_quiz {

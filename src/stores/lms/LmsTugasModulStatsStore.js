@@ -316,36 +316,37 @@ get_report_unsubmit: ({ report }) => {
       }
     },
 
-    async onReplace(stats_id, siswa_id) {
+    // // DI MODUL TIDAK ADA FITUR REPLACE, karena 1 kali mengisi langsung SUBMIT
+    // async onReplace(stats_id, siswa_id) {
 
-      if (this.loading.form) return false;
-      this.loading.form = true;
+    //   if (this.loading.form) return false;
+    //   this.loading.form = true;
 
-      const resp = await axios({
-        url: host + '/lms/tugas-modul-stats/' + stats_id +'/replace',
-        method: 'post'
-      })
-        .catch((err) => {
-          console.log('err', err?.response?.data)
-          const { caption, message } = (err?.response?.data)
-          notifFailed(message, caption)
-          return false
-        })
+    //   const resp = await axios({
+    //     url: host + '/lms/tugas-modul-hasil/' + stats_id +'/replace',
+    //     method: 'post'
+    //   })
+    //     .catch((err) => {
+    //       console.log('err', err?.response?.data)
+    //       const { caption, message } = (err?.response?.data)
+    //       notifFailed(message, caption)
+    //       return false
+    //     })
 
-      Loading.hide()
-      this.loading.form = false
-      console.log('onLogin', resp)
+    //   Loading.hide()
+    //   this.loading.form = false
+    //   console.log('onLogin', resp)
 
-      if (resp == false) return false
-      if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
-        notifSuccess()
+    //   if (resp == false) return false
+    //   if (!resp?.data) return false
+    //   if (resp?.data?.isLogin) {
+    //     notifSuccess()
 
-        await this.onReport(this.get_show_tugas?.id, siswa_id);
-        await this.onRank(this.get_show_tugas?.id, true)
+    //     await this.onReport(this.get_show_tugas?.id, siswa_id);
+    //     await this.onRank(this.get_show_tugas?.id, true)
 
-        return true
-      }
-    },
+    //     return true
+    //   }
+    // },
   },
 });

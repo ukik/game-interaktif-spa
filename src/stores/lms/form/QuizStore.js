@@ -113,7 +113,7 @@ export const useQuizStore = defineStore('QuizStore', {
   actions: {
     async setForm(val) {
 
-      if(useRouterStore().getQuery?.demo == 'true') return;
+      if(useRouterStore().getParams?.mode != 'student') return ;
 
       let temp = {
         total_question: val?.total_question,
@@ -143,26 +143,29 @@ export const useQuizStore = defineStore('QuizStore', {
       console.log('setForm', this.form)
 
     },
-    async onCreate(quiz) {
+    async onCreate() {
       const route = useRouterStore()
 
       const tugas_id = route?.getParams?.slug
+      const quiz = route?.getParams?.quiz
+      const mode = route?.getParams?.mode
 
-      if(route.getQuery?.demo == 'true') {
+      if(mode != 'student') {
         this.is_quiz_done = true;
         this.router_push = {
-          name: 'quiz_report',
+          name: mode == 'student' ? 'quiz_report' : 'quiz_report_public',
           params: {
             slug: tugas_id,
             quiz: quiz,
-            siswa_id: '',
+            // siswa_id: '',
           },
-          query: {
-            demo: true
-          }
+          // query: {
+          //   demo: true
+          // }
         }
         return
-      }
+      };
+
 
       console.log('onCreate', this.loading.form)
       if (this.loading.form) return false;

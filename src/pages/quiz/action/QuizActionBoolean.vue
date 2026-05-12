@@ -40,8 +40,10 @@ export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     const slug = currentRoute.params?.slug || ''; // tugas_id
+    const mode = currentRoute.params?.mode || '';
+
     const mystore = useLmsTugasStore(store)
-    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
@@ -320,7 +322,7 @@ export default {
       function startCountdown() {
         clearInterval(countdown);
         countdown = setInterval(() => {
-          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(countdown);
+          if(vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'boolean')  return clearInterval(countdown);
 
           if (!document.getElementById("timer")) return clearInterval(countdown);
           timeLeft--;
@@ -372,7 +374,7 @@ export default {
         if (currentSheetSoal > totalSheetSoal) {
 
           console.log('GAME OVER')
-          vm.onCreate('boolean')
+          vm.onCreate()
 
           // GAME OVER
 

@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useFormTugasStore } from './form/FormTugasStore';
 import { useLmsBankQuizStore } from './LmsBankQuizStore';
 import { useLmsBankModulStore } from './LmsBankModulStore';
+import { useRouterStore } from '../auth/RouterStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -188,12 +189,60 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       }
     },
     // dipakai oleh Quiz saat dimainkan: QuizActionArrange, QuizActionBoolean, QuizActionEssay, QuizActionMatch, QuizActionMultiple, QuizActionShortAnswer
-    async onAktivitas(slug = null) {
+    async onAktivitasTugas(slug = null, mode = '') {
 
       if (this.loading.local) return false;
       this.loading.local = true;
 
-      console.log('onAktivitas')
+      console.log('onAktivitasTugas')
+
+      const resp = await axios({
+        url: host + '/lms/tugas/'+slug+'/aktivitas/'+mode,
+        method: 'get',
+      })
+        .catch((err) => {
+          console.log(err)
+          notifFailed()
+          return false
+        })
+
+      this.loading.local = false
+      // this.init.show = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      // if (resp?.data?.isLogin) {
+
+        const data = resp?.data
+
+        // TIDAK PERLU SEBENARNYA
+        // switch (data?.payload?.payload?.model?.toLowerCase()) {
+        //   case 'quiz':
+        //     useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
+        //     break;
+        //   case 'modul':
+        //     useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
+        //     break;
+        // }
+
+        this.aktivitas = data //?.payload?.payload?.tugasable
+        console.log('data', this.aktivitas)
+
+        // useLmsBankQuizStore(onSetShow)
+        // console.log('onAktivitasTugas', data?.payload?.payload?.model?.toLowerCase())
+
+        return true
+      // }
+    },
+
+
+
+    async onAktivitasWithoutTugas(slug = null) {
+
+      if (this.loading.local) return false;
+      this.loading.local = true;
+
+      console.log('onAktivitasWithoutTugas')
 
       const resp = await axios({
         url: host + '/lms/tugas/'+slug+'/aktivitas',
@@ -213,26 +262,12 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       if (resp?.data?.isLogin) {
 
         const data = resp?.data
-
-        // TIDAK PERLU SEBENARNYA
-        // switch (data?.payload?.payload?.model?.toLowerCase()) {
-        //   case 'quiz':
-        //     useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
-        //     break;
-        //   case 'modul':
-        //     useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
-        //     break;
-        // }
-
-        this.aktivitas = data //?.payload?.payload?.tugasable
+        this.aktivitas = data
         console.log('data', this.aktivitas)
-
-        // useLmsBankQuizStore(onSetShow)
-        // console.log('onAktivitas', data?.payload?.payload?.model?.toLowerCase())
-
         return true
       }
     },
+
     async onShow(slug = null) {
 
       if (this.loading.local) return false;

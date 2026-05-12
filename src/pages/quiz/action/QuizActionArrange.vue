@@ -46,8 +46,10 @@ export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     const slug = currentRoute.params?.slug || ''; // tugas_id
+    const mode = currentRoute.params?.mode || '';
+
     const mystore = useLmsTugasStore(store)
-    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitas(slug)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
@@ -123,7 +125,7 @@ export default {
         clearInterval(timerInterval);
         timerEl.textContent = "⏱️ " + time;
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done || !vm.is_not_error)  return clearInterval(timerInterval);
+          if(vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'arrange')  return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           time--;
@@ -305,7 +307,7 @@ export default {
         if (currentSoal >= totalSoal) {
 
           console.log('GAME OVER')
-          vm.onCreate('arrange')
+          vm.onCreate()
           // GAME OVER
 
           // soal terakhir sudah selesai, tampilkan snackbar khusus
