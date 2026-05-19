@@ -4,8 +4,8 @@
 
     <q-card v-if="get_init_show && get_aktivitas_tugasable?.kategori" class="card-shadow card-border-radius game">
       <q-card-section class="text-center">
-        <div class="title">📘 <br> {{get_aktivitas_tugasable?.mapel?.nama}}</div>
-        <div class="subtitle">{{ get_aktivitas_tugasable?.judul }}</div>
+        <div v-if="get_aktivitas_tugasable?.mapel?.nama" class="title">📘 <br> {{get_aktivitas_tugasable?.mapel?.nama}}</div>
+        <div v-if="get_aktivitas_tugasable?.judul" class="subtitle">{{ get_aktivitas_tugasable?.judul }}</div>
         <!-- <div class="text-body2">{{ get_aktivitas_tugasable?.topik }}</div> -->
       </q-card-section>
 
@@ -50,12 +50,8 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 
 export default {
   async preFetch({ store, currentRoute }) {
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    const mode = currentRoute.params?.mode || ''; // tugas_id
-
     const mystore = useLmsTugasStore(store)
-
-    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
   },
   computed: {
     ...mapState(useLmsTugasStore, {
@@ -83,7 +79,7 @@ export default {
       const vm = this;
 
       const quiz = vm.get_aktivitas_tugasable?.kategori
-      const slug = vm.$route?.params?.slug
+      const slug = vm.$route?.params?.slug // tugas_id | quiz_id
       const mode = vm.$route?.params?.mode
 
       const route = {

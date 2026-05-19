@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-green-1">
     <!-- <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }"> -->
-    <q-header elevated height-hint="98">
+    <q-header elevated height-hint="98" v-if="false">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
 
@@ -31,6 +31,10 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
+
+      <q-page-sticky position="top-left" :offset="[0, 0]">
+        <DemoLabel />
+      </q-page-sticky>
       <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" />
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
@@ -51,6 +55,9 @@
         </q-toolbar-title>
       </q-toolbar>
     </q-footer> -->
+
+
+
   </q-layout>
 </template>
 

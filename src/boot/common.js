@@ -25,6 +25,18 @@ export default boot(async ({ app, ssrContext, router, store }) => {
     },
     methods: {
       ...mapActions(useUiStore, ['getPageWidth']),
+      dateToLocal(myDate) {
+        if (!myDate) return ''
+        const date = new Date(myDate);
+        return date.toLocaleString('sv-SE', {
+          timeZone: 'Asia/Jakarta'
+        })
+      },
+      ucfirst(str = '') {
+        str = String(str);
+
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      },
       removeAllEventsInGame() {
         const root = document.querySelector(`#QuizAction .game`);
         if (!root) return;

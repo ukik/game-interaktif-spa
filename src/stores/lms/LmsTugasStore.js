@@ -188,8 +188,19 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         return true
       }
     },
+
     // dipakai oleh Quiz saat dimainkan: QuizActionArrange, QuizActionBoolean, QuizActionEssay, QuizActionMatch, QuizActionMultiple, QuizActionShortAnswer
-    async onAktivitasTugas(slug = null, mode = '') {
+    async onAktivitasTugas() {
+
+      const route = useRouterStore()
+
+      const tugas_id = route?.getParams?.slug
+      const quiz = route?.getParams?.quiz
+      const mode = route?.getParams?.mode
+
+      if(mode == 'all') {
+        return this.onAktivitasWithoutTugas()
+      }
 
       if (this.loading.local) return false;
       this.loading.local = true;
@@ -197,7 +208,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       console.log('onAktivitasTugas')
 
       const resp = await axios({
-        url: host + '/lms/tugas/'+slug+'/aktivitas/'+mode,
+        url: host + '/lms/tugas/'+tugas_id+'/aktivitas/'+mode,
         method: 'get',
       })
         .catch((err) => {
@@ -226,7 +237,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         // }
 
         this.aktivitas = data //?.payload?.payload?.tugasable
-        console.log('data', this.aktivitas)
+        console.log('onAktivitasTugas', this.aktivitas)
 
         // useLmsBankQuizStore(onSetShow)
         // console.log('onAktivitasTugas', data?.payload?.payload?.model?.toLowerCase())
@@ -235,9 +246,14 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       // }
     },
 
+    async onAktivitasWithoutTugas() {
 
+      const route = useRouterStore()
 
-    async onAktivitasWithoutTugas(slug = null) {
+      const quiz_id = route?.getParams?.slug
+      const quiz = route?.getParams?.quiz
+      const mode = route?.getParams?.mode
+
 
       if (this.loading.local) return false;
       this.loading.local = true;
@@ -245,7 +261,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       console.log('onAktivitasWithoutTugas')
 
       const resp = await axios({
-        url: host + '/lms/tugas/'+slug+'/aktivitas',
+        url: host + '/lms/quiz/'+quiz_id+'/aktivitas/all',
         method: 'get',
       })
         .catch((err) => {
@@ -259,13 +275,13 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       if (resp == false) return false
       if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
+      // if (resp?.data?.isLogin) {
 
         const data = resp?.data
         this.aktivitas = data
-        console.log('data', this.aktivitas)
+        console.log('onAktivitasWithoutTugas', this.aktivitas)
         return true
-      }
+      // }
     },
 
     async onShow(slug = null) {

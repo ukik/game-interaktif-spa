@@ -16,7 +16,7 @@ const routes = [
     ]
   },
   {
-    path: "/",
+    path: "/QuizActionLayout",
     component: () => import("layouts/QuizActionLayout.vue"),
     children: [
       ...routes_quiz_action,
@@ -36,19 +36,62 @@ const routes = [
 
     ]
   },
+  {
+    path: "/QuizActionNoHeaderLayout",
+    component: () => import("layouts/QuizActionNoHeaderLayout.vue"),
+    children: [
+      ...routes_quiz_action_public,
+      {
+        path: '/quiz/intro/:slug/:mode(teacher|all)', // slug = tugas_id
+        name: 'quiz_intro_public',
+        component: () => import('pages/quiz/intro/QuizIntro.vue'),
+        meta: {
+          logged: false,
+          title: 'Intro Quiz',
+          meta: [
+            { name: 'description', content: 'Intro Quiz' }
+          ],
+          page_type: 'show',
+        }
+      },
+      {
+        path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:mode(teacher|all)', // tugas_id
+        name: 'quiz_report_public',
+        component: () => import('pages/quiz/report/QuizReportTeacher.vue'),
+        meta: {
+          logged: false,
+          title: 'Report Quiz',
+          meta: [
+            { name: 'description', content: 'Report Quiz' }
+          ]
+        }
+      },
+
+    ]
+  },
 
   {
-    path: "/",
+    path: "/QuizActionLayout",
     component: () => import("layouts/QuizActionLayout.vue"),
     children: [
+      // {
+      //   path: "/dashboard",
+      //   name: 'dashboard',
+      //   component: () => import("pages/IndexPage.vue"),
+      //   meta: {
+      //     logged: true,
+      //     title: "Dashboard STARKY",
+      //     meta: [{ name: "description", content: "Dashboard" }],
+      //   },
+      // },
       {
-        path: "/dashboard",
+        path: "/",
         name: 'dashboard',
-        component: () => import("pages/IndexPage.vue"),
+        component: () => import("pages/dashboard/LmsDashboardPage.vue"),
         meta: {
           logged: true,
-          title: "Dashboard STARKY",
-          meta: [{ name: "description", content: "Dashboard" }],
+          title: "Home STARKY",
+          meta: [{ name: "description", content: "Home" }],
         },
       },
       ...routes_account,
@@ -59,19 +102,23 @@ const routes = [
   },
 
   {
-    path: "/",
+    path: "/MainLayout",
     component: () => import("layouts/MainLayout.vue"),
     children: [
+
       {
-        path: "/",
+        path: "/tugas-statistik",
         name: '',
-        component: () => import("pages/Home.vue"),
+        component: () => import("pages/LmsDashboardTugasStatistikPage.vue"),
         meta: {
           logged: false,
           title: "Home STARKY",
           meta: [{ name: "description", content: "Home" }],
         },
       },
+
+
+
       {
         path: "/login",
         name: "login",

@@ -4,7 +4,7 @@
     <q-card flat bordered>
       <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
         <q-tab name="tab1" label="FINAL" />
-        <q-tab name="tab2" label="TUGAS" />
+        <q-tab v-if="$route?.params.mode != 'all'" name="tab2" label="TUGAS" />
       </q-tabs>
 
       <q-separator />
@@ -21,7 +21,7 @@
               <q-tab name="tab1_sub2" label="RIWAYAT" icon="archive" />
             </q-tabs>
 
-            <TimeupInfo :tugas="get_report_tugas"></TimeupInfo>
+            <TimeupInfo v-if="$route?.params.mode != 'all'" :tugas="get_report_tugas"></TimeupInfo>
 
             <q-tab-panels keep-alive v-model="tab1_sub" animated>
               <q-tab-panel name="tab1_sub1" class="q-pa-none q-px-sm">
@@ -47,7 +47,7 @@
           </q-tab-panel>
 
 
-          <q-tab-panel name="tab2" class="q-pa-none">
+          <q-tab-panel v-if="$route?.params.mode != 'all'" name="tab2" class="q-pa-none">
 
             <q-tabs key="tab2_sub" v-model="tab2_sub" dense inline-label indicator-color="transparent"
               active-color="white" class="bg-teal text-grey-4 shadow-2">

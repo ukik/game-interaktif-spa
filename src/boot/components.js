@@ -167,6 +167,12 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/Lottie_1_404.vue'))
   )
 
+  app.component("DemoLabel",
+    defineAsyncComponent(() => import('src/components/lms/DemoLabel.vue'))
+  )
+  // app.component("DashboardTable",
+  //   defineAsyncComponent(() => import('src/components/lms/DashboardTable.vue'))
+  // )
 
 
 

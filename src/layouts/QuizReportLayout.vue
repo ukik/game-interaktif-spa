@@ -116,21 +116,24 @@ export default {
     updateWidth() {
       const ui = useUiStore();
 
-      this.observer = new ResizeObserver((entries) => {
-        console.log('ResizeObserver')
-        // for (let entry of entries) {
-          // ui.setPageWidth(entry.contentRect.width) // kalo pake ini masih dikenakan padding
-        // }
-        ui.setPageWidth(document.querySelector(".q-page-container > main").offsetWidth);
+      const el = document.querySelector(".q-page-container > main");
+
+      if (!el) return;
+
+      this.observer?.disconnect();
+
+      this.observer = new ResizeObserver(() => {
+        console.log('ResizeObserver');
+        ui.setPageWidth(el.offsetWidth);
       });
 
-      this.observer.observe(this.$refs?.pageContainer.$el);
-    },
+      this.observer.observe(el);
+    }
   },
 
   mounted() {
     this.updateWidth()
-    window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
+    // window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
   },
 
   beforeUnmount() {
@@ -138,7 +141,7 @@ export default {
   },
 
   beforeDestroy() {
-    window.removeEventListener("resize", this.updateWidth);
+    // window.removeEventListener("resize", this.updateWidth);
   },
 
 };

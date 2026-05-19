@@ -20,15 +20,21 @@ export default boot(async ({ router, store }) => {
     await routerStore.setRouter(to);
 
     // console.log('form_accounts_password', store.state.value?.router)
+
     if (to.meta.logged && auth.getIsLogin) {
+      console.log('router 1')
       next()
     } else if (to.meta.logged && !auth.getIsLogin) {
+      console.log('router 2')
       next({ name: 'login' })
     } else if (to.name == 'login' && auth.getIsLogin) {
+      console.log('router 3')
       next({ name: 'dashboard' })
     } else if (to.name == 'register' && auth.getIsLogin) {
+      console.log('router 4')
       next({ name: 'dashboard' })
     } else {
+      console.log('router 5')
       next()
     }
 

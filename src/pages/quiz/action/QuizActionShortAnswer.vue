@@ -41,11 +41,8 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    const slug = currentRoute.params?.slug || ''; // tugas_id
-    const mode = currentRoute.params?.mode || '';
-
     const mystore = useLmsTugasStore(store)
-    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas(slug, mode)
+    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
