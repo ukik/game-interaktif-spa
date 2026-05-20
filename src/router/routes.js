@@ -84,6 +84,7 @@ const routes = [
       //     meta: [{ name: "description", content: "Dashboard" }],
       //   },
       // },
+
       {
         path: "/",
         name: 'dashboard',
@@ -94,7 +95,16 @@ const routes = [
           meta: [{ name: "description", content: "Home" }],
         },
       },
-      ...routes_account,
+      {
+        path: "/tugas-statistik",
+        name: 'dashboard_tugas_statistik',
+        component: () => import("pages/dashboard/LmsDashboardTugasStatistikPage.vue"),
+        meta: {
+          logged: false,
+          title: "Home STARKY",
+          meta: [{ name: "description", content: "Home" }],
+        },
+      },      ...routes_account,
       ...routes_collection,
       ...routes_activity,
       ...routes_stats,
@@ -106,16 +116,7 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
 
-      {
-        path: "/tugas-statistik",
-        name: '',
-        component: () => import("pages/LmsDashboardTugasStatistikPage.vue"),
-        meta: {
-          logged: false,
-          title: "Home STARKY",
-          meta: [{ name: "description", content: "Home" }],
-        },
-      },
+
 
 
 

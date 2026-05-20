@@ -1,42 +1,22 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-md">
-    <q-list separator bordered>
-      <template v-if="get_index_data.length > 0">
-        <q-item v-for="(item, index) in get_index_data" :key="index" clickable v-ripple
-          :to="{ name: 'lms-ortu-show', params: { slug: item?.id } }">
-          <q-item-section avatar>
-            <q-avatar size="55px">
-              <q-img :src="item?.url_image" @error="item.url_image = global_url_image" error-src="global_url_image" />
-            </q-avatar>
-          </q-item-section>
+    <!-- <q-list separator bordered> -->
+    <template v-if="get_widget_tugas_overview">
 
-          <q-item-section>
-            <q-item-label>{{ item?.name }}</q-item-label>
-            <q-item-label caption lines="1">{{ item?.email }}</q-item-label>
-            <!-- <q-item-label caption lines="1">{{ item?.ortu?.nis }} / {{ item?.ortu?.nisn }}</q-item-label> -->
-          </q-item-section>
+      <!-- <SummaryTable :item="get_widget_tugas_overview"></SummaryTable> -->
 
-          <q-item-section side>
-            <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
-            <q-item-label>
-              <q-avatar>
-                <q-icon name="group" color="grey" />
-                <q-badge floating color="teal">{{ item?.parent?.siswa_count }}</q-badge>
-              </q-avatar>
-            </q-item-label>
-          </q-item-section>
-          <q-badge class="square top badge-left" floating color="cyan">{{ item?.id }}</q-badge>
-        </q-item>
-      </template>
+      <MonthlyRankingQuizTable class="q-mt-md" :items="get_widget_quiz_score_distribution_monthly"></MonthlyRankingQuizTable>
+      <MonthlyRankingModulTable class="q-mt-md" :items="get_widget_modul_score_distribution_monthly"></MonthlyRankingModulTable>
+      <SemesterRankingQuizTable class="q-mt-md" :items="get_widget_quiz_score_distribution_semester"></SemesterRankingQuizTable>
+      <SemesterRankingModulTable class="q-mt-md" :items="get_widget_modul_score_distribution_semester"></SemesterRankingModulTable>
+      <StatistikKategoriTable class="q-mt-md" :items="get_widget_tugas_kategori"></StatistikKategoriTable>
+      <StatistikSubmitTable class="q-mt-md" :items="get_widget_tugas_submit"></StatistikSubmitTable>
 
-      <EmptyBlock v-else></EmptyBlock>
-    </q-list>
-    <div style="height: 47px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination :current_page="get_index_current_page" :last_page="get_index_last_page" :disable="get_index_loading"
-        @onBubbleEvent="onBubbleEvent"></Pagination>
-    </q-page-sticky>
+    </template>
+
+    <EmptyBlock v-else></EmptyBlock>
+    <!-- </q-list> -->
   </q-page>
 </template>
 
@@ -45,11 +25,26 @@ import { ref } from "vue";
 
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsParentStore } from "src/stores/lms/LmsParentStore";
+import { useLmsDashboardTugasStatistikStore } from "src/stores/lms/LmsDashboardTugasStatistikStore";
+
+import MonthlyRankingQuizTable from "./components/tugas_statistik/MonthlyRankingQuizTable.vue";
+import MonthlyRankingModulTable from "./components/tugas_statistik/MonthlyRankingModulTable.vue";
+import SemesterRankingQuizTable from "./components/tugas_statistik/SemesterRankingQuizTable.vue";
+import SemesterRankingModulTable from "./components/tugas_statistik/SemesterRankingModulTable.vue";
+import StatistikKategoriTable from "./components/tugas_statistik/StatistikKategoriTable.vue";
+import StatistikSubmitTable from "./components/tugas_statistik/StatistikSubmitTable.vue";
 
 export default {
+  components: {
+    StatistikKategoriTable,
+    StatistikSubmitTable,
+    MonthlyRankingQuizTable,
+    MonthlyRankingModulTable,
+    SemesterRankingQuizTable,
+    SemesterRankingModulTable,
+  },
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsParentStore(store);
+    const preStore = useLmsDashboardTugasStatistikStore(store);
 
     const page = currentRoute.query.page || 1;
 
@@ -60,39 +55,37 @@ export default {
       list_demo: [],
     };
   },
-  watch: {
-    get_index_data: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        // console.log('get_index_data', m)
-      },
-    },
-    get_index_current_page: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        console.log("get_index_current_page", val);
-      },
-    },
-  },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsParentStore, [
-      "get_index_data",
-      "get_index_current_page",
-      "get_index_last_page",
-      "get_index_loading",
-      'get_init_index'
+    ...mapState(useLmsDashboardTugasStatistikStore, [
+      'get_init_index',
+      "get_loading_index",
+
+      'get_widget_tugas_overview',
+      'get_widget_tugas_kategori',
+      'get_widget_tugas_submit',
+      'get_widget_quiz_score_distribution_monthly',
+      'get_widget_quiz_score_distribution_semester',
+      'get_widget_modul_score_distribution_monthly',
+      'get_widget_modul_score_distribution_semester',
+      'get_widget_student_performance',
+      'get_quiz_score_distribution_by_mapel',
+      'get_quiz_score_distribution_by_tugas',
+      'get_quiz_score_distribution_by_kelas',
+      'get_quiz_score_distribution_by_kategori',
+      'get_quiz_score_distribution_by_tugas_kategori',
+      'get_modul_score_distribution_by_mapel',
+      'get_modul_score_distribution_by_tugas',
+      'get_modul_score_distribution_by_kelas',
+      'get_modul_score_distribution_by_kategori',
+      'get_modul_score_distribution_by_tugas_kategori',
+
+
     ]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsParentStore, ["onIndex", "onChangePage"]),
+    ...mapActions(useLmsDashboardTugasStatistikStore, ["onIndex", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
