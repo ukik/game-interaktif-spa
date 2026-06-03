@@ -174,6 +174,9 @@ export default boot(({ app }) => {
   //   defineAsyncComponent(() => import('src/components/lms/DashboardTable.vue'))
   // )
 
+  app.component("GlobalLabel",
+    defineAsyncComponent(() => import('src/components/lms/GlobalLabel.vue'))
+  )
 
 
   // app.component("RelatedImageSlide",

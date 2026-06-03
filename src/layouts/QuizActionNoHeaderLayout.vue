@@ -32,11 +32,28 @@
 
     <q-page-container class="row justify-center">
 
-      <q-page-sticky position="top-left" :offset="[0, 0]">
-        <DemoLabel />
+      <q-page-sticky style="z-index: 999;" v-if="getRouteParams?.mode == 'student'"  position="top-left" :offset="[0, 0]">
+        <!-- <DemoLabel /> -->
+        <GlobalLabel shape="skew"
+  position="top-left"
+  backgroundColor="#6980fe"
+  textColor="#ffffff">DEMO</GlobalLabel>
       </q-page-sticky>
-      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
-        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" />
+
+      <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
+        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
+
+      <div id="main" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX" :class="[
+        is_mobile_size ? '' : 'q-card--borderedX',
+        is_ipad_lower_size ? 'bg-transparent' : 'bg-white'
+      ]">
+        <router-view v-slot="{ Component }">
+
+          <component :is="Component" ref="pageContainer" />
+
+        </router-view>
+      </div>
+
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
@@ -113,7 +130,7 @@ export default {
     updateWidth() {
       const ui = useUiStore();
 
-      const el = document.querySelector(".q-page-container > main");
+      const el = document.querySelector(".q-page-container > #main");
 
       if (!el) return;
 
@@ -129,7 +146,9 @@ export default {
   },
 
   mounted() {
-    this.updateWidth()
+    setTimeout(() => {
+      this.updateWidth()
+    }, 1000)
     // window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
   },
 

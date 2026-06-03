@@ -108,3 +108,46 @@ export async function onRequestPrivate(store, url = {
     return true
   }
 }
+
+
+
+export async function onRequestEditPrivate(store, url = {
+  // url: host + url,
+  // method: 'get',
+  // params: {
+  //   page: 1
+  // }
+}, key = '') {
+
+  if (store.loading[key]) return false;
+
+  store.loading[key] = true;
+
+  console.log('onRequestEditPrivate')
+
+  Loading.show()
+
+  const resp = await axios(url)
+    .then((response) => {
+      notifSuccess()
+      return response
+    })
+    .catch((err) => {
+      console.log('onRequestEditPrivate', err)
+      notifFailed()
+      return false
+    })
+
+  store.loading[key] = false
+  store.init[key] = false;
+
+  Loading.hide()
+
+  if (resp == false) return false
+  if (!resp?.data) return false
+  if (resp?.data?.isLogin) {
+
+    return true
+    return resp?.data
+  }
+}

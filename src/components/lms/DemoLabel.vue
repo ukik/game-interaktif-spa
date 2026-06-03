@@ -1,7 +1,9 @@
 <template>
 
   <div class="ribbon-demo">
-    <span>DEMO</span>
+    <slot>
+      <span>DEMO</span>
+    </slot>
   </div>
 </template>
 

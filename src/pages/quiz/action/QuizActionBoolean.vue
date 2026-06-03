@@ -1,5 +1,13 @@
 <template>
-  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
+  <q-page-sticky style="z-index: 999;" position="top-right" :offset="[0, 0]">
+    <GlobalLabel shape="skew" position="top-right" backgroundColor="#ff1744" textColor="#ffffff">
+      TUTUP
+    </GlobalLabel>
+  </q-page-sticky>
+
+  <InitLoading v-if="get_init_aktivitas"></InitLoading>
+  <q-page v-else id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
+    <template v-if="get_aktivitas_tugasable?.konten">
     <QuizMediaComponent />
     <WinLottie />
     <div v-show="!is_quiz_done && is_not_error" class="game">
@@ -22,6 +30,10 @@
     <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
       <q-btn round to="/" color="pink" size="xl" icon="home" />
     </Lottie_1_404>
+
+
+    </template>
+    <EmptyBlock class="full-width" v-else></EmptyBlock>
   </q-page>
 </template>
 
@@ -66,6 +78,8 @@ export default {
       }
       // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
       const list_questions = this.get_aktivitas_tugasable?.konten
+
+      if(!list_questions) return this.notifFailed('periksa database kembali', 'Konten Kosong')
 
       let checkingHTML = {};
 

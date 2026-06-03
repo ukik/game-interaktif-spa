@@ -1,53 +1,63 @@
 <template>
-  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
-    <QuizMediaComponent />
-    <WinLottie />
-    <div v-show="!is_quiz_done && is_not_error" class="game">
-      <q-card id="quizCard" bordered class="quiz-card">
-        <q-card-section>
-          <div class="title">🚀 Quiz Action</div>
-          <!-- <div class="subtitle">Match - Present Tense!</div> -->
-          <div class="question">Essay Pengetahuan Umum</div>
-        </q-card-section>
-        <q-separator></q-separator>
-        <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ 0</div>
-          <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
-        </q-card-actions>
+  <q-page-sticky style="z-index: 999;" position="top-right" :offset="[0, 0]">
+    <GlobalLabel shape="skew" position="top-right" backgroundColor="#ff1744" textColor="#ffffff">
+      TUTUP
+    </GlobalLabel>
+  </q-page-sticky>
 
-        <q-card-section>
-          <div class="tf-card" data-trial="0">
-            <div id="question">Text:</div>
-            <div class="question" id="charCount">0 / 500 char</div>
-            <div class="grow-wrap">
-              <textarea name="text" id="answer" maxlength="500" placeholder="Ketik jawaban yang tepat"></textarea>
+  <InitLoading v-if="get_init_aktivitas"></InitLoading>
+  <q-page v-else id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
+    <template v-if="get_aktivitas_tugasable?.konten">
+      <QuizMediaComponent />
+      <WinLottie />
+      <div v-show="!is_quiz_done && is_not_error" class="game">
+        <q-card id="quizCard" bordered class="quiz-card">
+          <q-card-section>
+            <div class="title">🚀 Quiz Action</div>
+            <!-- <div class="subtitle">Match - Present Tense!</div> -->
+            <div class="question">Essay Pengetahuan Umum</div>
+          </q-card-section>
+          <q-separator></q-separator>
+          <q-card-actions align="between" class="q-pa-none q-pa-md">
+            <div class="timer" id="timer">⏱️ 0</div>
+            <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
+          </q-card-actions>
+
+          <q-card-section>
+            <div class="tf-card" data-trial="0">
+              <div id="question">Text:</div>
+              <div class="question" id="charCount">0 / 500 char</div>
+              <div class="grow-wrap">
+                <textarea name="text" id="answer" maxlength="500" placeholder="Ketik jawaban yang tepat"></textarea>
+              </div>
+
+              <div class="btn-group">
+                <button class="next-btn" id="checkAnswer">
+                  ✔️ Cek Jawaban
+                </button>
+                <button class="next-btn-2" id="lockedAnswer" style="display: none">
+                  ➡️ Simpan Jawaban
+                </button>
+                <button class="next-btn-2" id="nextBtn" style="display: none">
+                  ➡️ Next Soal
+                </button>
+
+                <button class="result-btn" id="btnResult" style="display: none">
+                  📘 Lihat Hasil
+                </button>
+              </div>
             </div>
+            <div class="life">❤️ Peluang x <span id="lifeCount">5</span></div>
 
-            <div class="btn-group">
-              <button class="next-btn" id="checkAnswer">
-                ✔️ Cek Jawaban
-              </button>
-              <button class="next-btn-2" id="lockedAnswer" style="display: none">
-                ➡️ Simpan Jawaban
-              </button>
-              <button class="next-btn-2" id="nextBtn" style="display: none">
-                ➡️ Next Soal
-              </button>
-
-              <button class="result-btn" id="btnResult" style="display: none">
-                📘 Lihat Hasil
-              </button>
-            </div>
-          </div>
-          <div class="life">❤️ Peluang x <span id="lifeCount">5</span></div>
-
-          <div class="score" style="display: none" id="result"></div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
-      <q-btn round to="/" color="pink" size="xl" icon="home" />
-    </Lottie_1_404>
+            <div class="score" style="display: none" id="result"></div>
+          </q-card-section>
+        </q-card>
+      </div>
+      <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+        <q-btn round to="/" color="pink" size="xl" icon="home" />
+      </Lottie_1_404>
+    </template>
+    <EmptyBlock class="full-width" v-else></EmptyBlock>
   </q-page>
 </template>
 
@@ -66,7 +76,7 @@ export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     const mystore = useLmsTugasStore(store)
-    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
@@ -92,6 +102,8 @@ export default {
       }
       // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
       const list_questions = this.get_aktivitas_tugasable?.konten
+
+      if (!list_questions) return this.notifFailed('periksa database kembali', 'Konten Kosong')
 
       /* ================= INPUT FILTER ================= */
       const textarea = document.getElementById("answer");
@@ -632,7 +644,7 @@ export default {
         document.getElementById("timer").textContent = "⏱️ " + timeLeft;
 
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'essay')  return clearInterval(timerInterval);
+          if (vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'essay') return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           timeLeft--;

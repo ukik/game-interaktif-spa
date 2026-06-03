@@ -2,7 +2,7 @@
   <q-page class="justify-start items-start q-pa-sm">
 
     <q-card flat bordered>
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
         <q-tab name="tab1" label="FINAL" />
         <q-tab v-if="$route?.params.mode != 'all'" name="tab2" label="TUGAS" />
       </q-tabs>
@@ -115,8 +115,9 @@ export default {
   // mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     // const slug = currentRoute.params?.slug || ""; // tugas_id
-    // const siswa_id = currentRoute.params?.siswa_id || ""; // user_id
-    await useLmsTugasQuizStatsStore(store).onReport();
+    const mode = currentRoute.params?.mode || ""; // mode
+    console.log('QuizReportTeacher')
+    if(mode == 'teacher') await useLmsTugasQuizStatsStore(store).onReport();
   },
   components: {
     TimeupInfo,

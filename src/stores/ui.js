@@ -11,6 +11,8 @@ export const useUiStore = defineStore('ui', {
   },
   actions: {
     setPageWidth(width) {
+      if(isNaN(width)) return
+      console.log('setPageWidth', width)
       this.pageWidth = width
     },
     getPageWidth() {

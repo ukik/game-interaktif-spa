@@ -45,8 +45,7 @@
     </div>
 
     <!-- Visibility -->
-    <div>
-      <!-- <q-item-label lines="1" caption class="q-mb-sm">Visibilitas</q-item-label> -->
+    <!-- <div v-if="false">
       <q-banner class="bg-yellow-3 rounded-borders">Visibilitas <b>PUBLIC</b> orang lain dapat
         melihat</q-banner>
 
@@ -59,7 +58,7 @@
         ]" type="radio" inline />
 
       </q-field>
-    </div>
+    </div> -->
 
     <div class="q-mb-lg">
       <q-item-label lines="1" caption class="q-mb-sm">Jadwal</q-item-label>

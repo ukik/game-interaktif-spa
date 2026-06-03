@@ -24,6 +24,7 @@
       <TopSiswaTable class="q-mt-md" :items="get_top_siswa"></TopSiswaTable>
       <SubmitProgressTable class="q-mt-md" :items="get_submit_progress"></SubmitProgressTable>
       <DistribusiTipeTugasTable class="q-mt-md" :items="get_widget_tugas_type_distribution"></DistribusiTipeTugasTable>
+
     </template>
 
     <EmptyBlock v-else></EmptyBlock>

@@ -1,12 +1,12 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-md">
-    <q-list separator bordered>
+    <q-list separator bordered class="bg-white">
       <template v-if="get_index_data.length > 0">
         <q-item v-for="(item, index) in get_index_data" :key="index" clickable v-ripple
           :to="{ name: 'lms-siswa-show', params: { slug: item?.id } }">
           <q-item-section avatar>
-            <q-avatar size="55px">
+            <q-avatar>
               <q-img :src="item?.url_image" @error="item.url_image = global_url_image" error-src="global_url_image" />
               <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
 

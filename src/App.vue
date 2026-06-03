@@ -2,9 +2,16 @@
   <router-view />
 </template>
 
-<script setup>
-defineOptions({
-  name: 'App'
-});
-</script>
+<script>
+import { mapActions } from 'pinia';
+import { useGlobalStore } from './stores/lms/GlobalStore';
 
+export default {
+  methods:{
+    ...mapActions(useGlobalStore, ['onRequest'])
+  },
+  created() {
+    this.onRequest()
+  }
+}
+</script>

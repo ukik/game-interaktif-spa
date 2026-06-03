@@ -1,34 +1,45 @@
 <template>
-  <q-page id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
-    <QuizMediaComponent />
-    <WinLottie />
-    <div v-show="!is_quiz_done && is_not_error" class="game">
-      <q-card id="quizCard" bordered class="quiz-card">
-        <q-card-section>
-          <div class="title">🚀 Quiz Action</div>
-          <!-- <div class="subtitle">Match - Present Tense!</div> -->
-          <div class="question">Susun kata dengan tepat</div>
-        </q-card-section>
-        <q-separator></q-separator>
-        <q-card-actions align="between" class="q-pa-none q-pa-md">
-          <div class="timer" id="timer">⏱️ 0</div>
-          <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
-        </q-card-actions>
+  <q-page-sticky style="z-index: 999;" position="top-right" :offset="[0, 0]">
+    <GlobalLabel shape="skew" position="top-right" backgroundColor="#ff1744" textColor="#ffffff">
+      TUTUP
+    </GlobalLabel>
+  </q-page-sticky>
 
-        <q-card-section>
-          <div class="answer" id="answer"></div>
-          <div class="controls">
-            <button class="check" id="btnCheck">✔️&nbsp;&nbsp;CEK</button>
-            <button class="reset" id="btnReset">❌&nbsp;&nbsp;RESET</button>
-          </div>
-          <div class="life">❤️ Peluang x <span id="lifeCount">3</span></div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
-      <q-btn round to="/" color="pink" size="xl" icon="home" />
-    </Lottie_1_404>
+  <InitLoading v-if="get_init_aktivitas"></InitLoading>
+  <q-page v-else id="QuizAction" class="flex flex-center q-pa-sm bg-transparent">
+    <template v-if="get_aktivitas_tugasable?.konten">
+      <QuizMediaComponent />
+      <WinLottie />
+      <div v-show="!is_quiz_done && is_not_error" class="game">
+        <q-card id="quizCard" bordered class="quiz-card">
+          <q-card-section>
+            <div class="title">🚀 Quiz Action</div>
+            <!-- <div class="subtitle">Match - Present Tense!</div> -->
+            <div class="question">Susun kata dengan tepat</div>
+          </q-card-section>
+          <q-separator></q-separator>
+          <q-card-actions align="between" class="q-pa-none q-pa-md">
+            <div class="timer" id="timer">⏱️ 0</div>
+            <div class="score" id="score">Score: 0 | Lembar: 1/3</div>
+          </q-card-actions>
+
+          <q-card-section>
+            <div class="answer" id="answer"></div>
+            <div class="controls">
+              <button class="check" id="btnCheck">✔️&nbsp;&nbsp;CEK</button>
+              <button class="reset" id="btnReset">❌&nbsp;&nbsp;RESET</button>
+            </div>
+            <div class="life">❤️ Peluang x <span id="lifeCount">3</span></div>
+          </q-card-section>
+        </q-card>
+      </div>
+      <Lottie_1_404 v-if="!is_quiz_done && !is_not_error">
+        <q-btn round to="/" color="pink" size="xl" icon="home" />
+      </Lottie_1_404>
+    </template>
+    <EmptyBlock class="full-width" v-else></EmptyBlock>
   </q-page>
+
 </template>
 
 <script>
@@ -46,7 +57,7 @@ export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
     const mystore = useLmsTugasStore(store)
-    if(!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
@@ -64,7 +75,7 @@ export default {
   methods: {
     onStart() {
 
-      console.log('this.get_aktivitas_tugasable?.konten', this.get_aktivitas_tugasable?.kategori, this.get_aktivitas_tugasable?.konten)
+      console.log('this.get_aktivitas_tugasable?.konten', this.get_aktivitas_tugasable, this.get_aktivitas_tugasable?.kategori, this.get_aktivitas_tugasable?.konten)
 
       const vm = this;
 
@@ -76,6 +87,8 @@ export default {
       // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
 
       const list_questions = this.get_aktivitas_tugasable?.konten
+
+      if (!list_questions) return this.notifFailed('periksa database kembali', 'Konten Kosong')
 
       console.log('list_questions', list_questions)
 
@@ -122,7 +135,7 @@ export default {
         clearInterval(timerInterval);
         timerEl.textContent = "⏱️ " + time;
         timerInterval = setInterval(() => {
-          if(vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'arrange')  return clearInterval(timerInterval);
+          if (vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'arrange') return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           time--;

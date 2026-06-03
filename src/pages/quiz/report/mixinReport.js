@@ -12,9 +12,10 @@ export const myMixin = {
   },
   computed: {
     ...mapWritableState(useUiStore, ['report_confirm_dialog']),
+    ...mapWritableState(useLmsTugasQuizStatsStore, ['tab']),
     ...mapState(useLmsTugasQuizStatsStore, [
       'get_init_report',
-      // "get_report",
+      "get_report",
       "get_report_tugas",
       "get_report_unsubmit",
       "get_report_unsubmit_checking",

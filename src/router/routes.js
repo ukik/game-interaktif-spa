@@ -1,11 +1,18 @@
 import routes_quiz_action_public from "./routes_quiz_action_public";
 import routes_quiz_action from "./routes_quiz_action";
+
 import routes_quiz_report from "./routes_quiz_report";
+import routes_quiz_report_public from "./routes_quiz_report_public";
+
 import routes_quiz_intro from "./routes_quiz_intro";
+import routes_quiz_intro_public from "./routes_quiz_intro_public";
+
 import routes_account from "./routes_account";
 import routes_collection from "./routes_collection";
 import routes_activity from "./routes_activity";
 import routes_stats from "./routes_stats";
+import routes_notifications from "./routes_notifications";
+
 
 const routes = [
   {
@@ -13,59 +20,41 @@ const routes = [
     component: () => import("layouts/QuizReportLayout.vue"),
     children: [
       ...routes_quiz_report,
-    ]
-  },
-  {
-    path: "/QuizActionLayout",
-    component: () => import("layouts/QuizActionLayout.vue"),
-    children: [
-      ...routes_quiz_action,
-      ...routes_quiz_action_public,
-      ...routes_quiz_intro,
-      {
-        path: '/quiz/index',
-        name: 'quiz_index',
-        component: () => import('pages/quiz/QuizIndex.vue'),
-        meta: {
-          title: 'QuizIndex - Yuvoria GAME',
-          meta: [
-            { name: 'description', content: 'QuizIndex - Yuvoria GAME' }
-          ]
-        }
-      },
-
+      ...routes_quiz_report_public,
     ]
   },
   {
     path: "/QuizActionNoHeaderLayout",
     component: () => import("layouts/QuizActionNoHeaderLayout.vue"),
     children: [
+      ...routes_quiz_action,
       ...routes_quiz_action_public,
-      {
-        path: '/quiz/intro/:slug/:mode(teacher|all)', // slug = tugas_id
-        name: 'quiz_intro_public',
-        component: () => import('pages/quiz/intro/QuizIntro.vue'),
-        meta: {
-          logged: false,
-          title: 'Intro Quiz',
-          meta: [
-            { name: 'description', content: 'Intro Quiz' }
-          ],
-          page_type: 'show',
-        }
-      },
-      {
-        path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:mode(teacher|all)', // tugas_id
-        name: 'quiz_report_public',
-        component: () => import('pages/quiz/report/QuizReportTeacher.vue'),
-        meta: {
-          logged: false,
-          title: 'Report Quiz',
-          meta: [
-            { name: 'description', content: 'Report Quiz' }
-          ]
-        }
-      },
+      ...routes_quiz_intro,
+      ...routes_quiz_intro_public,
+      // {
+      //   path: '/quiz/index',
+      //   name: 'quiz_index',
+      //   component: () => import('pages/quiz/QuizIndex.vue'),
+      //   meta: {
+      //     title: 'QuizIndex - Yuvoria GAME',
+      //     meta: [
+      //       { name: 'description', content: 'QuizIndex - Yuvoria GAME' }
+      //     ]
+      //   }
+      // },
+
+      // {
+      //   path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:mode(teacher|all)', // tugas_id
+      //   name: 'quiz_report_public',
+      //   component: () => import('pages/quiz/report/QuizReportTeacher.vue'),
+      //   meta: {
+      //     logged: false,
+      //     title: 'Report Quiz',
+      //     meta: [
+      //       { name: 'description', content: 'Report Quiz' }
+      //     ]
+      //   }
+      // },
 
     ]
   },
@@ -104,10 +93,12 @@ const routes = [
           title: "Home STARKY",
           meta: [{ name: "description", content: "Home" }],
         },
-      },      ...routes_account,
+      },
+      ...routes_account,
       ...routes_collection,
       ...routes_activity,
       ...routes_stats,
+      ...routes_notifications,
     ]
   },
 

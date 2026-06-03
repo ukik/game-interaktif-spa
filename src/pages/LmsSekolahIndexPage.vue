@@ -6,7 +6,7 @@
         <q-item v-for="(item, index) in get_index_data" :key="index" clickable v-ripple
           :to="{ name: 'lms-sekolah-show', params: { slug: item?.id } }">
           <q-item-section avatar>
-            <q-avatar size="55px">
+            <q-avatar >
               <q-img :src="item?.url_image" @error="item.url_image = global_url_image" error-src="global_url_image" />
               <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
             </q-avatar>

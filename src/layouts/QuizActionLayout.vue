@@ -8,13 +8,13 @@
         <q-btn v-if="$route.meta?.page_type == 'show'" @click="$router.back" flat round dense icon="arrow_back"
           class="q-mr-sm" />
 
-        <!-- <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title> -->
+        <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
         <!-- <q-btn flat round icon="assignment" @click="leftDrawerOpen = true" /> -->
         <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
-        <!-- <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile> -->
-        <!-- <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" /> -->
+        <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile>
+        <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" />
       </q-toolbar>
       <!-- <q-separator></q-separator> -->
       <!-- <q-toolbar class="bg-white text-dark"> Hasil Matching Progress </q-toolbar> -->
@@ -31,8 +31,20 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
-      <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
-        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" />
+      <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
+        :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
+
+      <div id="main" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX" :class="[
+        is_mobile_size ? '' : 'q-card--borderedX',
+        is_ipad_lower_size ? 'bg-transparent' : 'bg-white'
+      ]">
+        <router-view v-slot="{ Component }">
+
+          <component :is="Component" ref="pageContainer" />
+
+        </router-view>
+      </div>
+
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
@@ -106,14 +118,14 @@ export default {
     updateWidth() {
       const ui = useUiStore();
 
-      const el = document.querySelector(".q-page-container > main");
-
+      const el = document.querySelector(".q-page-container > #main");
+      console.log('el', el)
       if (!el) return;
 
       this.observer?.disconnect();
 
       this.observer = new ResizeObserver(() => {
-        console.log('ResizeObserver');
+        console.log('ResizeObserver', el.offsetWidth);
         ui.setPageWidth(el.offsetWidth);
       });
 
@@ -122,7 +134,9 @@ export default {
   },
 
   mounted() {
-    this.updateWidth()
+    setTimeout(() => {
+      this.updateWidth()
+    }, 1000)
     // window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
   },
 

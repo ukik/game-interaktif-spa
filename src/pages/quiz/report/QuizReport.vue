@@ -14,7 +14,7 @@
       <q-separator />
 
       <keep-alive>
-        <q-tab-panels keep-alive v-model="tab" animated>
+        <q-tab-panels :keep-alive="true"v-model="tab" animated>
           <q-tab-panel name="tab1" class="q-pa-none">
 
             <!-- TAB 1 -->
@@ -43,7 +43,7 @@
               </template>
             </q-banner>
 
-            <q-tab-panels keep-alive v-model="tab1_sub" animated>
+            <q-tab-panels :keep-alive="true"v-model="tab1_sub" animated>
               <q-tab-panel name="tab1_sub1" class="q-pa-none q-px-sm">
                 <template v-if="get_report_unsubmit">
                   <component ref="unsubmit" v-if="tab == 'tab1'" v-bind:is="component.statistik"
@@ -86,7 +86,7 @@
               </div>
             </q-banner>
 
-            <q-tab-panels keep-alive v-model="tab2_sub" animated>
+            <q-tab-panels :keep-alive="true"v-model="tab2_sub" animated>
               <q-tab-panel name="tab2_sub1" class="q-pa-none q-px-sm">
                 <template v-if="get_report_submit">
                   <component ref="submit" v-if="tab == 'tab2'" v-bind:is="component.statistik" class=""
@@ -127,7 +127,7 @@
               <q-tab name="tab4_sub2" label="DESKRIPSI" icon="description" />
             </q-tabs>
 
-            <q-tab-panels keep-alive v-model="tab4_sub" animated>
+            <q-tab-panels :keep-alive="true"v-model="tab4_sub" animated>
               <q-tab-panel name="tab4_sub1" class="q-pa-none q-px-sm">
 
                 <template v-if="get_peserta_payload?.id && !get_init_peserta">
@@ -198,6 +198,7 @@ export default {
   async preFetch({ store, currentRoute }) {
     // const slug = currentRoute.params?.slug || ""; // tugas_id
     // const siswa_id = currentRoute.params?.siswa_id || ""; // user_id
+    console.log('QuizReport')
     await useLmsTugasQuizStatsStore(store).onReport();
   },
   components: {
@@ -315,7 +316,7 @@ export default {
         statistik: "",
         checking: "",
       },
-      tab: "tab1",
+
       tab1_sub: "tab1_sub1",
       tab2_sub: "tab2_sub1",
       tab4_sub: "tab4_sub1",

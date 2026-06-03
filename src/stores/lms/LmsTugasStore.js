@@ -30,13 +30,49 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
   })
 }
 
+function normalizeToString(value, separator = ',') {
+  if (Array.isArray(value)) {
+    return value.join(separator)
+  }
 
+  return value == null ? '' : String(value)
+}
+
+let kelasList = [];
+for (let index = 0; index < 12; index++) {
+  kelasList.push({
+    key: index + 1,
+    label: 'Kelas ' + index
+  })
+}
 export const useLmsTugasStore = defineStore('LmsTugasStore', {
   state: () => ({
     init: {
       index: true,
       show: true,
       peserta: true,
+      aktivitas: true,
+    },
+    filter: {
+      // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
+      kelas: [],
+      mapel: [],
+      kategori: [],
+      guru: [],
+
+      kelasList: kelasList,
+
+      optionsKelas: [],
+      optionsKategori: [],
+      optionsMapel: [],
+      optionsGuru: [],
+    },
+    valid_filter: {
+      // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
+      kelas: [],
+      mapel: [],
+      kategori: [],
+      guru: [],
     },
     index: {
       "payload": {
@@ -96,6 +132,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
     loading: {
       'local': false,
+      aktivitas: false,
       peserta: false,
     }
   }),
@@ -103,6 +140,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     get_init_index: ({ init }) => init?.index,
     get_init_show: ({ init }) => init?.show,
     get_init_peserta: ({ init }) => init?.peserta,
+    get_init_aktivitas: ({ init }) => init?.aktivitas,
 
     get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
     get_index_data: ({ index }) => index?.payload?.payload?.data,
@@ -130,6 +168,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
     get_loading: ({ loading }) => loading?.local,
     get_loading_peserta: ({ loading }) => loading?.local,
+    get_loading_aktivitas: ({ loading }) => loading?.aktivitas,
   },
   actions: {
     onChangePage(val) {
@@ -159,7 +198,13 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         url: host + '/lms/tugas',
         method: 'get',
         params: {
-          page: page
+          page: page,
+          jenjang: '', // abaikan
+          kelas: normalizeToString(this.filter.kelas),
+          user: normalizeToString(this.filter.guru),
+          mapel: normalizeToString(this.filter.mapel),
+          kategori: normalizeToString(this.filter.kategori),
+          // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
         }
       })
         .then((response) => {
@@ -198,18 +243,21 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       const quiz = route?.getParams?.quiz
       const mode = route?.getParams?.mode
 
-      if(mode == 'all') {
+      if (mode == 'all') {
         return this.onAktivitasWithoutTugas()
       }
 
-      if (this.loading.local) return false;
-      this.loading.local = true;
+      if (this.loading.aktivitas) return false;
+      this.loading.aktivitas = true;
 
       console.log('onAktivitasTugas')
 
       const resp = await axios({
-        url: host + '/lms/tugas/'+tugas_id+'/aktivitas/'+mode,
+        url: host + '/lms/tugas/' + tugas_id + '/aktivitas/' + mode,
         method: 'get',
+        params: {
+          quiz
+        }
       })
         .catch((err) => {
           console.log(err)
@@ -217,32 +265,32 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           return false
         })
 
-      this.loading.local = false
-      // this.init.show = false;
+      this.loading.aktivitas = false
+      this.init.aktivitas = false;
 
       if (resp == false) return false
       if (!resp?.data) return false
       // if (resp?.data?.isLogin) {
 
-        const data = resp?.data
+      const data = resp?.data
 
-        // TIDAK PERLU SEBENARNYA
-        // switch (data?.payload?.payload?.model?.toLowerCase()) {
-        //   case 'quiz':
-        //     useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
-        //     break;
-        //   case 'modul':
-        //     useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
-        //     break;
-        // }
+      // TIDAK PERLU SEBENARNYA
+      // switch (data?.payload?.payload?.model?.toLowerCase()) {
+      //   case 'quiz':
+      //     useLmsBankQuizStore().onSetShow(data?.payload?.payload?.tugasable)
+      //     break;
+      //   case 'modul':
+      //     useLmsBankModulStore().onSetShow(data?.payload?.payload?.tugasable)
+      //     break;
+      // }
 
-        this.aktivitas = data //?.payload?.payload?.tugasable
-        console.log('onAktivitasTugas', this.aktivitas)
+      this.aktivitas = data //?.payload?.payload?.tugasable
+      console.log('onAktivitasTugas', this.aktivitas)
 
-        // useLmsBankQuizStore(onSetShow)
-        // console.log('onAktivitasTugas', data?.payload?.payload?.model?.toLowerCase())
+      // useLmsBankQuizStore(onSetShow)
+      // console.log('onAktivitasTugas', data?.payload?.payload?.model?.toLowerCase())
 
-        return true
+      return true
       // }
     },
 
@@ -255,14 +303,17 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       const mode = route?.getParams?.mode
 
 
-      if (this.loading.local) return false;
-      this.loading.local = true;
+      if (this.loading.aktivitas) return false;
+      this.loading.aktivitas = true;
 
       console.log('onAktivitasWithoutTugas')
 
       const resp = await axios({
-        url: host + '/lms/quiz/'+quiz_id+'/aktivitas/all',
+        url: host + '/lms/quiz/' + quiz_id + '/aktivitas/all',
         method: 'get',
+        params: {
+          quiz
+        }
       })
         .catch((err) => {
           console.log(err)
@@ -270,17 +321,17 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           return false
         })
 
-      this.loading.local = false
-      // this.init.show = false;
+      this.loading.aktivitas = false
+      this.init.aktivitas = false;
 
       if (resp == false) return false
       if (!resp?.data) return false
       // if (resp?.data?.isLogin) {
 
-        const data = resp?.data
-        this.aktivitas = data
-        console.log('onAktivitasWithoutTugas', this.aktivitas)
-        return true
+      const data = resp?.data
+      this.aktivitas = data
+      console.log('onAktivitasWithoutTugas', this.aktivitas)
+      return true
       // }
     },
 
@@ -293,7 +344,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       console.log('onShow')
 
       const resp = await axios({
-        url: host + '/lms/tugas/'+slug,
+        url: host + '/lms/tugas/' + slug,
         method: 'get',
       })
         .then((response) => {
@@ -330,8 +381,8 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
     async onPeserta(slug = null, my_init = false) {
 
-      if(my_init) this.init.peserta = my_init
-      if(!this.init.peserta) return false
+      if (my_init) this.init.peserta = my_init
+      if (!this.init.peserta) return false
 
       if (this.loading.peserta) return false;
 
@@ -340,7 +391,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       console.log('onPeserta')
 
       const resp = await axios({
-        url: host + '/lms/tugas-peserta/'+slug,
+        url: host + '/lms/tugas-peserta/' + slug,
         method: 'get',
       })
         .then((response) => {

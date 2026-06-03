@@ -13,6 +13,16 @@
       <StatistikKategoriTable class="q-mt-md" :items="get_widget_tugas_kategori"></StatistikKategoriTable>
       <StatistikSubmitTable class="q-mt-md" :items="get_widget_tugas_submit"></StatistikSubmitTable>
 
+      <ScoreQuizDistributionByKelasTable class="q-mt-md" :items="get_quiz_score_distribution_by_kelas"></ScoreQuizDistributionByKelasTable>
+      <ScoreQuizDistributionByMapelTable class="q-mt-md" :items="get_quiz_score_distribution_by_mapel"></ScoreQuizDistributionByMapelTable>
+      <ScoreQuizDistributionByTugasKategoriTable class="q-mt-md" :items="get_quiz_score_distribution_by_tugas_kategori"></ScoreQuizDistributionByTugasKategoriTable>
+      <ScoreQuizDistributionByTugasTable class="q-mt-md" :items="get_quiz_score_distribution_by_tugas"></ScoreQuizDistributionByTugasTable>
+
+      <ScoreModulDistributionByKelasTable class="q-mt-md" :items="get_modul_score_distribution_by_kelas"></ScoreModulDistributionByKelasTable>
+      <ScoreModulDistributionByMapelTable class="q-mt-md" :items="get_modul_score_distribution_by_mapel"></ScoreModulDistributionByMapelTable>
+      <ScoreModulDistributionByTugasKategoriTable class="q-mt-md" :items="get_modul_score_distribution_by_tugas_kategori"></ScoreModulDistributionByTugasKategoriTable>
+      <ScoreModulDistributionByTugasTable class="q-mt-md" :items="get_modul_score_distribution_by_tugas"></ScoreModulDistributionByTugasTable>
+
     </template>
 
     <EmptyBlock v-else></EmptyBlock>
@@ -33,9 +43,28 @@ import SemesterRankingQuizTable from "./components/tugas_statistik/SemesterRanki
 import SemesterRankingModulTable from "./components/tugas_statistik/SemesterRankingModulTable.vue";
 import StatistikKategoriTable from "./components/tugas_statistik/StatistikKategoriTable.vue";
 import StatistikSubmitTable from "./components/tugas_statistik/StatistikSubmitTable.vue";
+import ScoreQuizDistributionByKelasTable from "./components/tugas_statistik/ScoreQuizDistributionByKelasTable.vue";
+import ScoreQuizDistributionByMapelTable from "./components/tugas_statistik/ScoreQuizDistributionByMapelTable.vue";
+import ScoreQuizDistributionByTugasKategoriTable from "./components/tugas_statistik/ScoreQuizDistributionByTugasKategoriTable.vue";
+import ScoreQuizDistributionByTugasTable from "./components/tugas_statistik/ScoreQuizDistributionByTugasTable.vue";
+
+import ScoreModulDistributionByKelasTable from "./components/tugas_statistik/ScoreModulDistributionByKelasTable.vue";
+import ScoreModulDistributionByMapelTable from "./components/tugas_statistik/ScoreModulDistributionByMapelTable.vue";
+import ScoreModulDistributionByTugasKategoriTable from "./components/tugas_statistik/ScoreModulDistributionByTugasKategoriTable.vue";
+import ScoreModulDistributionByTugasTable from "./components/tugas_statistik/ScoreModulDistributionByTugasTable.vue";
 
 export default {
   components: {
+    ScoreQuizDistributionByKelasTable,
+    ScoreQuizDistributionByMapelTable,
+    ScoreQuizDistributionByTugasKategoriTable,
+    ScoreQuizDistributionByTugasTable,
+
+    ScoreModulDistributionByKelasTable,
+    ScoreModulDistributionByMapelTable,
+    ScoreModulDistributionByTugasKategoriTable,
+    ScoreModulDistributionByTugasTable,
+
     StatistikKategoriTable,
     StatistikSubmitTable,
     MonthlyRankingQuizTable,

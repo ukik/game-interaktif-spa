@@ -32,6 +32,7 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
   state: () => ({
+    tab: "tab1",
     init: {
       index: true,
       show: true,
@@ -104,7 +105,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     },
     report: {
       payload: {
-        payload: {},
+        tugas: null
       },
     },
     loading: {
@@ -146,7 +147,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_rank_payload: ({ rank }) => rank?.payload?.payload,
     get_rank_top: ({ rank }) => rank?.payload?.top,
 
-    // get_report: ({ report }) => report?.payload?.report,
+    get_report: ({ report }) => report?.payload,
     get_report_tugas: ({ report }) => report?.payload?.tugas,
 
     get_report_unsubmit: ({ report }) => {
@@ -302,10 +303,16 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       this.loading[key] = true;
       console.log('onIndex')
 
+      let url = '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + siswa_id + '/student'
+
+      if(mode == 'teacher') url = '/lms/tugas-quiz-stats/' + tugas_id + '/report/teacher'
+
       const resp = await axios({
-        url: '/lms/tugas-quiz-stats/' + tugas_id + '/report/' + siswa_id + '/student',
+        url: url,
         method: 'get',
-        params: {}
+        params: {
+          quiz
+        }
       })
         .then((response) => {
           // notifSuccess()
@@ -379,12 +386,15 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       // console.log('onReplace', report, this.get_report_tugas?.id, siswa_id)
       // return;
 
+      const route = useRouterStore()
+      const quiz = route?.getParams?.quiz
+
       if (this.loading.form) return false;
       this.loading.form = true;
 
       Loading.show()
       const resp = await axios({
-        url: host + '/lms/tugas-quiz-hasil/' + this.get_report_tugas?.id + '/replace/' + report?.id + '/' + siswa_id,
+        url: host + '/lms/tugas-quiz-hasil/' + this.get_report_tugas?.id + '/replace/' + report?.id + '/' + siswa_id +'?quiz='+quiz,
         method: 'post'
       })
         .catch((err) => {
@@ -396,15 +406,37 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       Loading.hide()
       this.loading.form = false
-      console.log('onLogin', resp)
+      console.log('onReplace 1', resp)
 
       if (resp == false) return false
       if (!resp?.data) return false
       if (resp?.data?.isLogin) {
         notifSuccess()
 
+        console.log('onReplace 2')
+
+        this.rank = {
+          payload: {
+            payload: null,
+            top: {
+              data: null,
+            },
+          },
+        }
+
+        this.report = {
+          payload: {
+            tugas: true // jangan di isi null, nanti Page jadi kosong hilang semua
+          },
+        }
+
+        this.tab = "tab2";
+
+        Loading.show();
         await this.onReport(this.get_report_tugas?.id, siswa_id);
         await this.onRank(this.get_report_tugas?.id, true)
+        Loading.hide();
+
 
         return true
       }

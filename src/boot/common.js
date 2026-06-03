@@ -32,6 +32,27 @@ export default boot(async ({ app, ssrContext, router, store }) => {
           timeZone: 'Asia/Jakarta'
         })
       },
+      normalizeToString(value, separator = ',') {
+        if (Array.isArray(value)) {
+          return value.join(separator)
+        }
+
+        return value == null ? '' : String(value)
+      },
+      getJenis(value) {
+        switch (value) {
+          case 'LmsQuiz':
+            return 'Quiz';
+          case 'LmsModul':
+            return 'Modul';
+        }
+      },
+      nl2br(text) {
+        return String(text)
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\n/g, '<br>')
+      },
       ucfirst(str = '') {
         str = String(str);
 
@@ -315,7 +336,19 @@ export default boot(async ({ app, ssrContext, router, store }) => {
         // 'getAccessToken',
         // 'getLoading',
       ]),
+      getRouteParams() {
+        return this.$route?.params;
+      },
+      getRouteQuery() {
+        return this.$route?.query;
+      },
+      getRouteName() {
+        return this.$route?.name;
+      },
       is_teacher() {
+        return this.getRole == 'teacher' ? true : false
+      },
+      is_student() {
         return this.getRole == 'teacher' ? true : false
       },
 

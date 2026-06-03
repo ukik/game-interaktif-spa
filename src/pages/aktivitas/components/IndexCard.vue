@@ -16,7 +16,7 @@
       <!-- <q-item-section side>
         <q-badge class="q-pa-sm" :color="item?.status == 'draft' ? 'red' : 'green'" :label="item?.status" />
       </q-item-section> -->
-      <q-item-section side>
+      <q-item-section v-if="is_teacher" side>
         <q-btn dense :to="{ name: route_name, params: { slug: item?.id } }" icon="edit" color="blue" outline
           :label="is_mobile_size ? '' : 'Edit'"></q-btn>
       </q-item-section>

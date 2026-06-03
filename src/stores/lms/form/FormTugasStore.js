@@ -92,7 +92,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
         nama: 'PR'
       },
       priority: 'low',
-      visibility: 'private',
+      visibility: 'public',
       begin_date: getToday(),
       end_date: getTomorrow(),
       image: null,
@@ -110,12 +110,12 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       catatan: '',
       tugas_kategori: null,
       priority: '',
-      visibility: '',
+      visibility: 'public',
       begin_date: '',
       end_date: '',
       image: null,
 
-      status: '',
+      status: 'draft',
 
       kelas_id: '',
       siswa_ids: [],

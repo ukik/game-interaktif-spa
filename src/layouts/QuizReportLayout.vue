@@ -132,7 +132,9 @@ export default {
   },
 
   mounted() {
-    this.updateWidth()
+    setTimeout(() => {
+      this.updateWidth()
+    }, 2000)
     // window.addEventListener("resize", this.updateWidth); // 🔥 trigger ulang saat resize
   },
 

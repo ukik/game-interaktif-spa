@@ -13,7 +13,9 @@ export const myMixin = {
   },
   computed: {
     ...mapState(useLmsTugasStore, {
+      get_init_aktivitas: 'get_init_aktivitas',
       get_aktivitas_tugasable: "get_aktivitas_tugasable",
+      get_aktivitas_payload: "get_aktivitas_payload",
     }),
     ...mapWritableState(useQuizStore, {
       dialog_result: 'local.dialog_result',
