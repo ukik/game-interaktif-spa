@@ -65,64 +65,6 @@
     </q-card-actions>
 
     <q-separator />
-    <q-item dense>
-      <q-item-section avatar>
-        <q-avatar>
-          <q-icon name="group"></q-icon>
-        </q-avatar>
-      </q-item-section>
-
-      <q-item-section>
-        <q-item-label class="text-grey-8">Siswa Mengerjakan </q-item-label>
-      </q-item-section>
-
-      <q-item-section side>
-        <q-item-label class="items-center">
-          <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_hasil_count"></q-chip>
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-separator />
-    <q-item dense>
-      <q-item-section avatar>
-        <q-avatar>
-          <q-icon name="group"></q-icon>
-        </q-avatar>
-      </q-item-section>
-
-      <q-item-section>
-        <q-item-label class="text-grey-8">Siswa Partisipasi </q-item-label>
-      </q-item-section>
-
-      <q-item-section side>
-        <q-item-label class="items-center">
-          <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_siswa_count"></q-chip>
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-
-
-    <q-separator></q-separator>
-    <q-card-section horizontal>
-      <q-card-section class="q-pt-xs col">
-        <div class="text-overline">{{ item?.mapel?.nama }}</div>
-        <div class="text-h6 text-capitalize q-mb-xs">{{ item?.tugasable?.kategori }} </div>
-        <q-item-label lines="2">
-          {{ item?.judul }}
-        </q-item-label>
-        <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
-          {{ item?.tugasable?.judul }}
-        </q-item-label>
-      </q-card-section>
-
-      <q-card-section class="col-4 flex flex-center justify-end">
-        <q-img :height="is_mobile_size ? '' : '140px'" class="rounded-borders" :src="item?.url_image"
-          @error="item.url_image = global_url_image" error-src="global_url_image" />
-      </q-card-section>
-    </q-card-section>
-
-
-    <q-separator />
     <q-card-actions class="q-py-none q-px-md" align="between">
 
       <q-item class="col-auto q-pl-none"
@@ -141,18 +83,90 @@
       <q-separator vertical></q-separator>
       <div>
         <div>
-          <q-btn :to="{ name: route_name, params: { slug: item?.id } }" icon="visibility" color="primary"
+          <q-btn unelevated :to="{ name: route_name, params: { slug: item?.id } }" icon="visibility" color="primary"
             :label="is_mobile_size ? '' : 'Detail'"></q-btn>
 
-          <q-btn v-if="item?.tugas_hasil_count > 0" class="q-ml-sm" icon="leaderboard" color="orange"
+          <q-btn unelevated v-if="item?.tugas_hasil_count > 0" class="q-ml-sm" icon="leaderboard" color="orange"
             :label="is_mobile_size ? '' : 'Rank'"></q-btn>
 
-          <q-btn v-if="item?.status_durasi?.status !== 'selesai'" class="q-ml-sm" icon="play_circle" color="pink"
+          <q-btn unelevated v-if="item?.status_durasi?.status !== 'selesai'" class="q-ml-sm" icon="play_circle" color="pink"
             :label="is_mobile_size ? '' : 'Play'"></q-btn>
 
         </div>
       </div>
     </q-card-actions>
+    <q-separator />
+
+    <q-expansion-item>
+      <template v-slot:header>
+        <q-item-section avatar>
+          <q-avatar icon="assignment" color="orange" text-color="white" />
+        </q-item-section>
+
+        <q-item-section> Detail Tugas </q-item-section>
+      </template>
+
+
+      <q-separator />
+
+      <q-item dense>
+        <q-item-section avatar>
+          <q-avatar>
+            <q-icon name="group"></q-icon>
+          </q-avatar>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label class="text-grey-8">Siswa Mengerjakan </q-item-label>
+        </q-item-section>
+
+        <q-item-section side>
+          <q-item-label class="items-center">
+            <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_hasil_count"></q-chip>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-separator />
+      <q-item dense>
+        <q-item-section avatar>
+          <q-avatar>
+            <q-icon name="group"></q-icon>
+          </q-avatar>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label class="text-grey-8">Siswa Partisipasi </q-item-label>
+        </q-item-section>
+
+        <q-item-section side>
+          <q-item-label class="items-center">
+            <q-chip class="q-mx-none" icon="face" color="transparent" :label="item?.tugas_siswa_count"></q-chip>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+
+      <q-separator></q-separator>
+      <q-card-section horizontal>
+        <q-card-section class="q-pt-xs col">
+          <div class="text-overline">{{ item?.mapel?.nama }}</div>
+          <div class="text-h6 text-capitalize q-mb-xs">{{ item?.tugasable?.kategori }} </div>
+          <q-item-label lines="2">
+            {{ item?.judul }}
+          </q-item-label>
+          <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
+            {{ item?.tugasable?.judul }}
+          </q-item-label>
+        </q-card-section>
+
+        <q-card-section class="col-4 flex flex-center justify-end">
+          <q-img :height="is_mobile_size ? '' : '140px'" class="rounded-borders" :src="item?.url_image"
+            @error="item.url_image = global_url_image" error-src="global_url_image" />
+        </q-card-section>
+      </q-card-section>
+
+    </q-expansion-item>
+
   </q-card>
 </template>
 

@@ -47,6 +47,8 @@ for (let index = 0; index < 12; index++) {
 }
 export const useLmsTugasStore = defineStore('LmsTugasStore', {
   state: () => ({
+    tab: 'publish',
+    expired: 'false',
     init: {
       index: true,
       show: true,
@@ -194,18 +196,25 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       console.log('onIndex')
 
-      const resp = await axios({
-        url: host + '/lms/tugas',
-        method: 'get',
-        params: {
+      const params = {
           page: page,
           jenjang: '', // abaikan
           kelas: normalizeToString(this.filter.kelas),
           user: normalizeToString(this.filter.guru),
           mapel: normalizeToString(this.filter.mapel),
           kategori: normalizeToString(this.filter.kategori),
+          status: this.tab,
+          expired: this.expired,
           // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
         }
+
+      console.log('params', params)
+
+      Loading.show()
+      const resp = await axios({
+        url: host + '/lms/tugas',
+        method: 'get',
+        params: params,
       })
         .then((response) => {
           // notifSuccess()
@@ -217,6 +226,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           return false
         })
 
+      Loading.hide()
       this.loading.local = false
 
       this.init.index = false;

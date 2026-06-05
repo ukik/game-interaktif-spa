@@ -9,7 +9,8 @@
       </q-toolbar>
     </q-header> -->
 
-    <q-header elevated height-hint="98">
+
+    <q-header v-if="!getRouteQuery?.no_header" elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
 

@@ -18,6 +18,10 @@
         </template>
 
         <template v-slot:hint> Notifikasi </template>
+
+        <template v-slot:after>
+          <q-btn unelevated class="full-height" @click="onSubmit" color="primary" icon="search"></q-btn>
+        </template>
       </q-input>
     </q-form>
 

@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-green-1">
+  <q-layout view="hHh LpR fFf" class="bg-green-1">
     <!-- <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }"> -->
     <q-header elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
@@ -11,7 +11,7 @@
         <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
-        <!-- <q-btn flat round icon="assignment" @click="leftDrawerOpen = true" /> -->
+        <q-btn flat round icon="assignment" @click="leftDrawerOpen = !leftDrawerOpen" />
         <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
         <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile>
         <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" />
@@ -21,7 +21,8 @@
       <!-- </div> -->
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" behavior="mobile" bordered>
+    <!-- behavior="mobile"  -->
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <!-- drawer content -->
       <LeftDrawerItem />
     </q-drawer>

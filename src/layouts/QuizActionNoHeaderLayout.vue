@@ -45,7 +45,7 @@
 
       <div id="main" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX" :class="[
         is_mobile_size ? '' : 'q-card--borderedX',
-        is_ipad_lower_size ? 'bg-transparent' : 'bg-white'
+        is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX'
       ]">
         <router-view v-slot="{ Component }">
 

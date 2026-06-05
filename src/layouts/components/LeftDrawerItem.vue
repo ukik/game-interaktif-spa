@@ -1,17 +1,33 @@
 <template>
   <div class="q-pa-none">
-    <q-toolbar class="bg-primary text-white shadow-2">
+    <!-- <q-toolbar class="bg-primary text-white shadow-2">
       <q-toolbar-title>EMERALD</q-toolbar-title>
-    </q-toolbar>
+    </q-toolbar> -->
 
     <q-list>
+      <q-item-label header class="q-py-md">Notifikasi</q-item-label>
+      <q-item v-for="(item, index) in notifikasi_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
+        :active="link === item?.route_name" active-class="my-menu-link">
+        <q-item-section avatar>
+          <!-- <q-icon :name="item.icon"></q-icon> -->
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ item?.title }}</q-item-label>
+          <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+
       <q-item-label header class="q-py-md">Aktivitas</q-item-label>
       <q-item v-for="(item, index) in aktivitas_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
         :active="link === item?.route_name" active-class="my-menu-link">
         <q-item-section avatar>
           <!-- <q-icon :name="item.icon"></q-icon> -->
-          <q-avatar color="blue-1" text-color="white">
-            <q-icon color="primary" size="18px" :name="item.icon"></q-icon>
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
           </q-avatar>
         </q-item-section>
         <q-item-section>
@@ -24,8 +40,8 @@
       <q-item :inset-level="0.0" v-for="(item, index) in statistik_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
         :active="link === item?.route_name" active-class="my-menu-link">
         <q-item-section avatar>
-          <q-avatar color="blue-1" text-color="white">
-            <q-icon color="primary" size="18px" :name="item.icon"></q-icon>
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
           </q-avatar>
         </q-item-section>
         <q-item-section>
@@ -39,8 +55,8 @@
       <q-item v-for="(item, index) in koleksi_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
         :active="link === item?.route_name" active-class="my-menu-link">
         <q-item-section avatar>
-          <q-avatar color="blue-1" text-color="white">
-            <q-icon color="primary" size="18px" :name="item.icon"></q-icon>
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
           </q-avatar>
         </q-item-section>
 
@@ -55,8 +71,8 @@
       <q-item v-for="(item, index) in pengguna_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
         :active="link === item?.route_name" active-class="my-menu-link">
         <q-item-section avatar>
-          <q-avatar color="blue-1" text-color="white">
-            <q-icon color="primary" size="18px" :name="item.icon"></q-icon>
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
           </q-avatar>
         </q-item-section>
 
@@ -92,6 +108,24 @@
 </template>
 
 <script>
+const notifikasi_items = [
+  {
+    id: 1,
+    title: "NOTIFIKASI TUGAS",
+    subtitle: "tugas yang di publish",
+    icon: "fa fa-envelope",
+    route_name: 'lms_notification_tugas_index',
+  },
+  {
+    id: 1,
+    title: "NOTIFIKASI HASIL",
+    subtitle: "nilai yang di submit",
+    icon: "fa-solid fa-bell",
+    route_name: 'lms_notification_quiz_hasil_index',
+  },
+];
+
+
 const aktivitas_items = [
   {
     id: 1,
@@ -180,6 +214,7 @@ import { ref } from 'vue'
 export default {
   setup() {
     return {
+      notifikasi_items,
       aktivitas_items,
       statistik_items,
       koleksi_items,
