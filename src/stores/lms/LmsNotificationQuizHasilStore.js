@@ -1,10 +1,4 @@
-import {
-  Loading,
-  // Notify,
-  // Cookies,
-  // Platform,
-  // Screen
-} from 'quasar'
+import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
 import { defineStore, acceptHMRUpdate } from 'pinia';
 
@@ -193,11 +187,13 @@ export const useLmsNotificationQuizHasilStore = defineStore('LmsNotificationQuiz
 
       console.log('onIndex ----------------', params)
 
+      Loading.show()
       await onRequestPrivate(this, {
         url: host + '/lms/notifications/quiz-hasil',
         method: 'get',
         params: params,
       }, this.tab)
+      Loading.hide()
 
       this.init.index = false
     },
@@ -240,10 +236,12 @@ export const useLmsNotificationQuizHasilStore = defineStore('LmsNotificationQuiz
       //   temp.read_at = '11111111111'
       // }
 
+      Loading.show()
       const data = await onRequestEditPrivate(this, {
         url: host + `/lms/notifications/quiz-hasil/${id}/read`,
         method: 'post'
       }, 'read')
+      Loading.hide()
 
       if (data) {
         const index = temp.findIndex(el => el.id == id)
@@ -285,10 +283,12 @@ export const useLmsNotificationQuizHasilStore = defineStore('LmsNotificationQuiz
 
     async onShow(slug = null) {
 
+      Loading.show()
       await onRequestPrivate(this, {
         url: host + '/lms/notifications/quiz-hasil/'+slug,
         method: 'get',
       }, 'show')
+      Loading.hide()
 
       this.init.show = false;
     },

@@ -29,10 +29,71 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
   })
 }
 
+function normalizeToString(value, separator = ',') {
+  if (Array.isArray(value)) {
+    return value.join(separator)
+  }
+
+  return value == null ? '' : String(value)
+}
+
+let kelasList = [];
+for (let index = 0; index < 12; index++) {
+  kelasList.push({
+    key: index + 1,
+    label: 'Kelas ' + index
+  })
+}
 
 export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
   state: () => ({
     tab: "tab1",
+    filter: {
+      // jenjang=&kelas=&user=&mapel=&siswa=&kategori=&durasi=semester&year=2026&day=2026-06-06&begin_date=2026-06-01&end_date=2026-06-07&week=23&month=6&triwulan=2&caturwulan=2&semester=1&sort=desc
+      kelas: [],
+      mapel: [],
+      kategori: [],
+      guru: [],
+      siswa: [],
+      durasi: [],
+      year: [],
+      day: [],
+      begin_date: [],
+      end_date: [],
+      week: [],
+      month: [],
+      triwulan: [],
+      caturwulan: [],
+      semester: [],
+      sort: 'desc',
+
+      kelasList: kelasList,
+
+      optionsKelas: [],
+      optionsKategori: [],
+      optionsMapel: [],
+      optionsGuru: [],
+    },
+    valid_filter: {
+      // jenjang=&kelas=&user=&mapel=&siswa=&kategori=&durasi=semester&year=2026&day=2026-06-06&begin_date=2026-06-01&end_date=2026-06-07&week=23&month=6&triwulan=2&caturwulan=2&semester=1&sort=desc
+      kelas: [],
+      mapel: [],
+      kategori: [],
+      guru: [],
+      siswa: [],
+      durasi: [],
+      year: [],
+      day: [],
+      begin_date: [],
+      end_date: [],
+      week: [],
+      month: [],
+      triwulan: [],
+      caturwulan: [],
+      semester: [],
+      sort: 'desc',
+    },
+
     init: {
       index: true,
       show: true,
@@ -88,6 +149,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     },
     show: {
       payload: {
+        payload: null,
         tugas: [],
         top: {
           data: [],
@@ -105,7 +167,10 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     },
     report: {
       payload: {
-        tugas: null
+        payload: {},
+        tugas: null,
+        report: null,
+        siswa: null,
       },
     },
     loading: {
@@ -143,12 +208,14 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_show_kelas: ({ show }) => show?.payload?.kelas,
     get_show_top: ({ show }) => show?.payload?.top,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
+    get_show_payload: ({ show }) => show?.payload?.payload,
 
     get_rank_payload: ({ rank }) => rank?.payload?.payload,
     get_rank_top: ({ rank }) => rank?.payload?.top,
 
     get_report: ({ report }) => report?.payload,
     get_report_tugas: ({ report }) => report?.payload?.tugas,
+    get_report_siswa: ({ report }) => report?.payload?.siswa,
 
     get_report_unsubmit: ({ report }) => {
       let json = null
@@ -218,12 +285,31 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       console.log('onIndex')
 
+
+      // jenjang=&kelas=&user=&mapel=&siswa=&kategori=&durasi=semester&year=2026&day=2026-06-06&begin_date=2026-06-01&end_date=2026-06-07&week=23&month=6&triwulan=2&caturwulan=2&semester=1&sort=desc
+      const params = {
+          page: page,
+          jenjang: '', // abaikan
+          kelas: normalizeToString(this.valid_filter.kelas),
+          user: normalizeToString(this.valid_filter.guru),
+          mapel: normalizeToString(this.valid_filter.mapel),
+          kategori: normalizeToString(this.valid_filter.kategori),
+          siswa: normalizeToString(this.valid_filter.siswa),
+          status: this.tab,
+        }
+
+      // const auth = useAuthStore()
+      // if(auth.getRole == 'student') {
+      //   params['siswa'] = auth.getAuthUser?.id
+      // } else {
+      //   params['siswa'] = normalizeToString(this.valid_filter.student)
+      // }
+
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas-quiz-stats',
         method: 'get',
-        params: {
-          page: page
-        }
+        params: params,
       })
         .then((response) => {
           // notifSuccess()
@@ -234,6 +320,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -259,6 +346,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas-quiz-stats/' + slug,
         method: 'get',
@@ -272,6 +360,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -307,6 +396,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       if(mode == 'teacher') url = '/lms/tugas-quiz-stats/' + tugas_id + '/report/teacher'
 
+      Loading.show()
       const resp = await axios({
         url: url,
         method: 'get',
@@ -323,6 +413,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           // notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading[key] = false
       this.init[key] = false;

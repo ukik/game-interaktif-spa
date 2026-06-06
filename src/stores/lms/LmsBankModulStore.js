@@ -141,6 +141,7 @@ export const useLmsBankModulStore = defineStore('LmsBankModulStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/modul',
         method: 'get',
@@ -157,6 +158,7 @@ export const useLmsBankModulStore = defineStore('LmsBankModulStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -182,6 +184,7 @@ export const useLmsBankModulStore = defineStore('LmsBankModulStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/modul/'+slug,
         method: 'get',
@@ -195,6 +198,7 @@ export const useLmsBankModulStore = defineStore('LmsBankModulStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

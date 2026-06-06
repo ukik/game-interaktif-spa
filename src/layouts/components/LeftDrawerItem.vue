@@ -5,6 +5,22 @@
     </q-toolbar> -->
 
     <q-list>
+      <q-item-label header class="q-py-md">Dashboard</q-item-label>
+      <q-item v-for="(item, index) in dashboard_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
+        :active="link === item?.route_name" active-class="my-menu-link">
+        <q-item-section avatar>
+          <!-- <q-icon :name="item.icon"></q-icon> -->
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ item?.title }}</q-item-label>
+          <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+
       <q-item-label header class="q-py-md">Notifikasi</q-item-label>
       <q-item v-for="(item, index) in notifikasi_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
         :active="link === item?.route_name" active-class="my-menu-link">
@@ -111,26 +127,44 @@
 const notifikasi_items = [
   {
     id: 1,
-    title: "NOTIFIKASI TUGAS",
-    subtitle: "tugas yang di publish",
-    icon: "fa fa-envelope",
+    title: "PESAN TUGAS",
+    subtitle: "Tugas Terbaru",
+    icon: "alarm",
     route_name: 'lms_notification_tugas_index',
   },
   {
-    id: 1,
-    title: "NOTIFIKASI HASIL",
-    subtitle: "nilai yang di submit",
-    icon: "fa-solid fa-bell",
+    id: 2,
+    title: "PESAN HASIL",
+    subtitle: "Nilai Terbaru",
+    icon: "alarm_on",
     route_name: 'lms_notification_quiz_hasil_index',
   },
 ];
+
+const dashboard_items = [
+  {
+    id: 1,
+    title: "GENERAL",
+    subtitle: "Tugas Publish",
+    icon: "widgets",
+    route_name: 'dashboard',
+  },
+  {
+    id: 2,
+    title: "AKTIVITAS",
+    subtitle: "Nilai Submit",
+    icon: "dashboard",
+    route_name: 'dashboard_tugas_statistik',
+  },
+];
+
 
 
 const aktivitas_items = [
   {
     id: 1,
-    title: "TUGAS",
-    subtitle: "Materi Latihan",
+    title: "DAFTAR TUGAS",
+    subtitle: "Kumpulan Latihan",
     icon: "fa-solid fa-table",
     route_name: 'lms-tugas-index',
   },
@@ -139,14 +173,14 @@ const aktivitas_items = [
 const statistik_items = [
   {
     id: 2,
-    title: "MODUL",
+    title: "RANKING MODUL",
     subtitle: "Hasil Tugas",
     icon: "fa-solid fa-chart-line",
     route_name: 'lms-tugas-modul-stats-index',
   },
   {
     id: 3,
-    title: "QUIZ",
+    title: "RANKING QUIZ",
     subtitle: "Hasil Tugas",
     icon: "fa-solid fa-chart-line",
     route_name: 'lms-tugas-quiz-stats-index',
@@ -219,6 +253,7 @@ export default {
       statistik_items,
       koleksi_items,
       pengguna_items,
+      dashboard_items,
       // offline,
       link: ref('')
     };
@@ -239,11 +274,12 @@ export default {
 
 <style scoped lang="scss">
 .my-menu-link {
-  color: white;
-  background: #37bdf2;
+  color: #1976D2;
+  font-weight: bold;
+  background: #8ac6ff34;
 
   :deep(.text-caption) {
-    color: white;
+    color: #1976D2;
   }
 }
 </style>

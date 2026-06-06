@@ -1,8 +1,8 @@
 <template>
   <q-page id="Intro"
     class="flex flex-center bg-transparent row q-pa-sm animate__animated animate__bounce animate__faster">
-
-    <q-card v-if="get_init_show && get_aktivitas_tugasable?.kategori" class="card-shadow card-border-radius game">
+    <!-- {{ get_init_show && get_aktivitas_tugasable?.kategori }} -->
+    <q-card v-if="get_aktivitas_tugasable?.kategori" class="card-shadow card-border-radius game">
       <q-card-section class="text-center">
         <div v-if="get_aktivitas_tugasable?.mapel?.nama" class="title">📘 <br> {{get_aktivitas_tugasable?.mapel?.nama}}</div>
         <div v-if="get_aktivitas_tugasable?.judul" class="subtitle">{{ get_aktivitas_tugasable?.judul }}</div>

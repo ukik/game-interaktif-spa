@@ -128,6 +128,7 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/siswa',
         method: 'get',
@@ -144,6 +145,7 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -169,6 +171,7 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/siswa/'+slug,
         method: 'get',
@@ -182,6 +185,7 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

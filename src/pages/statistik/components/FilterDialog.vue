@@ -105,7 +105,7 @@
 <script>
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useGlobalStore } from 'src/stores/lms/GlobalStore';
-import { useLmsTugasStore } from 'src/stores/lms/LmsTugasStore';
+import { useLmsTugasQuizStatsStore } from 'src/stores/lms/LmsTugasQuizStatsStore';
 
 let kelasList = [];
 for (let index = 0; index < 12; index++) {
@@ -142,14 +142,14 @@ export default {
     }
   },
   computed: {
-    // ...mapState(useLmsTugasStore, ['get_index_kategori_list']),
+    // ...mapState(useLmsTugasQuizStatsStore, ['get_index_kategori_list']),
     ...mapState(useGlobalStore, [
       'get_data_global_list_kelas',
       'get_data_global_list_kategori_quiz',
       'get_data_global_list_mapel',
       'get_data_global_list_guru'
     ]),
-    ...mapWritableState(useLmsTugasStore, ['filter', 'valid_filter']),
+    ...mapWritableState(useLmsTugasQuizStatsStore, ['filter', 'valid_filter']),
     kategoriOptions() {
       // return []
       const full = this['filter'].kategori.length >= 3
@@ -179,7 +179,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useLmsTugasStore, ['onIndex']),
+    ...mapActions(useLmsTugasQuizStatsStore, ['onIndex']),
     async onClear() {
       this['filter'].kelas = []
       this['filter'].mapel = []

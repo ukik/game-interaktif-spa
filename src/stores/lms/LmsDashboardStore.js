@@ -1,3 +1,5 @@
+import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
+
 import { defineStore } from 'pinia';
 
 import { host } from 'src/boot/common'
@@ -77,6 +79,7 @@ export const useLmsDashboardStore = defineStore('LmsDashboardStore', {
     },
     async onIndex(page = 1) {
 
+      Loading.show()
       onRequestPrivate(this, {
         url: host + '/lms',
         method: 'get',
@@ -84,6 +87,7 @@ export const useLmsDashboardStore = defineStore('LmsDashboardStore', {
           page: page
         }
       }, 'index')
+      Loading.hide()
 
     },
     // async onShow(slug = null) {

@@ -36,7 +36,7 @@
           <q-item-label caption>Kategori</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori')?.nama }}</q-item-label>
+          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_quiz')?.nama }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-btn @click="() => onClear('kategori')"  dense round flat icon="close"></q-btn>
@@ -250,10 +250,10 @@ export default {
     async onClear(key) {
       this['filter'][key] = []
 
-      this.$q.loading.show()
+      // this.$q.loading.show()
       await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
-      this.$q.loading.hide()
+      // this.$q.loading.hide()
     },
     async onClearAll() {
       this['filter'].kelas = []
@@ -262,10 +262,10 @@ export default {
       this['filter'].guru = []
 
       console.log('onClearAll');
-      this.$q.loading.show()
+      // this.$q.loading.show()
       await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
-      this.$q.loading.hide()
+      // this.$q.loading.hide()
     }
   },
   async mounted() {

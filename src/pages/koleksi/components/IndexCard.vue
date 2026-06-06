@@ -69,9 +69,16 @@
     <q-separator />
 
     <q-card-actions align="center">
-      <q-btn :to="{ name: route_name, params: { slug: item?.id } }"  icon="visibility" color="primary"
+      <q-btn unelevated :to="{ name: route_name, params: { slug: item?.id } }"  icon="visibility" color="primary"
         label="Detail"></q-btn>
-      <q-btn  icon="play_circle" color="pink" label="Play"></q-btn>
+      <q-btn unelevated :to="{
+        name: route_play,
+        params: {
+          mode: 'all',
+          quiz: item?.kategori,
+          slug: item?.id
+        }
+      }" icon="play_circle" color="pink" label="Coba"></q-btn>
     </q-card-actions>
   </q-card>
 </template>
@@ -79,6 +86,6 @@
 
 <script>
 export default {
-  props: ['get_index_data', 'get_index_kelas', 'route_name'],
+  props: ['get_index_data', 'get_index_kelas', 'route_name', 'route_play'],
 };
 </script>

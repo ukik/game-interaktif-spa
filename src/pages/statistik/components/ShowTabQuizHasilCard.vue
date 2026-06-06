@@ -1,19 +1,31 @@
 <template>
-
   <div class="q-pa-sm">
-
-    <div class="text-right q-mb-sm">
-      <q-btn @click="onRefresh" dense icon="refresh" round unelevated color="positive"></q-btn>
+    <div class="text-center q-mb-sm">
+      <q-btn
+        @click="onRefresh"
+        outline
+        dense
+        icon="refresh"
+        class="q-px-sm"
+        rounded
+        label="refresh"
+        unelevated
+        color="positive"
+      ></q-btn>
     </div>
 
     <q-list separator bordered class="text-dark">
-
       <q-card-actions class="q-pa-none">
         <div class="col-12 text-center">
-          <q-chip class="q-my-sm text-body2" color="grey" text-color="white" icon="star" label="Top 3"></q-chip>
+          <q-chip
+            class="q-my-sm text-body2"
+            color="grey"
+            text-color="white"
+            icon="star"
+            label="Top 3"
+          ></q-chip>
           <q-separator></q-separator>
         </div>
-
 
         <template v-for="(item, index) in top">
           <q-card flat square class="col-4">
@@ -24,14 +36,23 @@
             </q-card-actions> -->
 
             <q-card-actions align="center" class="q-pt-md">
-
               <q-avatar class="q-mb-xs" size="75px">
-                <q-img fit="fill" :src="item?.siswa?.url_image" @error="item.siswa.url_image = global_url_image"
-                  error-src="global_url_image" />
-                <q-badge :color="getRankColor(index)" class="badge-left round q-pa-sm flex flex-center text-body2"
-                  style="width:30px; height:30px; " floating>
+                <q-img
+                  fit="fill"
+                  :src="item?.siswa?.url_image"
+                  @error="item.siswa.url_image = global_url_image"
+                  error-src="global_url_image"
+                />
+                <q-badge
+                  :color="getRankColor(index)"
+                  class="badge-left round q-pa-sm flex flex-center text-body2"
+                  style="width: 30px; height: 30px"
+                  floating
+                >
                   <!-- <q-icon name="fa-brands fa-web-awesome"></q-icon> -->
-                  {{ getRanking(item?.score)?.grade }}
+                  {{
+                    getRankModel_1(item?.total_question_true, item?.total_question)["g"]
+                  }}
                 </q-badge>
               </q-avatar>
 
@@ -39,9 +60,12 @@
                 {{ item?.siswa?.name }}
               </q-item-label>
 
-              <q-item-label class="q-mt-sm col-12 text-center text-bold" :class="['text-' + getRankColor(index)]"
-                lines="1">Rank {{
-                  Number(index + 1) }} </q-item-label>
+              <q-item-label
+                class="q-mt-sm col-12 text-center text-bold"
+                :class="['text-' + getRankColor(index)]"
+                lines="1"
+                >Rank {{ Number(index + 1) }}
+              </q-item-label>
 
               <!-- <q-item-label class="q-mt-sm col-12 text-center" lines="1" caption>
                 {{item?.siswa?.email}}
@@ -57,18 +81,24 @@
             </q-card-actions>
 
             <q-separator></q-separator>
-            <q-card-actions align="between" class="q-px-md" :class="['alert-' + getRankColorBootstrap(index)]">
+            <q-card-actions
+              align="between"
+              class="q-px-md"
+              :class="['alert-' + getRankColorBootstrap(index)]"
+            >
               <div class="text-bold">
-                <q-icon name="fa-brands fa-web-awesome"></q-icon>
+                <q-icon color="orange" name="fa-brands fa-web-awesome"></q-icon>
               </div>
-              <div class="text-caption">({{ item?.score }} / 100) </div>
+              <div class="text-caption text-dark text-right">
+                <div class="text-bold">
+                  ({{ item?.total_question_true }} / {{ item?.total_question }}) Soal
+                </div>
+                <!-- <div class="text-caption">Siswa Waktu: {{ item?.total_time_left }}</div> -->
+              </div>
             </q-card-actions>
-
-
           </q-card>
           <q-separator vertical />
         </template>
-
       </q-card-actions>
     </q-list>
   </div>
@@ -76,30 +106,79 @@
   <q-card-section class="q-pa-sm">
     <q-list separator bordered class="text-dark">
       <div class="col-12 text-center">
-        <q-chip class="q-my-sm text-body2" color="grey" text-color="white" icon="bar_chart"
-          label="Leaderboard"></q-chip>
+        <q-chip
+          class="q-my-sm text-body2"
+          color="grey"
+          text-color="white"
+          icon="bar_chart"
+          label="Leaderboard"
+        ></q-chip>
         <q-separator></q-separator>
       </div>
-      <q-item v-for="(item, index) in payload?.data">
+      <q-item v-for="(item, index) in payload?.data" :to="{
+        name: 'quiz_report',
+        params: {
+          quiz: tugas?.tugasable?.kategori,
+          slug: tugas?.id,
+          mode: 'student',
+          siswa_id: item?.siswa?.id,
+        }
+      }" clickable v-ripple>
+        <!-- <q-item-section side>
+          <q-avatar v-if="index <= 2" :color="getRankColor(index)" class="text-white">
+            {{ getRankModel_1(item?.total_question_true, item?.total_question)["g"] }}
+          </q-avatar>
+          <q-avatar v-else color="grey-2" class="text-dark">
+            {{ getRankModel_1(item?.total_question_true, item?.total_question)["g"] }}
+          </q-avatar>
+        </q-item-section> -->
+
         <q-item-section avatar>
           <q-avatar color="dark">
-            <q-img class="rounded-borders" :src="item?.siswa?.url_image"
-              @error="item.siswa.url_image = global_url_image" error-src="global_url_image" />
+            <q-img
+              class="rounded-borders"
+              :src="item?.siswa?.url_image"
+              @error="item.siswa.url_image = global_url_image"
+              error-src="global_url_image"
+            />
+
+            <q-badge
+              :color="getRankColor(index)"
+              class="badge-left round q-pa-sm flex flex-center text-body2"
+              style="width: 20px; height: 20px; margin-left: -10px;"
+              floating
+            >
+              <!-- <q-icon name="fa-brands fa-web-awesome"></q-icon> -->
+              {{ getRankModel_1(item?.total_question_true, item?.total_question)["g"] }}
+            </q-badge>
           </q-avatar>
         </q-item-section>
         <q-item-section>
           <q-item-label lines="1">{{ item?.siswa?.name }}</q-item-label>
-          <q-item-label caption>({{ item?.score }} / 100) </q-item-label>
+          <q-item-label caption lines="1"
+            >({{ item?.total_question_true }} / {{ item?.total_question }}) Soal / Siswa
+            Waktu: {{ item?.total_time_left }}</q-item-label
+          >
         </q-item-section>
 
         <q-item-section side>
           <!-- <q-badge class="q-pa-sm" :color="item?.status == 'draft' ? 'red' : 'green'" :label="item?.status" /> -->
           <q-avatar color="grey-2" class="text-dark">
             {{ index + 1 }}
-            <q-badge color="transparent" class="round flex flex-center" style="right: -7px;"
-              :class="['text-' + getRankColor(index)]" floating>
+            <q-badge
+              color="transparent"
+              class="round flex flex-center"
+              style="right: -7px"
+              :class="['text-' + getRankColor(index)]"
+              floating
+            >
               <q-icon name="fa-brands fa-web-awesome"></q-icon>
             </q-badge>
+          </q-avatar>
+        </q-item-section>
+        <q-item-section side>
+          <q-avatar color="primary" text-color="white">
+            <q-icon name="signal_cellular_alt"></q-icon>
           </q-avatar>
         </q-item-section>
       </q-item>
@@ -109,12 +188,12 @@
 
 <script>
 export default {
-  props: ['payload', 'top'],
-  emits: ['onRefresh'],
+  props: ["payload", "top", "tugas"],
+  emits: ["onRefresh"],
   methods: {
     onRefresh() {
-      this.$emit('onRefresh')
-    }
-  }
+      this.$emit("onRefresh");
+    },
+  },
 };
 </script>

@@ -1,10 +1,14 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm">
-
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-quiz-show"></IndexCard>
+        <IndexCard
+          route_play="quiz_intro_public"
+          :get_index_data="get_index_data"
+          :get_index_kelas="get_index_kelas"
+          route_name="lms-quiz-show"
+        ></IndexCard>
       </div>
     </template>
 
@@ -12,8 +16,12 @@
 
     <div style="height: 47px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination :current_page="get_index_current_page" :last_page="get_index_last_page" :disable="get_index_loading"
-        @onBubbleEvent="onBubbleEvent"></Pagination>
+      <Pagination
+        :current_page="get_index_current_page"
+        :last_page="get_index_last_page"
+        :disable="get_index_loading"
+        @onBubbleEvent="onBubbleEvent"
+      ></Pagination>
     </q-page-sticky>
   </q-page>
 </template>
@@ -28,7 +36,7 @@ import IndexCard from "./components/IndexCard.vue";
 
 export default {
   components: {
-    IndexCard
+    IndexCard,
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsBankQuizStore(store);
@@ -69,8 +77,8 @@ export default {
       "get_index_current_page",
       "get_index_last_page",
       "get_index_loading",
-      'get_init_index',
-      'get_index_kelas',
+      "get_init_index",
+      "get_index_kelas",
     ]),
   },
   methods: {

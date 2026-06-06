@@ -142,6 +142,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/quiz',
         method: 'get',
@@ -158,6 +159,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -183,6 +185,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/quiz/'+slug,
         method: 'get',
@@ -196,6 +199,7 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

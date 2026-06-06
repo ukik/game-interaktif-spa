@@ -71,10 +71,10 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
       },
       kelas: {},
       kategoriList: [],
-      "currentMapel":null,
-      "currentUser":null,
-      "currentSiswa":null,
-      "currentKategori":null,
+      "currentMapel": null,
+      "currentUser": null,
+      "currentSiswa": null,
+      "currentKategori": null,
       "status": "success",
       "success": true,
       "message": "OK",
@@ -84,9 +84,9 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     },
     show: {
       payload: {
-        tugas:[],
-        top:{
-          data:[],
+        tugas: [],
+        top: {
+          data: [],
         },
       },
       kelas: {},
@@ -102,6 +102,9 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     report: {
       payload: {
         payload: {},
+        tugas: null,
+        report: null,
+        siswa: null,
       },
     },
     loading: {
@@ -137,16 +140,17 @@ export const useLmsTugasModulStatsStore = defineStore('LmsTugasModulStatsStore',
     get_show_kelas: ({ show }) => show?.payload?.kelas,
     get_show_top: ({ show }) => show?.payload?.top?.data,
     get_show_tugas: ({ show }) => show?.payload?.tugas,
+    get_show_payload: ({ show }) => show?.payload?.payload,
 
     get_rank_payload: ({ rank }) => rank?.payload?.payload,
     get_rank_top: ({ rank }) => rank?.payload?.top,
 
     get_report: ({ report }) => report?.payload?.payload,
-get_report_unsubmit: ({ report }) => {
+    get_report_unsubmit: ({ report }) => {
       let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_unsubmit', el)
-        if(el.is_submit == 'N') {
+        if (el.is_submit == 'N') {
           json = el?.json
         }
       });
@@ -157,7 +161,7 @@ get_report_unsubmit: ({ report }) => {
       let json = null
       report?.payload?.report?.forEach(el => {
         console.log('get_report_submit', el)
-        if(el.is_submit == 'Y') {
+        if (el.is_submit == 'Y') {
           json = el?.json
         }
       });
@@ -209,6 +213,7 @@ get_report_unsubmit: ({ report }) => {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas-modul-stats',
         method: 'get',
@@ -225,6 +230,7 @@ get_report_unsubmit: ({ report }) => {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -250,8 +256,9 @@ get_report_unsubmit: ({ report }) => {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
-        url: host + '/lms/tugas-modul-stats/'+slug,
+        url: host + '/lms/tugas-modul-stats/' + slug,
         method: 'get',
       })
         .then((response) => {
@@ -263,6 +270,7 @@ get_report_unsubmit: ({ report }) => {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -287,6 +295,7 @@ get_report_unsubmit: ({ report }) => {
       this.loading[key] = true;
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: '/lms/tugas-modul-stats/' + tugas_id + '/report/' + siswa_id,
         method: 'get',
@@ -301,6 +310,7 @@ get_report_unsubmit: ({ report }) => {
           // notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading[key] = false
       this.init[key] = false;

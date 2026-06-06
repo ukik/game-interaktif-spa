@@ -2,8 +2,15 @@
   <InitLoading v-if="get_init_show"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm">
     <q-card flat bordered>
-      <q-tabs v-model="tab" :key="tab" dense class="text-grey"
-        active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs
+        v-model="tab"
+        :key="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+      >
         <q-tab :key="1" name="tab1" label="Ranking" />
         <q-tab :key="2" name="tab2" label="Tugas" />
         <q-tab :key="3" name="tab3" label="Aktivitas" />
@@ -14,43 +21,83 @@
 
       <q-tab-panels keep-alive v-model="tab" animated>
         <q-tab-panel name="tab1" class="q-pa-none">
-          <ShowTabQuizHasilCard v-if="get_show_payload?.data.length > 0" @onRefresh="onRefreshShow"
-            :payload="get_show_payload" :top="get_show_top"></ShowTabQuizHasilCard>
+          <template v-if="get_show_payload?.data.length > 0">
+
+            <ShowTabQuizHasilEssayCard v-if="get_show_tugas[0]?.tugasable?.kategori == 'essay'"
+              @onRefresh="onRefreshShow"
+              :tugas="get_show_tugas[0]"
+              :payload="get_show_payload"
+              :top="get_show_top"
+            >
+            </ShowTabQuizHasilEssayCard>
+
+            <ShowTabQuizHasilCard v-else
+              @onRefresh="onRefreshShow"
+              :tugas="get_show_tugas[0]"
+              :payload="get_show_payload"
+              :top="get_show_top"
+            >
+            </ShowTabQuizHasilCard>
+
+          </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="tab2" class="q-pa-none">
-          <template v-if="get_show_tugas.length > 0" v-for="(item,index) in get_show_tugas">
-            <ShowTabTugasCard  :get_show_payload="item"
-              :get_show_kelas="get_show_kelas"></ShowTabTugasCard>
+          <template
+            v-if="get_show_tugas.length > 0"
+            v-for="(item, index) in get_show_tugas"
+          >
+            <ShowTabTugasCard
+              :get_show_payload="item"
+              :get_show_kelas="get_show_kelas"
+            ></ShowTabTugasCard>
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="tab3" class="q-pa-none">
-          <template v-if="get_show_tugas.length > 0" v-for="(item,index) in get_show_tugas">
-            <ShowTabAktivitasCard :get_show_payload="item?.tugasable"
-              :mapel="item?.mapel" :get_show_kelas="get_show_kelas"></ShowTabAktivitasCard>
+          <template
+            v-if="get_show_tugas.length > 0"
+            v-for="(item, index) in get_show_tugas"
+          >
+            <ShowTabAktivitasCard
+              :get_show_payload="item?.tugasable"
+              :mapel="item?.mapel"
+              :get_show_kelas="get_show_kelas"
+            ></ShowTabAktivitasCard>
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="tab4" class="q-pa-none">
           <template v-if="get_peserta_payload?.id && !get_init_peserta">
-            <ShowTabPesertaCard @onRefresh="onRefreshPeserta" :get_peserta_payload="get_peserta_payload?.tugas_siswa"></ShowTabPesertaCard>
+            <ShowTabPesertaCard
+              @onRefresh="onRefreshPeserta"
+              :get_peserta_payload="get_peserta_payload?.tugas_siswa"
+            >
+            </ShowTabPesertaCard>
           </template>
           <InitLoading v-else-if="get_init_peserta"></InitLoading>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
-    <div style="height: 50px"></div>
+
+
+    <!-- <div style="height: 50px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <q-card-actions align="center" class="bg-primary q-pa-none" :style="`width: ${getPageWidth()}px`">
+      <q-card-actions
+        align="center"
+        class="bg-primary q-pa-none"
+        :style="`width: ${getPageWidth()}px`"
+      >
         <q-item class="col-12 text-white" clickable v-ripple>
           <q-item-section avatar>
             <q-icon text-color="white" name="bar_chart" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Leaderboard</q-item-label>
-            <q-item-label class="text-white" caption>{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label>
+            <q-item-label class="text-white" caption
+              >{{ get_show_payload?.tugas_hasil_count }} siswa</q-item-label
+            >
           </q-item-section>
           <q-item-section avatar>
             <q-icon text-color="white" name="navigate_next" />
@@ -58,6 +105,8 @@
         </q-item>
       </q-card-actions>
     </q-page-sticky>
+     -->
+
   </q-page>
 </template>
 
@@ -71,11 +120,16 @@ import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
 import ShowTabTugasCard from "./components/ShowTabTugasCard.vue";
 import ShowTabAktivitasCard from "./components/ShowTabAktivitasCard.vue";
 import ShowTabQuizHasilCard from "./components/ShowTabQuizHasilCard.vue";
+import ShowTabQuizHasilEssayCard from "./components/ShowTabQuizHasilEssayCard.vue";
 import ShowTabPesertaCard from "./components/ShowTabPesertaCard.vue";
 
 export default {
   components: {
-    ShowTabTugasCard, ShowTabAktivitasCard, ShowTabQuizHasilCard, ShowTabPesertaCard
+    ShowTabTugasCard,
+    ShowTabAktivitasCard,
+    ShowTabQuizHasilCard,
+    ShowTabQuizHasilEssayCard,
+    ShowTabPesertaCard,
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasQuizStatsStore(store);
@@ -92,22 +146,20 @@ export default {
   },
   watch: {
     tab(val) {
-      if(val == 'tab4') this.onPeserta(this.$route.params?.slug)
-    },
-    get_show_payload: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        // console.log('get_index_data', m)
-      },
+      if (val == "tab4") this.onPeserta(this.$route.params?.slug);
     },
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsTugasQuizStatsStore, ["get_show_payload", "get_init_show", "get_show_kelas", 'get_show_top', 'get_show_tugas', 'get_show_top']),
-    ...mapState(useLmsTugasStore, ["get_peserta_payload","get_init_peserta"]),
+    ...mapState(useLmsTugasQuizStatsStore, [
+      "get_show_payload",
+      "get_init_show",
+      "get_show_kelas",
+      "get_show_top",
+      "get_show_tugas",
+      "get_show_top",
+    ]),
+    ...mapState(useLmsTugasStore, ["get_peserta_payload", "get_init_peserta"]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
@@ -119,11 +171,11 @@ export default {
       this.onChangePage(val);
     },
     onRefreshPeserta() {
-      this.onPeserta(this.$route.params?.slug, true)
+      this.onPeserta(this.$route.params?.slug, true);
     },
     onRefreshShow() {
-      this.onShow(this.$route.params?.slug)
-    }
+      this.onShow(this.$route.params?.slug);
+    },
   },
   async mounted() {
     // await this.$nextTick();

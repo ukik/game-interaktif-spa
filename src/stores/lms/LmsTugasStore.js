@@ -199,10 +199,10 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       const params = {
           page: page,
           jenjang: '', // abaikan
-          kelas: normalizeToString(this.filter.kelas),
-          user: normalizeToString(this.filter.guru),
-          mapel: normalizeToString(this.filter.mapel),
-          kategori: normalizeToString(this.filter.kategori),
+          kelas: normalizeToString(this.valid_filter.kelas),
+          user: normalizeToString(this.valid_filter.guru),
+          mapel: normalizeToString(this.valid_filter.mapel),
+          kategori: normalizeToString(this.valid_filter.kategori),
           status: this.tab,
           expired: this.expired,
           // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
@@ -262,6 +262,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       console.log('onAktivitasTugas')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas/' + tugas_id + '/aktivitas/' + mode,
         method: 'get',
@@ -274,6 +275,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.aktivitas = false
       this.init.aktivitas = false;
@@ -312,12 +314,12 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       const quiz = route?.getParams?.quiz
       const mode = route?.getParams?.mode
 
-
       if (this.loading.aktivitas) return false;
       this.loading.aktivitas = true;
 
       console.log('onAktivitasWithoutTugas')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/quiz/' + quiz_id + '/aktivitas/all',
         method: 'get',
@@ -330,6 +332,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.aktivitas = false
       this.init.aktivitas = false;
@@ -353,6 +356,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas/' + slug,
         method: 'get',
@@ -366,6 +370,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -400,6 +405,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       console.log('onPeserta')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas-peserta/' + slug,
         method: 'get',
@@ -412,6 +418,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.peserta = false
 

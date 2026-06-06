@@ -128,6 +128,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/sekolah',
         method: 'get',
@@ -144,6 +145,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

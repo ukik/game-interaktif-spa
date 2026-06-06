@@ -4,7 +4,7 @@
     <!-- <q-list separator bordered> -->
     <template v-if="get_widget_tugas_overview">
 
-      <!-- <SummaryTable :item="get_widget_tugas_overview"></SummaryTable> -->
+      <SummaryTable :item="get_widget_tugas_overview"></SummaryTable>
 
       <MonthlyRankingQuizTable class="q-mt-md" :items="get_widget_quiz_score_distribution_monthly"></MonthlyRankingQuizTable>
       <MonthlyRankingModulTable class="q-mt-md" :items="get_widget_modul_score_distribution_monthly"></MonthlyRankingModulTable>
@@ -52,9 +52,12 @@ import ScoreModulDistributionByKelasTable from "./components/tugas_statistik/Sco
 import ScoreModulDistributionByMapelTable from "./components/tugas_statistik/ScoreModulDistributionByMapelTable.vue";
 import ScoreModulDistributionByTugasKategoriTable from "./components/tugas_statistik/ScoreModulDistributionByTugasKategoriTable.vue";
 import ScoreModulDistributionByTugasTable from "./components/tugas_statistik/ScoreModulDistributionByTugasTable.vue";
+import SummaryTable from "./components/tugas_statistik/SummaryTable.vue";
 
 export default {
   components: {
+    SummaryTable,
+
     ScoreQuizDistributionByKelasTable,
     ScoreQuizDistributionByMapelTable,
     ScoreQuizDistributionByTugasKategoriTable,

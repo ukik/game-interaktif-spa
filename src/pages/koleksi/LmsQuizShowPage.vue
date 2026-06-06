@@ -2,7 +2,14 @@
   <InitLoading v-if="get_init_show"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm">
     <q-card flat bordered>
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+      >
         <q-tab name="tab1" label="QUIZ" />
       </q-tabs>
 
@@ -11,7 +18,10 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="tab1" class="q-pa-none">
           <template v-if="get_show_payload?.id">
-            <ShowTab1Card :get_show_payload="get_show_payload" :get_show_kelas="get_show_kelas"></ShowTab1Card>
+            <ShowTab1Card
+              :get_show_payload="get_show_payload"
+              :get_show_kelas="get_show_kelas"
+            ></ShowTab1Card>
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
@@ -20,8 +30,17 @@
 
     <div style="height: 50px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <q-card-actions align="center" class="q-pa-none" :style="`width: ${getPageWidth()}px`">
-        <q-item @click="onOpenDialog" class="col text-white bg-primary" clickable v-ripple>
+      <q-card-actions
+        align="center"
+        class="q-pa-none"
+        :style="`width: ${getPageWidth()}px`"
+      >
+        <q-item
+          @click="onOpenDialog"
+          class="col text-white bg-primary"
+          clickable
+          v-ripple
+        >
           <q-item-section avatar>
             <q-icon text-color="white" name="post_add" />
           </q-item-section>
@@ -29,19 +48,30 @@
             <q-item-label>Buat Tugas</q-item-label>
           </q-item-section>
         </q-item>
-        <!-- <q-item class="col-6 text-white bg-positive" clickable v-ripple>
+        <q-item
+          class="col-6 text-white bg-pink"
+          clickable
+          v-ripple
+          :to="{
+            name: 'quiz_intro_public',
+            params: {
+              mode: 'all',
+              quiz: get_show_payload?.kategori,
+              slug: get_show_payload?.id,
+            },
+          }"
+        >
           <q-item-section avatar>
-            <q-icon text-color="white" name="bar_chart" />
+            <q-icon text-color="white" name="play_circle" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Leaderboard</q-item-label>
+            <q-item-label>Coba</q-item-label>
           </q-item-section>
-        </q-item> -->
+        </q-item>
       </q-card-actions>
     </q-page-sticky>
 
     <FormCreateTugas ref="FormCreateTugas" model="LmsQuiz"></FormCreateTugas>
-
   </q-page>
 </template>
 
@@ -56,7 +86,8 @@ import FormCreateTugas from "../koleksi/components/FormCreateTugas.vue";
 
 export default {
   components: {
-    ShowTab1Card, FormCreateTugas
+    ShowTab1Card,
+    FormCreateTugas,
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsBankQuizStore(store);
@@ -84,7 +115,11 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsBankQuizStore, ["get_show_payload", "get_init_show", "get_show_kelas"]),
+    ...mapState(useLmsBankQuizStore, [
+      "get_show_payload",
+      "get_init_show",
+      "get_show_kelas",
+    ]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
@@ -94,8 +129,8 @@ export default {
       this.onChangePage(val);
     },
     onOpenDialog() {
-      this.$refs.FormCreateTugas?.onOpen()
-    }
+      this.$refs.FormCreateTugas?.onOpen();
+    },
   },
   async mounted() {
     // await this.$nextTick();

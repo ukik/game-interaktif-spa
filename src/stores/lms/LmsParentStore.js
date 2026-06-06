@@ -128,6 +128,7 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/parent',
         method: 'get',
@@ -144,6 +145,7 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

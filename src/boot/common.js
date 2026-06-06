@@ -349,7 +349,7 @@ export default boot(async ({ app, ssrContext, router, store }) => {
         return this.getRole == 'teacher' ? true : false
       },
       is_student() {
-        return this.getRole == 'teacher' ? true : false
+        return this.getRole == 'student' ? true : false
       },
 
       getScreen() {

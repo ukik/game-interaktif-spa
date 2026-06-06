@@ -1,3 +1,6 @@
+
+import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
+
 import { defineStore, acceptHMRUpdate } from 'pinia';
 
 import { host } from 'src/boot/common'
@@ -21,7 +24,8 @@ export const useGlobalStore = defineStore('GlobalStore', {
       global: {
         payload: {
           list_kelas: null,
-          list_kategori: null,
+          list_kategori_quiz: null,
+          list_kategori_modul: null,
           list_guru: null,
           list_mapel: null,
         }
@@ -36,7 +40,7 @@ export const useGlobalStore = defineStore('GlobalStore', {
     get_data_global: ({ data }) => data?.global,
 
     get_data_global_list_kelas: ({ data }) => data?.global?.payload?.list_kelas ?? [],
-    get_data_global_list_kategori: ({ data }) => data?.global?.payload?.list_kategori ?? [],
+    get_data_global_list_kategori_quiz: ({ data }) => data?.global?.payload?.list_kategori_quiz ?? [],
     get_data_global_list_guru: ({ data }) => data?.global?.payload?.list_guru ?? [],
     get_data_global_list_mapel: ({ data }) => data?.global?.payload?.list_mapel ?? [],
 

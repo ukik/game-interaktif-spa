@@ -5,7 +5,7 @@
     </div>
 
     <q-list separator bordered class="text-dark">
-      <q-item v-for="(item, index) in get_peserta_payload">
+      <q-item v-for="(item, index) in get_peserta_payload" clickable v-ripple>
         <q-item-section avatar>
           <q-avatar color="dark">
             <q-img class="rounded-borders" :src="item?.siswa?.url_image"

@@ -1,3 +1,5 @@
+import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
+
 import { defineStore } from 'pinia';
 
 import { host } from 'src/boot/common'
@@ -76,6 +78,7 @@ export const useLmsDashboardTugasStatistikStore = defineStore('LmsDashboardTugas
     },
     async onIndex(page = 1) {
 
+      Loading.show()
       onRequestPrivate(this, {
         url: host + '/lms/tugas-statistik',
         method: 'get',
@@ -83,6 +86,7 @@ export const useLmsDashboardTugasStatistikStore = defineStore('LmsDashboardTugas
           page: page
         }
       }, 'index')
+      Loading.hide()
 
     },
     // async onShow(slug = null) {

@@ -128,6 +128,7 @@ export const useLmsStakeholderStore = defineStore('LmsStakeholderStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/stakeholder',
         method: 'get',
@@ -144,6 +145,7 @@ export const useLmsStakeholderStore = defineStore('LmsStakeholderStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -169,6 +171,7 @@ export const useLmsStakeholderStore = defineStore('LmsStakeholderStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/stakeholder/'+slug,
         method: 'get',
@@ -182,6 +185,7 @@ export const useLmsStakeholderStore = defineStore('LmsStakeholderStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
