@@ -34,7 +34,7 @@ export const myMixin = {
 
       // this.dialog_result = true;
 
-      return;
+      // return;
 
       const local = localStorage.getItem('record_quiz_' + quiz + '2')
 

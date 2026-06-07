@@ -118,7 +118,7 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       },
 
       getDateOnly(date) {
-        return date.split(" ")[0];
+        return date?.split(" ")[0];
       },
 
       getRankModel_1(correct, questions) {

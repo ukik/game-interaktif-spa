@@ -12,6 +12,7 @@ import routes_collection from "./routes_collection";
 import routes_activity from "./routes_activity";
 import routes_stats from "./routes_stats";
 import routes_notifications from "./routes_notifications";
+import routes_riwayat from "./routes_riwayat";
 
 
 const routes = [
@@ -99,6 +100,7 @@ const routes = [
       ...routes_activity,
       ...routes_stats,
       ...routes_notifications,
+      ...routes_riwayat,
     ]
   },
 

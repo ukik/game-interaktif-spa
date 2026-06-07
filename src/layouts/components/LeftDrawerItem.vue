@@ -66,6 +66,20 @@
         </q-item-section>
       </q-item>
 
+      <q-item-label header class="q-py-md">Statistik</q-item-label>
+      <q-item :inset-level="0.0" v-for="(item, index) in log_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
+        :active="link === item?.route_name" active-class="my-menu-link">
+        <q-item-section avatar>
+          <q-avatar color="primary" text-color="white">
+            <q-icon color="white" size="18px" :name="item.icon"></q-icon>
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ item?.title }}</q-item-label>
+          <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
 
       <q-item-label header class="q-py-md">Koleksi</q-item-label>
       <q-item v-for="(item, index) in koleksi_items" :key="index" :to="{ name: item?.route_name }" clickable v-ripple
@@ -158,9 +172,17 @@ const dashboard_items = [
   },
 ];
 
-
-
 const aktivitas_items = [
+  {
+    id: 1,
+    title: "DAFTAR TUGAS",
+    subtitle: "Kumpulan Latihan",
+    icon: "fa-solid fa-table",
+    route_name: 'lms-tugas-index',
+  },
+];
+
+const log_items = [
   {
     id: 1,
     title: "DAFTAR TUGAS",
@@ -248,6 +270,7 @@ import { ref } from 'vue'
 export default {
   setup() {
     return {
+      log_items,
       notifikasi_items,
       aktivitas_items,
       statistik_items,
