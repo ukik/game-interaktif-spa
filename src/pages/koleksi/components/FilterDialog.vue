@@ -46,46 +46,6 @@
             </template>
           </q-select>
 
-          <!-- {{ filter.kategori }} -->
-          <q-select option-value="id" clearable option-label="nama" emit-value map-options
-            class="full-width q-mt-md text-capitalize" :multiple="false" filled v-model="filter.kategori"
-            :use-input="false" input-debounce="500" label="Kategori" :options="kategoriOptions"
-            @filter="(val, update) => filterFn(val, update, 'optionsKategori', 'get_data_global_list_kategori_tugas')"
-            style="width: 250px" :behavior="is_mobile_size ? 'dialog' : 'dialog'"
-            @update:model-value="onUpdate($event, 'kategori')">
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey"> No results </q-item-section>
-              </q-item>
-            </template>
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <!-- <q-item-section avatar>
-                <q-icon :name="scope.opt.icon" />
-              </q-item-section> -->
-                <q-item-section>
-                  <q-item-label class="text-capitalize">{{ scope.opt.nama }}</q-item-label>
-                  <!-- <q-item-label caption>{{ scope.opt.nama }}</q-item-label> -->
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-
-          <!-- {{ filter.guru }} -->
-          <q-select option-value="id" clearable option-label="name" emit-value map-options class="full-width q-mt-md"
-            :multiple="false" filled v-model="filter.guru" :use-input="true" input-debounce="500" label="Guru"
-            :options="guruOptions"
-            @filter="(val, update) => filterFn(val, update, 'optionsGuru', 'get_data_global_list_guru')"
-            style="width: 250px" :behavior="is_mobile_size ? 'dialog' : 'dialog'"
-            @update:model-value="onUpdate($event, 'guru')">
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey"> No results </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-
-
         </q-card-section>
 
         <q-separator></q-separator>
@@ -105,7 +65,7 @@
 <script>
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useGlobalStore } from 'src/stores/lms/GlobalStore';
-import { useLmsTugasStore } from 'src/stores/lms/LmsTugasStore';
+import { useLmsBankQuizStore } from 'src/stores/lms/LmsBankQuizStore';
 
 let kelasList = [];
 for (let index = 0; index < 12; index++) {
@@ -120,17 +80,6 @@ export default {
   data() {
     return {
       confirm: false,
-      // kelas: [],
-      // mapel: [],
-      // kategori: [],
-      // guru: [],
-
-      // kelasList,
-
-      // optionsKelas: [],
-      // optionsKategori: [],
-      // optionsMapel: [],
-      // optionsGuru: [],
     }
   },
   watch: {
@@ -142,14 +91,14 @@ export default {
     }
   },
   computed: {
-    // ...mapState(useLmsTugasStore, ['get_index_kategori_list']),
+    // ...mapState(useLmsBankQuizStore, ['get_index_kategori_list']),
     ...mapState(useGlobalStore, [
       'get_data_global_list_kelas',
-      'get_data_global_list_kategori_tugas',
+      'get_data_global_list_kategori_quiz',
       'get_data_global_list_mapel',
       'get_data_global_list_guru'
     ]),
-    ...mapWritableState(useLmsTugasStore, ['filter', 'valid_filter']),
+    ...mapWritableState(useLmsBankQuizStore, ['filter', 'valid_filter']),
     kategoriOptions() {
       // return []
       const full = this['filter'].kategori.length >= 3
@@ -179,7 +128,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useLmsTugasStore, ['onIndex']),
+    ...mapActions(useLmsBankQuizStore, ['onIndex']),
     async onClear() {
       this['filter'].kelas = []
       this['filter'].mapel = []
@@ -192,7 +141,7 @@ export default {
       this.confirm = false
       // this.$q.loading.hide()
 
-      this.optionsKategori = [...this.get_data_global_list_kategori_tugas]
+      this.optionsKategori = [...this.get_data_global_list_kategori_quiz]
       this.optionsMapel = [...this.get_data_global_list_mapel]
       this.optionsGuru = [...this.get_data_global_list_guru]
 
@@ -200,7 +149,7 @@ export default {
     onOpen(val) {
       this.confirm = val
 
-      this['filter'].optionsKategori = [...this.get_data_global_list_kategori_tugas]
+      this['filter'].optionsKategori = [...this.get_data_global_list_kategori_quiz]
       this['filter'].optionsMapel = [...this.get_data_global_list_mapel]
       this['filter'].optionsGuru = [...this.get_data_global_list_guru]
     },

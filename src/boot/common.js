@@ -250,6 +250,7 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       },
       getNamaKelasList(kelasMap, kelasString) {
         if (!kelasString) return [];
+        if (!kelasMap) return;
 
         console.log('getNamaKelasList', kelasMap, kelasString);
 

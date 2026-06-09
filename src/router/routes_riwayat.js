@@ -2,7 +2,7 @@ const routes_riwayat = [
   // Log MODUL
   {
     path: "/lms-tugas-modul-log-index",
-    name: 'lms-tugas-modul-log-index',
+    name: 'lms_tugas_modul_log_index',
     component: () => import("pages/riwayat/LmsTugasModulLogIndexPage.vue"),
     meta: {
       logged: true,
@@ -13,7 +13,7 @@ const routes_riwayat = [
   },
   {
     path: "/lms-tugas-modul-log-show/:slug",
-    name: 'lms-tugas-modul-log-show',
+    name: 'lms_tugas_modul_log_show',
     component: () => import("pages/riwayat/LmsTugasModulLogShowPage.vue"),
     meta: {
       logged: true,
@@ -24,24 +24,24 @@ const routes_riwayat = [
   },
   // Log QUIZ
   {
-    path: "/lms-tugas-quiz-log-index",
-    name: 'lms-tugas-quiz-log-index',
+    path: "/lms-tugas-quiz-log-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
+    name: 'lms_tugas_quiz_log_index',
     component: () => import("pages/riwayat/LmsTugasQuizLogIndexPage.vue"),
     meta: {
       logged: true,
-      title: "Index Quiz Log",
-      meta: [{ name: "description", content: "Index Quiz Log" }],
+      title: "Nilai Quiz",
+      meta: [{ name: "description", content: "Nilai Quiz" }],
       page_type: 'index',
     },
   },
   {
     path: "/lms-tugas-quiz-log-show/:slug",
-    name: 'lms-tugas-quiz-log-show',
+    name: 'lms_tugas_quiz_log_show',
     component: () => import("pages/riwayat/LmsTugasQuizLogShowPage.vue"),
     meta: {
       logged: true,
-      title: "Detail Quiz Log",
-      meta: [{ name: "description", content: "Detail Quiz Log" }],
+      title: "Detail Nilai Quiz",
+      meta: [{ name: "description", content: "Detail Nilai Quiz" }],
       page_type: 'show',
     },
   },

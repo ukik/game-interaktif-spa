@@ -11,8 +11,8 @@
         <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
+        <BuatTugas />
         <q-btn flat round icon="assignment" @click="leftDrawerOpen = !leftDrawerOpen" />
-        <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
         <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile>
         <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" />
       </q-toolbar>
@@ -34,6 +34,9 @@
     <q-page-container class="row justify-center">
       <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
+
+      <ToolbarPage></ToolbarPage>
+
 
       <div id="main" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX" :class="[
         is_mobile_size ? '' : 'q-card--borderedX',
@@ -75,12 +78,14 @@ import { mapActions } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 
 import MenuProfile from "./components/MenuProfile.vue";
+import BuatTugas from "./components/BuatTugas.vue";
 
 import { useUiStore } from 'src/stores/ui'
+import ToolbarPage from "./components/ToolbarPage.vue";
 
 export default {
   components: {
-    LeftDrawerItem, MenuProfile
+    LeftDrawerItem, MenuProfile, BuatTugas, ToolbarPage
   },
   setup() {
     const leftDrawerOpen = ref(false);

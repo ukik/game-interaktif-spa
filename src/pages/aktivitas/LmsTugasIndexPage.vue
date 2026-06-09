@@ -3,10 +3,12 @@
   <q-page v-else class="justify-start items-start q-pa-sm">
     <!-- {{ tab }} {{ expired }} -->
 
-
     <!-- <template v-if="get_index_data.length > 0"> -->
     <q-list v-if="
-      normalizeToString(valid_filter?.kelas) || normalizeToString(valid_filter?.mapel) || normalizeToString(valid_filter?.kategori) || normalizeToString(valid_filter?.guru)
+      normalizeToString(valid_filter?.kelas) ||
+      normalizeToString(valid_filter?.mapel) ||
+      normalizeToString(valid_filter?.kategori) ||
+      normalizeToString(valid_filter?.guru)
     " bordered class="bg-white q-mb-sm q-py-sm text-capitalize">
 
       <q-item dense class="q-py-none" v-if="valid_filter?.kelas?.length > 0">
@@ -36,7 +38,7 @@
           <q-item-label caption>Kategori</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_quiz')?.nama }}</q-item-label>
+          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_tugas')?.nama }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-btn @click="() => onClear('kategori')"  dense round flat icon="close"></q-btn>
@@ -92,14 +94,14 @@
             <q-tab-panel name="false" class="q-pa-none">
               <div class="row q-gutter-y-md" v-if="expired_1 == 'false'">
                 <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas"
-                  route_name="lms-tugas-show">
+                  route_name="lms_tugas_show">
                 </IndexCard>
               </div>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
               <div class="row q-gutter-y-md" v-if="expired_1 == 'true'">
                 <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas"
-                  route_name="lms-tugas-show">
+                  route_name="lms_tugas_show">
                 </IndexCard>
               </div>
             </q-tab-panel>
@@ -124,14 +126,14 @@
             <q-tab-panel name="false" class="q-pa-none">
               <div class="row q-gutter-y-md" v-if="expired_2 == 'false'">
                 <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas"
-                  route_name="lms-tugas-show">
+                  route_name="lms_tugas_show">
                 </IndexCard>
               </div>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
               <div class="row q-gutter-y-md" v-if="expired_2 == 'true'">
                 <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas"
-                  route_name="lms-tugas-show">
+                  route_name="lms_tugas_show">
                 </IndexCard>
               </div>
             </q-tab-panel>
@@ -194,6 +196,8 @@ export default {
 
     const page = currentRoute.query.page || 1;
 
+    preStore.setKategoriQuiz(currentRoute.params.quiz)
+
     await preStore.onIndex(page);
   },
   data() {
@@ -251,8 +255,8 @@ export default {
       this['filter'][key] = []
 
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       // this.$q.loading.hide()
     },
     async onClearAll() {
@@ -263,8 +267,8 @@ export default {
 
       console.log('onClearAll');
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       // this.$q.loading.hide()
     }
   },

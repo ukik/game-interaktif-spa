@@ -14,6 +14,7 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useGlobalStore } from '../lms/GlobalStore';
 
 // const api = axios.create({ baseURL: host })
 
@@ -268,6 +269,9 @@ export const useAuthStore = defineStore('AuthStore', {
 
         this.onClearFormLoginRole()
         this.onClearFormLogin()
+
+
+        useGlobalStore().onRequest()
 
         return true
       }

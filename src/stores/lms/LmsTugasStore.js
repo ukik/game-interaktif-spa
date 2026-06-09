@@ -60,6 +60,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
 
       kelasList: kelasList,
@@ -74,6 +75,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
     },
     index: {
@@ -173,6 +175,10 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     get_loading_aktivitas: ({ loading }) => loading?.aktivitas,
   },
   actions: {
+    setKategoriQuiz(quiz) {
+      this.filter.kategori_quiz = quiz
+      this.valid_filter.kategori_quiz = quiz
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -203,6 +209,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           user: normalizeToString(this.valid_filter.guru),
           mapel: normalizeToString(this.valid_filter.mapel),
           kategori: normalizeToString(this.valid_filter.kategori),
+          kategori_quiz: normalizeToString(this.valid_filter.kategori_quiz),
           status: this.tab,
           expired: this.expired,
           // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2

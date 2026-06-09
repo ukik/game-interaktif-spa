@@ -124,7 +124,7 @@
             class="q-pa-sm">
             <q-list separator bordered class="text-dark">
               <q-item v-for="(item, index) in get_show_payload?.parent?.siswa" :key="index"
-                :to="{ name: 'lms-siswa-show', params: { slug: item?.user_id } }" clickable v-ripple>
+                :to="{ name: 'lms_siswa_show', params: { slug: item?.user_id } }" clickable v-ripple>
                 <q-item-section avatar>
                   <q-avatar size="80px">
                     <q-img :src="item?.siswa?.url_image" @error="item.siswa.url_image = global_url_image"

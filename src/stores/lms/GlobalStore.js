@@ -28,6 +28,7 @@ export const useGlobalStore = defineStore('GlobalStore', {
           list_kategori_modul: null,
           list_guru: null,
           list_mapel: null,
+          list_kategori_tugas: null,
         }
       }
     },
@@ -41,6 +42,7 @@ export const useGlobalStore = defineStore('GlobalStore', {
 
     get_data_global_list_kelas: ({ data }) => data?.global?.payload?.list_kelas ?? [],
     get_data_global_list_kategori_quiz: ({ data }) => data?.global?.payload?.list_kategori_quiz ?? [],
+    get_data_global_list_kategori_tugas: ({ data }) => data?.global?.payload?.list_kategori_tugas ?? [],
     get_data_global_list_guru: ({ data }) => data?.global?.payload?.list_guru ?? [],
     get_data_global_list_mapel: ({ data }) => data?.global?.payload?.list_mapel ?? [],
 

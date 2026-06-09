@@ -81,6 +81,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       create: false,
       form_tugas_edit: false,
     },
+    tugas_reference: null,
     form_tugas_create: {
       user: '',
       aktivitas: '',

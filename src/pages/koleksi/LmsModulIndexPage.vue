@@ -4,7 +4,7 @@
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-modul-show"></IndexCard>
+        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms_modul_show"></IndexCard>
       </div>
     </template>
 

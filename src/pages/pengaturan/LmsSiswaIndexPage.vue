@@ -1,27 +1,34 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-md">
-    <q-list separator bordered>
+    <q-list separator bordered class="bg-white">
       <template v-if="get_index_data.length > 0">
         <q-item v-for="(item, index) in get_index_data" :key="index" clickable v-ripple
-          :to="{ name: 'lms-stakeholder-show', params: { slug: item?.id } }">
+          :to="{ name: 'lms_siswa_show', params: { slug: item?.id } }">
           <q-item-section avatar>
             <q-avatar>
               <q-img :src="item?.url_image" @error="item.url_image = global_url_image" error-src="global_url_image" />
               <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
+
             </q-avatar>
           </q-item-section>
 
           <q-item-section>
             <q-item-label>{{ item?.name }}</q-item-label>
             <q-item-label caption lines="1">{{ item?.email }}</q-item-label>
-            <!-- <q-item-label caption lines="1">{{ item?.telpon }} / {{ item?.whatsapp }}</q-item-label> -->
+            <!-- <q-item-label caption lines="1">{{ item?.siswa?.nis }} / {{ item?.siswa?.nisn }}</q-item-label> -->
           </q-item-section>
 
-          <q-item-section side top>
+          <q-item-section side>
             <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
+            <q-item-label>
+              <q-avatar>
+                <q-icon name="group" color="grey" />
+                <q-badge floating color="teal">{{ item?.siswa?.parents_count }}</q-badge>
+              </q-avatar>
+            </q-item-label>
           </q-item-section>
-
+          <q-badge class="square top badge-left" floating color="cyan">{{ item?.id }}</q-badge>
         </q-item>
       </template>
 
@@ -40,11 +47,11 @@ import { ref } from "vue";
 
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsSekolahStore } from "src/stores/lms/LmsSekolahStore";
+import { useLmsSiswaStore } from "src/stores/lms/LmsSiswaStore";
 
 export default {
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsSekolahStore(store);
+    const preStore = useLmsSiswaStore(store);
 
     const page = currentRoute.query.page || 1;
 
@@ -77,7 +84,7 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsSekolahStore, [
+    ...mapState(useLmsSiswaStore, [
       "get_index_data",
       "get_index_current_page",
       "get_index_last_page",
@@ -87,7 +94,7 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsSekolahStore, ["onIndex", "onChangePage"]),
+    ...mapActions(useLmsSiswaStore, ["onIndex", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

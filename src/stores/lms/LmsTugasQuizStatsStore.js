@@ -45,14 +45,24 @@ for (let index = 0; index < 12; index++) {
   })
 }
 
+function dateYmd(date = new Date()) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0')
+  ].join('-')
+}
+
 export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
   state: () => ({
     tab: "tab1",
+    is_filter: false,
     filter: {
       // jenjang=&kelas=&user=&mapel=&siswa=&kategori=&durasi=semester&year=2026&day=2026-06-06&begin_date=2026-06-01&end_date=2026-06-07&week=23&month=6&triwulan=2&caturwulan=2&semester=1&sort=desc
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
       siswa: [],
       durasi: [],
@@ -79,6 +89,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
       siswa: [],
       durasi: [],
@@ -93,7 +104,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       semester: [],
       sort: 'desc',
     },
-
+    siswa_options: [],
     init: {
       index: true,
       show: true,
@@ -262,6 +273,10 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKategoriQuiz(quiz) {
+      this.filter.kategori_quiz = quiz
+      this.valid_filter.kategori_quiz = quiz
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -291,10 +306,22 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           page: page,
           jenjang: '', // abaikan
           kelas: normalizeToString(this.valid_filter.kelas),
-          user: normalizeToString(this.valid_filter.guru),
           mapel: normalizeToString(this.valid_filter.mapel),
           kategori: normalizeToString(this.valid_filter.kategori),
+          kategori_quiz: normalizeToString(this.valid_filter.kategori_quiz),
+          guru: normalizeToString(this.valid_filter.guru),
           siswa: normalizeToString(this.valid_filter.siswa),
+          durasi: normalizeToString(this.valid_filter.durasi),
+          year: normalizeToString(this.valid_filter.year),
+          day: normalizeToString(this.valid_filter.day),
+          begin_date: normalizeToString(this.valid_filter.begin_date),
+          end_date: normalizeToString(this.valid_filter.end_date),
+          week: normalizeToString(this.valid_filter.week),
+          month: normalizeToString(this.valid_filter.month),
+          triwulan: normalizeToString(this.valid_filter.triwulan),
+          caturwulan: normalizeToString(this.valid_filter.caturwulan),
+          semester: normalizeToString(this.valid_filter.semester),
+          sort: normalizeToString(this.valid_filter.sort),
           status: this.tab,
         }
 

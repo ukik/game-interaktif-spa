@@ -88,7 +88,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
     get_init_show: ({ init }) => init?.show,
 
     get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
-    get_index_data: ({ index }) => index?.payload?.payload?.data,
+    get_index_data: ({ index }) => index?.payload?.payload?.data ?? [],
     get_index_first_page_url: ({ index }) => index?.payload?.payload?.first_page_url,
     get_index_from: ({ index }) => index?.payload?.payload?.from,
     get_index_last_page: ({ index }) => index?.payload?.payload?.last_page,

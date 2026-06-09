@@ -151,7 +151,7 @@
           <q-avatar icon="assignment" color="grey-2" text-color="orange" />
         </q-item-section>
 
-        <q-item-section class="text-capitalize"> Detail Tugas  ( {{ item?.tugasable?.kategori }} ) </q-item-section>
+        <q-item-section class="text-capitalize"> Detail Tugas  ( {{ item?.tugasable?.kategori }} )  / ( {{ item?.tugas_kategori?.nama }} ) </q-item-section>
       </template>
 
       <q-separator />
@@ -204,7 +204,7 @@
 
       <q-separator></q-separator>
       <q-card-section horizontal>
-        <q-card-section class="q-pt-xs col">
+        <q-card-section class="q-pt-xs col bg-grey-1">
           <div class="text-overline">{{ item?.mapel?.nama }}</div>
           <div class="text-h6 text-capitalize q-mb-xs">
             {{ item?.tugasable?.kategori }}
@@ -217,10 +217,10 @@
           </q-item-label>
         </q-card-section>
 
-        <q-card-section class="col-4 flex flex-center justify-end">
+        <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
           <q-img
             :height="is_mobile_size ? '' : '140px'"
-            class="rounded-borders"
+            class="rounded-borders bg-white"
             :src="item?.url_image"
             @error="item.url_image = global_url_image"
             error-src="global_url_image"

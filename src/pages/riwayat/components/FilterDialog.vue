@@ -50,7 +50,7 @@
           <q-select option-value="id" clearable option-label="nama" emit-value map-options
             class="full-width q-mt-md text-capitalize" :multiple="false" filled v-model="filter.kategori"
             :use-input="false" input-debounce="500" label="Kategori" :options="kategoriOptions"
-            @filter="(val, update) => filterFn(val, update, 'optionsKategori', 'get_data_global_list_kategori_quiz')"
+            @filter="(val, update) => filterFn(val, update, 'optionsKategori', 'get_data_global_list_kategori_tugas')"
             style="width: 250px" :behavior="is_mobile_size ? 'dialog' : 'dialog'"
             @update:model-value="onUpdate($event, 'kategori')">
             <template v-slot:no-option>
@@ -145,7 +145,7 @@ export default {
     // ...mapState(useLmsTugasQuizStatsStore, ['get_index_kategori_list']),
     ...mapState(useGlobalStore, [
       'get_data_global_list_kelas',
-      'get_data_global_list_kategori_quiz',
+      'get_data_global_list_kategori_tugas',
       'get_data_global_list_mapel',
       'get_data_global_list_guru'
     ]),
@@ -187,12 +187,12 @@ export default {
       this['filter'].guru = []
 
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       this.confirm = false
       // this.$q.loading.hide()
 
-      this.optionsKategori = [...this.get_data_global_list_kategori_quiz]
+      this.optionsKategori = [...this.get_data_global_list_kategori_tugas]
       this.optionsMapel = [...this.get_data_global_list_mapel]
       this.optionsGuru = [...this.get_data_global_list_guru]
 
@@ -200,7 +200,7 @@ export default {
     onOpen(val) {
       this.confirm = val
 
-      this['filter'].optionsKategori = [...this.get_data_global_list_kategori_quiz]
+      this['filter'].optionsKategori = [...this.get_data_global_list_kategori_tugas]
       this['filter'].optionsMapel = [...this.get_data_global_list_mapel]
       this['filter'].optionsGuru = [...this.get_data_global_list_guru]
     },
@@ -235,8 +235,8 @@ export default {
     async onSubmit() {
       console.log('onSubmit');
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       this.confirm = false
       // this.$q.loading.hide()
     }

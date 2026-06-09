@@ -142,6 +142,19 @@
       </q-item-section>
     </q-item>
   </q-card-actions>
+
+
+  <q-separator></q-separator>
+  <q-card-actions class="q-pa-none">
+    <q-item class="full-width">
+      <q-item-section>
+        <q-item-label lines="1">Kelas</q-item-label>
+        <q-item-label class="">
+          <textarea readonly class="form-control" rows="8">{{ item?.json }}</textarea>
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+  </q-card-actions>
 </template>
 
 <script>
@@ -149,3 +162,17 @@ export default {
   props: ["item"],
 };
 </script>
+
+<style scoped lang="css">
+.form-control {
+    font-size: 13px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(231, 231, 231);
+    border-image: initial;
+    border-radius: 3px;
+    padding: 8px 12px;
+    transition: 0.3s;
+    width: 100% !important;
+}
+</style>

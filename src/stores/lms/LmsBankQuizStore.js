@@ -26,9 +26,40 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
   })
 }
 
+function normalizeToString(value, separator = ',') {
+  if (Array.isArray(value)) {
+    return value.join(separator)
+  }
+
+  return value == null ? '' : String(value)
+}
+
+let kelasList = [];
+for (let index = 0; index < 12; index++) {
+  kelasList.push({
+    key: index + 1,
+    label: 'Kelas ' + index
+  })
+}
 
 export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
   state: () => ({
+    filter: {
+      kelas: [],
+      mapel: [],
+      kategori: [],
+
+      kelasList: kelasList,
+
+      optionsKelas: [],
+      optionsKategori: [],
+      optionsMapel: [],
+    },
+    valid_filter: {
+      kelas: [],
+      mapel: [],
+      kategori: [],
+    },
     init: {
       index: true,
       show: true,
@@ -114,6 +145,10 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKategori(quiz) {
+      this.filter.kategori = quiz
+      this.valid_filter.kategori = quiz
+    },
     // dipanggil LmsTugasStore
     onSetShow(tugasable) {
       this.show.payload.payload = tugasable
@@ -142,13 +177,20 @@ export const useLmsBankQuizStore = defineStore('LmsBankQuizStore', {
 
       console.log('onIndex')
 
+      const params = {
+          page: page,
+          jenjang: '', // abaikan
+          kelas: normalizeToString(this.valid_filter.kelas),
+          mapel: normalizeToString(this.valid_filter.mapel),
+          kategori: normalizeToString(this.valid_filter.kategori),
+        }
+
+
       Loading.show()
       const resp = await axios({
         url: host + '/lms/quiz',
         method: 'get',
-        params: {
-          page: page
-        }
+        params: params
       })
         .then((response) => {
           // notifSuccess()

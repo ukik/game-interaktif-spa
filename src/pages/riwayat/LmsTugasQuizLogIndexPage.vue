@@ -3,10 +3,13 @@
   <q-page v-else class="justify-start items-start q-pa-sm">
 
     <q-list v-if="
-      normalizeToString(valid_filter?.kelas) || normalizeToString(valid_filter?.mapel) || normalizeToString(valid_filter?.kategori) || normalizeToString(valid_filter?.guru)
+      normalizeToString(valid_filter?.kelas) ||
+      normalizeToString(valid_filter?.mapel) ||
+      normalizeToString(valid_filter?.kategori) ||
+      normalizeToString(valid_filter?.guru)
     " bordered class="bg-white q-mb-sm q-py-sm text-capitalize">
 
-      <q-item dense class="q-py-none" v-if="valid_filter?.kelas?.length > 0">
+      <q-item dense class="q-py-none" v-if="normalizeToString(valid_filter?.kelas)">
         <q-item-section>
           <q-item-label caption>Kelas</q-item-label>
         </q-item-section>
@@ -33,7 +36,7 @@
           <q-item-label caption>Kategori</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_quiz')?.nama }}</q-item-label>
+          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_tugas')?.nama }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-btn @click="() => onClear('kategori')"  dense round flat icon="close"></q-btn>
@@ -69,7 +72,7 @@
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-tugas-quiz-stats-show" leaderboard_key="tugas_quiz_hasil"></IndexCard>
+        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms_tugas_quiz_stats_show" leaderboard_key="tugas_quiz_hasil"></IndexCard>
       </div>
     </template>
 
@@ -114,6 +117,8 @@ export default {
     const preStore = useLmsTugasQuizLogStore(store);
 
     const page = currentRoute.query.page || 1;
+
+    preStore.setKategoriQuiz(currentRoute.params.quiz)
 
     await preStore.onIndex(page);
   },
@@ -173,8 +178,8 @@ export default {
       this['filter'][key] = []
 
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       // this.$q.loading.hide()
     },
     async onClearAll() {
@@ -185,8 +190,8 @@ export default {
 
       console.log('onClearAll');
       // this.$q.loading.show()
-      await this.onIndex()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+      await this.onIndex()
       // this.$q.loading.hide()
     }
   },

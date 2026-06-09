@@ -2,19 +2,19 @@ const routes_account = [
   // SISWA
   {
     path: "/lms-siswa-index",
-    name: 'lms-siswa-index',
-    component: () => import("pages/LmsSiswaIndexPage.vue"),
+    name: 'lms_siswa_index',
+    component: () => import("pages/pengaturan/LmsSiswaIndexPage.vue"),
     meta: {
       logged: true,
-      title: "Index Siswa",
-      meta: [{ name: "description", content: "Index Siswa" }],
+      title: "Siswa",
+      meta: [{ name: "description", content: "Siswa" }],
       page_type: 'index',
     },
   },
   {
     path: "/lms-siswa-show/:slug",
-    name: 'lms-siswa-show',
-    component: () => import("pages/LmsSiswaShowPage.vue"),
+    name: 'lms_siswa_show',
+    component: () => import("pages/pengaturan/LmsSiswaShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Siswa",
@@ -25,19 +25,19 @@ const routes_account = [
   // STAKEHOLDER
   {
     path: "/lms-stakeholder-index",
-    name: 'lms-stakeholder-index',
-    component: () => import("pages/LmsStakeholderIndexPage.vue"),
+    name: 'lms_stakeholder_index',
+    component: () => import("pages/pengaturan/LmsStakeholderIndexPage.vue"),
     meta: {
       logged: true,
-      title: "Index Stakeholder",
-      meta: [{ name: "description", content: "Index Stakeholder" }],
+      title: "Stakeholder",
+      meta: [{ name: "description", content: "Stakeholder" }],
       page_type: 'index',
     },
   },
   {
     path: "/lms-stakeholder-show/:slug",
-    name: 'lms-stakeholder-show',
-    component: () => import("pages/LmsStakeholderShowPage.vue"),
+    name: 'lms_stakeholder_show',
+    component: () => import("pages/pengaturan/LmsStakeholderShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Stakeholder",
@@ -48,19 +48,19 @@ const routes_account = [
   // PARENT
   {
     path: "/lms-ortu-index",
-    name: 'lms-ortu-index',
-    component: () => import("pages/LmsParentIndexPage.vue"),
+    name: 'lms_ortu_index',
+    component: () => import("pages/pengaturan/LmsParentIndexPage.vue"),
     meta: {
       logged: true,
-      title: "Index Orangtua",
-      meta: [{ name: "description", content: "Index Orangtua" }],
+      title: "Orangtua",
+      meta: [{ name: "description", content: "Orangtua" }],
       page_type: 'index',
     },
   },
   {
     path: "/lms-ortu-show/:slug",
-    name: 'lms-ortu-show',
-    component: () => import("pages/LmsParentShowPage.vue"),
+    name: 'lms_ortu_show',
+    component: () => import("pages/pengaturan/LmsParentShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Orangtua",
@@ -71,19 +71,19 @@ const routes_account = [
   // SEKOLAH
   {
     path: "/lms-sekolah-index",
-    name: 'lms-sekolah-index',
-    component: () => import("pages/LmsSekolahIndexPage.vue"),
+    name: 'lms_sekolah_index',
+    component: () => import("pages/pengaturan/LmsSekolahIndexPage.vue"),
     meta: {
       logged: true,
-      title: "Index Sekolah",
-      meta: [{ name: "description", content: "Index Sekolah" }],
+      title: "Sekolah",
+      meta: [{ name: "description", content: "Sekolah" }],
       page_type: 'index',
     },
   },
   {
     path: "/lms-sekolah-show/:slug",
-    name: 'lms-sekolah-show',
-    component: () => import("pages/LmsSekolahShowPage.vue"),
+    name: 'lms_sekolah_show',
+    component: () => import("pages/pengaturan/LmsSekolahShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Sekolah",

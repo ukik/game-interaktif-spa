@@ -22,7 +22,7 @@
               </div>
               <template v-slot:action>
                 <q-btn color="white" :to="{
-                  name: 'lms-tugas-show',
+                  name: 'lms_tugas_show',
                   params: {
                     slug: get_show_payload?.data?.tugas?.id
                   }

@@ -47,7 +47,7 @@
       <div>
         <q-btn
           unelevated
-          :to="{ name: 'lms-tugas-quiz-log-show', params: { slug: item?.id } }"
+          :to="{ name: 'lms_tugas_quiz_log_show', params: { slug: item?.id } }"
           icon="visibility"
           color="primary"
           :label="is_mobile_size ? '' : 'Detail'"
@@ -56,7 +56,7 @@
         <q-btn
           unelevated
           class="q-ml-sm"
-          :to="{ name: 'lms-tugas-show', params: { slug: item?.id } }"
+          :to="{ name: 'lms_tugas_show', params: { slug: item?.id } }"
           icon="edit"
           color="orange"
           :label="is_mobile_size ? '' : 'Edit'"
@@ -87,7 +87,7 @@
 
       <q-separator></q-separator>
       <q-card-section horizontal>
-        <q-card-section class="q-pt-xs col">
+        <q-card-section class="q-pt-xs col bg-grey-1">
           <div class="text-overline">{{ item?.mapel?.nama }}</div>
           <div class="text-h6 text-capitalize q-mb-xs">
             {{ item?.tugasable?.kategori }}
@@ -100,10 +100,10 @@
           </q-item-label>
         </q-card-section>
 
-        <q-card-section class="col-4 flex flex-center justify-end">
+        <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
           <q-img
             :height="is_mobile_size ? '' : '140px'"
-            class="rounded-borders"
+            class="rounded-borders bg-white"
             :src="item?.url_image"
             @error="item.url_image = global_url_image"
             error-src="global_url_image"

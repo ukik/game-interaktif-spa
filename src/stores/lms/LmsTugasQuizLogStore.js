@@ -53,6 +53,7 @@ export const useLmsTugasQuizLogStore = defineStore('LmsTugasQuizLogStore', {
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
       siswa: [],
       durasi: [],
@@ -79,6 +80,7 @@ export const useLmsTugasQuizLogStore = defineStore('LmsTugasQuizLogStore', {
       kelas: [],
       mapel: [],
       kategori: [],
+      kategori_quiz: [],
       guru: [],
       siswa: [],
       durasi: [],
@@ -202,6 +204,10 @@ export const useLmsTugasQuizLogStore = defineStore('LmsTugasQuizLogStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKategoriQuiz(quiz) {
+      this.filter.kategori_quiz = quiz
+      this.valid_filter.kategori_quiz = quiz
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -233,6 +239,7 @@ export const useLmsTugasQuizLogStore = defineStore('LmsTugasQuizLogStore', {
           user: normalizeToString(this.valid_filter.guru),
           mapel: normalizeToString(this.valid_filter.mapel),
           kategori: normalizeToString(this.valid_filter.kategori),
+          kategori_quiz: normalizeToString(this.valid_filter.kategori_quiz),
           siswa: normalizeToString(this.valid_filter.siswa),
           status: this.tab,
         }

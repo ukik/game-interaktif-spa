@@ -95,23 +95,14 @@ export default {
     // const page = currentRoute.query.page || 1;
     const slug = currentRoute.params.slug || "";
 
+    preStore.setKategori(currentRoute.params.quiz)
+
     await preStore.onShow(slug);
   },
   data() {
     return {
       tab: "tab1",
     };
-  },
-  watch: {
-    get_show_payload: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        // console.log('get_index_data', m)
-      },
-    },
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
@@ -129,7 +120,7 @@ export default {
       this.onChangePage(val);
     },
     onOpenDialog() {
-      this.$refs.FormCreateTugas?.onOpen();
+      this.$refs.FormCreateTugas?.onOpen(this.get_show_payload);
     },
   },
   async mounted() {

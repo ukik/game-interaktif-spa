@@ -4,7 +4,7 @@
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms-tugas-modul-stats-show" leaderboard_key="tugas_modul_hasil"></IndexCard>
+        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms_tugas_modul_stats_show" leaderboard_key="tugas_modul_hasil"></IndexCard>
       </div>
     </template>
 
