@@ -1,8 +1,7 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm">
-
-    <q-list v-if="
+    <!-- <q-list v-if="
       normalizeToString(valid_filter?.kelas) ||
       normalizeToString(valid_filter?.mapel) ||
       normalizeToString(valid_filter?.kategori) ||
@@ -63,16 +62,84 @@
           </q-item-label>
         </q-item-section>
       </q-item>
+    </q-list> -->
 
+    <q-banner dense class="bg-grey-1 q-mb-sm rounded-borders q-card--bordered">
+      <!-- <div class="text-primary text-bold q-mb-sm">FILTER</div> -->
+      <q-chip
+        @remove="() => onClear('kelas')"
+        v-if="normalizeToString(valid_filter?.kelas)"
+        removable
+        class="text-capitalize"
+        color="teal"
+        text-color="white"
+        label="kelas"
+      ></q-chip>
+      <q-chip
+        @remove="() => onClear('mapel')"
+        v-if="normalizeToString(valid_filter?.mapel)"
+        removable
+        class="text-capitalize"
+        color="teal"
+        text-color="white"
+        label="mapel"
+      ></q-chip>
+      <q-chip
+        @remove="() => onClear('kategori')"
+        v-if="normalizeToString(valid_filter?.kategori)"
+        removable
+        class="text-capitalize"
+        color="teal"
+        text-color="white"
+        label="kategori"
+      ></q-chip>
+      <!-- <q-chip removable class="text-capitalize" color="teal" text-color="white" label="kategori_quiz"></q-chip> -->
+      <q-chip
+        @remove="() => onClear('guru')"
+        v-if="normalizeToString(valid_filter?.guru)"
+        removable
+        class="text-capitalize"
+        color="teal"
+        text-color="white"
+        label="guru"
+      ></q-chip>
 
+      <q-chip
+        @click="() => $refs?.FilterDialog?.onOpen(true)"
+        unelevated
+        rounded
+        clickable
+        outline
+        label="Filter"
+        color="primary"
+        icon="search"
+      ></q-chip>
 
-    </q-list>
-
-
+      <!-- <template v-slot:action>
+        <div class="row">
+          <q-btn
+            @click="() => $refs?.FilterDialog?.onOpen(true)"
+            unelevated
+            round
+            dense
+            outline
+            class="q-px-md"
+            color="primary"
+            icon="search"
+          ></q-btn>
+          <div style="width: 5px" />
+        </div>
+      </template> -->
+    </q-banner>
 
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms_tugas_quiz_stats_show" leaderboard_key="tugas_quiz_hasil"></IndexCard>
+        <IndexCard
+          :get_index_data="get_index_data"
+          :get_index_kelas="get_index_kelas"
+          route_name="lms_tugas_quiz_stats_show"
+          leaderboard_key="tugas_quiz_hasil"
+        ></IndexCard>
       </div>
     </template>
 
@@ -80,15 +147,27 @@
 
     <div style="height: 47px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination :current_page="get_index_current_page" :last_page="get_index_last_page" :disable="get_index_loading"
-        @onBubbleEvent="onBubbleEvent"></Pagination>
+      <Pagination
+        :current_page="get_index_current_page"
+        :last_page="get_index_last_page"
+        :disable="get_index_loading"
+        @onBubbleEvent="onBubbleEvent"
+      ></Pagination>
     </q-page-sticky>
 
-    <q-page-sticky :position="is_ipad_lower_size ? 'bottom-right' : 'top-right'"
-      :offset="is_ipad_lower_size ? [10, 0] : [10, 10]">
+    <q-page-sticky
+      :position="is_ipad_lower_size ? 'bottom-right' : 'right'" v-if="is_ipad_lower_size"
+      :offset="is_ipad_lower_size ? [10, 0] : [10, 10]"
+    >
       <!-- <q-fab icon="search" direction="up" color="accent"></q-fab> -->
-      <q-btn @click="() => $refs?.FilterDialog?.onOpen(true)" unelevated round
-        :color="is_ipad_lower_size ? 'primary' : 'pink'" size="md" icon="search"></q-btn>
+      <q-btn
+        @click="() => $refs?.FilterDialog?.onOpen(true)"
+        unelevated
+        round
+        :color="is_ipad_lower_size ? 'primary' : 'pink'"
+        size="md"
+        icon="search"
+      ></q-btn>
     </q-page-sticky>
 
     <keep-alive>
@@ -111,14 +190,14 @@ import { useGlobalStore } from "src/stores/lms/GlobalStore.js";
 export default {
   components: {
     IndexCard,
-    FilterDialog
+    FilterDialog,
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasQuizLogStore(store);
 
     const page = currentRoute.query.page || 1;
 
-    preStore.setKategoriQuiz(currentRoute.params.quiz)
+    preStore.setKategoriQuiz(currentRoute.params.quiz);
 
     await preStore.onIndex(page);
   },
@@ -149,51 +228,48 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapWritableState(useLmsTugasQuizLogStore, [
-      "tab",
-      "valid_filter",
-      "filter",
-    ]),
+    ...mapWritableState(useLmsTugasQuizLogStore, ["tab", "valid_filter", "filter"]),
     ...mapState(useLmsTugasQuizLogStore, [
       "get_index_data",
       "get_index_current_page",
       "get_index_last_page",
       "get_index_loading",
-      'get_init_index',
-      'get_index_kelas',
+      "get_init_index",
+      "get_index_kelas",
     ]),
   },
   methods: {
-    ...mapActions(useGlobalStore, [
-      'getFilter',
-      'getFilterKelas',
-    ]),
+    ...mapActions(useGlobalStore, ["getFilter", "getFilterKelas"]),
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsTugasQuizLogStore, ["onIndex", "onChangePage", "getNamaKelasList"]),
+    ...mapActions(useLmsTugasQuizLogStore, [
+      "onIndex",
+      "onChangePage",
+      "getNamaKelasList",
+    ]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
     },
     async onClear(key) {
-      this['filter'][key] = []
+      this["filter"][key] = [];
 
       // this.$q.loading.show()
-      this.valid_filter = JSON.parse(JSON.stringify(this.filter))
-      await this.onIndex()
+      this.valid_filter = JSON.parse(JSON.stringify(this.filter));
+      await this.onIndex();
       // this.$q.loading.hide()
     },
-    async onClearAll() {
-      this['filter'].kelas = []
-      this['filter'].mapel = []
-      this['filter'].kategori = []
-      this['filter'].guru = []
+    // async onClearAll() {
+    //   this['filter'].kelas = []
+    //   this['filter'].mapel = []
+    //   this['filter'].kategori = []
+    //   this['filter'].guru = []
 
-      console.log('onClearAll');
-      // this.$q.loading.show()
-      this.valid_filter = JSON.parse(JSON.stringify(this.filter))
-      await this.onIndex()
-      // this.$q.loading.hide()
-    }
+    //   console.log('onClearAll');
+    //   // this.$q.loading.show()
+    //   this.valid_filter = JSON.parse(JSON.stringify(this.filter))
+    //   await this.onIndex()
+    //   // this.$q.loading.hide()
+    // }
   },
   async mounted() {
     // await this.$nextTick();

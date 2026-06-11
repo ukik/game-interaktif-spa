@@ -2,7 +2,7 @@
   <q-card-actions align="center" class="q-py-sm">
     <q-parallax :height="is_mobile_size ? 250 : 450">
       <q-img position="50% 0%" :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-        error-src="global_url_image" />
+        :error-src="global_url_image" />
     </q-parallax>
   </q-card-actions>
   <q-separator></q-separator>

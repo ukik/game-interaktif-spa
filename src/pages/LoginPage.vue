@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center row q-pa-md">
     <form class="col-12 col-sm-8 col-sm-8 col-md-6" @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
-      <q-card >
+      <q-card v-if="!is_confirmed">
         <q-card-section class="bg-primary text-white">
           <div class="text-h6">Selamat Datang</div>
           <div class="text-subtitle2">silahkan login</div>
@@ -30,7 +30,7 @@
 
             <q-list bordered separator>
               <template v-for="user in form_login_role?.users" :key="user.id">
-                <q-item @click="onLoginRole(user.id)" clickable v-ripple>
+                <q-item @click="onLoginRole(user.id); is_confirmed = true" clickable v-ripple>
                   <q-item-section avatar>
                     <q-avatar>
                       <q-img :src="user?.url_image" @error="user.url_image = user?.default_image"
@@ -50,9 +50,12 @@
 
         <q-separator></q-separator>
 
-        <q-card-actions class="q-pa-md" align="between">
-            <q-btn label="Submit" type="submit" color="primary" />
-            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-card-actions v-if="!form_login_role?.temp_token" class="q-pa-md" align="between">
+            <q-btn label="Submit" icon="send" type="submit" color="primary" />
+            <q-btn label="Reset" @click="onClearFormLogin" type="reset" color="negative" icon="delete" outline class="q-ml-sm" />
+        </q-card-actions>
+        <q-card-actions v-else class="q-pa-md" align="center">
+            <q-btn @click="onClearFormLoginRole" label="Refresh" color="teal" outline icon="refresh"  />
         </q-card-actions>
       </q-card>
     </form>
@@ -75,7 +78,7 @@ export default {
   data() {
     return {
       accept: false,
-
+      is_confirmed: false,
       loading: false,
 
       emailRules: [
@@ -92,7 +95,7 @@ export default {
     ...mapState(useAuthStore, ['form_login', 'form_login_role', 'auth']),
   },
   methods: {
-    ...mapActions(useAuthStore, ['onLogin', 'onLoginRole']),
+    ...mapActions(useAuthStore, ['onLogin', 'onLoginRole','onClearFormLoginRole','onClearFormLogin']),
     async onSubmit() {
       this.$refs.emailRef.validate()
       this.$refs.passwordRef.validate()

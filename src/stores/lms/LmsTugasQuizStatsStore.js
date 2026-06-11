@@ -53,6 +53,8 @@ function dateYmd(date = new Date()) {
   ].join('-')
 }
 
+const currentYear = new Date().getFullYear();
+
 export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
   state: () => ({
     tab: "tab1",
@@ -65,8 +67,8 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       kategori_quiz: [],
       guru: [],
       siswa: [],
-      durasi: [],
-      year: [],
+      durasi: 'year',
+      year: currentYear,
       day: [],
       begin_date: [],
       end_date: [],
@@ -92,8 +94,8 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       kategori_quiz: [],
       guru: [],
       siswa: [],
-      durasi: [],
-      year: [],
+      durasi: 'year',
+      year: currentYear,
       day: [],
       begin_date: [],
       end_date: [],
@@ -465,6 +467,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       this.loading.rank = true;
       console.log('onRank')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/tugas-quiz-stats/' + tugas_id + '/rank',
         method: 'get',
@@ -474,6 +477,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.rank = false
       this.init.rank = false;

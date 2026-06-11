@@ -6,7 +6,7 @@
         <q-item-section avatar>
           <q-avatar color="dark">
             <q-img class="rounded-borders" :src="item?.siswa?.url_image" @error="item.siswa.url_image = global_url_image"
-              error-src="global_url_image" />
+              :error-src="global_url_image" />
           </q-avatar>
         </q-item-section>
         <q-item-section>

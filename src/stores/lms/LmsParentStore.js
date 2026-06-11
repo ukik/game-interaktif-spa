@@ -5,6 +5,7 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useRouterStore } from '../auth/RouterStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -29,6 +30,7 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useLmsParentStore = defineStore('LmsParentStore', {
   state: () => ({
+    keyword: '',
     init: {
       index: true,
       show: true,
@@ -105,6 +107,9 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKeyword(val) {
+      this.keyword = val
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -128,13 +133,17 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
 
       console.log('onIndex')
 
+      const route = useRouterStore();
+      const params = {
+        page: this.get_index_current_page ?? 1,
+        keyword: route?.getQuery?.keyword,
+      }
+
       Loading.show()
       const resp = await axios({
         url: host + '/lms/parent',
         method: 'get',
-        params: {
-          page: page
-        }
+        params: params
       })
         .then((response) => {
           // notifSuccess()
@@ -171,8 +180,9 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
-        url: host + '/lms/parent/'+slug,
+        url: host + '/lms/parent/' + slug,
         method: 'get',
       })
         .then((response) => {
@@ -184,6 +194,7 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 

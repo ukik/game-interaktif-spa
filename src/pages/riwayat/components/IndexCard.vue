@@ -13,7 +13,7 @@
             class="rounded-borders"
             :src="item?.siswa?.url_image"
             @error="item.siswa.url_image = global_url_image"
-            error-src="global_url_image"
+            :error-src="global_url_image"
           />
         </q-avatar>
       </q-item-section>
@@ -106,7 +106,7 @@
             class="rounded-borders bg-white"
             :src="item?.url_image"
             @error="item.url_image = global_url_image"
-            error-src="global_url_image"
+            :error-src="global_url_image"
           />
         </q-card-section>
       </q-card-section>

@@ -356,16 +356,16 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       getScreen() {
         return this.$q.screen.width
       },
-      higherLaptop() {
+      is_higher_laptop() {
         return this.getScreen > 1024
       },
-      equalToHigherLaptop() {
+      is_equal_to_higher_laptop() {
         return this.getScreen >= 1024
       },
-      equalToLowerLaptop() {
+      is_equal_to_lower_laptop() {
         return this.getScreen <= 1024
       },
-      lowerLaptop() {
+      is_lower_laptop() {
         return this.getScreen < 1024
       },
       is_mobile_size() {

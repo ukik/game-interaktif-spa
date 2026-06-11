@@ -49,16 +49,14 @@
         </q-item-section>
       </q-item>
 
-
-      <q-item-label header class="q-py-md">Koleksi</q-item-label>
+      <!-- Koleksi -->
+      <q-item-label header class="q-py-md"
+        >STEP 1 <q-icon name="arrow_right"></q-icon> </q-item-label
+      >
       <q-expansion-item v-model="expanded_bank" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
-            <q-avatar
-              text-color="white"
-              icon="school"
-              color="primary"
-            />
+            <q-avatar text-color="white" icon="school" color="primary" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">BANK QUIZ</q-item-label>
@@ -89,12 +87,18 @@
         </q-item>
       </q-expansion-item>
 
-
-      <q-item-label header class="q-py-md">Aktivitas</q-item-label>
+      <!-- Aktivitas -->
+      <q-item-label header class="q-py-md"
+        >STEP 2 <q-icon name="arrow_right"></q-icon> </q-item-label
+      >
       <q-expansion-item v-model="expanded_tugas" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
-            <q-avatar text-color="white" icon="fa-solid fa-clipboard-question" color="primary" />
+            <q-avatar
+              text-color="white"
+              icon="fa-solid fa-clipboard-question"
+              color="primary"
+            />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">TUGAS QUIZ</q-item-label>
@@ -125,7 +129,10 @@
         </q-item>
       </q-expansion-item>
 
-      <q-item-label header class="q-py-md">Riwayat</q-item-label>
+      <!-- Riwayat -->
+      <q-item-label header class="q-py-md"
+        >STEP 3 <q-icon name="arrow_right"></q-icon> </q-item-label
+      >
       <q-expansion-item v-model="expanded_nilai" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
@@ -162,7 +169,10 @@
         </q-item>
       </q-expansion-item>
 
-      <q-item-label header class="q-py-md">Statistik</q-item-label>
+      <!-- Statistik -->
+      <q-item-label header class="q-py-md"
+        >STEP 4 <q-icon name="arrow_right"></q-icon> </q-item-label
+      >
       <q-expansion-item v-model="expanded_ranking" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
@@ -204,11 +214,7 @@
       <q-expansion-item v-model="expanded_pengaturan" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
-            <q-avatar
-              text-color="white"
-              icon="fa-solid fa-house-user"
-              color="primary"
-            />
+            <q-avatar text-color="white" icon="fa-solid fa-house-user" color="primary" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">PENGATURAN</q-item-label>
@@ -223,7 +229,7 @@
           :to="{ name: item?.route_name }"
           clickable
           v-ripple
-          :active="link === item?.route_name"
+          :active="link === item?.route_name || link === item?.route_name_show"
           active-class="my-menu-link"
         >
           <q-item-section avatar>
@@ -238,7 +244,6 @@
           </q-item-section>
         </q-item>
       </q-expansion-item>
-
     </q-list>
   </div>
 </template>
@@ -282,30 +287,34 @@ const pengguna_items = [
   {
     id: 0,
     title: "SEKOLAH",
-    subtitle: "Profil Informasi",
+    subtitle: "Profil Sekolah",
     icon: "fa-solid fa-house-user",
     route_name: "lms_sekolah_index",
+    route_name_show: "lms_sekolah_show",
   },
   {
     id: 1,
     title: "STAKEHOLDER",
-    subtitle: "Profil Informasi",
+    subtitle: "Profil Stakeholder",
     icon: "fa-solid fa-house-user",
     route_name: "lms_stakeholder_index",
+    route_name_show: "lms_stakeholder_show",
   },
   {
     id: 2,
     title: "ORANGTUA",
-    subtitle: "Profil Informasi",
+    subtitle: "Profil Wali",
     icon: "fa-solid fa-house-user",
     route_name: "lms_ortu_index",
+    route_name_show: "lms_ortu_show",
   },
   {
     id: 3,
     title: "SISWA",
-    subtitle: "Profil Informasi",
+    subtitle: "Profil Pelajar",
     icon: "fa-solid fa-house-user",
     route_name: "lms_siswa_index",
+    route_name_show: "lms_siswa_show",
   },
 ];
 

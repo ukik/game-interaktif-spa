@@ -6,7 +6,14 @@
         <div class="text-h6">PROFIL</div>
       </q-card-actions> -->
 
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+      >
         <q-tab name="school" label="SEKOLAH" />
       </q-tabs>
 
@@ -15,15 +22,25 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="school" class="q-pa-none">
           <template v-if="get_show_payload?.id">
-            <q-card-actions align="center" class="q-py-md">
+            <q-card-actions align="center" class="q-py-sm">
+              <q-parallax :height="is_mobile_size ? 250 : 450">
+                <q-img
+                  position="50% 0%"
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
+              </q-parallax>
+            </q-card-actions>
+            <q-card-actions v-if="false" align="center" class="q-py-md">
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
-                <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  error-src="global_url_image" />
+                <q-img
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
               </q-avatar>
-              <!-- <div class="col-12 text-center">
-                <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>
-              </div> -->
               <!-- </q-parallax> -->
             </q-card-actions>
             <q-separator></q-separator>
@@ -167,6 +184,22 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+
+    <div style="height: 40px"></div>
+
+    <FormDialog ref="FormDialog"></FormDialog>
+
+    <q-page-sticky position="bottom" :offset="[0, 10]">
+      <q-btn
+        @click="onOpenDialog"
+        unelevated
+        rounded
+        label="edit"
+        color="pink"
+        size="md"
+        icon="edit"
+      ></q-btn>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -176,6 +209,7 @@ import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsSekolahStore } from "src/stores/lms/LmsSekolahStore";
+import FormDialog from "./forms/sekolah/FormDialog.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
@@ -186,21 +220,13 @@ export default {
 
     await preStore.onShow(slug);
   },
+  components: {
+    FormDialog,
+  },
   data() {
     return {
       tab: "school",
     };
-  },
-  watch: {
-    get_show_payload: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        // console.log('get_index_data', m)
-      },
-    },
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
@@ -212,6 +238,9 @@ export default {
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
+    },
+    onOpenDialog() {
+      this.$refs.FormDialog?.onOpen(this.get_show_payload?.id);
     },
   },
   async mounted() {

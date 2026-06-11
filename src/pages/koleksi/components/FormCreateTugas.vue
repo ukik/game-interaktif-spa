@@ -48,7 +48,7 @@
                   class="rounded-borders bg-white"
                   :src="tugas_reference?.url_image"
                   @error="tugas_reference.url_image = global_url_image"
-                  error-src="global_url_image"
+                  :error-src="global_url_image"
                 />
               </q-card-section>
             </q-card-section>

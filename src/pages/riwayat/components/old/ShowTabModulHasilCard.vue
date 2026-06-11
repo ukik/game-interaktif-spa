@@ -41,7 +41,7 @@
                   fit="fill"
                   :src="item?.siswa?.url_image"
                   @error="item.siswa.url_image = global_url_image"
-                  error-src="global_url_image"
+                  :error-src="global_url_image"
                 />
                 <q-badge
                   :color="getRankColor(index)"
@@ -115,7 +115,7 @@
               class="rounded-borders"
               :src="item?.siswa?.url_image"
               @error="item.siswa.url_image = global_url_image"
-              error-src="global_url_image"
+              :error-src="global_url_image"
             />
           </q-avatar>
         </q-item-section>

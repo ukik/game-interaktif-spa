@@ -5,6 +5,7 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useRouterStore } from '../auth/RouterStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -29,6 +30,7 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
   state: () => ({
+    keyword: '',
     init: {
       index: true,
       show: true,
@@ -105,6 +107,18 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKeyword(val) {
+      this.keyword = val
+    },
+    syncAfterUpdate(payload) {
+      this.get_index_data.forEach((item, index) => {
+        if(item?.id == payload?.id) {
+          this.index.payload.payload.data[index] = payload
+        }
+      })
+
+      this.show.payload.payload = payload
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -128,13 +142,18 @@ export const useLmsSiswaStore = defineStore('LmsSiswaStore', {
 
       console.log('onIndex')
 
+      const route = useRouterStore();
+      const params = {
+        page: this.get_index_current_page ?? 1,
+        keyword: route?.getQuery?.keyword,
+      }
+
+
       Loading.show()
       const resp = await axios({
         url: host + '/lms/siswa',
         method: 'get',
-        params: {
-          page: page
-        }
+        params: params
       })
         .then((response) => {
           // notifSuccess()

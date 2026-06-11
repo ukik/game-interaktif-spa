@@ -6,6 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
+import { useLmsTugasStore } from '../LmsTugasStore';
 
 
 function getToday() {
@@ -160,6 +161,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + url,
         method: 'get',
@@ -176,6 +178,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
           // notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading[key] = false
       this.init[key] = false;
@@ -301,7 +304,16 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
         formData.append(key, value)
       })
 
-      console.log('formData', this.form_tugas_edit)
+      console.log('form_tugas_edit', this.form_tugas_edit)
+      console.log('tugas_reference', this.tugas_reference)
+
+      formData.append('siswa_ids_old', JSON.stringify(this.tugas_reference?.siswa_ids))
+      formData.append('siswa_ids', JSON.stringify(this.form_tugas_edit?.siswa_ids))
+
+      console.table([...formData.entries()])
+      // for (const [key, value] of formData.entries()) {
+      //   console.log(key, value)
+      // }
 
       Loading.show()
 
@@ -323,8 +335,6 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       this.loading.form_tugas_edit = false
 
-      console.log('onLogin', resp)
-
       if (resp == false) return false
       if (!resp?.data) return false
 
@@ -341,6 +351,9 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
           this.form_tugas_edit.url_image = this.preview
           this.preview = null
         }
+
+        this.tugas_reference = JSON.parse(JSON.stringify(this.form_tugas_edit))
+        useLmsTugasStore().syncAfterUpdate(this.form_tugas_edit)
 
         return true
       }

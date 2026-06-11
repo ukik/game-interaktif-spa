@@ -19,7 +19,7 @@
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
                 <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  error-src="global_url_image" />
+                  :error-src="global_url_image" />
               </q-avatar>
               <!-- <div class="col-12 text-center">
                 <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>

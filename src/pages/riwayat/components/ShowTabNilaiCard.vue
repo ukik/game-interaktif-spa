@@ -8,7 +8,7 @@
           class="rounded-borders"
           :src="item?.user?.url_image"
           @error="item.user.url_image = global_url_image"
-          error-src="global_url_image"
+          :error-src="global_url_image"
         />
       </q-avatar>
     </q-item-section>
@@ -28,7 +28,7 @@
           class="rounded-borders"
           :src="item?.siswa?.url_image"
           @error="item.siswa.url_image = global_url_image"
-          error-src="global_url_image"
+          :error-src="global_url_image"
         />
       </q-avatar>
     </q-item-section>

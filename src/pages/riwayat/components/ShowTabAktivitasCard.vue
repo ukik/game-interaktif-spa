@@ -5,7 +5,7 @@
         position="50% 0%"
         :src="get_show_payload?.url_image"
         @error="get_show_payload.url_image = global_url_image"
-        error-src="global_url_image"
+        :error-src="global_url_image"
       />
     </q-parallax>
   </q-card-actions>

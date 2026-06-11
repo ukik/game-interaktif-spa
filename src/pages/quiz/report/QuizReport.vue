@@ -14,7 +14,7 @@
               class="rounded-borders"
               :src="get_report_siswa?.url_image"
               @error="get_report_siswa.url_image = global_url_image"
-              error-src="global_url_image"
+              :error-src="global_url_image"
             />
           </q-avatar>
         </q-item-section>

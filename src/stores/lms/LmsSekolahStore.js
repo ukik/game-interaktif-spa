@@ -1,10 +1,11 @@
-import { defineStore } from 'pinia';
+import { defineStore, acceptHMRUpdate } from 'pinia';
 
 import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
 import { host } from 'src/boot/common'
 
 import axios from 'axios'
+import { useRouterStore } from '../auth/RouterStore';
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
   Notify.create({
@@ -29,6 +30,7 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
 
 export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
   state: () => ({
+    keyword: '',
     init: {
       index: true,
       show: true,
@@ -105,6 +107,18 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
     get_loading: ({ loading }) => loading?.local,
   },
   actions: {
+    setKeyword(val) {
+      this.keyword = val
+    },
+    syncAfterUpdate(payload) {
+      this.get_index_data.forEach((item, index) => {
+        if(item?.id == payload?.id) {
+          this.index.payload.payload.data[index] = payload
+        }
+      })
+
+      this.show.payload.payload = payload
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;
@@ -128,13 +142,18 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
 
       console.log('onIndex')
 
+      const route = useRouterStore();
+      const params = {
+        page: this.get_index_current_page ?? 1,
+        keyword: route?.getQuery?.keyword,
+      }
+
+
       Loading.show()
       const resp = await axios({
         url: host + '/lms/sekolah',
         method: 'get',
-        params: {
-          page: page
-        }
+        params: params
       })
         .then((response) => {
           // notifSuccess()
@@ -171,6 +190,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
 
       console.log('onShow')
 
+      Loading.show()
       const resp = await axios({
         url: host + '/lms/sekolah/'+slug,
         method: 'get',
@@ -184,6 +204,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
           notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading.local = false
 
@@ -203,3 +224,7 @@ export const useLmsSekolahStore = defineStore('LmsSekolahStore', {
     },
   },
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useLmsSekolahStore, import.meta.hot))
+}

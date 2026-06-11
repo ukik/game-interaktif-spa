@@ -26,7 +26,7 @@
               <q-img
                 :src="item?.url_image"
                 @error="item.url_image = global_url_image"
-                error-src="global_url_image"
+                :error-src="global_url_image"
               />
             </q-avatar>
             <!-- <div class="col-12 text-center">

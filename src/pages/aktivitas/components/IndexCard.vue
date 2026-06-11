@@ -6,7 +6,6 @@
     flat
     bordered
   >
-
     <q-item>
       <q-item-section avatar>
         <q-avatar>
@@ -14,7 +13,7 @@
             class="rounded-borders"
             :src="item?.user?.url_image"
             @error="item.user.url_image = global_url_image"
-            error-src="global_url_image"
+            :error-src="global_url_image"
           />
         </q-avatar>
       </q-item-section>
@@ -151,7 +150,10 @@
           <q-avatar icon="assignment" color="grey-2" text-color="orange" />
         </q-item-section>
 
-        <q-item-section class="text-capitalize"> Detail Tugas  ( {{ item?.tugasable?.kategori }} )  / ( {{ item?.tugas_kategori?.nama }} ) </q-item-section>
+        <q-item-section class="text-capitalize">
+          Detail Tugas ( {{ item?.tugasable?.kategori }} ) / (
+          {{ item?.tugas_kategori?.nama }} )
+        </q-item-section>
       </template>
 
       <q-separator />
@@ -223,7 +225,7 @@
             class="rounded-borders bg-white"
             :src="item?.url_image"
             @error="item.url_image = global_url_image"
-            error-src="global_url_image"
+            :error-src="global_url_image"
           />
         </q-card-section>
       </q-card-section>

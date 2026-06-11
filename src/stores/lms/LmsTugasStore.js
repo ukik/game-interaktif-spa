@@ -179,6 +179,15 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       this.filter.kategori_quiz = quiz
       this.valid_filter.kategori_quiz = quiz
     },
+    syncAfterUpdate(payload) {
+      this.get_index_data.forEach((item, index) => {
+        if(item?.id == payload?.id) {
+          this.index.payload.payload.data[index] = payload
+        }
+      })
+
+      this.show.payload.payload = payload
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;

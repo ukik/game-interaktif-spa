@@ -19,7 +19,7 @@
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
                 <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  error-src="global_url_image" />
+                  :error-src="global_url_image" />
               </q-avatar>
               <!-- <div class="col-12 text-center">
                 <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>
@@ -137,15 +137,30 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+
+    <div style="height: 40px"></div>
+
+    <FormDialog ref="FormDialog"></FormDialog>
+
+    <q-page-sticky position="bottom" :offset="[0, 10]">
+      <q-btn
+        @click="onOpenDialog"
+        unelevated
+        rounded
+        label="edit"
+        color="pink"
+        size="md"
+        icon="edit"
+      ></q-btn>
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
-import { ref } from "vue";
-
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsStakeholderStore } from "src/stores/lms/LmsStakeholderStore";
+import FormDialog from "./forms/stakeholder/FormDialog.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
@@ -160,6 +175,9 @@ export default {
     return {
       tab: "stakeholder",
     };
+  },
+  components: {
+    FormDialog,
   },
   watch: {
     get_show_payload: {
@@ -182,6 +200,9 @@ export default {
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
+    },
+    onOpenDialog(payload) {
+      this.$refs.FormDialog?.onOpen(payload?.id);
     },
   },
   async mounted() {

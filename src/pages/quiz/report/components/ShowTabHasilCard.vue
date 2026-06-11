@@ -27,7 +27,7 @@
 
               <q-avatar class="q-mb-xs" size="75px">
                 <q-img fit="fill" :src="item?.siswa?.url_image" @error="item.siswa.url_image = global_url_image"
-                  error-src="global_url_image" />
+                  :error-src="global_url_image" />
                 <q-badge :color="getRankColor(index)" class="badge-left round q-pa-sm flex flex-center text-body2"
                   style="width:30px; height:30px; " floating>
                   <!-- <q-icon name="fa-brands fa-web-awesome"></q-icon> -->
@@ -89,7 +89,7 @@
         <q-item-section avatar>
           <q-avatar color="dark">
             <q-img class="rounded-borders" :src="item?.siswa?.url_image"
-              @error="item.siswa.url_image = global_url_image" error-src="global_url_image" />
+              @error="item.siswa.url_image = global_url_image" :error-src="global_url_image" />
           </q-avatar>
         </q-item-section>
         <q-item-section>

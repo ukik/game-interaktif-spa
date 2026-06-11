@@ -6,7 +6,7 @@
         <div class="text-h6">PROFIL</div>
       </q-card-actions> -->
 
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
         <q-tab name="student" label="SISWA" />
         <q-tab name="parent" label="ORANGTUA">
           <q-badge color="teal" v-if="get_show_payload?.siswa?.parents_count" floating>{{
@@ -23,7 +23,7 @@
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
                 <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  error-src="global_url_image" />
+                  :error-src="global_url_image" />
               </q-avatar>
               <!-- <div class="col-12 text-center">
                 <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>
@@ -154,10 +154,10 @@
             <q-list separator bordered class="text-dark">
               <q-item v-for="(item, index) in get_show_payload?.siswa?.parents" :key="index"
                 :to="{ name: 'lms_ortu_show', params: { slug: item?.user_id } }" clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar size="80px">
+                <q-item-section avatar top>
+                  <q-avatar>
                     <q-img :src="item?.parent?.url_image" @error="item.parent.url_image = global_url_image"
-                      error-src="global_url_image" />
+                      :error-src="global_url_image" />
                   </q-avatar>
                 </q-item-section>
 

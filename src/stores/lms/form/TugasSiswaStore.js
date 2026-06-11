@@ -69,6 +69,7 @@ export const useTugasSiswaStore = defineStore('TugasSiswaStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + url,
         method: 'get',
@@ -85,6 +86,7 @@ export const useTugasSiswaStore = defineStore('TugasSiswaStore', {
           // notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading[key] = false
       this.init[key] = false;

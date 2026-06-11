@@ -45,6 +45,7 @@ export const useTugasKategoriStore = defineStore('TugasKategoriStore', {
 
       console.log('onIndex')
 
+      Loading.show()
       const resp = await axios({
         url: host + url,
         method: 'get',
@@ -61,6 +62,7 @@ export const useTugasKategoriStore = defineStore('TugasKategoriStore', {
           // notifFailed()
           return false
         })
+      Loading.hide()
 
       this.loading[key] = false
       this.init[key] = false;

@@ -289,6 +289,7 @@ export const useAuthStore = defineStore('AuthStore', {
       formData.append('user_id', user_id);
       formData.append('token', this.form_login_role?.temp_token);
 
+      Loading.show()
       const resp = await axios({
         url: host + '/login-role',
         method: 'post',
@@ -303,6 +304,8 @@ export const useAuthStore = defineStore('AuthStore', {
           notifFailed(err?.response?.data?.message?.toString())
           return false
         })
+
+      Loading.hide()
 
       this.loading.form_login = false
 

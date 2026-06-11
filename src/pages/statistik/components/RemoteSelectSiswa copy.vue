@@ -32,7 +32,7 @@
               class="rounded-borders"
               :src="scope.opt?.url_image"
               @error="scope.opt.url_image = global_url_image"
-              error-src="global_url_image"
+              :error-src="global_url_image"
             />
           </q-avatar>
         </q-item-section>

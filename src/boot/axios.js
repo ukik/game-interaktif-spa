@@ -72,7 +72,7 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     }
 
     // muhamadduki@gmail.com
-    if (config.method === 'post') {
+    if (config.method === 'post' || config.method === 'put' || config.method === 'patch') {
       if (config.data instanceof FormData) {
         // Upload file via FormData (umum untuk banyak file sekaligus)
         config.headers['Content-Type'] = 'multipart/form-data'

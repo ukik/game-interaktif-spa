@@ -82,9 +82,7 @@
       </q-item>
     </q-list> -->
 
-
-
-    <q-banner dense class="bg-grey-1 text-white q-mb-sm">
+    <q-banner dense class="bg-grey-1 q-mb-sm rounded-borders q-card--bordered">
       <q-chip
         @remove="() => onClear('durasi')"
         v-if="normalizeToString(valid_filter?.durasi)"
@@ -163,7 +161,6 @@
         label="siswa"
       ></q-chip>
 
-
       <q-chip
         @remove="() => onClear('day')"
         v-if="normalizeToString(valid_filter?.day) && valid_filter?.durasi == 'day'"
@@ -225,7 +222,18 @@
         text-color="white"
         label="semester"
       ></q-chip>
-      <template v-slot:action>
+
+      <q-chip
+        @click="() => $refs?.FilterDialog?.onOpen(true)"
+        unelevated
+        rounded
+        clickable
+        outline
+        label="Filter"
+        color="primary"
+        icon="search"
+      ></q-chip>
+      <!-- <template v-slot:action>
         <div class="row">
           <q-btn
             @click="() => $refs?.FilterDialog?.onOpen(true)"
@@ -238,18 +246,8 @@
             icon="search"
           ></q-btn>
           <div style="width: 5px" />
-          <!-- <q-btn
-            round
-            @click="onClearAll"
-            unelevated
-            dense
-            outline
-            class="q-px-md"
-            color="red"
-            icon="delete"
-          ></q-btn> -->
         </div>
-      </template>
+      </template> -->
     </q-banner>
 
     <template v-if="get_index_data.length > 0">
@@ -276,7 +274,7 @@
     </q-page-sticky>
 
     <q-page-sticky
-      :position="is_ipad_lower_size ? 'bottom-right' : 'top-right'"
+      :position="is_ipad_lower_size ? 'bottom-right' : 'right'" v-if="is_ipad_lower_size"
       :offset="is_ipad_lower_size ? [10, 0] : [10, 10]"
     >
       <!-- <q-fab icon="search" direction="up" color="accent"></q-fab> -->
@@ -328,11 +326,7 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapWritableState(useLmsTugasQuizStatsStore, [
-      "tab",
-      "valid_filter",
-      "filter",
-    ]),
+    ...mapWritableState(useLmsTugasQuizStatsStore, ["tab", "valid_filter", "filter"]),
     ...mapState(useLmsTugasQuizStatsStore, [
       "get_index_data",
       "get_index_current_page",

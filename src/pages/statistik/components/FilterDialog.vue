@@ -140,7 +140,7 @@
                       class="rounded-borders"
                       :src="scope.opt?.url_image"
                       @error="scope.opt.url_image = global_url_image"
-                      error-src="global_url_image"
+                      :error-src="global_url_image"
                     />
                   </q-avatar>
                 </q-item-section>
@@ -362,7 +362,7 @@ export default {
       this["filter"]["guru"] = []
       this["filter"]["siswa"] = []
       // this["filter"]["durasi"] = []
-      this["filter"]["year"] = []
+      this["filter"]["year"] = new Date().getFullYear();
       this["filter"]["day"] = []
       this["filter"]["begin_date"] = []
       this["filter"]["end_date"] = []

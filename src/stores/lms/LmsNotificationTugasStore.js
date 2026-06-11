@@ -179,11 +179,24 @@ export const useLmsNotificationTugasStore = defineStore('LmsNotificationTugasSto
         return this.init[this.tab] = false;
       }
 
-      const params = {
-        page: this.index?.payload?.payload?.current_page ?? 1,
+      let params = {
+        // page: this.index?.payload?.payload?.current_page ?? 1,
         status: route?.getQuery?.status,
         keyword: route?.getQuery?.keyword,
       }
+
+      switch (this.tab) {
+        case 'index':
+          params['page'] = this.get_index_current_page ?? 1
+          break;
+        case 'index_read':
+          params['page'] = this.get_index_read_current_page ?? 1
+          break;
+        case 'index_unread':
+          params['page'] = this.get_index_unread_current_page ?? 1
+          break;
+      }
+
 
       console.log('onIndex ----------------', params)
 
