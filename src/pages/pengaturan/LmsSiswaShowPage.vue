@@ -9,8 +9,8 @@
       <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
         <q-tab name="student" label="SISWA" />
         <q-tab name="parent" label="ORANGTUA">
-          <q-badge color="teal" v-if="get_show_payload?.siswa?.parents_count" floating>{{
-            get_show_payload?.siswa?.parents_count }}</q-badge>
+          <q-badge color="teal" v-if="get_show_payload?.siswa?.parents.length > 0" floating>{{
+            get_show_payload?.siswa?.parents.length }}</q-badge>
         </q-tab>
       </q-tabs>
 
@@ -153,7 +153,7 @@
             class="q-pa-sm">
             <q-list separator bordered class="text-dark">
               <q-item v-for="(item, index) in get_show_payload?.siswa?.parents" :key="index"
-                :to="{ name: 'lms_ortu_show', params: { slug: item?.user_id } }" clickable v-ripple>
+                :to="{ name: 'lms_ortu_show', params: { slug: item?.parent?.id } }" clickable v-ripple>
                 <q-item-section avatar top>
                   <q-avatar>
                     <q-img :src="item?.parent?.url_image" @error="item.parent.url_image = global_url_image"
@@ -170,7 +170,7 @@
 
                 <q-item-section side top>
                   <q-item-label caption lines="1">{{ item?.parent?.created_at_human }}</q-item-label>
-                  <q-badge class="q-mt-xs">ID: {{ item?.user_id }}</q-badge>
+                  <q-badge class="q-mt-xs">ID: {{ item?.parent?.id }}</q-badge>
                 </q-item-section>
 
               </q-item>
@@ -180,15 +180,31 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+
+
+    <div style="height: 40px"></div>
+
+    <FormDialog ref="FormDialog"></FormDialog>
+
+    <q-page-sticky position="bottom" :offset="[0, 10]">
+      <q-btn
+        @click="onOpenDialog"
+        unelevated
+        rounded
+        label="edit"
+        color="pink"
+        size="md"
+        icon="edit"
+      ></q-btn>
+    </q-page-sticky>
   </q-page>
 </template>
 
 <script>
-import { ref } from "vue";
-
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsSiswaStore } from "src/stores/lms/LmsSiswaStore";
+import FormDialog from "./forms/siswa/FormDialog.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
@@ -198,6 +214,9 @@ export default {
     const slug = currentRoute.params.slug || "";
 
     await preStore.onShow(slug);
+  },
+  components: {
+    FormDialog
   },
   data() {
     return {
@@ -225,6 +244,9 @@ export default {
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
+    },
+    onOpenDialog(payload) {
+      this.$refs.FormDialog?.onOpen(payload?.id);
     },
   },
   async mounted() {

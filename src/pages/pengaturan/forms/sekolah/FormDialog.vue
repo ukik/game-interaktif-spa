@@ -76,14 +76,16 @@ export default {
       // this.form_edit = payload
       // if(typeof(this.form_edit['image'] === 'string')) this.form_edit['image'] = null
 
+      const ref = JSON.parse(JSON.stringify(this.get_show_payload))
+
       if (this.$route.name == "lms_sekolah_index") {
         await this.onShow(id);
-        this.form_edit = this.get_show_payload;
-        this.form_edit['image'] = null
       } else if (this.$route.name == "lms_sekolah_show") {
-        this.form_edit = this.get_show_payload;
-        this.form_edit['image'] = null
       }
+
+      this.form_edit = ref;
+      this.form_edit['image'] = null
+
     },
     showValidationErrors() {
       const form = this.$refs.formRef;

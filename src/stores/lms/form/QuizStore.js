@@ -201,7 +201,7 @@ export const useQuizStore = defineStore('QuizStore', {
 
       Loading.hide()
       this.loading.form = false
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false

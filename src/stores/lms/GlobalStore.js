@@ -48,6 +48,20 @@ export const useGlobalStore = defineStore('GlobalStore', {
     get_data_global_list_mapel: ({ data }) => data?.global?.payload?.list_mapel ?? [],
     get_data_global_list_jenjang: ({ data }) => data?.global?.payload?.list_jenjang ?? [],
 
+    get_kelas_option_lists:  ({ data }) => {
+
+      const object = data?.global?.payload?.list_kelas ?? {}
+      let temp = []
+      for (const key in object) {
+        // if (!Object.hasOwn(object, key)) continue;
+        temp.push({
+          value: key,
+          label: object[key]
+        })
+      }
+      return temp
+    },
+
     get_loading_global: ({ loading }) => loading?.global,
   },
   actions: {

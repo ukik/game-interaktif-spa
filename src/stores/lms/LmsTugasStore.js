@@ -179,7 +179,8 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
       this.filter.kategori_quiz = quiz
       this.valid_filter.kategori_quiz = quiz
     },
-    syncAfterUpdate(payload) {
+    syncAfterUpdate(val) {
+      let payload = JSON.parse(JSON.stringify(val))
       this.get_index_data.forEach((item, index) => {
         if(item?.id == payload?.id) {
           this.index.payload.payload.data[index] = payload

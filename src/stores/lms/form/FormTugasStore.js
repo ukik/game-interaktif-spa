@@ -102,7 +102,9 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       status: '',
 
       kelas_id: 2,
-      siswa_ids: [],
+
+      siswa_ids_old: [], // additional
+      siswa_ids: [], // additional
     },
     form_tugas_edit: {
       user: '',
@@ -121,6 +123,9 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       kelas_id: '',
       siswa_ids: [],
+
+      siswa_ids_old: [], // additional
+      siswa_ids: [], // additional
     },
     preview: null,
   }),
@@ -242,7 +247,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       this.loading.create = false
 
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false

@@ -74,17 +74,18 @@ export default {
       this.dialog = true;
       this.id = id;
 
+      const ref = JSON.parse(JSON.stringify(this.get_show_payload))
+
       switch (this.$route.name) {
         case "lms_stakeholder_index":
           await this.onShow(id);
-          this.form_edit = this.get_show_payload;
-          this.form_edit["image"] = null;
           break;
         case "lms_stakeholder_show":
-          this.form_edit = this.get_show_payload;
-          this.form_edit["image"] = null;
           break;
       }
+
+      this.form_edit = ref;
+      this.form_edit["image"] = null;
     },
     showValidationErrors() {
       const form = this.$refs.formRef;

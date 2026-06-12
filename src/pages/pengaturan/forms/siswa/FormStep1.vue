@@ -11,6 +11,19 @@
   old_password: '',
 
  -->
+      <div>
+        <q-input
+          class="q-mb-md"
+          v-model="form_edit.email"
+          readonly
+          label="Email"
+          outlined
+          :error="true"
+          error-message="Tidak bisa dirubah (hubungi Admin)"
+          hint="Tidak bisa dirubah (hubungi Admin)"
+          :rules="[(val) => !!val || 'wajib diisi']"
+        />
+      </div>
 
       <q-input
         v-model="form_edit.name"
@@ -22,8 +35,8 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.stakeholder.nip"
-        label="NIP"
+        v-model="form_edit.siswa.nis"
+        label="NIS"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -31,8 +44,8 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.stakeholder.nuptk"
-        label="NUPTK"
+        v-model="form_edit.siswa.nisn"
+        label="NISN"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -43,15 +56,6 @@
       <q-input
         v-model="form_edit.telpon"
         label="Telpon"
-        outlined
-        hint="required"
-        :rules="[(val) => !!val || 'wajib diisi']"
-      />
-    </div>
-    <div>
-      <q-input
-        v-model="form_edit.email"
-        label="Email"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -70,16 +74,13 @@
 
     <div class="q-mb-lg">
       <q-select
-        v-model="form_edit.role"
-        :options="[
-          { value: 'principal', label: 'KEPSEK' },
-          { value: 'teacher', label: 'GURU' },
-        ]"
+        v-model="form_edit.siswa.kelas_id"
+        :options="get_kelas_option_lists"
         option-label="label"
         option-value="value"
         emit-value
         map-options
-        label="Role"
+        label="Kelas"
         outlined
         hint="required"
         :use-input="false"
@@ -152,7 +153,7 @@ export default {
   },
   computed: {
     ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "preview"]),
-    ...mapState(useGlobalStore, ["get_data_global_list_jenjang"]),
+    ...mapState(useGlobalStore, ["get_kelas_option_lists"]),
   },
   watch: {
     "form_edit.image"(file) {

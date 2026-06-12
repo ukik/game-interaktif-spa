@@ -200,7 +200,7 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
 
       this.loading.create = false
 
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false
@@ -276,7 +276,7 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
 
       this.loading.edit = false
 
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false

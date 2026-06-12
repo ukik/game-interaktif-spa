@@ -140,7 +140,8 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     } else if (route.getMeta?.logged) {
       await onClearAuth()
       await cookies.remove('accessToken')
-      router.replace({ name: 'login' })
+      await router.replace({ name: 'login' })
+      location.reload();
     }
 
 

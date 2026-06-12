@@ -6,7 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
-import { useLmsStakeholderStore } from '../LmsStakeholderStore';
+import { useLmsSiswaStore } from '../LmsSiswaStore';
 
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
@@ -52,12 +52,13 @@ function formatLaravelError(error) {
 }
 
 const form = {
-  // table: stakeholder
-  stakeholder: {
+  // table: siswa
+  siswa: {
     uuid: '',
     user_id: '',
-    nip: '',
-    nuptk: '',
+    kelas_id: '',
+    nis: '',
+    nisn: '',
   },
   // table: users
   name: '',
@@ -73,6 +74,8 @@ const form = {
   new_password: '',
   new_password_confirmation: '',
   old_password: '',
+  // addition
+  ortu_id: [],
 }
 
 export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore', {
@@ -91,6 +94,9 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
     form_create: JSON.parse(JSON.stringify(form)),
     form_edit: JSON.parse(JSON.stringify(form)),
     preview: null,
+    // additional
+    parent_options: [], // from ajax saat pencarian
+    selected_parents: [],
   }),
   getters: {
     get_init: ({ init }) => init,
@@ -119,7 +125,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
       if (my_init) this.init.edit = my_init
       if (!this.init.edit) return false
 
-      this.onRequest('/lms/stakeholder/' + tugas_id + '/edit', 'form_edit')
+      this.onRequest('/lms/siswa/' + tugas_id + '/edit', 'form_edit')
     },
     async onRequest(url = '', key = '') {
 
@@ -185,15 +191,20 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         }
       })
       formData.append('nama', this.form_create.name)
-      formData.append('nip', this.form_create.stakeholder.nip)
-      formData.append('nuptk', this.form_create.stakeholder.nuptk)
+      formData.append('nis', this.form_create.siswa.nis)
+      formData.append('nisn', this.form_create.siswa.nisn)
+      formData.append('kelas', this.form_create.siswa.kelas_id)
+      this.form_create.ortu_id.forEach(element => {
+        formData.append('ortu_id[]', element)
+      });
 
-      console.log('formData', this.form_create)
+      // console.log('formData', this.form_create)
+      console.table([...formData.entries()])
 
       Loading.show()
 
       const resp = await axios({
-        url: host + '/lms/stakeholder',
+        url: host + '/lms/siswa',
         method: 'post',
         data: formData,
       })
@@ -210,7 +221,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
 
       this.loading.create = false
 
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false
@@ -265,15 +276,20 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         formData.append(key, value)
       })
       formData.append('nama', this.form_edit.name)
-      formData.append('nip', this.form_edit.stakeholder.nip)
-      formData.append('nuptk', this.form_edit.stakeholder.nuptk)
+      formData.append('nis', this.form_edit.siswa.nis)
+      formData.append('nisn', this.form_edit.siswa.nisn)
+      formData.append('kelas', this.form_edit.siswa.kelas_id)
+      this.form_edit.ortu_id.forEach(element => {
+        formData.append('ortu_id[]', element)
+      });
 
       console.log('formData', this.form_edit)
+      console.table([...formData.entries()])
 
       Loading.show()
 
       const resp = await axios({
-        url: host + '/lms/stakeholder/' + id,
+        url: host + '/lms/siswa/' + id,
         method: 'post',
         data: formData,
       })
@@ -290,7 +306,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
 
       this.loading.edit = false
 
-      console.log('onLogin', resp)
+
 
       if (resp == false) return false
       if (!resp?.data) return false
@@ -305,7 +321,20 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
           this.preview = null
         }
 
-        useLmsStakeholderStore().syncAfterUpdate(this.form_edit)
+        // untuk menyesuaikan API
+        let _temp = []
+        this.selected_parents?.forEach(element => {
+            _temp.push({
+              parent: element
+            })
+        });
+
+        this.form_edit.siswa.parents = JSON.parse(JSON.stringify(_temp))
+        this.reference = JSON.parse(JSON.stringify(this.form_edit))
+
+        console.log('FINISH UPDATE', this.form_edit)
+
+        useLmsSiswaStore().syncAfterUpdate(this.form_edit)
 
         return true
       }
