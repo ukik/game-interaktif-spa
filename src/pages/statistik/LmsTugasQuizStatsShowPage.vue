@@ -22,8 +22,8 @@
       <q-tab-panels keep-alive v-model="tab" animated>
         <q-tab-panel name="tab1" class="q-pa-none">
           <template v-if="get_show_payload?.data.length > 0">
-
-            <ShowTabQuizHasilEssayCard v-if="get_show_tugas[0]?.tugasable?.kategori == 'essay'"
+            <ShowTabQuizHasilEssayCard
+              v-if="get_show_tugas[0]?.tugasable?.kategori == 'essay'"
               @onRefresh="onRefreshShow"
               :tugas="get_show_tugas[0]"
               :payload="get_show_payload"
@@ -31,14 +31,14 @@
             >
             </ShowTabQuizHasilEssayCard>
 
-            <ShowTabQuizHasilCard v-else
+            <ShowTabQuizHasilCard
+              v-else
               @onRefresh="onRefreshShow"
               :tugas="get_show_tugas[0]"
               :payload="get_show_payload"
               :top="get_show_top"
             >
             </ShowTabQuizHasilCard>
-
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
@@ -81,7 +81,6 @@
       </q-tab-panels>
     </q-card>
 
-
     <!-- <div style="height: 50px"></div>
     <q-page-sticky position="bottom" :offset="[0, 0]">
       <q-card-actions
@@ -106,7 +105,6 @@
       </q-card-actions>
     </q-page-sticky>
      -->
-
   </q-page>
 </template>
 

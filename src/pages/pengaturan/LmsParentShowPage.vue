@@ -6,11 +6,11 @@
         <div class="text-h6">PROFIL</div>
       </q-card-actions> -->
 
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
         <q-tab name="parent" label="ORANGTUA" />
         <q-tab name="student" label="SISWA">
-          <q-badge color="teal" v-if="get_show_payload?.parent?.siswa_count" floating>{{
-            get_show_payload?.parent?.siswa_count }}</q-badge>
+          <q-badge color="teal" v-if="get_show_payload?.parent?.siswa.length > 0 " floating>{{
+            get_show_payload?.parent?.siswa.length }}</q-badge>
         </q-tab>
       </q-tabs>
 
@@ -151,6 +151,23 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+
+    <div style="height: 40px"></div>
+
+    <FormDialog ref="FormDialog"></FormDialog>
+
+    <q-page-sticky position="bottom" :offset="[0, 10]">
+      <q-btn
+        @click="onOpenDialog"
+        unelevated
+        rounded
+        label="edit"
+        color="pink"
+        size="md"
+        icon="edit"
+      ></q-btn>
+    </q-page-sticky>
+
   </q-page>
 </template>
 
@@ -160,6 +177,7 @@ import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsParentStore } from "src/stores/lms/LmsParentStore";
+import FormDialog from "./forms/parent/FormDialog.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
@@ -169,6 +187,9 @@ export default {
     const slug = currentRoute.params.slug || "";
 
     await preStore.onShow(slug);
+  },
+  components: {
+    FormDialog
   },
   data() {
     return {
@@ -196,6 +217,9 @@ export default {
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
+    },
+    onOpenDialog(payload) {
+      this.$refs.FormDialog?.onOpen(payload?.id);
     },
   },
   async mounted() {

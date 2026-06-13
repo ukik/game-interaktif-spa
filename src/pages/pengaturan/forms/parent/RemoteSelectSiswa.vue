@@ -13,10 +13,10 @@
     v-model="current"
     :use-input="true"
     input-debounce="250"
-    label="Parent"
+    label="Siswa"
     :options="options"
     @filter="onFilter"
-    hint="Cari Ortu"
+    hint="Cari Siswa: nama, email, nis, nisn"
     :behavior="is_mobile_size ? 'dialog' : 'dialog'"
     :options-disable="optionDisable"
     @update:model-value="onChange"
@@ -40,7 +40,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label class="text-capitalize">{{ scope.opt.name }}</q-item-label>
-          <q-item-label caption>{{ scope.opt.email }}</q-item-label>
+          <q-item-label caption>{{ scope.opt.email }} / NIS: {{ scope.opt.siswa?.nis }} / NISN: {{ scope.opt.siswa?.nisn }}</q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -50,7 +50,7 @@
 <script>
 import axios from "axios";
 import { mapWritableState } from "pinia";
-import { useFormPengaturanSiswaStore } from "src/stores/lms/form/FormPengaturanSiswaStore";
+import { useFormPengaturanParentStore } from "src/stores/lms/form/FormPengaturanParentStore";
 
 export default {
   props: {
@@ -65,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapWritableState(useFormPengaturanSiswaStore, {
+    ...mapWritableState(useFormPengaturanParentStore, {
       options: "options",
       selected_options: "selected_options",
     }),
@@ -89,11 +89,11 @@ export default {
 
         if (!Array.isArray(val)) return;
 
-        if (val?.length > 3) {
-          this.current = val.slice(0, 3);
+        if (val?.length > 5) {
+          this.current = val.slice(0, 5);
           this.$q.notify({
             type: 'warning',
-            message: 'Maksimal 3 Orangtua',
+            message: 'Maksimal 5 Siswa',
             position: 'top'
           });
           return;
@@ -115,7 +115,7 @@ export default {
 
         this.selected_options = [...new Map(temp.map(item => [item.id, item])).values()];
 
-        // this.selected_options = temp
+        console.log('vm.selected_options', vm.selected_options)
         // console.log("onBubbleEvent", this.selected_options, this.options);
 
         // if (!val) return;
@@ -130,12 +130,12 @@ export default {
       this.current = payload
     },
     onChange(val) {
-      if (val?.length > 3) {
-        this.current = val.slice(0, 3);
+      if (val?.length > 5) {
+        this.current = val.slice(0, 5);
 
         this.$q.notify({
           type: "warning",
-          message: "Maksimal 3 Orangtua",
+          message: "Maksimal 5 Siswa",
           position: 'top'
         });
 
@@ -146,7 +146,7 @@ export default {
       this.$emit("onBubbleEvent", val);
     },
     optionDisable(opt) {
-      return this.current.length >= 3 && !this.current.includes(opt.id);
+      return this.current.length >= 5 && !this.current.includes(opt.id);
     },
     async onFilter(val, update) {
       if (val?.length < 2) {

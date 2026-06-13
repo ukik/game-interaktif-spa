@@ -3,7 +3,7 @@
   <q-card>
 
     <q-card-section>
-      <div class="text-h6">Monthly Ranking Quiz</div>
+      <div class="text-h6">Semester Ranking Quiz</div>
     </q-card-section>
 
     <q-separator></q-separator>

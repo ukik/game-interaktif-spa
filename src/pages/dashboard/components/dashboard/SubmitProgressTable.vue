@@ -3,7 +3,7 @@
   <q-card>
 
     <q-card-section>
-      <div class="text-h6">item?.</div>
+      <div class="text-h6">Submit Progress</div>
     </q-card-section>
 
     <q-separator></q-separator>

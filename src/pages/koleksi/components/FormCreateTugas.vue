@@ -1,6 +1,7 @@
 <template>
   <q-form ref="formRef">
     <q-dialog
+      @hide="step = 1"
       v-model="dialog"
       persistent
       maximized
@@ -258,6 +259,8 @@ export default {
 
       console.log("onSubmit", this.onCreate());
       this.onCreate();
+
+      this.dialog = false;
     },
   },
   mounted() {

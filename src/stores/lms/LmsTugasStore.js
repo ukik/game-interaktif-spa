@@ -134,6 +134,11 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
         payload: null
       },
     },
+    peserta: {
+      payload: {
+        payload: null
+      },
+    },
     loading: {
       'local': false,
       aktivitas: false,
@@ -168,7 +173,10 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     get_peserta_payload: ({ peserta }) => peserta?.payload?.payload,
 
     get_aktivitas_payload: ({ aktivitas }) => aktivitas?.payload?.payload,
+    get_aktivitas_payload_status_durasi: ({ aktivitas }) => aktivitas?.payload?.payload?.status_durasi,
     get_aktivitas_tugasable: ({ aktivitas }) => aktivitas?.payload?.payload?.tugasable,
+
+
 
     get_loading: ({ loading }) => loading?.local,
     get_loading_peserta: ({ loading }) => loading?.local,
@@ -402,7 +410,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
         this.show = data
 
-        const payload = data?.payload?.payload
+        const payload = JSON.parse(JSON.stringify(data?.payload?.payload))
         console.log('onShow payload', payload)
 
         const form_edit = useFormTugasStore();

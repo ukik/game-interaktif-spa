@@ -3,8 +3,7 @@
     <div class="text-center q-mb-sm">
       <q-btn @click="onRefresh" outline dense icon="refresh" class="q-px-sm" rounded label="refresh" unelevated color="positive"></q-btn>
     </div>
-
-    <q-list separator bordered class="text-dark">
+    <q-list v-if="get_peserta_payload?.length > 0" separator bordered class="text-dark">
       <q-item v-for="(item, index) in get_peserta_payload">
         <q-item-section avatar>
           <q-avatar color="dark">

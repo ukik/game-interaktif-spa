@@ -29,15 +29,16 @@
     </q-card>
 
     <div style="height: 50px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
+    <q-page-sticky v-if="getPageWidth" position="bottom" :offset="[0, 0]">
       <q-card-actions
         align="center"
         class="q-pa-none"
         :style="`width: ${getPageWidth()}px`"
       >
         <q-item
+          v-if="(is_teacher || enabled)"
           @click="onOpenDialog"
-          class="col text-white bg-primary"
+          class="col-6 text-white bg-primary"
           clickable
           v-ripple
         >
@@ -49,7 +50,7 @@
           </q-item-section>
         </q-item>
         <q-item
-          class="col-6 text-white bg-pink"
+          class="col text-white bg-pink"
           clickable
           v-ripple
           :to="{

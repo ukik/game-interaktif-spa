@@ -92,6 +92,7 @@
 
     <q-card-actions align="center">
       <q-btn
+        v-if="(is_teacher || enabled)"
         unelevated
         @click="onBuat(item)"
         icon="post_add"
@@ -129,7 +130,7 @@ export default {
   emits: ["onBuat"],
   methods: {
     onBuat(item) {
-      console.log('onBuat', item)
+      console.log("onBuat", item);
       this.$emit("onBuat", item);
     },
   },

@@ -2,6 +2,7 @@
   <q-form ref="formRef">
     <q-dialog
       @hide="step = 1"
+      id="FormParentDialog"
       v-model="dialog"
       persistent
       maximized
@@ -16,18 +17,19 @@
         "
       >
         <q-toolbar class="bg-primary text-white">
-          <q-toolbar-title> Edit Tugas </q-toolbar-title>
+          <q-toolbar-title> Edit Orangtua </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
         </q-toolbar>
 
-        <q-card-section
-          ref="scrollArea"
-          style="height: calc(100% - 50px - 53px)"
-          class="scroll q-pa-sm q-pt-md"
-        >
+        <q-card-section style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
+          <!-- <q-list bordered class="q-pa-sm">
+            <FormStep1 />
+          </q-list> -->
+
           <q-stepper
+            header-nav
             bordered
             class="q-pa-none"
             flat
@@ -36,62 +38,61 @@
             color="primary"
             animated
           >
-            <q-step dense :name="1" title="Tugas" icon="settings" :done="step > 1">
+            <q-step
+              dense
+              :name="1"
+              title="Orangtua"
+              icon="settings"
+              class="q-pa-md"
+              :done="step > 1"
+            >
               <FormStep1 v-if="step == 1" />
             </q-step>
 
-            <q-step :name="2" title="Peserta" icon="group" :done="step > 2">
+            <q-step
+              :name="2"
+              title="Siswa"
+              icon="group"
+              class="q-pa-md"
+              :done="step > 2"
+            >
               <FormStep2 v-if="step == 2" />
             </q-step>
-
-            <q-step :name="3" title="Status" icon="lock" :done="step > 3">
-              <FormStep3 v-if="step == 3" />
-            </q-step>
-
-            <!-- <template v-slot:navigation>
-              <q-stepper-navigation>
-                <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 2 ? 'Finish' : 'Continue'" />
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back"
-                  class="q-ml-sm" />
-              </q-stepper-navigation>
-            </template> -->
           </q-stepper>
-
-          <div style="height: 10px"></div>
         </q-card-section>
 
         <q-separator></q-separator>
 
-        <q-card-actions align="center" class="q-px-sm bg-redX">
+        <q-card-actions align="center">
           <q-btn
             unelevated
             v-if="step > 1"
             icon="chevron_left"
-            color="primary"
+            color="teal"
             @click="$refs.stepper.previous()"
             class="q-mx-sm"
+            label="Mundur"
           />
 
           <q-btn
             unelevated
-            v-if="step <= 2"
+            v-if="step == 1"
             @click="nextStep"
-            color="primary"
-            label="Lanjut"
+            color="teal"
+            label="Maju"
             icon-right="chevron_right"
           />
 
           <q-btn
-            type="subtmi"
+          v-if="step >= 2"
+            type="submit"
             unelevated
-            v-if="step == 3"
             color="primary"
             label="Proses"
             icon-right="check"
             @click="onSubmit"
             class="q-mx-sm"
           />
-          <!-- <q-btn @click="step1 = 1" label="Lanjut" icon-right="send" type="submit" color="primary" /> -->
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -99,38 +100,85 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapWritableState } from "pinia";
+import { mapActions, mapWritableState, mapState } from "pinia";
 import FormStep1 from "./FormStep1.vue";
 import FormStep2 from "./FormStep2.vue";
-import FormStep3 from "./FormStep3.vue";
-import { useFormTugasStore } from "src/stores/lms/form/FormTugasStore";
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
+import { useFormPengaturanParentStore } from "src/stores/lms/form/FormPengaturanParentStore";
+import { useLmsParentStore } from "src/stores/lms/LmsParentStore.js";
 
 export default {
   components: {
     FormStep1,
     FormStep2,
-    FormStep3,
   },
-  props: ["model"],
   data() {
     return {
       dialog: false,
+      id: null,
       step: 1,
     };
   },
+  watch: {
+    step(val) {
+      console.log('form_edit', this.form_edit)
+    }
+  },
   computed: {
-    ...mapWritableState(useFormTugasStore, ["form_tugas_edit","tugas_reference"]),
-    ...mapState(useLmsTugasStore, ['get_show_payload']),
+    ...mapState(useLmsParentStore, ["get_show_payload"]),
+    ...mapWritableState(useFormPengaturanParentStore, ["form_edit", "selected_options", "options", "reference"]),
   },
   methods: {
-    ...mapActions(useFormTugasStore, {
+    ...mapActions(useFormPengaturanParentStore, {
       onUpdate: "onUpdate",
     }),
-    onOpen() {
+    ...mapActions(useLmsParentStore, ["onShow"]),
+    async onOpen(id) {
       this.dialog = true;
-      this.form_tugas_edit.aktivitas = this.model + "-" + this.$route.params?.slug;
-      this.tugas_reference = JSON.parse(JSON.stringify(this.get_show_payload))
+      this.id = id;
+
+      const form_edit = JSON.parse(JSON.stringify(this.get_show_payload));
+      const reference = JSON.parse(JSON.stringify(this.get_show_payload));
+      // console.log("ref?.parent?.siswa", form_edit?.parent?.siswa.map(item => item.siswa.id), form_edit);
+
+      switch (this.$route.name) {
+        case "lms_ortu_index":
+          await this.onShow(id);
+          break;
+        case "lms_ortu_show":
+          break;
+      }
+      this.form_edit = form_edit;
+      this.form_edit["image"] = null;
+      this.form_edit['siswa_id'] = form_edit?.parent?.siswa.map(item => item.siswa.id)
+
+      this.reference = reference;
+      this.reference["image"] = null;
+      this.reference['siswa_id'] = reference?.parent?.siswa.map(item => item.siswa.id)
+
+      if(this.options.length <= 0) this.options = form_edit?.parent?.siswa.map(item => item.siswa)
+
+      this.selected_options = form_edit?.parent?.siswa.map(item => item.siswa)
+
+      console.log('this.options', this.options)
+      console.log("this.reference['siswa_id']", this.reference['siswa_id'])
+    },
+    async nextStep() {
+      const isValid = await this.$refs.formRef.validate();
+
+      if (!isValid) {
+        this.step <= 2;
+
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.showValidationErrors();
+            this.waitAndScrollToError();
+          }, 300);
+        });
+
+        return;
+      }
+
+      this.$refs.stepper.next();
     },
     showValidationErrors() {
       const form = this.$refs.formRef;
@@ -189,25 +237,11 @@ export default {
         }
       }, 150);
     },
-    async nextStep() {
-      const isValid = await this.$refs.formRef.validate();
 
-      if (!isValid) {
-        this.step <= 2;
-
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.showValidationErrors();
-            this.waitAndScrollToError();
-          }, 300);
-        });
-
-        return;
-      }
-
-      this.$refs.stepper.next();
-    },
     async onSubmit() {
+
+      console.log('form_edit', this.form_edit)
+
       const isValid = await this.$refs.formRef.validate();
 
       if (!isValid) {
@@ -221,25 +255,18 @@ export default {
         return;
       }
 
-      await this.onUpdate(this.$route?.params?.slug);
-
-      // karena bagian ini dari server, harus di update setelah sukses
-      this.form_tugas_edit.status_durasi = this.diffFromNow(
-        this.form_tugas_edit?.begin_date,
-        this.form_tugas_edit?.end_date
-      );
+      await this.onUpdate(this.form_edit?.id);
       this.dialog = false;
     },
   },
-  mounted() {
-    // if(this.form_tugas_edit?.status_durasi?.status == 'selesai') return
-    // this.onOpen()
+  async mounted() {
+
   },
 };
 </script>
 
-<style lang="scss">
-.q-stepper__step-inner {
-  padding: 12px !important;
+<style>
+#FormParentDialog .q-stepper__step-inner {
+  padding: 0px;
 }
 </style>

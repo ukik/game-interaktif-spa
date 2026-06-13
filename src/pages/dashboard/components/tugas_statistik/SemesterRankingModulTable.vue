@@ -1,9 +1,9 @@
 <template>
 
-  <q-card>
+  <q-card v-if="items?.length > 0">
 
     <q-card-section>
-      <div class="text-h6">Monthly Ranking Modul</div>
+      <div class="text-h6">Semester Ranking Modul</div>
     </q-card-section>
 
     <q-separator></q-separator>

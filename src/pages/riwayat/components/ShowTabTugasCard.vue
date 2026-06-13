@@ -138,6 +138,7 @@
           }}</q-item-label>
         </q-item-section>
       </q-item>
+
       <q-item>
         <q-item-section>
           <q-item-label lines="1" caption>Prioritas</q-item-label>
@@ -150,14 +151,15 @@
       </q-item>
       <q-item>
         <q-item-section>
-          <q-item-label lines="1" caption>Prioritas</q-item-label>
+          <q-item-label lines="1" caption>Kategori</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-item-label class="text-dark">{{
-            get_show_tugas_payload?.priority
+            get_show_tugas_payload?.tugasable?.kategori
           }}</q-item-label>
         </q-item-section>
       </q-item>
+
       <q-item>
         <q-item-section>
           <q-item-label lines="1" caption>Kelas</q-item-label>
@@ -179,7 +181,7 @@
       </q-item>
       <q-item>
         <q-item-section>
-          <q-item-label class="q-mb-sm" lines="1" caption>Kategori</q-item-label>
+          <q-item-label class="q-mb-sm" lines="1" caption>Tipe</q-item-label>
 
           <q-item-label class="text-dark text-capitalize">{{
             get_show_tugas_payload?.tugas_kategori?.nama

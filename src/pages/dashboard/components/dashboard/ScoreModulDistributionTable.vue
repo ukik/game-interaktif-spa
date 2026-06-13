@@ -1,6 +1,6 @@
 <template>
 
-  <q-card>
+  <q-card v-if="items?.length > 0">
 
     <q-card-section>
       <div class="text-h6">Score Modul Distribution</div>

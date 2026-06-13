@@ -135,12 +135,11 @@
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="publish" class="q-pa-none">
-        <template v-if="get_index_data?.length > 0 && tab == 'publish'">
+        <template v-if="tab == 'publish'">
           <q-tabs
             v-model="expired_1"
             dense
             inline-label
-            @update:model-value="expired = expired_1"
             class="bg-teal text-grey-4 shadow-2"
             active-color="white"
             indicator-color="white"
@@ -151,24 +150,28 @@
           </q-tabs>
           <q-tab-panels v-model="expired_1" animated>
             <q-tab-panel name="false" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="expired_1 == 'false'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'false'">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
                   route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
                 >
                 </IndexCard>
               </div>
+              <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="expired_1 == 'true'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'true'">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
                   route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
                 >
                 </IndexCard>
               </div>
+              <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
           </q-tab-panels>
         </template>
@@ -176,12 +179,11 @@
       </q-tab-panel>
 
       <q-tab-panel name="draft" class="q-pa-none">
-        <template v-if="get_index_data?.length > 0 && tab == 'draft'">
+        <template v-if="tab == 'draft'">
           <q-tabs
             v-model="expired_2"
             dense
             inline-label
-            @update:model-value="expired = expired_1"
             class="bg-teal text-grey-4 shadow-2"
             active-color="white"
             indicator-color="white"
@@ -192,24 +194,28 @@
           </q-tabs>
           <q-tab-panels v-model="expired_2" animated>
             <q-tab-panel name="false" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="expired_2 == 'false'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'false'">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
                   route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
                 >
                 </IndexCard>
               </div>
+              <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="expired_2 == 'true'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'true'">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
                   route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
                 >
                 </IndexCard>
               </div>
+              <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
           </q-tab-panels>
         </template>
@@ -291,10 +297,21 @@ export default {
         this.onIndex();
       },
     },
-    expired: {
+    expired_1: {
       // immediate: true, // 🔥 ini kunci
       deep: true,
-      handler(val) {
+      async handler(val) {
+        this.expired = val
+        await this.$nextTick()
+        this.onIndex();
+      },
+    },
+    expired_2: {
+      // immediate: true, // 🔥 ini kunci
+      deep: true,
+      async handler(val) {
+        this.expired = val
+        await this.$nextTick()
         this.onIndex();
       },
     },

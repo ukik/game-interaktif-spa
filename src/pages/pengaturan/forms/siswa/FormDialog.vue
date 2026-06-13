@@ -125,7 +125,7 @@ export default {
   },
   computed: {
     ...mapState(useLmsSiswaStore, ["get_show_payload"]),
-    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "selected_parents", "parent_options", "reference"]),
+    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "selected_options", "options", "reference"]),
   },
   methods: {
     ...mapActions(useFormPengaturanSiswaStore, {
@@ -155,9 +155,11 @@ export default {
       this.reference["image"] = null;
       this.reference['ortu_id'] = reference?.siswa?.parents.map(item => item.parent.id)
 
-      if(this.parent_options.length <= 0) this.parent_options = form_edit?.siswa?.parents.map(item => item.parent)
+      if(this.options.length <= 0) this.options = form_edit?.siswa?.parents.map(item => item.parent)
 
-      console.log('this.parent_options', this.parent_options)
+      this.selected_options = form_edit?.siswa?.parents.map(item => item.parent)
+
+      console.log('this.options', this.options)
       console.log('form_edit', this.form_edit)
     },
     async nextStep() {
@@ -258,8 +260,7 @@ export default {
     },
   },
   async mounted() {
-    // if(this.form_tugas_edit?.status_durasi?.status == 'selesai') return
-    // this.onOpen()
+
   },
 };
 </script>

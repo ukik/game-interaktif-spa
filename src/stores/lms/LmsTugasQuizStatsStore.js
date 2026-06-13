@@ -112,6 +112,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       show: true,
       report: true,
       rank: true,
+      peserta: true,
     },
     index: {
       "payload": {
@@ -186,16 +187,23 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
         siswa: null,
       },
     },
+    peserta: {
+      payload: {
+        payload: null
+      },
+    },
     loading: {
       report: false,
       'local': false,
       form: false,
+      peserta: false,
     }
   }),
   getters: {
     get_init_index: ({ init }) => init?.index,
     get_init_show: ({ init }) => init?.show,
     get_init_report: ({ init }) => init?.report,
+    get_init_peserta: ({ init }) => init?.peserta,
 
     get_index_current_page: ({ index }) => index?.payload?.payload?.current_page,
     get_index_data: ({ index }) => index?.payload?.payload?.data,
@@ -217,6 +225,8 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
     get_index_current_user: ({ index }) => index?.payload?.currentUser,
     get_index_current_siswa: ({ index }) => index?.payload?.currentSiswa,
     get_index_current_kategori: ({ index }) => index?.payload?.currentKategori,
+
+    get_peserta_payload: ({ peserta }) => peserta?.payload?.payload,
 
     get_show_kelas: ({ show }) => show?.payload?.kelas,
     get_show_top: ({ show }) => show?.payload?.top,
@@ -449,13 +459,13 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       if (resp == false) return false
       if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
+      // if (resp?.data?.isLogin) {
 
         this[key] = resp?.data
         console.log('onRequest', this[key])
 
         return true
-      }
+      // }
     },
 
     async onRank(tugas_id = null, init = false) {
@@ -484,7 +494,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
 
       if (resp == false) return false
       if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
+      // if (resp?.data?.isLogin) {
 
         const data = resp?.data
         console.log('onRank', data)
@@ -492,7 +502,7 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
         this.rank = data
 
         return true
-      }
+      // }
     },
 
     async onReplace(siswa_id) {
@@ -564,7 +574,48 @@ export const useLmsTugasQuizStatsStore = defineStore('LmsTugasQuizStatsStore', {
       }
     },
 
+    async onPeserta(slug = null, my_init = false) {
 
+      if (my_init) this.init.peserta = my_init
+      if (!this.init.peserta) return false
+
+      if (this.loading.peserta) return false;
+
+      this.loading.peserta = true;
+
+      console.log('onPeserta')
+
+      Loading.show()
+      const resp = await axios({
+        url: host + '/lms/tugas-peserta/' + slug+'/report',
+        method: 'get',
+      })
+        .then((response) => {
+          return response
+        })
+        .catch((err) => {
+          console.log(err)
+          notifFailed()
+          return false
+        })
+      Loading.hide()
+
+      this.loading.peserta = false
+
+      this.init.peserta = false;
+
+      if (resp == false) return false
+      if (!resp?.data) return false
+      // if (resp?.data?.isLogin) {
+
+        const data = resp?.data
+        console.log('onPeserta', data)
+
+        this.peserta = data
+
+        return true
+      // }
+    },
   },
 });
 

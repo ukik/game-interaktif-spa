@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="ribbon"
-    :class="[
-      `pos-${position}`,
-      `shape-${shape}`
-    ]"
-    :style="cssVars"
-  >
+  <div v-if="get_aktivitas_payload_status_durasi?.status == 'selesai'" class="ribbon" :class="[`pos-${position}`, `shape-${shape}`]" :style="cssVars">
     <div class="ribbon-shape">
       <span class="ribbon-text">
         <slot>TIME'S UP</slot>
@@ -16,52 +9,65 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { mapState } from "pinia";
+import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
+import { computed } from "vue";
 
 const props = defineProps({
   position: {
     type: String,
-    default: 'top-right',
+    default: "top-right",
   },
 
   shape: {
     type: String,
-    default: 'skew',
+    default: "skew",
   },
 
   backgroundColor: {
     type: String,
-    default: '#6980fe',
+    default: "#6980fe",
   },
 
   textColor: {
     type: String,
-    default: '#ffffff',
+    default: "#ffffff",
   },
 
   size: {
     type: String,
-    default: '200px',
+    default: "200px",
   },
 
   bandSize: {
     type: String,
-    default: '62px',
+    default: "62px",
   },
 
   fontSize: {
     type: String,
-    default: '20px',
-  }
-})
+    default: "20px",
+  },
+});
 
 const cssVars = computed(() => ({
-  '--size': props.size,
-  '--band-size': props.bandSize,
-  '--color': props.backgroundColor,
-  '--text-color': props.textColor,
-  '--font-size': props.fontSize,
-}))
+  "--size": props.size,
+  "--band-size": props.bandSize,
+  "--color": props.backgroundColor,
+  "--text-color": props.textColor,
+  "--font-size": props.fontSize,
+}));
+</script>
+
+<script>
+export default {
+  computed: {
+    ...mapState(useLmsTugasStore, ['get_aktivitas_payload_status_durasi']),
+  },
+  mounted() {
+    console.log('useLmsTugasStore', this.get_aktivitas_payload_status_durasi)
+  }
+};
 </script>
 
 <style scoped>
@@ -239,38 +245,22 @@ const cssVars = computed(() => ({
 
 /* TOP RIGHT */
 .pos-top-right.shape-clip .ribbon-shape {
-  clip-path: polygon(
-    100% 0,
-    20% 0,
-    100% 80%
-  );
+  clip-path: polygon(100% 0, 20% 0, 100% 80%);
 }
 
 /* TOP LEFT */
 .pos-top-left.shape-clip .ribbon-shape {
-  clip-path: polygon(
-    0 0,
-    0 80%,
-    80% 0
-  );
+  clip-path: polygon(0 0, 0 80%, 80% 0);
 }
 
 /* BOTTOM RIGHT */
 .pos-bottom-right.shape-clip .ribbon-shape {
-  clip-path: polygon(
-    100% 20%,
-    100% 100%,
-    20% 100%
-  );
+  clip-path: polygon(100% 20%, 100% 100%, 20% 100%);
 }
 
 /* BOTTOM LEFT */
 .pos-bottom-left.shape-clip .ribbon-shape {
-  clip-path: polygon(
-    0 20%,
-    80% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 20%, 80% 100%, 0 100%);
 }
 
 /* =========================================================

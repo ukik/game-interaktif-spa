@@ -15,11 +15,13 @@
           <th>Judul</th>
           <th>Kategori</th>
           <th>Tipe</th>
-          <th>Kelas</th>
-          <th>Mapel</th>
+
           <th>Sisa Hari</th>
           <th>Status</th>
           <th>Deadline</th>
+
+          <th>Kelas</th>
+          <th>Mapel</th>
         </tr>
       </thead>
 
@@ -32,13 +34,15 @@
           </td>
           <td>{{ item?.content_kategori ?? '-' }}</td>
           <td>{{ item?.tugas_kategori ?? '-' }}</td>
-          <td>{{ item?.kelas ?? '-' }}</td>
-          <td>{{ item?.mapel ?? '-' }}</td>
+
           <td>{{ item?.sisa_hari < 0 ? '-' : item?.sisa_hari }}</td>
           <td>
             <q-badge :color="getStatus(item?.deadline_status)" class="text-capitalize">{{ item?.deadline_status }}</q-badge>
           </td>
           <td>{{ item?.end_date ?? '-' }}</td>
+
+          <td>{{ item?.kelas ?? '-' }}</td>
+          <td>{{ item?.mapel ?? '-' }}</td>
 
         </tr>
 

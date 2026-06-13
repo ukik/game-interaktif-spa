@@ -1,8 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-green-1">
-    <!-- <q-layout view="hHh lpR fFf" :style="{ background: getGradientC() }"> -->
     <q-header elevated height-hint="98" v-if="!getRouteQuery?.no_header">
-      <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
         <q-btn
           v-if="$route.meta?.page_type == 'show'"
@@ -13,18 +11,7 @@
           icon="arrow_back"
           class="q-mr-sm"
         />
-
-        <!-- <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title> -->
-        <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
-        <!-- <q-btn flat round icon="search" /> -->
-        <!-- <q-btn flat round icon="assignment" @click="leftDrawerOpen = true" /> -->
-        <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
-        <!-- <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile> -->
-        <!-- <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" /> -->
       </q-toolbar>
-      <!-- <q-separator></q-separator> -->
-      <!-- <q-toolbar class="bg-white text-dark"> Hasil Matching Progress </q-toolbar> -->
-      <!-- </div> -->
     </q-header>
 
     <q-drawer
@@ -51,11 +38,10 @@
     <q-page-container class="row justify-center">
       <q-page-sticky
         style="z-index: 999"
-        v-if="getRouteParams?.mode == 'student'"
+        v-if="getRouteParams?.mode !== 'student'"
         position="top-left"
         :offset="[0, 0]"
       >
-        <!-- <DemoLabel /> -->
         <GlobalLabel
           shape="skew"
           position="top-left"
@@ -64,6 +50,12 @@
           >DEMO</GlobalLabel
         >
       </q-page-sticky>
+      <q-page-sticky style="z-index: 999;" position="top-right" :offset="[0, 0]">
+        <GlobalLabel shape="skew" position="top-right" backgroundColor="#ff1744" textColor="#ffffff">
+          TUTUP
+        </GlobalLabel>
+      </q-page-sticky>
+
 
       <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->

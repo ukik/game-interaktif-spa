@@ -110,6 +110,16 @@ export const useLmsParentStore = defineStore('LmsParentStore', {
     setKeyword(val) {
       this.keyword = val
     },
+    syncAfterUpdate(val) {
+      let payload = JSON.parse(JSON.stringify(val))
+      this.get_index_data.forEach((item, index) => {
+        if(item?.id == payload?.id) {
+          this.index.payload.payload.data[index] = payload
+        }
+      })
+
+      this.show.payload.payload = payload
+    },
     onChangePage(val) {
       console.log('action onChangePage', val)
       if (this.loading.local) return false;

@@ -1,12 +1,13 @@
 <template>
   <!-- {{ get_init_report }}
   {{ get_report_tugas }} -->
+
   <InitLoading v-if="get_init_report"></InitLoading>
   <q-page
     v-else-if="!get_init_report && get_report_tugas"
     class="justify-start items-start q-pa-sm"
   >
-    <q-list bordered class="q-mb-sm">
+    <q-list bordered class="q-mb-sm bg-white">
       <q-item>
         <q-item-section avatar>
           <q-avatar color="dark">
@@ -73,6 +74,7 @@
               </div>
               <template
                 v-if="
+                  isLogged &&
                   get_report_unsubmit &&
                   get_report_tugas?.status_durasi?.status !== 'selesai'
                 "
@@ -169,7 +171,8 @@
           </q-tab-panel>
 
           <q-tab-panel name="tab3" class="q-pa-none">
-            <template v-if="get_rank_payload && !get_init_rank">
+            <!-- get_rank_payload &&  -->
+            <template v-if="!get_init_rank">
               <ShowTabHasilCardEssay
                 v-if="$route?.params?.quiz == 'essay'"
                 @onRefresh="onRefreshShow"
@@ -202,10 +205,10 @@
               <q-tab name="tab4_sub1" label="PESERTA" icon="person" />
               <q-tab name="tab4_sub2" label="DESKRIPSI" icon="description" />
             </q-tabs>
-
             <q-tab-panels :keep-alive="true" v-model="tab4_sub" animated>
               <q-tab-panel name="tab4_sub1" class="q-pa-none q-px-sm">
-                <template v-if="get_peserta_payload?.id && !get_init_peserta">
+                <!-- get_peserta_payload?.id &&  -->
+                <template v-if="!get_init_peserta">
                   <ShowTabPesertaCard
                     @onRefresh="onRefreshPeserta"
                     :get_peserta_payload="get_peserta_payload?.tugas_siswa"
@@ -258,7 +261,7 @@ import CardQuizReportMultiple from "./components/CardQuizReportMultiple.vue";
 import CardQuizReportMultipleChecking from "./components/CardQuizReportMultipleChecking.vue";
 import CardQuizReportShortAnswer from "./components/CardQuizReportShortAnswer.vue";
 import CardQuizReportShortAnswerChecking from "./components/CardQuizReportShortAnswerChecking.vue";
-import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
+// import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 import { mapActions, mapState } from "pinia";
 import ShowTabPesertaCard from "./components/ShowTabPesertaCard.vue";
 import ShowTabHasilCard from "./components/ShowTabHasilCard.vue";
@@ -326,17 +329,20 @@ export default {
     // }
   },
   computed: {
-    ...mapState(useLmsTugasStore, ["get_peserta_payload", "get_init_peserta"]),
+    // ...mapState(useLmsTugasStore, ["get_peserta_payload", "get_init_peserta"]),
     ...mapState(useLmsTugasQuizStatsStore, [
       "get_report_siswa",
       "get_rank_payload",
       "get_rank_top",
       "get_init_rank",
+      "get_peserta_payload",
+      "get_init_peserta",
+      "peserta"
     ]),
   },
   methods: {
-    ...mapActions(useLmsTugasStore, ["onPeserta"]),
-    ...mapActions(useLmsTugasQuizStatsStore, ["onRank", "onReplace", "onShow"]),
+    // ...mapActions(useLmsTugasStore, ["onPeserta"]),
+    ...mapActions(useLmsTugasQuizStatsStore, ["onRank", "onReplace", "onShow", "onPeserta"]),
     onRefreshPeserta() {
       this.onPeserta(this.$route.params?.slug, true);
     },
@@ -347,7 +353,7 @@ export default {
       this.onReplace(this.$route?.params?.siswa_id);
     },
     onRefreshShow() {
-      this.onShow(this.$route.params?.slug);
+      this.onRank(this.$route.params?.slug, true);
     },
   },
   created() {

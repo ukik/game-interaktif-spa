@@ -56,10 +56,10 @@
         <q-btn
           unelevated
           class="q-ml-sm"
-          :to="{ name: 'lms_tugas_show', params: { slug: item?.id } }"
-          icon="edit"
+          :to="{ name: 'lms_tugas_show', params: { slug: item?.tugas_id } }"
+          icon="assignment"
           color="orange"
-          :label="is_mobile_size ? '' : 'Edit'"
+          :label="is_mobile_size ? '' : 'Tugas'"
         ></q-btn>
 
         <q-btn

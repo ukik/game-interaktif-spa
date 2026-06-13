@@ -6,7 +6,7 @@ import { host } from 'src/boot/common'
 
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
-import { useLmsSiswaStore } from '../LmsSiswaStore';
+import { useLmsParentStore } from '../LmsParentStore';
 
 
 function notifSuccess(caption = 'data berhasil diproses', message = 'Loading success') {
@@ -56,9 +56,6 @@ const form = {
   siswa: {
     uuid: '',
     user_id: '',
-    kelas_id: '',
-    nis: '',
-    nisn: '',
   },
   // table: users
   name: '',
@@ -75,10 +72,10 @@ const form = {
   new_password_confirmation: '',
   old_password: '',
   // addition
-  ortu_id: [],
+  siswa_id: [],
 }
 
-export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore', {
+export const useFormPengaturanParentStore = defineStore('FormPengaturanParentStore', {
   state: () => ({
     init: {
       edit: true,
@@ -133,16 +130,10 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         }
       })
       formData.append('nama', this.form_create.name)
-      formData.append('nis', this.form_create.siswa.nis)
-      formData.append('nisn', this.form_create.siswa.nisn)
-      formData.append('kelas', this.form_create.siswa.kelas_id)
 
       this.selected_options.map(item => item.id)?.forEach(element => {
-        formData.append('ortu_id[]', element)
+        formData.append('siswa_id[]', element)
       });
-      // this.form_create.ortu_id.forEach(element => {
-      //   formData.append('ortu_id[]', element)
-      // });
 
       // console.log('formData', this.form_create)
       console.table([...formData.entries()])
@@ -150,7 +141,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
       Loading.show()
 
       const resp = await axios({
-        url: host + '/lms/siswa',
+        url: host + '/lms/parent',
         method: 'post',
         data: formData,
       })
@@ -222,16 +213,10 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         formData.append(key, value)
       })
       formData.append('nama', this.form_edit.name)
-      formData.append('nis', this.form_edit.siswa.nis)
-      formData.append('nisn', this.form_edit.siswa.nisn)
-      formData.append('kelas', this.form_edit.siswa.kelas_id)
 
       this.selected_options.map(item => item.id)?.forEach(element => {
-        formData.append('ortu_id[]', element)
+        formData.append('siswa_id[]', element)
       });
-      // this.form_edit.ortu_id.forEach(element => {
-      //   formData.append('ortu_id[]', element)
-      // });
 
       console.log('formData', this.form_edit)
       console.table([...formData.entries()])
@@ -239,7 +224,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
       Loading.show()
 
       const resp = await axios({
-        url: host + '/lms/siswa/' + id,
+        url: host + '/lms/parent/' + id,
         method: 'post',
         data: formData,
       })
@@ -275,16 +260,16 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         let _temp = []
         this.selected_options?.forEach(element => {
             _temp.push({
-              parent: element
+              siswa: element
             })
         });
 
-        this.form_edit.siswa.parents = JSON.parse(JSON.stringify(_temp))
+        this.form_edit.parent.siswa = JSON.parse(JSON.stringify(_temp))
         this.reference = JSON.parse(JSON.stringify(this.form_edit))
 
         console.log('FINISH UPDATE', this.form_edit)
 
-        useLmsSiswaStore().syncAfterUpdate(this.form_edit)
+        useLmsParentStore().syncAfterUpdate(this.form_edit)
 
         return true
       }
@@ -296,5 +281,5 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useFormPengaturanSiswaStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useFormPengaturanParentStore, import.meta.hot))
 }

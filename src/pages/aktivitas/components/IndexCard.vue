@@ -25,7 +25,8 @@
       <!-- <q-item-section side>
         <q-badge class="q-pa-sm" :color="item?.status == 'draft' ? 'red' : 'green'" :label="item?.status" />
       </q-item-section> -->
-      <q-item-section v-if="is_teacher" side>
+
+      <q-item-section v-if="is_teacher || enabled" side>
         <q-btn
           dense
           :to="{ name: route_name, params: { slug: item?.id } }"
@@ -125,6 +126,7 @@
           <q-btn
             unelevated
             v-if="item?.tugas_hasil_count > 0"
+            :to="{ name: route_name_rank, params: { slug: item?.id } }"
             class="q-ml-sm"
             icon="leaderboard"
             color="orange"
@@ -151,8 +153,10 @@
         </q-item-section>
 
         <q-item-section class="text-capitalize">
-          Detail Tugas ( {{ item?.tugasable?.kategori }} ) / (
-          {{ item?.tugas_kategori?.nama }} )
+          <q-item-label>Detail Tugas ( {{ item?.tugasable?.kategori }} )</q-item-label>
+          <q-item-label v-if="item?.tugas_kategori?.nama" caption>{{
+            item?.tugas_kategori?.nama
+          }}</q-item-label>
         </q-item-section>
       </template>
 
@@ -235,7 +239,7 @@
 
 <script>
 export default {
-  props: ["get_index_data", "get_index_kelas", "route_name"],
+  props: ["get_index_data", "get_index_kelas", "route_name", "route_name_rank"],
   computed: {
     route_play() {
       return function (item) {

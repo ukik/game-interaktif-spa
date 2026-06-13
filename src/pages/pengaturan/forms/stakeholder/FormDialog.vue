@@ -164,8 +164,6 @@ export default {
     },
   },
   async mounted() {
-    // if(this.form_tugas_edit?.status_durasi?.status == 'selesai') return
-    // this.onOpen()
   },
 };
 </script>

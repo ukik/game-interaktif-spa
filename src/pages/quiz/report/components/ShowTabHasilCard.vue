@@ -6,7 +6,7 @@
       <q-btn @click="onRefresh" outline dense icon="refresh" class="q-px-sm" rounded label="refresh" unelevated color="positive"></q-btn>
     </div>
 
-    <q-list separator bordered class="text-dark">
+    <q-list v-if="top?.length > 0" separator bordered class="text-dark">
 
       <q-card-actions class="q-pa-none">
         <div class="col-12 text-center">
@@ -73,7 +73,7 @@
     </q-list>
   </div>
 
-  <q-card-section class="q-pa-sm">
+  <q-card-section v-if="payload?.data?.length > 0" class="q-pa-sm">
     <q-list separator bordered class="text-dark">
       <div class="col-12 text-center">
         <q-chip class="q-my-sm text-body2" color="grey" text-color="white" icon="bar_chart"

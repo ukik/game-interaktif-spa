@@ -90,7 +90,6 @@
         </q-item>
       </q-card-actions>
     </q-page-sticky> -->
-
   </q-page>
 </template>
 

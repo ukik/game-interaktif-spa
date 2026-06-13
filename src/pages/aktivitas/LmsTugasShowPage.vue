@@ -24,7 +24,7 @@
           class=""
           icon="play_circle"
           color="pink"
-          :label="is_mobile_size ? '' : 'Coba'"
+          label="Coba Quiz"
         ></q-btn>
       </q-card-actions>
       <q-separator></q-separator>
@@ -48,7 +48,7 @@
         </q-tab-panel>
         <q-tab-panel name="tab3" class="q-pa-none">
           <ShowTabPesertaCard
-            v-if="get_show_payload?.tugas_siswa.length > 0"
+            v-if="get_show_payload?.tugas_siswa?.length > 0"
             :get_show_payload="get_show_payload?.tugas_siswa"
           ></ShowTabPesertaCard>
           <EmptyBlock v-else></EmptyBlock>
@@ -57,13 +57,14 @@
     </q-card>
 
     <div style="height: 50px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
+    <q-page-sticky v-if="getPageWidth" position="bottom" :offset="[0, 0]">
       <q-card-actions
         align="center"
         class="q-pa-none"
         :style="`width: ${getPageWidth()}px`"
       >
         <q-item
+          v-if="(is_teacher || enabled)"
           @click="onOpenDialog"
           class="col-6 text-white"
           :class="[is_selesai ? 'bg-red' : 'bg-primary', is_hasil ? '' : '']"

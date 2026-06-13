@@ -20,11 +20,19 @@
       <q-card-actions align="center" class="q-py-sm">
         <q-btn
           unelevated
-          :to="route_play"
+          :to="route_report"
           class=""
           icon="signal_cellular_alt"
           color="teal"
           label="Detail Nilai"
+        ></q-btn>
+        <q-btn
+          unelevated
+          :to="route_play"
+          class=""
+          icon="play_circle"
+          color="pink"
+          label="Coba Quiz"
         ></q-btn>
       </q-card-actions>
 
@@ -93,7 +101,7 @@ export default {
       "get_init_show",
       "get_show_kelas",
     ]),
-    route_play() {
+    route_report() {
       return {
         name: "quiz_report",
         params: {
@@ -103,6 +111,27 @@ export default {
           siswa_id: this.get_show_payload?.siswa?.id,
         },
       };
+    },
+    route_play() {
+      if (this.is_student) {
+        return {
+          name: "quiz_intro",
+          params: {
+            mode: "student",
+            quiz: this.get_show_payload?.tugasable?.kategori,
+            slug: this.get_show_payload?.tugas_id,
+          },
+        };
+      } else {
+        return {
+          name: "quiz_intro_public",
+          params: {
+            mode: "teacher",
+            quiz: this.get_show_payload?.tugasable?.kategori,
+            slug: this.get_show_payload?.tugas_id,
+          },
+        };
+      }
     },
   },
   methods: {

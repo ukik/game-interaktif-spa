@@ -71,6 +71,7 @@ module.exports = configure(function (/* ctx */) {
       'main',
       'common',
       'glightbox',
+      'global-properties',
       // {
       //   server: false, // run on client-side only!
       //   path: 'glightbox' // references /src/boot/<name>.js

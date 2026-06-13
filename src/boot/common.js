@@ -327,59 +327,74 @@ export default boot(async ({ app, ssrContext, router, store }) => {
           : new Date(y, m - 1, d, 0, 0, 0)
       }
     },
-    computed: {
-      ...mapState(useAuthStore, [
-        'getAuthUser',
-        // 'getAuth',
-        'getIsLogin',
-        'getRole',
-        // 'getLoadingInit',
-        // 'getAccessToken',
-        // 'getLoading',
-      ]),
-      getRouteParams() {
-        return this.$route?.params;
-      },
-      getRouteQuery() {
-        return this.$route?.query;
-      },
-      getRouteName() {
-        return this.$route?.name;
-      },
-      is_teacher() {
-        return this.getRole == 'teacher' ? true : false
-      },
-      is_student() {
-        return this.getRole == 'student' ? true : false
-      },
+    // computed: {
+    //   ...mapState(useAuthStore, [
+    //     'getAuthUser',
+    //     // 'getAuth',
+    //     'getIsLogin',
+    //     'getRole',
+    //     // 'getLoadingInit',
+    //     // 'getAccessToken',
+    //     // 'getLoading',
+    //   ]),
+    //   getUser() {
+    //     return this.getAuthUser
+    //   },
+    //   isLogged() {
+    //     return this.getIsLogin
+    //   },
+    //   getRouteParams() {
+    //     return this.$route?.params;
+    //   },
+    //   getRouteQuery() {
+    //     return this.$route?.query;
+    //   },
+    //   getRouteName() {
+    //     return this.$route?.name;
+    //   },
+    //   enabled() {
+    //     switch (this.getRole) {
+    //       case 'superadmin':
+    //       case 'admin':
+    //         return true
+    //       default:
+    //         return false
+    //     }
+    //   },
+    //   is_teacher() {
+    //     return this.getRole == 'teacher' ? true : false
+    //   },
+    //   is_student() {
+    //     return this.getRole == 'student' ? true : false
+    //   },
 
-      getScreen() {
-        return this.$q.screen.width
-      },
-      is_higher_laptop() {
-        return this.getScreen > 1024
-      },
-      is_equal_to_higher_laptop() {
-        return this.getScreen >= 1024
-      },
-      is_equal_to_lower_laptop() {
-        return this.getScreen <= 1024
-      },
-      is_lower_laptop() {
-        return this.getScreen < 1024
-      },
-      is_mobile_size() {
-        return this.getScreen < 768;
-      },
-      is_ipad_lower_size() {
-        return this.getScreen <= 768;
-      },
-      is_ipad_higher_size() {
-        return this.getScreen >= 768;
-      },
-      is_ipad_to_laptop_size() {
-        return this.getScreen >= 768 && this.getScreen < 1024;
-      },
-    }
+    //   getScreen() {
+    //     return this.$q.screen.width
+    //   },
+    //   is_higher_laptop() {
+    //     return this.getScreen > 1024
+    //   },
+    //   is_equal_to_higher_laptop() {
+    //     return this.getScreen >= 1024
+    //   },
+    //   is_equal_to_lower_laptop() {
+    //     return this.getScreen <= 1024
+    //   },
+    //   is_lower_laptop() {
+    //     return this.getScreen < 1024
+    //   },
+    //   is_mobile_size() {
+    //     return this.getScreen < 768;
+    //   },
+    //   is_ipad_lower_size() {
+    //     return this.getScreen <= 768;
+    //   },
+    //   is_ipad_higher_size() {
+    //     return this.getScreen >= 768;
+    //   },
+    //   is_ipad_to_laptop_size() {
+    //     return this.getScreen >= 768 && this.getScreen < 1024;
+    //   },
+    // }
   })
 })

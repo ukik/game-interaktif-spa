@@ -333,6 +333,8 @@ export const useAuthStore = defineStore('AuthStore', {
 
       console.log('stores/lagia-stores/auth/AuthStore/onLoginRole', this.auth)
 
+      useGlobalStore().onRequest()
+
       return true
 
     },
