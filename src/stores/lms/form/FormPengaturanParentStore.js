@@ -51,7 +51,38 @@ function formatLaravelError(error) {
   }
 }
 
+function getDummy() {
+  return Math.round(Math.random() * 10000000)
+}
+function getDummyEmail() {
+  return Math.round(Math.random() * 10000000) + "@dummy.com"
+}
+
 const form = {
+  // table: siswa
+  siswa: {
+    uuid: '',
+    user_id: '',
+  },
+  // table: users
+  name: getDummy(),
+  email: getDummyEmail(),
+  telpon: getDummy(),
+  whatsapp: getDummy(),
+  role: 'parent',
+  alamat: getDummy(),
+  // password: '',
+  // raw_password: '',
+  image: null,
+  // UI
+  new_password: '12345',
+  new_password_confirmation: '12345',
+  old_password: '',
+  // addition
+  siswa_id: [],
+}
+
+const formX = {
   // table: siswa
   siswa: {
     uuid: '',
@@ -62,10 +93,10 @@ const form = {
   email: '',
   telpon: '',
   whatsapp: '',
-  role: '',
+  role: 'parent',
   alamat: '',
-  password: '',
-  raw_password: '',
+  // password: '',
+  // raw_password: '',
   image: null,
   // UI
   new_password: '',
@@ -74,6 +105,8 @@ const form = {
   // addition
   siswa_id: [],
 }
+
+const empty_form = JSON.parse(JSON.stringify(formX))
 
 export const useFormPengaturanParentStore = defineStore('FormPengaturanParentStore', {
   state: () => ({
@@ -126,7 +159,7 @@ export const useFormPengaturanParentStore = defineStore('FormPengaturanParentSto
         //   formData.append(key, this.form_create[key]['id'])
         // }
         else {
-          formData.append(key, this.form_create[key])
+          formData.append(key, this.form_create[key] ?? '')
         }
       })
       formData.append('nama', this.form_create.name)
@@ -158,8 +191,6 @@ export const useFormPengaturanParentStore = defineStore('FormPengaturanParentSto
 
       this.loading.create = false
 
-
-
       if (resp == false) return false
       if (!resp?.data) return false
 
@@ -167,6 +198,12 @@ export const useFormPengaturanParentStore = defineStore('FormPengaturanParentSto
         notifSuccess()
 
         const data = resp?.data
+
+        this.form_create = empty_form;
+        this.reference = null
+        this.options = [] // from ajax saat pencarian
+        this.selected_options = []
+        this.preview = null
 
         console.log('onCreate', data)
 
@@ -210,7 +247,7 @@ export const useFormPengaturanParentStore = defineStore('FormPengaturanParentSto
         //   if (!value) return
         // }
 
-        formData.append(key, value)
+        formData.append(key, value ?? '')
       })
       formData.append('nama', this.form_edit.name)
 
@@ -259,9 +296,9 @@ export const useFormPengaturanParentStore = defineStore('FormPengaturanParentSto
         // untuk menyesuaikan API
         let _temp = []
         this.selected_options?.forEach(element => {
-            _temp.push({
-              siswa: element
-            })
+          _temp.push({
+            siswa: element
+          })
         });
 
         this.form_edit.parent.siswa = JSON.parse(JSON.stringify(_temp))

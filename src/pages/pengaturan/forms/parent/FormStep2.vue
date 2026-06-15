@@ -13,7 +13,7 @@
     <q-list separator bordered class="text-dark q-mt-md">
       <q-item>
         <q-item-section>
-          <q-item-label>Orangtua Terpilih</q-item-label>
+          <q-item-label>Siswa Terpilih</q-item-label>
         </q-item-section>
       </q-item>
 

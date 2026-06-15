@@ -3,33 +3,16 @@
   <q-btn flat round color="white" icon="add">
     <q-menu>
       <q-list bordered separator style="min-width: 100px">
-        <q-item class="text-dark text-bold" @click="onOpenDialog('FormDialogSekolah')" clickable v-close-popup>
-          <q-item-section avatar>
-            <q-icon name="apartment"></q-icon>
-          </q-item-section>
-          <q-item-section>New Sekolah</q-item-section>
+        <q-item clickable v-close-popup>
+          <q-item-section>Buat Tugas (Quiz)</q-item-section>
         </q-item>
-        <q-item class="text-primary text-bold" @click="onOpenDialog('FormDialogStakeholder')" clickable v-close-popup>
-          <q-item-section avatar>
-            <q-icon name="face"></q-icon>
-          </q-item-section>
-          <q-item-section>New Stakeholder</q-item-section>
-        </q-item>
-        <q-item class="text-pink text-bold" @click="onOpenDialog('FormDialogParent')" clickable v-close-popup>
-          <q-item-section avatar>
-            <q-icon name="face_6"></q-icon>
-          </q-item-section>
-          <q-item-section>New Orangtua</q-item-section>
-        </q-item>
-        <q-item class="text-teal text-bold" @click="onOpenDialog('FormDialogSiswa')" clickable v-close-popup>
-          <q-item-section avatar>
-            <q-icon name="face_5"></q-icon>
-          </q-item-section>
-          <q-item-section>New Siswa</q-item-section>
+        <q-item clickable v-close-popup>
+          <q-item-section>Buat Tugas (Modul)</q-item-section>
         </q-item>
       </q-list>
     </q-menu>
   </q-btn>
+
 
   <FormDialogParent ref="FormDialogParent"></FormDialogParent>
   <FormDialogSekolah ref="FormDialogSekolah"></FormDialogSekolah>

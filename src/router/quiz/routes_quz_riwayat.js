@@ -1,4 +1,4 @@
-const routes_riwayat = [
+const routes = [
   // Log MODUL
   {
     path: "/lms-tugas-modul-log-index",
@@ -48,4 +48,4 @@ const routes_riwayat = [
 
 ]
 
-export default routes_riwayat
+export default routes

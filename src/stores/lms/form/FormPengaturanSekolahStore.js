@@ -51,22 +51,50 @@ function formatLaravelError(error) {
   }
 }
 
+function getDummy() {
+  return Math.round(Math.random() * 10000000)
+}
+function getDummyEmail() {
+  return Math.round(Math.random() * 10000000) + "@dummy.com"
+}
+
 const form = {
-      'id':'',
-      'uuid': '',
-      'nama': '',
-      'npsn': '',
-      'jenjang': '',
-      'status': '',
-      'alamat': '',
-      'provinsi': '',
-      'kota': '',
-      'kecamatan': '',
-      'kode_pos': '',
-      'telpon': '',
-      'email': '',
-      'image': null
-    }
+  'id': '',
+  'uuid': '',
+  'nama': getDummy(),
+  'npsn': getDummy(),
+  'jenjang': '',
+  'status': '',
+  'alamat': getDummy(),
+  'provinsi': getDummy(),
+  'kota': getDummy(),
+  'kecamatan': getDummy(),
+  'kode_pos': getDummy(),
+  'telpon': getDummy(),
+  'email': getDummyEmail(),
+  'image': null
+}
+
+
+const formX = {
+  'id': '',
+  'uuid': '',
+  'nama': '',
+  'npsn': '',
+  'jenjang': '',
+  'status': '',
+  'alamat': '',
+  'provinsi': '',
+  'kota': '',
+  'kecamatan': '',
+  'kode_pos': '',
+  'telpon': '',
+  'email': '',
+  'image': null
+}
+
+const empty_form = JSON.parse(JSON.stringify(formX))
+
 
 export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahStore', {
   state: () => ({
@@ -96,64 +124,18 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
 
   },
   actions: {
-    setFormEdit(payload) {
-      this.form_edit = payload
+    // setFormEdit(payload) {
+    //   this.form_edit = payload
 
-      let siswa_ids = []
-      payload.tugas_siswa?.forEach((item, i) => {
-        siswa_ids.push(item?.siswa_id)
-      })
-      console.log('setFormEdit', siswa_ids)
-      this.form_edit.siswa_ids = siswa_ids
-      this.form_edit.image = null // wajib agar di bagian q-file tidak error
+    //   let siswa_ids = []
+    //   payload.tugas_siswa?.forEach((item, i) => {
+    //     siswa_ids.push(item?.siswa_id)
+    //   })
+    //   console.log('setFormEdit', siswa_ids)
+    //   this.form_edit.siswa_ids = siswa_ids
+    //   this.form_edit.image = null // wajib agar di bagian q-file tidak error
 
-    },
-    onEdit(tugas_id, my_init = false) {
-      if (my_init) this.init.edit = my_init
-      if (!this.init.edit) return false
-
-      this.onRequest('/lms/sekolah/' + tugas_id + '/edit', 'form_edit')
-    },
-    async onRequest(url = '', key = '') {
-
-      if (this.loading[key]) return false;
-
-      this.loading[key] = true;
-
-      console.log('onIndex')
-
-      Loading.show()
-      const resp = await axios({
-        url: host + url,
-        method: 'get',
-        params: {
-          page: 1
-        }
-      })
-        .then((response) => {
-          // notifSuccess()
-          return response
-        })
-        .catch((err) => {
-          console.log('onRequest', err)
-          // notifFailed()
-          return false
-        })
-      Loading.hide()
-
-      this.loading[key] = false
-      this.init[key] = false;
-
-      if (resp == false) return false
-      if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
-
-        this[key] = resp?.data
-        console.log('onRequest', this[key])
-
-        return true
-      }
-    },
+    // },
 
     async onCreate() {
 
@@ -170,11 +152,12 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
           const auth = useAuthStore()
           formData.append(key, auth.getAuthUser?.id)
         }
+
         // else if (key == 'tugas_kategori') {
         //   formData.append(key, this.form_create[key]['id'])
         // }
         else {
-          formData.append(key, this.form_create[key])
+          formData.append(key, this.form_create[key] ?? '')
         }
       })
 
@@ -201,7 +184,6 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
       this.loading.create = false
 
 
-
       if (resp == false) return false
       if (!resp?.data) return false
 
@@ -209,6 +191,10 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
         notifSuccess()
 
         const data = resp?.data
+
+        this.form_create = empty_form
+        this.reference = null
+        this.preview = null
 
         console.log('onCreate', data)
 
@@ -251,7 +237,7 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
         //   if (!value) return
         // }
 
-        formData.append(key, value)
+        formData.append(key, value ?? '')
       })
 
       console.log('formData', this.form_edit)

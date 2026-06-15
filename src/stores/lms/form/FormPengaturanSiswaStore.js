@@ -51,7 +51,42 @@ function formatLaravelError(error) {
   }
 }
 
+
+function getDummy() {
+  return Math.round(Math.random()*10000000)
+}
+function getDummyEmail() {
+  return Math.round(Math.random()*10000000)+"@dummy.com"
+}
+
 const form = {
+  // table: siswa
+  siswa: {
+    uuid: '',
+    user_id: '',
+    kelas_id: '',
+    nis: getDummy(),
+    nisn: getDummy(),
+  },
+  // table: users
+  name: getDummy(),
+  email: getDummyEmail(),
+  telpon: getDummy(),
+  whatsapp: getDummy(),
+  role: '',
+  alamat: getDummy(),
+  // password: '',
+  // raw_password: '',
+  image: null,
+  // UI
+  new_password: '',
+  new_password_confirmation: '',
+  old_password: '',
+  // addition
+  ortu_id: [],
+}
+
+const formX = {
   // table: siswa
   siswa: {
     uuid: '',
@@ -67,8 +102,8 @@ const form = {
   whatsapp: '',
   role: '',
   alamat: '',
-  password: '',
-  raw_password: '',
+  // password: '',
+  // raw_password: '',
   image: null,
   // UI
   new_password: '',
@@ -77,6 +112,9 @@ const form = {
   // addition
   ortu_id: [],
 }
+
+const empty_form = JSON.parse(JSON.stringify(formX))
+
 
 export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore', {
   state: () => ({
@@ -129,7 +167,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         //   formData.append(key, this.form_create[key]['id'])
         // }
         else {
-          formData.append(key, this.form_create[key])
+          formData.append(key, this.form_create[key] ?? '')
         }
       })
       formData.append('nama', this.form_create.name)
@@ -177,6 +215,12 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
 
         const data = resp?.data
 
+        this.form_create = empty_form
+        this.reference = null
+        this.options = [] // from ajax saat pencarian
+        this.selected_options = []
+        this.preview = null
+
         console.log('onCreate', data)
 
         return true
@@ -219,7 +263,7 @@ export const useFormPengaturanSiswaStore = defineStore('FormPengaturanSiswaStore
         //   if (!value) return
         // }
 
-        formData.append(key, value)
+        formData.append(key, value ?? '')
       })
       formData.append('nama', this.form_edit.name)
       formData.append('nis', this.form_edit.siswa.nis)

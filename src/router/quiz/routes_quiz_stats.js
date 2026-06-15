@@ -1,4 +1,4 @@
-const routes_stats = [
+const routes = [
   // STATS MODUL
   {
     path: "/lms-tugas-modul-stats-index",
@@ -48,4 +48,4 @@ const routes_stats = [
 
 ]
 
-export default routes_stats
+export default routes

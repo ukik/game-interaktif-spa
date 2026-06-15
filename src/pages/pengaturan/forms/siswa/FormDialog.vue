@@ -16,7 +16,7 @@
             : `width: ${getPageWidth()}px; height: calc(100vh - 0px);`
         "
       >
-        <q-toolbar class="bg-primary text-white">
+        <q-toolbar class="bg-teal text-white">
           <q-toolbar-title> Edit Siswa </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>

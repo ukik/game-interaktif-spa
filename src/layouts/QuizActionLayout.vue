@@ -95,6 +95,11 @@
 
     <!-- <DialogResult></DialogResult> -->
 
+    <!-- <FormDialogParent ref="FormDialogParent"></FormDialogParent>
+    <FormDialogSekolah ref="FormDialogSekolah"></FormDialogSekolah>
+    <FormDialogSiswa ref="FormDialogSiswa"></FormDialogSiswa>
+    <FormDialogStakeholder ref="FormDialogStakeholder"></FormDialogStakeholder> -->
+
     <!-- <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
         <q-toolbar-title>
@@ -109,7 +114,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, defineAsyncComponent } from "vue";
 
 import LeftDrawerItem from "./components/LeftDrawerItem.vue";
 import { mapActions } from "pinia";
@@ -125,10 +130,20 @@ import ToolbarPage from "./components/ToolbarPage.vue";
 import { scroll } from "quasar";
 import LeftDrawerItemQuiz from "./components/LeftDrawerItemQuiz.vue";
 
+const FormDialogParent = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/parent/FormDialog.vue'))
+const FormDialogSekolah = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/sekolah/FormDialog.vue'))
+const FormDialogSiswa = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/siswa/FormDialog.vue'))
+const FormDialogStakeholder = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue'))
+
 const { getVerticalScrollPosition } = scroll;
 
 export default {
   components: {
+    FormDialogParent,
+    FormDialogSekolah,
+    FormDialogSiswa,
+    FormDialogStakeholder,
+
     LeftDrawerItem,
     MenuProfile,
     BuatTugas,

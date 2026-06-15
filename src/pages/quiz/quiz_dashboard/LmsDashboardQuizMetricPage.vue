@@ -38,25 +38,26 @@ import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsDashboardStore } from "src/stores/lms/LmsDashboardStore";
-import DeadlineTable from "./components/dashboard/DeadlineTable.vue";
-import RecentSubmissionTable from "./components/dashboard/RecentSubmissionTable.vue";
-import AktivitasNewestTable from "./components/dashboard/AktivitasNewestTable.vue";
-import ContentGrowthTable from "./components/dashboard/ContentGrowthTable.vue";
-import PublishStatusTable from "./components/dashboard/PublishStatusTable.vue";
-import TopMapelTable from "./components/dashboard/TopMapelTable.vue";
-import RoleDistributionTable from "./components/dashboard/RoleDistributionTable.vue";
-import ScoreQuizDistributionTable from "./components/dashboard/ScoreQuizDistributionTable.vue";
-import ScoreModulDistributionTable from "./components/dashboard/ScoreModulDistributionTable.vue";
-import TopKelasTable from "./components/dashboard/TopKelasTable.vue";
-import QuizCategoryTable from "./components/dashboard/QuizCategoryTable.vue";
-import ModulCategoryTable from "./components/dashboard/ModulCategoryTable.vue";
-import QuizPopulerTable from "./components/dashboard/QuizPopulerTable.vue";
-import ModulPopulerTable from "./components/dashboard/ModulPopulerTable.vue";
-import TopTeacherTable from "./components/dashboard/TopTeacherTable.vue";
-import TopSiswaTable from "./components/dashboard/TopSiswaTable.vue";
-import SubmitProgressTable from "./components/dashboard/SubmitProgressTable.vue";
-import DistribusiTipeTugasTable from "./components/dashboard/DistribusiTipeTugasTable.vue";
-import SummaryTable from "./components/dashboard/SummaryTable.vue";
+
+import DeadlineTable from "./components/quiz_metric/DeadlineTable.vue";
+import RecentSubmissionTable from "./components/quiz_metric/RecentSubmissionTable.vue";
+import AktivitasNewestTable from "./components/quiz_metric/AktivitasNewestTable.vue";
+import ContentGrowthTable from "./components/quiz_metric/ContentGrowthTable.vue";
+import PublishStatusTable from "./components/quiz_metric/PublishStatusTable.vue";
+import TopMapelTable from "./components/quiz_metric/TopMapelTable.vue";
+import RoleDistributionTable from "./components/quiz_metric/RoleDistributionTable.vue";
+import ScoreQuizDistributionTable from "./components/quiz_metric/ScoreQuizDistributionTable.vue";
+import ScoreModulDistributionTable from "./components/quiz_metric/ScoreModulDistributionTable.vue";
+import TopKelasTable from "./components/quiz_metric/TopKelasTable.vue";
+import QuizCategoryTable from "./components/quiz_metric/QuizCategoryTable.vue";
+import ModulCategoryTable from "./components/quiz_metric/ModulCategoryTable.vue";
+import QuizPopulerTable from "./components/quiz_metric/QuizPopulerTable.vue";
+import ModulPopulerTable from "./components/quiz_metric/ModulPopulerTable.vue";
+import TopTeacherTable from "./components/quiz_metric/TopTeacherTable.vue";
+import TopSiswaTable from "./components/quiz_metric/TopSiswaTable.vue";
+import SubmitProgressTable from "./components/quiz_metric/SubmitProgressTable.vue";
+import DistribusiTipeTugasTable from "./components/quiz_metric/DistribusiTipeTugasTable.vue";
+import SummaryTable from "./components/quiz_metric/SummaryTable.vue";
 
 
 export default {

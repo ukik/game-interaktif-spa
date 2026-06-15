@@ -1,53 +1,37 @@
 <template>
+
   <div class="q-gutter-md">
     <div>
-      <div class="q-mb-md">
-        <q-input
-          v-model="form_edit.old_password"
-          label="Password Lama"
-          outlined
-          hint="required"
-          :rules="[(val) => !!val || 'wajib diisi']"
-        />
-      </div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password"
+            v-model="form_create.new_password"
             label="Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="rules.password"
           />
         </div>
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password_confirmation"
+            v-model="form_create.new_password_confirmation"
             label="Konfirmasi Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="[
+              (val) => !!val || 'Konfirmasi password wajib diisi',
+              (val) => val === form_create.new_password || 'Password tidak sama',
+            ]"
           />
         </div>
       </div>
     </div>
-    <div>
-      <div>
-        <q-input
-          class="q-mb-md"
-          v-model="form_edit.email"
-          readonly
-          label="Email"
-          outlined
-          :error="true"
-          error-message="Tidak bisa dirubah (hubungi Admin)"
-          hint="Tidak bisa dirubah (hubungi Admin)"
-          :rules="[(val) => !!val || 'wajib diisi']"
-        />
-      </div>
 
+    <div>
       <q-input
-        v-model="form_edit.name"
+        v-model="form_create.name"
         label="Nama"
         outlined
         hint="required"
@@ -56,8 +40,8 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.siswa.nis"
-        label="NIS"
+        v-model="form_create.stakeholder.nip"
+        label="NIP"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -65,8 +49,8 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.siswa.nisn"
-        label="NISN"
+        v-model="form_create.stakeholder.nuptk"
+        label="NUPTK"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -75,17 +59,26 @@
 
     <div>
       <q-input
-        v-model="form_edit.telpon"
+        v-model="form_create.telpon"
         label="Telpon"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
       />
     </div>
+    <div>
+      <q-input
+        v-model="form_create.email"
+        label="Email"
+        outlined
+        hint="required"
+        :rules="[(val) => !!val || 'wajib diisi']"
+      />
+    </div>
 
     <div>
       <q-input
-        v-model="form_edit.whatsapp"
+        v-model="form_create.whatsapp"
         label="Whatsapp"
         outlined
         hint="required"
@@ -95,13 +88,16 @@
 
     <div class="q-mb-lg">
       <q-select
-        v-model="form_edit.siswa.kelas_id"
-        :options="get_kelas_option_lists"
+        v-model="form_create.role"
+        :options="[
+          { value: 'principal', label: 'KEPSEK' },
+          { value: 'teacher', label: 'GURU' },
+        ]"
         option-label="label"
         option-value="value"
         emit-value
         map-options
-        label="Kelas"
+        label="Role"
         outlined
         hint="required"
         :use-input="false"
@@ -111,7 +107,7 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.alamat"
+        v-model="form_create.alamat"
         label="Deskripsi"
         input-style="min-height: 100px;"
         type="textarea"
@@ -126,35 +122,18 @@
     <div class="row">
       <q-item-label lines="1" caption class="col-12 q-mb-sm">Gambar</q-item-label>
       <q-file
-        clearable
         class="col-12"
-        v-model="form_edit.image"
+        v-model="form_create.image"
         label="Upload Gambar"
         accept=".jpg,.png,.jpeg,.webp"
         outlined
       />
-      <div class="row col-12 q-col-gutter-sm">
-        <div class="col-12 col-sm-6" v-if="preview">
-          <q-img
-            height="300px"
-            class="rounded-borders q-mt-md q-list--bordered"
-            :src="preview"
-          >
-            <div class="absolute-bottom text-center">Baru</div>
-          </q-img>
-        </div>
-        <div class="col-12 col-sm-6">
-          <q-img
-            height="300px"
-            class="rounded-borders q-mt-md col-6 q-list--bordered"
-            @error="form_edit.url_image = global_url_image"
-            :error-src="global_url_image"
-            :src="form_edit?.url_image"
-          >
-            <div class="absolute-bottom q-pa-xs text-center">Lama</div>
-          </q-img>
-        </div>
-      </div>
+      <q-img
+        height="300px"
+        class="rounded-borders q-mt-md col-sm-6 col-xs-12 col-4 q-list--bordered"
+        v-if="preview"
+        :src="preview"
+      />
     </div>
 
     <!-- Submit -->
@@ -163,7 +142,7 @@
 
 <script>
 import { mapActions, mapState, mapWritableState } from "pinia";
-import { useFormPengaturanSiswaStore } from "src/stores/lms/form/FormPengaturanSiswaStore";
+import { useFormPengaturanStakeholderStore } from "src/stores/lms/form/FormPengaturanStakeholderStore";
 import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
 export default {
@@ -173,11 +152,11 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "preview"]),
-    ...mapState(useGlobalStore, ["get_kelas_option_lists"]),
+    ...mapWritableState(useFormPengaturanStakeholderStore, ["form_create", "preview"]),
+    ...mapState(useGlobalStore, ["get_data_global_list_jenjang"]),
   },
   watch: {
-    "form_edit.image"(file) {
+    "form_create.image"(file) {
       if (file) {
         this.preview = URL?.createObjectURL(file);
       } else {

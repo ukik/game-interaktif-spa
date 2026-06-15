@@ -132,4 +132,114 @@ export default boot(({ app, router }) => {
     }
   })
 
+  Object.defineProperty(app.config.globalProperties, 'rules', {
+    value: {
+      password: [
+        val => !!val || 'Password wajib diisi',
+        val => val.length >= 5 || 'Minimal 5 karakter',
+        val => val.length <= 100 || 'Maksimal 100 karakter',
+        // val => /[A-Za-z]/.test(val) || 'Harus mengandung huruf',
+        // val => /\d/.test(val) || 'Harus mengandung angka',
+      ],
+
+      required: [
+        val => !!val || 'Wajib diisi'
+      ],
+
+      email: [
+        val => !!val || 'Email wajib diisi',
+        val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
+          || 'Format email tidak valid'
+      ]
+    }
+  })
+
+  Object.defineProperty(app.config.globalProperties, 'Swal', {
+    value: {
+      success() {
+        Swal.fire({
+          title: "Sukses!",
+          text: "Data berhasil diproses!",
+          icon: "success"
+        });
+      },
+      error() {
+        Swal.fire({
+          title: "Batal!",
+          text: "Data gagal diproses!",
+          icon: "error"
+        });
+      },
+    }
+  })
+
+  Object.defineProperty(app.config.globalProperties, 'getValidate', {
+    value: {
+
+      async showValidationErrors(formRef = 'formRef') {
+        let form = null;
+
+        try {
+          form = this.$refs[formRef]
+        } catch (error) {
+          return
+        }
+
+        if (!form) return;
+
+        const errors = [];
+
+        const components = form.getValidationComponents?.() || [];
+
+        components.forEach((comp) => {
+          if (comp.validate && !comp.validate()) {
+            const label =
+              comp.label ||
+              comp.$attrs?.label ||
+              comp.$options?.propsData?.label ||
+              "Field";
+
+            errors.push(label);
+          }
+        });
+
+        if (errors.length) {
+          this.$q.notify({
+            type: "negative",
+            message: "Periksa: " + errors.join(", "),
+            timeout: 2000,
+            position: "top",
+          });
+        }
+      },
+      async waitAndScrollToError() {
+        let attempt = 0;
+
+        const findAndScroll = () => {
+          const el = document.querySelector(".q-field--error");
+
+          if (el) {
+            el.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+            return true;
+          }
+
+          return false;
+        };
+
+        const interval = setInterval(() => {
+          attempt++;
+
+          const found = findAndScroll();
+
+          if (found || attempt > 20) {
+            clearInterval(interval);
+          }
+        }, 150);
+      },
+    }
+  })
+
 })

@@ -2,18 +2,18 @@
   <div>
   <!-- {{ reference }}
   =-=========================
-  {{ form_edit.ortu_id }} -->
-    <RemoteSelectParent
+  {{ form_create.siswa_id }} -->
+    <RemoteSelectSiswa
       ref="RemoteSelect"
-      :parent="reference?.ortu_id"
-      @onBubbleEvent="form_edit.ortu_id = $event"
-      url="/ajax/parent/search"
+      :parent="reference?.siswa_id"
+      @onBubbleEvent="form_create.siswa_id = $event"
+      url="/ajax/student/search"
     />
 
     <q-list separator bordered class="text-dark q-mt-md">
       <q-item>
         <q-item-section>
-          <q-item-label>Orangtua Terpilih</q-item-label>
+          <q-item-label>Siswa Terpilih</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -47,8 +47,8 @@
 
 <script>
 import { mapActions, mapState, mapWritableState } from "pinia";
-import { useFormPengaturanSiswaStore } from "src/stores/lms/form/FormPengaturanSiswaStore";
-import RemoteSelectParent from "./RemoteSelectParent.vue";
+import { useFormPengaturanParentStore } from "src/stores/lms/form/FormPengaturanParentStore";
+import RemoteSelectSiswa from "./RemoteSelectSiswa.vue";
 
 export default {
   data() {
@@ -57,21 +57,12 @@ export default {
     };
   },
   components: {
-    RemoteSelectParent,
+    RemoteSelectSiswa,
   },
   computed: {
-    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "selected_options", "reference"]),
+    ...mapWritableState(useFormPengaturanParentStore, ["form_create", "selected_options", "reference"]),
     preview_list() {
       return this.selected_options
-      if (this.selected_options?.length <= 0) {
-        let temp = [];
-        this.form_edit?.siswa?.parents.forEach((element) => {
-          temp.push(element?.parent);
-        });
-
-        return temp;
-      }
-      return this.selected_options;
     },
   },
   methods: {
@@ -83,12 +74,14 @@ export default {
         }
       });
 
-      this.reference['ortu_id'] = selected_options.map(item => item.id)
-      this.$refs?.RemoteSelect?.setCurrent(this.reference['ortu_id'])
+      this.form_create['siswa_id'] = selected_options?.map(item => item?.id)
+      this.$refs?.RemoteSelect?.setCurrent(selected_options?.map(item => item?.id))
 
       this.selected_options = selected_options
     }
   },
-  mounted() {},
+  mounted() {
+      this.$refs?.RemoteSelect?.setCurrent(this.selected_options?.map(item => item?.id))
+  },
 };
 </script>

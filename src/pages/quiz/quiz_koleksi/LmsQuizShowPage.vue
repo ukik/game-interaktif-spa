@@ -10,7 +10,7 @@
         indicator-color="primary"
         align="justify"
       >
-        <q-tab name="tab1" label="MODUL" />
+        <q-tab name="tab1" label="QUIZ" />
       </q-tabs>
 
       <q-separator />
@@ -36,8 +36,9 @@
         :style="`width: ${getPageWidth()}px`"
       >
         <q-item
+          v-if="(is_teacher || enabled)"
           @click="onOpenDialog"
-          class="col text-white bg-primary"
+          class="col-6 text-white bg-primary"
           clickable
           v-ripple
         >
@@ -48,18 +49,30 @@
             <q-item-label>Buat Tugas</q-item-label>
           </q-item-section>
         </q-item>
-        <!-- <q-item class="col-6 text-white bg-positive" clickable v-ripple>
+        <q-item
+          class="col text-white bg-pink"
+          clickable
+          v-ripple
+          :to="{
+            name: 'quiz_intro_public',
+            params: {
+              mode: 'all',
+              quiz: get_show_payload?.kategori,
+              slug: get_show_payload?.id,
+            },
+          }"
+        >
           <q-item-section avatar>
-            <q-icon text-color="white" name="bar_chart" />
+            <q-icon text-color="white" name="play_circle" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Leaderboard</q-item-label>
+            <q-item-label>Coba</q-item-label>
           </q-item-section>
-        </q-item> -->
+        </q-item>
       </q-card-actions>
     </q-page-sticky>
 
-    <FormCreateTugas ref="FormCreateTugas" model="LmsModul"></FormCreateTugas>
+    <FormCreateTugas ref="FormCreateTugas" model="LmsQuiz"></FormCreateTugas>
   </q-page>
 </template>
 
@@ -68,9 +81,9 @@ import { ref } from "vue";
 
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsBankModulStore } from "src/stores/lms/LmsBankModulStore";
+import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore";
 import ShowTab1Card from "./components/ShowTab1Card.vue";
-import FormCreateTugas from "../koleksi/components/FormCreateTugas.vue";
+import FormCreateTugas from "./components/FormCreateTugas.vue";
 
 export default {
   components: {
@@ -78,10 +91,12 @@ export default {
     FormCreateTugas,
   },
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsBankModulStore(store);
+    const preStore = useLmsBankQuizStore(store);
 
     // const page = currentRoute.query.page || 1;
     const slug = currentRoute.params.slug || "";
+
+    preStore.setKategori(currentRoute.params.quiz)
 
     await preStore.onShow(slug);
   },
@@ -90,20 +105,9 @@ export default {
       tab: "tab1",
     };
   },
-  watch: {
-    get_show_payload: {
-      immediate: true, // 🔥 ini kunci
-      deep: true,
-      handler(val) {
-        // const m = [...val, ...val, ...val, ...val, ...val, ...val, ...val, ...val];
-        // this.list_demo = m;
-        // console.log('get_index_data', m)
-      },
-    },
-  },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsBankModulStore, [
+    ...mapState(useLmsBankQuizStore, [
       "get_show_payload",
       "get_init_show",
       "get_show_kelas",
@@ -111,13 +115,13 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsBankModulStore, ["onShow", "onChangePage"]),
+    ...mapActions(useLmsBankQuizStore, ["onShow", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);
     },
     onOpenDialog() {
-      this.$refs.FormCreateTugas?.onOpen();
+      this.$refs.FormCreateTugas?.onOpen(this.get_show_payload);
     },
   },
   async mounted() {

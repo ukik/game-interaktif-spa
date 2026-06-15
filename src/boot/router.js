@@ -4,6 +4,9 @@ import { boot } from 'quasar/wrappers';
 import { useRouterStore } from 'src/stores/auth/RouterStore'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
 
+const route_after_login_redirect = "lms_notification_tugas_index"
+
+
 export default boot(async ({ router, store }) => {
   const auth = useAuthStore(store) // inject disini ya
   await auth.onInit()
@@ -29,10 +32,10 @@ export default boot(async ({ router, store }) => {
       next({ name: 'login' })
     } else if (to.name == 'login' && auth.getIsLogin) {
       console.log('router 3')
-      next({ name: 'dashboard' })
+      next({ name: route_after_login_redirect })
     } else if (to.name == 'register' && auth.getIsLogin) {
       console.log('router 4')
-      next({ name: 'dashboard' })
+      next({ name: route_after_login_redirect })
     } else {
       console.log('router 5')
       next()

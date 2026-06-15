@@ -1,9 +1,9 @@
-const routes_activity = [
+const routes = [
   // BANK TUGAS
   {
     path: "/lms-tugas-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
     name: 'lms_tugas_index',
-    component: () => import("pages/aktivitas/LmsTugasIndexPage.vue"),
+    component: () => import("pages/quiz/quiz_aktivitas/LmsTugasIndexPage.vue"),
     meta: {
       logged: true,
       title: "Tugas Quiz",
@@ -14,7 +14,7 @@ const routes_activity = [
   {
     path: "/lms-tugas-show/:slug",
     name: 'lms_tugas_show',
-    component: () => import("pages/aktivitas/LmsTugasShowPage.vue"),
+    component: () => import("pages/quiz/quiz_aktivitas/LmsTugasShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Tugas Quiz",
@@ -24,4 +24,4 @@ const routes_activity = [
   },
 ]
 
-export default routes_activity
+export default routes

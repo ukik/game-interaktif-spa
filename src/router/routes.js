@@ -1,19 +1,18 @@
-import routes_quiz_action_public from "./routes_quiz_action_public";
-import routes_quiz_action from "./routes_quiz_action";
+import routes_quiz_action_public from "./quiz/routes_quiz_action_public";
+import routes_quiz_action from "./quiz/routes_quiz_action";
+import routes_quiz_report from "./quiz/routes_quiz_report";
+import routes_collection from "./quiz/routes_quiz_collection";
+import routes_activity from "./quiz/routes_quiz_activity";
+import routes_stats from "./quiz/routes_quiz_stats";
+import routes_riwayat from "./quiz/routes_quz_riwayat";
+import routes_quiz_intro from "./quiz/routes_quiz_intro";
+import routes_quiz_dashboard from "./quiz/routes_quiz_dashboard";
 
-import routes_quiz_report from "./routes_quiz_report";
-import routes_quiz_report_public from "./routes_quiz_report_public";
 
-import routes_quiz_intro from "./routes_quiz_intro";
-import routes_quiz_intro_public from "./routes_quiz_intro_public";
+
 
 import routes_account from "./routes_account";
-import routes_collection from "./routes_collection";
-import routes_activity from "./routes_activity";
-import routes_stats from "./routes_stats";
 import routes_notifications from "./routes_notifications";
-import routes_riwayat from "./routes_riwayat";
-
 
 const routes = [
   {
@@ -21,7 +20,6 @@ const routes = [
     component: () => import("layouts/QuizReportLayout.vue"),
     children: [
       ...routes_quiz_report,
-      ...routes_quiz_report_public,
     ]
   },
   {
@@ -31,7 +29,6 @@ const routes = [
       ...routes_quiz_action,
       ...routes_quiz_action_public,
       ...routes_quiz_intro,
-      ...routes_quiz_intro_public,
       // {
       //   path: '/quiz/index',
       //   name: 'quiz_index',
@@ -43,20 +40,6 @@ const routes = [
       //     ]
       //   }
       // },
-
-      // {
-      //   path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:mode(teacher|all)', // tugas_id
-      //   name: 'quiz_report_public',
-      //   component: () => import('pages/quiz/report/QuizReportTeacher.vue'),
-      //   meta: {
-      //     logged: false,
-      //     title: 'Report Quiz',
-      //     meta: [
-      //       { name: 'description', content: 'Report Quiz' }
-      //     ]
-      //   }
-      // },
-
     ]
   },
 
@@ -64,37 +47,7 @@ const routes = [
     path: "/QuizActionLayout",
     component: () => import("layouts/QuizActionLayout.vue"),
     children: [
-      // {
-      //   path: "/dashboard",
-      //   name: 'dashboard',
-      //   component: () => import("pages/IndexPage.vue"),
-      //   meta: {
-      //     logged: true,
-      //     title: "Dashboard STARKY",
-      //     meta: [{ name: "description", content: "Dashboard" }],
-      //   },
-      // },
-
-      {
-        path: "/",
-        name: 'dashboard',
-        component: () => import("pages/dashboard/LmsDashboardPage.vue"),
-        meta: {
-          logged: true,
-          title: "Home STARKY",
-          meta: [{ name: "description", content: "Home" }],
-        },
-      },
-      {
-        path: "/tugas-statistik",
-        name: 'dashboard_tugas_statistik',
-        component: () => import("pages/dashboard/LmsDashboardTugasStatistikPage.vue"),
-        meta: {
-          logged: false,
-          title: "Home STARKY",
-          meta: [{ name: "description", content: "Home" }],
-        },
-      },
+      ...routes_quiz_dashboard,
       ...routes_account,
       ...routes_collection,
       ...routes_activity,
@@ -108,11 +61,6 @@ const routes = [
     path: "/MainLayout",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-
-
-
-
-
       {
         path: "/login",
         name: "login",

@@ -215,13 +215,15 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       // }
 
       Object.keys(this.form_tugas_create).forEach(key => {
+        let value = this.form_tugas_create[key]
+
         if(key == 'user') {
           const auth = useAuthStore()
           formData.append(key, auth.getAuthUser?.id)
         } else if(key == 'tugas_kategori') {
-          formData.append(key, this.form_tugas_create[key]['id'])
+          formData.append(key, value['id'])
         } else {
-          formData.append(key, this.form_tugas_create[key])
+          formData.append(key, value ?? '')
         }
       })
 
@@ -304,9 +306,10 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
         } else if (key === 'tugas_kategori') {
           value = value?.id
           if (!value) return
+        } else {
+          formData.append(key, value ?? '')
         }
 
-        formData.append(key, value)
       })
 
       console.log('form_tugas_edit', this.form_tugas_edit)

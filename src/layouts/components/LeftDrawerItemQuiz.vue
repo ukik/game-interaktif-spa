@@ -193,7 +193,7 @@ const dashboard_items = [
     title: "GENERAL",
     subtitle: "Tugas Publish",
     icon: "widgets",
-    route_name: "dashboard",
+    route_name: "dashboard_quiz_metric",
   },
   {
     id: 2,
@@ -285,7 +285,7 @@ export default {
         },
       ],
 
-      expanded_bank: true,
+      expanded_bank: false,
       expanded_nilai: false,
       expanded_ranking: false,
       expanded_tugas: false,

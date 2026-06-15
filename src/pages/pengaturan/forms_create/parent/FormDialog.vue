@@ -1,7 +1,7 @@
 <template>
   <q-form ref="formRef">
     <q-dialog
-      @hide="step = 1"
+      @before-show="step = 1"
       id="FormParentDialog"
       v-model="dialog"
       persistent
@@ -17,7 +17,7 @@
         "
       >
         <q-toolbar class="bg-pink text-white">
-          <q-toolbar-title> Edit Orangtua </q-toolbar-title>
+          <q-toolbar-title> Tambah Orangtua </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
@@ -104,7 +104,6 @@ import { mapActions, mapWritableState, mapState } from "pinia";
 import FormStep1 from "./FormStep1.vue";
 import FormStep2 from "./FormStep2.vue";
 import { useFormPengaturanParentStore } from "src/stores/lms/form/FormPengaturanParentStore";
-import { useLmsParentStore } from "src/stores/lms/LmsParentStore.js";
 
 export default {
   components: {
@@ -114,53 +113,18 @@ export default {
   data() {
     return {
       dialog: false,
-      id: null,
       step: 1,
     };
   },
-  watch: {
-    step(val) {
-      console.log('form_edit', this.form_edit)
-    }
-  },
   computed: {
-    ...mapState(useLmsParentStore, ["get_show_payload"]),
-    ...mapWritableState(useFormPengaturanParentStore, ["form_edit", "selected_options", "options", "reference"]),
+    ...mapWritableState(useFormPengaturanParentStore, ["form_create"]),
   },
   methods: {
     ...mapActions(useFormPengaturanParentStore, {
-      onUpdate: "onUpdate",
+      onCreate: "onCreate",
     }),
-    ...mapActions(useLmsParentStore, ["onShow"]),
-    async onOpen(id) {
+    async onOpen() {
       this.dialog = true;
-      this.id = id;
-
-      const form_edit = JSON.parse(JSON.stringify(this.get_show_payload));
-      const reference = JSON.parse(JSON.stringify(this.get_show_payload));
-      // console.log("ref?.parent?.siswa", form_edit?.parent?.siswa.map(item => item.siswa.id), form_edit);
-
-      switch (this.$route.name) {
-        case "lms_ortu_index":
-          await this.onShow(id);
-          break;
-        case "lms_ortu_show":
-          break;
-      }
-      this.form_edit = form_edit;
-      this.form_edit["image"] = null;
-      this.form_edit['siswa_id'] = form_edit?.parent?.siswa.map(item => item.siswa.id)
-
-      this.reference = reference;
-      this.reference["image"] = null;
-      this.reference['siswa_id'] = reference?.parent?.siswa.map(item => item.siswa.id)
-
-      if(this.options.length <= 0) this.options = form_edit?.parent?.siswa.map(item => item.siswa)
-
-      this.selected_options = form_edit?.parent?.siswa.map(item => item.siswa)
-
-      console.log('this.options', this.options)
-      console.log("this.reference['siswa_id']", this.reference['siswa_id'])
     },
     async nextStep() {
       const isValid = await this.$refs.formRef.validate();
@@ -180,82 +144,48 @@ export default {
 
       this.$refs.stepper.next();
     },
-    showValidationErrors() {
-      const form = this.$refs.formRef;
-
-      if (!form) return;
-
-      const errors = [];
-
-      const components = form.getValidationComponents?.() || [];
-
-      components.forEach((comp) => {
-        if (comp.validate && !comp.validate()) {
-          const label =
-            comp.label ||
-            comp.$attrs?.label ||
-            comp.$options?.propsData?.label ||
-            "Field";
-
-          errors.push(label);
-        }
-      });
-
-      if (errors.length) {
-        this.$q.notify({
-          type: "negative",
-          message: "Periksa: " + errors.join(", "),
-          timeout: 2000,
-          position: "top",
-        });
-      }
-    },
-    async waitAndScrollToError() {
-      let attempt = 0;
-
-      const findAndScroll = () => {
-        const el = document.querySelector(".q-field--error");
-
-        if (el) {
-          el.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          return true;
-        }
-
-        return false;
-      };
-
-      const interval = setInterval(() => {
-        attempt++;
-
-        const found = findAndScroll();
-
-        if (found || attempt > 20) {
-          clearInterval(interval);
-        }
-      }, 150);
-    },
-
     async onSubmit() {
-
-      console.log('form_edit', this.form_edit)
 
       const isValid = await this.$refs.formRef.validate();
 
       if (!isValid) {
         this.$nextTick(() => {
           setTimeout(() => {
-            this.showValidationErrors();
-            this.waitAndScrollToError();
+            this.getValidate?.showValidationErrors();
+            this.getValidate?.waitAndScrollToError();
           }, 300);
         });
 
         return;
       }
 
-      await this.onUpdate(this.form_edit?.id);
+      if(this.form_create.new_password !== this.form_create.new_password_confirmation) {
+        this.$q.notify({
+          type: "negative",
+          message: "Password Konfirmasi Salah!!!",
+          timeout: 2000,
+          position: "top",
+        });
+        return
+      }
+
+      if(this.form_create.siswa_id.length <= 0) {
+        this.$q.notify({
+          type: "negative",
+          message: "Siswa tidak boleh kosong!!!",
+          timeout: 2000,
+          position: "top",
+        });
+        return
+      }
+
+
+      const resp = await this.onCreate();
+      if(!resp) {
+        this.Swal.error()
+        return
+      }
+      this.Swal.success()
       this.dialog = false;
     },
   },

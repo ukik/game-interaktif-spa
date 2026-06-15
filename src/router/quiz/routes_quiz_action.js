@@ -1,8 +1,8 @@
-const routes_quiz_action = [
+const routes = [
   {
     path: '/quiz/action/:quiz(arrange)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_arrange',
-    component: () => import('pages/quiz/action/QuizActionArrange.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionArrange.vue'),
     meta: {
       logged: true,
       title: 'Quiz Arrange',
@@ -15,7 +15,7 @@ const routes_quiz_action = [
   {
     path: '/quiz/action/:quiz(boolean)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_boolean',
-    component: () => import('pages/quiz/action/QuizActionBoolean.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionBoolean.vue'),
     meta: {
       logged: true,
       title: 'Quiz Boolean',
@@ -28,7 +28,7 @@ const routes_quiz_action = [
   {
     path: '/quiz/action/:quiz(essay)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_essay',
-    component: () => import('pages/quiz/action/QuizActionEssay.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionEssay.vue'),
     meta: {
       logged: true,
       title: 'Quiz Essay',
@@ -41,7 +41,7 @@ const routes_quiz_action = [
   {
     path: '/quiz/action/:quiz(match)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_match',
-    component: () => import('pages/quiz/action/QuizActionMatch.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionMatch.vue'),
     meta: {
       logged: true,
       title: 'Quiz Match',
@@ -54,7 +54,7 @@ const routes_quiz_action = [
   {
     path: '/quiz/action/:quiz(multiple)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_multiple',
-    component: () => import('pages/quiz/action/QuizActionMultiple.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionMultiple.vue'),
     meta: {
       logged: true,
       title: 'Quiz Multiple',
@@ -67,7 +67,7 @@ const routes_quiz_action = [
   {
     path: '/quiz/action/:quiz(shortanswer)/:slug/:mode(student)', // slug == tugas_id
     name: 'quiz_action_shortanswer',
-    component: () => import('pages/quiz/action/QuizActionShortAnswer.vue'),
+    component: () => import('src/pages/quiz/quiz_game/action/QuizActionShortAnswer.vue'),
     meta: {
       logged: true,
       title: 'Quiz ShortAnswer',
@@ -79,4 +79,4 @@ const routes_quiz_action = [
   },
 ]
 
-export default routes_quiz_action
+export default routes

@@ -1,7 +1,7 @@
 <template>
   <q-form ref="formRef">
     <q-dialog
-      @hide="step = 1"
+      @before-show="step = 1"
       v-model="dialog"
       persistent
       maximized

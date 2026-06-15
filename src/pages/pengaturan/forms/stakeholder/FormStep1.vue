@@ -1,17 +1,37 @@
 <template>
   <div class="q-gutter-md">
     <div>
-      <!--
-  password: '',
-  raw_password: '',
-
-  // UI
-  new_password: '',
-  new_password_confirmation: '',
-  old_password: '',
-
- -->
-
+      <div class="q-mb-md">
+        <q-input
+          v-model="form_edit.old_password"
+          label="Password Lama"
+          outlined
+          hint="required"
+          :rules="[(val) => !!val || 'wajib diisi']"
+        />
+      </div>
+      <div class="row q-col-gutter-md">
+        <div class="col-12 col-sm-6">
+          <q-input
+            v-model="form_edit.new_password"
+            label="Password Baru"
+            outlined
+            hint="required"
+            :rules="[(val) => !!val || 'wajib diisi']"
+          />
+        </div>
+        <div class="col-12 col-sm-6">
+          <q-input
+            v-model="form_edit.new_password_confirmation"
+            label="Konfirmasi Password Baru"
+            outlined
+            hint="required"
+            :rules="[(val) => !!val || 'wajib diisi']"
+          />
+        </div>
+      </div>
+    </div>
+    <div>
       <q-input
         v-model="form_edit.name"
         label="Nama"

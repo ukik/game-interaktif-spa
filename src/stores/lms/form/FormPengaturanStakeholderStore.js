@@ -51,7 +51,39 @@ function formatLaravelError(error) {
   }
 }
 
+function getDummy() {
+  return Math.round(Math.random()*10000000)
+}
+function getDummyEmail() {
+  return Math.round(Math.random()*10000000)+"@dummy.com"
+}
+
 const form = {
+  // table: stakeholder
+  stakeholder: {
+    uuid: '',
+    user_id: '',
+    nip: getDummy(),
+    nuptk: getDummy(),
+  },
+  // table: users
+  name: getDummy(),
+  email: getDummyEmail(),
+  telpon: getDummy(),
+  whatsapp: getDummy(),
+  role: '',
+  alamat: getDummy(),
+  // password: '',
+  // raw_password: '',
+  image: null,
+  // UI
+  new_password: '12345',
+  new_password_confirmation: '12345',
+  old_password: '',
+}
+
+
+const formX = {
   // table: stakeholder
   stakeholder: {
     uuid: '',
@@ -66,14 +98,16 @@ const form = {
   whatsapp: '',
   role: '',
   alamat: '',
-  password: '',
-  raw_password: '',
+  // password: '',
+  // raw_password: '',
   image: null,
   // UI
   new_password: '',
   new_password_confirmation: '',
   old_password: '',
 }
+
+const empty_form = JSON.parse(JSON.stringify(formX))
 
 export const useFormPengaturanStakeholderStore = defineStore('FormPengaturanStakeholderStore', {
   state: () => ({
@@ -115,52 +149,52 @@ export const useFormPengaturanStakeholderStore = defineStore('FormPengaturanStak
       this.form_edit.image = null // wajib agar di bagian q-file tidak error
 
     },
-    onEdit(tugas_id, my_init = false) {
-      if (my_init) this.init.edit = my_init
-      if (!this.init.edit) return false
+    // onEdit(tugas_id, my_init = false) {
+    //   if (my_init) this.init.edit = my_init
+    //   if (!this.init.edit) return false
 
-      this.onRequest('/lms/stakeholder/' + tugas_id + '/edit', 'form_edit')
-    },
-    async onRequest(url = '', key = '') {
+    //   this.onRequest('/lms/stakeholder/' + tugas_id + '/edit', 'form_edit')
+    // },
+    // async onRequest(url = '', key = '') {
 
-      if (this.loading[key]) return false;
+    //   if (this.loading[key]) return false;
 
-      this.loading[key] = true;
+    //   this.loading[key] = true;
 
-      console.log('onIndex')
+    //   console.log('onIndex')
 
-      Loading.show()
-      const resp = await axios({
-        url: host + url,
-        method: 'get',
-        params: {
-          page: 1
-        }
-      })
-        .then((response) => {
-          // notifSuccess()
-          return response
-        })
-        .catch((err) => {
-          console.log('onRequest', err)
-          // notifFailed()
-          return false
-        })
-      Loading.hide()
+    //   Loading.show()
+    //   const resp = await axios({
+    //     url: host + url,
+    //     method: 'get',
+    //     params: {
+    //       page: 1
+    //     }
+    //   })
+    //     .then((response) => {
+    //       // notifSuccess()
+    //       return response
+    //     })
+    //     .catch((err) => {
+    //       console.log('onRequest', err)
+    //       // notifFailed()
+    //       return false
+    //     })
+    //   Loading.hide()
 
-      this.loading[key] = false
-      this.init[key] = false;
+    //   this.loading[key] = false
+    //   this.init[key] = false;
 
-      if (resp == false) return false
-      if (!resp?.data) return false
-      if (resp?.data?.isLogin) {
+    //   if (resp == false) return false
+    //   if (!resp?.data) return false
+    //   if (resp?.data?.isLogin) {
 
-        this[key] = resp?.data
-        console.log('onRequest', this[key])
+    //     this[key] = resp?.data
+    //     console.log('onRequest', this[key])
 
-        return true
-      }
-    },
+    //     return true
+    //   }
+    // },
 
     async onCreate() {
 
@@ -177,11 +211,12 @@ export const useFormPengaturanStakeholderStore = defineStore('FormPengaturanStak
           const auth = useAuthStore()
           formData.append(key, auth.getAuthUser?.id)
         }
+
         // else if (key == 'tugas_kategori') {
         //   formData.append(key, this.form_create[key]['id'])
         // }
         else {
-          formData.append(key, this.form_create[key])
+          formData.append(key, this.form_create[key] ?? '')
         }
       })
       formData.append('nama', this.form_create.name)
@@ -219,6 +254,12 @@ export const useFormPengaturanStakeholderStore = defineStore('FormPengaturanStak
         notifSuccess()
 
         const data = resp?.data
+
+        this.form_create = empty_form
+        this.reference = null
+        this.options = [] // from ajax saat pencarian
+        this.selected_options = []
+        this.preview = null
 
         console.log('onCreate', data)
 
@@ -262,7 +303,7 @@ export const useFormPengaturanStakeholderStore = defineStore('FormPengaturanStak
         //   if (!value) return
         // }
 
-        formData.append(key, value)
+        formData.append(key, value ?? '')
       })
       formData.append('nama', this.form_edit.name)
       formData.append('nip', this.form_edit.stakeholder.nip)

@@ -1,9 +1,9 @@
-const routes_collection = [
+const routes = [
   // BANK MODUL
   {
     path: "/lms-modul-index",
     name: 'lms_modul_index',
-    component: () => import("pages/koleksi/LmsModulIndexPage.vue"),
+    component: () => import("pages/quiz/quiz_koleksi/LmsModulIndexPage.vue"),
     meta: {
       logged: true,
       title: "Bank Modul",
@@ -14,7 +14,7 @@ const routes_collection = [
   {
     path: "/lms-modul-show/:slug",
     name: 'lms_modul_show',
-    component: () => import("pages/koleksi/LmsModulShowPage.vue"),
+    component: () => import("pages/quiz/quiz_koleksi/LmsModulShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Bank Modul",
@@ -26,7 +26,7 @@ const routes_collection = [
   {
     path: "/lms-quiz-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
     name: 'lms_quiz_index',
-    component: () => import("pages/koleksi/LmsQuizIndexPage.vue"),
+    component: () => import("pages/quiz/quiz_koleksi/LmsQuizIndexPage.vue"),
     meta: {
       logged: true,
       title: "Bank Quiz",
@@ -37,7 +37,7 @@ const routes_collection = [
   {
     path: "/lms-quiz-show/:slug",
     name: 'lms_quiz_show',
-    component: () => import("pages/koleksi/LmsQuizShowPage.vue"),
+    component: () => import("pages/quiz/quiz_koleksi/LmsQuizShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Bank Quiz",
@@ -48,4 +48,4 @@ const routes_collection = [
 
 ]
 
-export default routes_collection
+export default routes

@@ -2,7 +2,7 @@ const routes_quiz_report = [
   // {
   //   path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:siswa_id/:mode(student)', // tugas_id
   //   name: 'quiz_report',
-  //   component: () => import('pages/quiz/report/QuizReport.vue'),
+  //   component: () => import('pages/quiz/game_quiz/report/QuizReport.vue'),
   //   meta: {
   //     logged: false,
   //     title: 'Report Quiz',

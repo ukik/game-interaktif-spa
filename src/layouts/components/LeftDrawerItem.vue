@@ -272,7 +272,7 @@ const dashboard_items = [
     title: "GENERAL",
     subtitle: "Tugas Publish",
     icon: "widgets",
-    route_name: "dashboard",
+    route_name: "dashboard_quiz_metric",
   },
   {
     id: 2,

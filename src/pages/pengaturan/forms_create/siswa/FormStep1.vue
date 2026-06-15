@@ -1,53 +1,50 @@
 <template>
   <div class="q-gutter-md">
     <div>
-      <div class="q-mb-md">
-        <q-input
-          v-model="form_edit.old_password"
-          label="Password Lama"
-          outlined
-          hint="required"
-          :rules="[(val) => !!val || 'wajib diisi']"
-        />
-      </div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password"
+            v-model="form_create.new_password"
             label="Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="rules.password"
           />
         </div>
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password_confirmation"
+            v-model="form_create.new_password_confirmation"
             label="Konfirmasi Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="[
+              (val) => !!val || 'Konfirmasi password wajib diisi',
+              (val) => val === form_create.new_password || 'Password tidak sama',
+            ]"
           />
         </div>
       </div>
     </div>
+
+
     <div>
       <div>
         <q-input
           class="q-mb-md"
-          v-model="form_edit.email"
-          readonly
+          v-model="form_create.email"
+
           label="Email"
           outlined
-          :error="true"
-          error-message="Tidak bisa dirubah (hubungi Admin)"
+
           hint="Tidak bisa dirubah (hubungi Admin)"
           :rules="[(val) => !!val || 'wajib diisi']"
         />
       </div>
 
       <q-input
-        v-model="form_edit.name"
+        v-model="form_create.name"
         label="Nama"
         outlined
         hint="required"
@@ -56,7 +53,7 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.siswa.nis"
+        v-model="form_create.siswa.nis"
         label="NIS"
         outlined
         hint="required"
@@ -65,7 +62,7 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.siswa.nisn"
+        v-model="form_create.siswa.nisn"
         label="NISN"
         outlined
         hint="required"
@@ -75,7 +72,7 @@
 
     <div>
       <q-input
-        v-model="form_edit.telpon"
+        v-model="form_create.telpon"
         label="Telpon"
         outlined
         hint="required"
@@ -85,7 +82,7 @@
 
     <div>
       <q-input
-        v-model="form_edit.whatsapp"
+        v-model="form_create.whatsapp"
         label="Whatsapp"
         outlined
         hint="required"
@@ -95,7 +92,7 @@
 
     <div class="q-mb-lg">
       <q-select
-        v-model="form_edit.siswa.kelas_id"
+        v-model="form_create.siswa.kelas_id"
         :options="get_kelas_option_lists"
         option-label="label"
         option-value="value"
@@ -111,7 +108,7 @@
     </div>
     <div>
       <q-input
-        v-model="form_edit.alamat"
+        v-model="form_create.alamat"
         label="Deskripsi"
         input-style="min-height: 100px;"
         type="textarea"
@@ -126,35 +123,18 @@
     <div class="row">
       <q-item-label lines="1" caption class="col-12 q-mb-sm">Gambar</q-item-label>
       <q-file
-        clearable
         class="col-12"
-        v-model="form_edit.image"
+        v-model="form_create.image"
         label="Upload Gambar"
         accept=".jpg,.png,.jpeg,.webp"
         outlined
       />
-      <div class="row col-12 q-col-gutter-sm">
-        <div class="col-12 col-sm-6" v-if="preview">
-          <q-img
-            height="300px"
-            class="rounded-borders q-mt-md q-list--bordered"
-            :src="preview"
-          >
-            <div class="absolute-bottom text-center">Baru</div>
-          </q-img>
-        </div>
-        <div class="col-12 col-sm-6">
-          <q-img
-            height="300px"
-            class="rounded-borders q-mt-md col-6 q-list--bordered"
-            @error="form_edit.url_image = global_url_image"
-            :error-src="global_url_image"
-            :src="form_edit?.url_image"
-          >
-            <div class="absolute-bottom q-pa-xs text-center">Lama</div>
-          </q-img>
-        </div>
-      </div>
+      <q-img
+        height="300px"
+        class="rounded-borders q-mt-md col-sm-6 col-xs-12 col-4 q-list--bordered"
+        v-if="preview"
+        :src="preview"
+      />
     </div>
 
     <!-- Submit -->
@@ -173,11 +153,11 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "preview"]),
+    ...mapWritableState(useFormPengaturanSiswaStore, ["form_create", "preview"]),
     ...mapState(useGlobalStore, ["get_kelas_option_lists"]),
   },
   watch: {
-    "form_edit.image"(file) {
+    "form_create.image"(file) {
       if (file) {
         this.preview = URL?.createObjectURL(file);
       } else {

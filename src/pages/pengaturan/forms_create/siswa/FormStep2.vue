@@ -2,11 +2,11 @@
   <div>
   <!-- {{ reference }}
   =-=========================
-  {{ form_edit.ortu_id }} -->
+  {{ form_create.ortu_id }} -->
     <RemoteSelectParent
       ref="RemoteSelect"
       :parent="reference?.ortu_id"
-      @onBubbleEvent="form_edit.ortu_id = $event"
+      @onBubbleEvent="form_create.ortu_id = $event"
       url="/ajax/parent/search"
     />
 
@@ -60,18 +60,9 @@ export default {
     RemoteSelectParent,
   },
   computed: {
-    ...mapWritableState(useFormPengaturanSiswaStore, ["form_edit", "selected_options", "reference"]),
+    ...mapWritableState(useFormPengaturanSiswaStore, ["form_create", "selected_options", "reference"]),
     preview_list() {
       return this.selected_options
-      if (this.selected_options?.length <= 0) {
-        let temp = [];
-        this.form_edit?.siswa?.parents.forEach((element) => {
-          temp.push(element?.parent);
-        });
-
-        return temp;
-      }
-      return this.selected_options;
     },
   },
   methods: {
@@ -83,8 +74,8 @@ export default {
         }
       });
 
-      this.reference['ortu_id'] = selected_options.map(item => item.id)
-      this.$refs?.RemoteSelect?.setCurrent(this.reference['ortu_id'])
+      this.form_create['ortu_id'] = selected_options?.map(item => item?.id)
+      this.$refs?.RemoteSelect?.setCurrent(selected_options?.map(item => item?.id))
 
       this.selected_options = selected_options
     }

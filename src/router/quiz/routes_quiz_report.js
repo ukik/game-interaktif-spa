@@ -1,8 +1,8 @@
-const routes_quiz_report_public = [
+const routes = [
   {
     path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:mode(teacher|all)', // tugas_id
     name: 'quiz_report_public',
-    component: () => import('pages/quiz/report/QuizReportTeacher.vue'),
+    component: () => import('src/pages/quiz/quiz_game/report/QuizReportTeacher.vue'),
     meta: {
       logged: false,
       title: 'Report Quiz',
@@ -14,7 +14,7 @@ const routes_quiz_report_public = [
   {
     path: '/quiz/report/:quiz(arrange|match|boolean|essay|multiple|shortanswer)/:slug/:siswa_id/:mode(student)', // tugas_id
     name: 'quiz_report',
-    component: () => import('pages/quiz/report/QuizReport.vue'),
+    component: () => import('src/pages/quiz/quiz_game/report/QuizReport.vue'),
     meta: {
       logged: false,
       title: 'Report Quiz',
@@ -45,4 +45,4 @@ const routes_quiz_report_public = [
   },
 ]
 
-export default routes_quiz_report_public
+export default routes
