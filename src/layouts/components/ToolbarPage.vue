@@ -1,11 +1,19 @@
 <template>
-  <q-toolbar v-if="toolbar" class="text-primary bg-white q-mb-md">
-    <q-btn flat round dense icon="home" />
-    <q-avatar icon="arrow_forward_ios"></q-avatar>
-    <q-toolbar-title class="q-pa-none text-body2"
-      >{{ $route?.meta?.title }} {{ $route?.params?.quiz ? `/ ${$route?.params?.quiz}` : '' }}</q-toolbar-title
+  <div class="full-width">
+    <q-toolbar
+      v-if="toolbar"
+      class="text-primary bg-white"
+      :class="[is_ipad_lower_size ? '' : 'q-mb-md']"
     >
-  </q-toolbar>
+      <q-btn flat round dense icon="home" to="/" />
+      <q-avatar icon="arrow_forward_ios"></q-avatar>
+      <q-toolbar-title class="q-pa-none text-body2"
+        >{{ $route?.meta?.title }}
+        {{ $route?.params?.quiz ? `/ ${$route?.params?.quiz}` : "" }}</q-toolbar-title
+      >
+    </q-toolbar>
+    <q-separator v-if="is_ipad_lower_size" color="grey-4"></q-separator>
+  </div>
 </template>
 
 <script>
@@ -21,18 +29,24 @@ export default {
       handler(val) {
         this.$nextTick(() => {
           switch (val) {
-            case "lms_tugas_index":
-            case "lms_quiz_index":
-            case "lms_tugas_quiz_log_index":
-            case "lms_tugas_quiz_stats_index":
-            case "lms_sekolah_index":
-            case "lms_stakeholder_index":
-            case "lms_ortu_index":
-            case "lms_siswa_index":
-              this.toolbar = true;
+            // case "lms_tugas_index":
+            // case "lms_quiz_index":
+            // case "lms_tugas_quiz_log_index":
+            // case "lms_tugas_quiz_stats_index":
+            // case "lms_sekolah_index":
+            // case "lms_stakeholder_index":
+            // case "lms_ortu_index":
+            // case "lms_siswa_index":
+            //   this.toolbar = true;
+            //   break;
+
+            case "dashboard_quiz_metric":
+            case "dashboard_tugas_statistik":
+              this.toolbar = false;
               break;
             default:
-              this.toolbar = false;
+              this.toolbar = true;
+              break;
           }
         });
       },

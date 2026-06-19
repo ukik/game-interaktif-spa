@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-form @submit="onSubmit" class="q-mb-md">
       <q-input
         @clear="onSubmit"

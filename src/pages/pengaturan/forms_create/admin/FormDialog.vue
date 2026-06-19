@@ -15,7 +15,7 @@
         "
       >
         <q-toolbar class="bg-blue text-white">
-          <q-toolbar-title> Tambah Stakeholder </q-toolbar-title>
+          <q-toolbar-title> Tambah Admin </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
@@ -48,7 +48,7 @@
 <script>
 import { mapActions, mapWritableState, mapState } from "pinia";
 import FormStep1 from "./FormStep1.vue";
-import { useFormPengaturanStakeholderStore } from "src/stores/lms/form/FormPengaturanStakeholderStore";
+import { useFormPengaturanAdminStore } from "src/stores/lms/form/FormPengaturanAdminStore";
 
 export default {
   components: {
@@ -60,10 +60,10 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useFormPengaturanStakeholderStore, ["form_create"]),
+    ...mapWritableState(useFormPengaturanAdminStore, ["form_create"]),
   },
   methods: {
-    ...mapActions(useFormPengaturanStakeholderStore, {
+    ...mapActions(useFormPengaturanAdminStore, {
       onCreate: "onCreate",
     }),
     async onOpen() {

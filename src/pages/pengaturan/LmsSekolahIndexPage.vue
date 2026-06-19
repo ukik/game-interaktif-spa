@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-list separator bordered class="q-pa-sm bg-white">
       <template v-if="get_index_data.length > 0">
         <!-- <SekolahDetailCard :item="get_index_data[0]"></SekolahDetailCard> -->
@@ -27,7 +27,7 @@
           <q-item-section side top> </q-item-section>
         </q-item> -->
 
-        <div class="row col-gutters-md">
+        <div class="row q-col-gutter-sm">
           <template v-for="(item, index) in get_index_data" :key="index">
             <div class="col-12 col-sm-6">
               <q-card flat bordered>

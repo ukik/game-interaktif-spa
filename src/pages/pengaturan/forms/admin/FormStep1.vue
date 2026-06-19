@@ -42,28 +42,25 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <q-input
+        class="q-mb-md"
+        v-model="form_edit.email"
+        readonly
+        label="Email"
+        outlined
+        :error="true"
+        error-message="Tidak bisa dirubah (hubungi Superadmin)"
+        hint="Tidak bisa dirubah (hubungi Superadmin)"
+        :rules="[(val) => !!val || 'wajib diisi']"
+      />
+    </div>
+
     <div>
       <q-input
         v-model="form_edit.name"
         label="Nama"
-        outlined
-        hint="required"
-        :rules="[(val) => !!val || 'wajib diisi']"
-      />
-    </div>
-    <div>
-      <q-input
-        v-model="form_edit.stakeholder.nip"
-        label="NIP"
-        outlined
-        hint="required"
-        :rules="[(val) => !!val || 'wajib diisi']"
-      />
-    </div>
-    <div>
-      <q-input
-        v-model="form_edit.stakeholder.nuptk"
-        label="NUPTK"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -74,15 +71,6 @@
       <q-input
         v-model="form_edit.telpon"
         label="Telpon"
-        outlined
-        hint="required"
-        :rules="[(val) => !!val || 'wajib diisi']"
-      />
-    </div>
-    <div>
-      <q-input
-        v-model="form_edit.email"
-        label="Email"
         outlined
         hint="required"
         :rules="[(val) => !!val || 'wajib diisi']"
@@ -99,7 +87,7 @@
       />
     </div>
 
-    <div class="q-mb-lg">
+    <!-- <div class="q-mb-lg">
       <q-select
         v-model="form_edit.role"
         :options="[
@@ -117,7 +105,7 @@
         input-debounce="100"
         :rules="[(val) => !!val || 'wajib diisi']"
       />
-    </div>
+    </div> -->
     <div>
       <q-input
         v-model="form_edit.alamat"
@@ -172,7 +160,7 @@
 
 <script>
 import { mapActions, mapState, mapWritableState } from "pinia";
-import { useFormPengaturanStakeholderStore } from "src/stores/lms/form/FormPengaturanStakeholderStore";
+import { useFormPengaturanAdminStore } from "src/stores/lms/form/FormPengaturanAdminStore";
 import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
 export default {
@@ -182,7 +170,7 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useFormPengaturanStakeholderStore, ["form_edit", "preview"]),
+    ...mapWritableState(useFormPengaturanAdminStore, ["form_edit", "preview"]),
     ...mapState(useGlobalStore, ["get_data_global_list_jenjang"]),
   },
   watch: {

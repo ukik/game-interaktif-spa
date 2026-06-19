@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <!-- <q-list v-if="
       normalizeToString(valid_filter?.kelas) ||
       normalizeToString(valid_filter?.mapel) ||

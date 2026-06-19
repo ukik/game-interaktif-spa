@@ -58,7 +58,7 @@ function getDummyEmail() {
   return Math.round(Math.random() * 10000000) + "@dummy.com"
 }
 
-const form = {
+const form_dummy = {
   'id': '',
   'uuid': '',
   'nama': getDummy(),
@@ -76,7 +76,7 @@ const form = {
 }
 
 
-const formX = {
+const form = {
   'id': '',
   'uuid': '',
   'nama': '',
@@ -93,7 +93,7 @@ const formX = {
   'image': null
 }
 
-const empty_form = JSON.parse(JSON.stringify(formX))
+const empty_form = JSON.parse(JSON.stringify(form))
 
 
 export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahStore', {

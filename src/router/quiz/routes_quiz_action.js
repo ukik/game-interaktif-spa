@@ -7,7 +7,7 @@ const routes = [
       logged: true,
       title: 'Quiz Arrange',
       meta: [
-        { name: 'description', content: 'QuizActionArrange - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz Arrange' }
       ],
       page_type: 'show',
     }
@@ -20,7 +20,7 @@ const routes = [
       logged: true,
       title: 'Quiz Boolean',
       meta: [
-        { name: 'description', content: 'QuizActionBoolean - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz Boolean' }
       ],
       page_type: 'show',
     }
@@ -33,7 +33,7 @@ const routes = [
       logged: true,
       title: 'Quiz Essay',
       meta: [
-        { name: 'description', content: 'QuizActionEssay - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz Essay' }
       ],
       page_type: 'show',
     }
@@ -46,7 +46,7 @@ const routes = [
       logged: true,
       title: 'Quiz Match',
       meta: [
-        { name: 'description', content: 'QuizActionMatch - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz Match' }
       ],
       page_type: 'show',
     }
@@ -59,7 +59,7 @@ const routes = [
       logged: true,
       title: 'Quiz Multiple',
       meta: [
-        { name: 'description', content: 'QuizActionMultiple - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz Multiple' }
       ],
       page_type: 'show',
     }
@@ -72,7 +72,7 @@ const routes = [
       logged: true,
       title: 'Quiz ShortAnswer',
       meta: [
-        { name: 'description', content: 'QuizActionShortAnswer - Yuvoria GAME' }
+        { name: 'description', content: 'Quiz ShortAnswer' }
       ],
       page_type: 'show',
     }

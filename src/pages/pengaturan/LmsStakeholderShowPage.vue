@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-card flat bordered>
       <!-- <q-card-actions align="left">
         <div class="text-h6">PROFIL</div>
@@ -18,7 +18,7 @@
             <q-card-actions align="center" class="q-py-md">
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
-                <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
+                <q-img class="bg-black" :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
                   :error-src="global_url_image" />
               </q-avatar>
               <!-- <div class="col-12 text-center">
@@ -138,21 +138,23 @@
       </q-tab-panels>
     </q-card>
 
-    <div style="height: 40px"></div>
+    <template v-if="enabled || is_stakeholder && get_show_payload?.id">
+      <div style="height: 40px"></div>
 
-    <FormDialog ref="FormDialog"></FormDialog>
+      <FormDialog ref="FormDialog"></FormDialog>
 
-    <q-page-sticky position="bottom" :offset="[0, 10]">
-      <q-btn
-        @click="onOpenDialog"
-        unelevated
-        rounded
-        label="edit"
-        color="pink"
-        size="md"
-        icon="edit"
-      ></q-btn>
-    </q-page-sticky>
+      <q-page-sticky position="bottom" :offset="[0, 10]">
+        <q-btn
+          @click="onOpenDialog"
+          unelevated
+          rounded
+          label="edit"
+          color="pink"
+          size="md"
+          icon="edit"
+        ></q-btn>
+      </q-page-sticky>
+    </template>
   </q-page>
 </template>
 

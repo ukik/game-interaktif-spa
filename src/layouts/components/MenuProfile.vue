@@ -119,10 +119,15 @@ export default {
           break;
         case "teacher":
         case "principal":
+          return {
+            name: "lms_stakeholder_show",
+            params: params,
+          };
+          break;
         case "superadmin":
         case "admin":
           return {
-            name: "lms_stakeholder_show",
+            name: "lms_admin_show",
             params: params,
           };
           break;

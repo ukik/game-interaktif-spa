@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-list separator bordered class="bg-white">
       <template v-if="get_index_data.length > 0">
         <q-item
@@ -47,7 +47,7 @@
       <EmptyBlock v-else></EmptyBlock>
     </q-list>
     <div style="height: 47px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
+    <q-page-sticky v-if="is_student" position="bottom" :offset="[0, 0]">
       <Pagination
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"

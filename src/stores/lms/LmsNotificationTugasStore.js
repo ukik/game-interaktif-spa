@@ -105,7 +105,9 @@ export const useLmsNotificationTugasStore = defineStore('LmsNotificationTugasSto
     get_index_per_page: ({ index }) => index?.payload?.payload?.per_page,
     get_index_prev_page_url: ({ index }) => index?.payload?.payload?.prev_page_url,
     get_index_to: ({ index }) => index?.payload?.payload?.to,
-    get_index_total: ({ index }) => index?.payload?.payload?.total,
+
+    get_index_total_read: ({ index }) => index?.payload?.total_read,
+    get_index_total_unread: ({ index }) => index?.payload?.total_unread,
 
     get_index_read_current_page: ({ index_read }) => index_read?.payload?.payload?.current_page,
     get_index_read_data: ({ index_read }) => index_read?.payload?.payload?.data,
@@ -118,7 +120,10 @@ export const useLmsNotificationTugasStore = defineStore('LmsNotificationTugasSto
     get_index_read_per_page: ({ index_read }) => index_read?.payload?.payload?.per_page,
     get_index_read_prev_page_url: ({ index_read }) => index_read?.payload?.payload?.prev_page_url,
     get_index_read_to: ({ index_read }) => index_read?.payload?.payload?.to,
-    get_index_read_total: ({ index_read }) => index_read?.payload?.payload?.total,
+
+    get_index_read_total_read: ({ index_read }) => index_read?.payload?.total_read,
+    get_index_read_total_unread: ({ index_read }) => index_read?.payload?.total_unread,
+
 
     // get_index_unread: ({ index_unread }) => index_unread?.payload?.payload,
     get_index_unread_current_page: ({ index_unread }) => index_unread?.payload?.payload?.current_page,
@@ -132,7 +137,9 @@ export const useLmsNotificationTugasStore = defineStore('LmsNotificationTugasSto
     get_index_unread_per_page: ({ index_unread }) => index_unread?.payload?.payload?.per_page,
     get_index_unread_prev_page_url: ({ index_unread }) => index_unread?.payload?.payload?.prev_page_url,
     get_index_unread_to: ({ index_unread }) => index_unread?.payload?.payload?.to,
-    get_index_unread_total: ({ index_unread }) => index_unread?.payload?.payload?.total,
+
+    get_index_unread_total_read: ({ index_unread }) => index_unread?.payload?.total_read,
+    get_index_unread_total_unread: ({ index_unread }) => index_unread?.payload?.total_unread,
 
 
     get_show_payload: ({ show }) => show?.payload?.payload,

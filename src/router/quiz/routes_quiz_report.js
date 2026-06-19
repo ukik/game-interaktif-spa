@@ -8,7 +8,8 @@ const routes = [
       title: 'Report Quiz',
       meta: [
         { name: 'description', content: 'Report Quiz' }
-      ]
+      ],
+      page_type: 'show',
     }
   },
   {
@@ -20,7 +21,8 @@ const routes = [
       title: 'Report Quiz',
       meta: [
         { name: 'description', content: 'Report Quiz' }
-      ]
+      ],
+      page_type: 'show',
     },
     beforeEnter: (to, from, next) => {
       // reject the navigation

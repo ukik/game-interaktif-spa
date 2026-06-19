@@ -6,7 +6,7 @@ import { host } from 'src/boot/common'
 
 import { onRequestPrivate, notifSuccess, notifFailed } from 'src/utils/apiRequest';
 
-export const useLmsDashboardStore = defineStore('LmsDashboardStore', {
+export const useLmsDashboardQuizMetricStore = defineStore('LmsDashboardQuizMetricStore', {
   state: () => ({
     init: {
       index: true,
@@ -81,7 +81,7 @@ export const useLmsDashboardStore = defineStore('LmsDashboardStore', {
 
       Loading.show()
       onRequestPrivate(this, {
-        url: host + '/lms',
+        url: host + '/lms/dashboard-quiz-metric',
         method: 'get',
         params: {
           page: page

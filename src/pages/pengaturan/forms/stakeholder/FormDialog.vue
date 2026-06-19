@@ -21,7 +21,7 @@
           </q-btn>
         </q-toolbar>
 
-        <q-card-section style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
+        <q-card-section v-if="dialog" style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
           <q-list bordered class="q-pa-sm">
             <FormStep1 />
           </q-list>
@@ -86,6 +86,9 @@ export default {
 
       this.form_edit = ref;
       this.form_edit["image"] = null;
+      this.form_edit["new_password"] = null;
+      this.form_edit["new_password_confirmation"] = null;
+      this.form_edit["old_password"] = null;
     },
     showValidationErrors() {
       const form = this.$refs.formRef;

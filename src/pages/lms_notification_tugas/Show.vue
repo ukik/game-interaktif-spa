@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-card flat bordered>
       <!-- <q-card-actions align="left">
         <div class="text-h6">PROFIL</div>

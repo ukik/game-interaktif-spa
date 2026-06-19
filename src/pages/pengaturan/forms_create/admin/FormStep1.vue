@@ -1,4 +1,5 @@
 <template>
+
   <div class="q-gutter-md">
     <div>
       <div class="row q-col-gutter-md">
@@ -29,17 +30,6 @@
     </div>
 
     <div>
-      <div>
-        <q-input
-          class="q-mb-md"
-          v-model="form_create.email"
-          label="Email"
-          outlined
-          hint="Tidak bisa dirubah (hubungi Admin)"
-          :rules="[(val) => !!val || 'wajib diisi']"
-        />
-      </div>
-
       <q-input
         v-model="form_create.name"
         label="Nama"
@@ -58,6 +48,15 @@
         :rules="[(val) => !!val || 'wajib diisi']"
       />
     </div>
+    <div>
+      <q-input
+        v-model="form_create.email"
+        label="Email"
+        outlined
+        hint="required"
+        :rules="[(val) => !!val || 'wajib diisi']"
+      />
+    </div>
 
     <div>
       <q-input
@@ -68,11 +67,13 @@
         :rules="[(val) => !!val || 'wajib diisi']"
       />
     </div>
-    <div class="q-mb-lg">
+
+    <!-- <div class="q-mb-lg">
       <q-select
         v-model="form_create.role"
         :options="[
-          { value: 'parent', label: 'ORANGTUA' },
+          { value: 'principal', label: 'KEPSEK' },
+          { value: 'teacher', label: 'GURU' },
         ]"
         option-label="label"
         option-value="value"
@@ -85,7 +86,7 @@
         input-debounce="100"
         :rules="[(val) => !!val || 'wajib diisi']"
       />
-    </div>
+    </div> -->
     <div>
       <q-input
         v-model="form_create.alamat"
@@ -99,6 +100,7 @@
       />
     </div>
 
+    <!-- Upload -->
     <div class="row">
       <q-item-label lines="1" caption class="col-12 q-mb-sm">Gambar</q-item-label>
       <q-file
@@ -116,14 +118,13 @@
       />
     </div>
 
-
     <!-- Submit -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapWritableState } from "pinia";
-import { useFormPengaturanParentStore } from "src/stores/lms/form/FormPengaturanParentStore";
+import { useFormPengaturanAdminStore } from "src/stores/lms/form/FormPengaturanAdminStore";
 import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
 export default {
@@ -133,8 +134,8 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useFormPengaturanParentStore, ["form_create", "preview"]),
-    ...mapState(useGlobalStore, ["get_kelas_option_lists"]),
+    ...mapWritableState(useFormPengaturanAdminStore, ["form_create", "preview"]),
+    ...mapState(useGlobalStore, ["get_data_global_list_jenjang"]),
   },
   watch: {
     "form_create.image"(file) {

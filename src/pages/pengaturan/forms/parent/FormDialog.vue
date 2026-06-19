@@ -23,7 +23,7 @@
           </q-btn>
         </q-toolbar>
 
-        <q-card-section style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
+        <q-card-section  v-if="dialog" style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
           <!-- <q-list bordered class="q-pa-sm">
             <FormStep1 />
           </q-list> -->
@@ -149,10 +149,16 @@ export default {
       }
       this.form_edit = form_edit;
       this.form_edit["image"] = null;
+      this.form_edit["new_password"] = null;
+      this.form_edit["new_password_confirmation"] = null;
+      this.form_edit["old_password"] = null;
       this.form_edit['siswa_id'] = form_edit?.parent?.siswa.map(item => item.siswa.id)
 
       this.reference = reference;
       this.reference["image"] = null;
+      this.reference["new_password"] = null;
+      this.reference["new_password_confirmation"] = null;
+      this.reference["old_password"] = null;
       this.reference['siswa_id'] = reference?.parent?.siswa.map(item => item.siswa.id)
 
       if(this.options.length <= 0) this.options = form_edit?.parent?.siswa.map(item => item.siswa)

@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <!-- {{ tab }} {{ expired }} -->
 
     <!-- <template v-if="get_index_data.length > 0"> -->
@@ -124,18 +124,17 @@
       dense
       class="text-grey"
       :active-color="tab == 'publish' ? 'primary' : 'pink'"
-      :indicator-color="tab == 'publish' ? 'primary' : 'pink'"
       align="justify"
     >
+      <q-tab name="semua" class="text-teal" label="Semua" />
       <q-tab name="publish" class="text-primary" label="Publish" />
       <q-tab name="draft" class="text-pink" label="Draft" />
     </q-tabs>
 
     <q-separator />
-
     <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="publish" class="q-pa-none">
-        <template v-if="tab == 'publish'">
+      <q-tab-panel name="semua" class="q-pa-none">
+        <template v-if="tab == 'semua'">
           <q-tabs
             v-model="expired_1"
             dense
@@ -146,11 +145,11 @@
             align="center"
           >
             <q-tab icon="lock_open" name="false" label="Tersedia" />
-            <q-tab icon="lock" name="true" label="Tutup" />
+            <q-tab icon="lock" name="true" label="Selesai" />
           </q-tabs>
           <q-tab-panels v-model="expired_1" animated>
             <q-tab-panel name="false" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'false'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'false' && !get_loading">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
@@ -162,7 +161,52 @@
               <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'true'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'true' && !get_loading">
+                <IndexCard
+                  :get_index_data="get_index_data"
+                  :get_index_kelas="get_index_kelas"
+                  route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
+                >
+                </IndexCard>
+              </div>
+              <EmptyBlock v-else></EmptyBlock>
+            </q-tab-panel>
+          </q-tab-panels>
+        </template>
+        <EmptyBlock v-else></EmptyBlock>
+      </q-tab-panel>
+
+
+      <q-tab-panel name="publish" class="q-pa-none">
+        <template v-if="tab == 'publish'">
+          <q-tabs
+            v-model="expired_1"
+            dense
+            inline-label
+            class="bg-primary text-grey-4 shadow-2"
+            active-color="white"
+            indicator-color="white"
+            align="center"
+          >
+            <q-tab icon="lock_open" name="false" label="Tersedia" />
+            <q-tab icon="lock" name="true" label="Selesai" />
+          </q-tabs>
+          <q-tab-panels v-model="expired_1" animated>
+            <q-tab-panel name="false" class="q-pa-none">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'false' && !get_loading">
+                <IndexCard
+                  :get_index_data="get_index_data"
+                  :get_index_kelas="get_index_kelas"
+                  route_name="lms_tugas_show"
+                  route_name_rank="lms_tugas_quiz_stats_show"
+                >
+                </IndexCard>
+              </div>
+              <EmptyBlock v-else></EmptyBlock>
+            </q-tab-panel>
+            <q-tab-panel name="true" class="q-pa-none">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_1 == 'true' && !get_loading">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
@@ -184,17 +228,17 @@
             v-model="expired_2"
             dense
             inline-label
-            class="bg-teal text-grey-4 shadow-2"
+            class="bg-pink text-grey-4 shadow-2"
             active-color="white"
             indicator-color="white"
             align="center"
           >
             <q-tab icon="lock_open" name="false" label="Tersedia" />
-            <q-tab icon="lock" name="true" label="Tutup" />
+            <q-tab icon="lock" name="true" label="Selesai" />
           </q-tabs>
           <q-tab-panels v-model="expired_2" animated>
             <q-tab-panel name="false" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'false'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'false' && !get_loading">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
@@ -206,7 +250,7 @@
               <EmptyBlock v-else></EmptyBlock>
             </q-tab-panel>
             <q-tab-panel name="true" class="q-pa-none">
-              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'true'">
+              <div class="row q-gutter-y-md" v-if="get_index_data?.length > 0 && expired_2 == 'true' && !get_loading">
                 <IndexCard
                   :get_index_data="get_index_data"
                   :get_index_kelas="get_index_kelas"
@@ -284,7 +328,7 @@ export default {
   },
   data() {
     return {
-      list_demo: [],
+      // list_demo: [],
       expired_1: "false",
       expired_2: "false",
     };
@@ -326,6 +370,7 @@ export default {
       "get_index_loading",
       "get_init_index",
       "get_index_kelas",
+      "get_loading"
     ]),
   },
   methods: {

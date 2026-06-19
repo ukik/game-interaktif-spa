@@ -25,7 +25,7 @@
             <q-avatar color="primary" text-color="white" icon="account_circle" />
           </q-item-section>
 
-          <q-item-section>Total Teacher</q-item-section>
+          <q-item-section>Total Guru</q-item-section>
           <q-item-section side class="text-h6">{{ Number(item?.total_teachers ?? 0) }}</q-item-section>
         </q-item>
       </div>
@@ -35,7 +35,7 @@
             <q-avatar color="cyan" text-color="white" icon="assignment_ind" />
           </q-item-section>
 
-          <q-item-section>Total Student</q-item-section>
+          <q-item-section>Total Siswa</q-item-section>
           <q-item-section side class="text-h6">{{ Number(item?.total_students ?? 0) }}</q-item-section>
         </q-item>
       </div>
@@ -60,7 +60,7 @@
           <q-item-section side class="text-h6">{{ Number(item?.total_tugas ?? 0) }}</q-item-section>
         </q-item>
       </div>
-      <div class="col-xs-12 col-sm-6 row">
+      <!-- <div class="col-xs-12 col-sm-6 row">
         <q-separator vertical></q-separator>
         <q-item class="col">
           <q-item-section avatar>
@@ -69,6 +69,17 @@
 
           <q-item-section>Total Modul</q-item-section>
           <q-item-section side class="text-h6">{{ Number(item?.total_modul ?? 0) }}</q-item-section>
+        </q-item>
+      </div> -->
+      <div class="col-xs-12 col-sm-6 row">
+        <q-separator vertical></q-separator>
+        <q-item class="col">
+          <q-item-section avatar>
+            <q-avatar color="pink" text-color="white" icon="assignment_late" />
+          </q-item-section>
+
+          <q-item-section>Total Mapel</q-item-section>
+          <q-item-section side class="text-h6">{{ Number(item?.total_mapel_used ?? 0) }}</q-item-section>
         </q-item>
       </div>
       <div class="col-xs-12 col-sm-6">
@@ -83,14 +94,14 @@
       </div>
       <div class="col-xs-12 col-sm-6 row">
         <q-separator vertical></q-separator>
-        <q-item class="col">
+        <!-- <q-item class="col">
           <q-item-section avatar>
-            <q-avatar color="pink" text-color="white" icon="assignment_late" />
+            <q-avatar color="orange" text-color="white" icon="assignment" />
           </q-item-section>
 
-          <q-item-section>Total Mapel</q-item-section>
-          <q-item-section side class="text-h6">{{ Number(item?.total_mapel_used ?? 0) }}</q-item-section>
-        </q-item>
+          <q-item-section>Total Modul</q-item-section>
+          <q-item-section side class="text-h6">{{ Number(item?.total_modul ?? 0) }}</q-item-section>
+        </q-item> -->
       </div>
     </q-list>
   </q-card>

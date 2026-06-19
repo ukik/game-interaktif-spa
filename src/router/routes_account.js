@@ -1,6 +1,29 @@
 const routes_account = [
   // SISWA
   {
+    path: "/lms-admin-index",
+    name: 'lms_admin_index',
+    component: () => import("pages/pengaturan/LmsAdminIndexPage.vue"),
+    meta: {
+      logged: true,
+      title: "Admin",
+      meta: [{ name: "description", content: "Admin" }],
+      page_type: 'index',
+    },
+  },
+  {
+    path: "/lms-admin-show/:slug",
+    name: 'lms_admin_show',
+    component: () => import("pages/pengaturan/LmsAdminShowPage.vue"),
+    meta: {
+      logged: true,
+      title: "Detail Admin",
+      meta: [{ name: "description", content: "Detail Admin" }],
+      page_type: 'show',
+    },
+  },
+  // SISWA
+  {
     path: "/lms-siswa-index",
     name: 'lms_siswa_index',
     component: () => import("pages/pengaturan/LmsSiswaIndexPage.vue"),

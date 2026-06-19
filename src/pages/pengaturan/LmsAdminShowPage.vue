@@ -6,24 +6,49 @@
         <div class="text-h6">PROFIL</div>
       </q-card-actions> -->
 
-      <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-        <q-tab name="student" label="SISWA" />
-        <q-tab name="parent" label="ORANGTUA">
-          <q-badge color="teal" v-if="get_show_payload?.siswa?.parents.length > 0" floating>{{
-            get_show_payload?.siswa?.parents.length }}</q-badge>
-        </q-tab>
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+      >
+        <q-tab name="admin" label="admin" />
       </q-tabs>
 
       <q-separator />
 
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="student" class="q-pa-none">
+        <q-tab-panel name="admin" class="q-pa-none">
           <template v-if="get_show_payload?.id">
+            <!-- <q-card-actions align="center" class="q-py-sm">
+              <q-parallax :height="is_mobile_size ? 250 : 450">
+                <q-img class="img_blur"
+                  position="50% 0%"
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
+              </q-parallax>
+
+              <q-avatar class="absolute" size="240px">
+                <q-img class="bg-black"
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
+              </q-avatar>
+            </q-card-actions> -->
+
             <q-card-actions align="center" class="q-py-md">
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
-                <q-img class="bg-black" :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  :error-src="global_url_image" />
+                <q-img class="bg-black"
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
               </q-avatar>
               <!-- <div class="col-12 text-center">
                 <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>
@@ -83,42 +108,13 @@
                     }}</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kelas</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.siswa?.kelas?.nama
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>NIS</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.siswa?.nis
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>NISN</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.siswa?.nisn
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
+
                 <q-item>
                   <q-item-section>
                     <q-item-label lines="1" caption>Role</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-item-label class="text-dark  text-capitalize">{{
+                    <q-item-label class="text-dark text-capitalize">{{
                       get_show_payload?.role
                     }}</q-item-label>
                   </q-item-section>
@@ -148,41 +144,10 @@
           </template>
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
-        <q-tab-panel name="parent" class="q-pa-none">
-          <q-card-section v-if="get_show_payload?.siswa?.parents && get_show_payload?.siswa?.parents.length > 0"
-            class="q-pa-sm">
-            <q-list separator bordered class="text-dark">
-              <q-item v-for="(item, index) in get_show_payload?.siswa?.parents" :key="index"
-                :to="{ name: 'lms_ortu_show', params: { slug: item?.parent?.id } }" clickable v-ripple>
-                <q-item-section avatar top>
-                  <q-avatar>
-                    <q-img :src="item?.parent?.url_image" @error="item.parent.url_image = global_url_image"
-                      :error-src="global_url_image" />
-                  </q-avatar>
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label>{{ item?.parent?.name }}</q-item-label>
-                  <q-item-label caption lines="1">{{ item?.parent?.email }}</q-item-label>
-                  <q-item-label caption lines="1">{{ item?.parent?.telpon }} / {{ item?.parent?.whatsapp
-                  }}</q-item-label>
-                </q-item-section>
-
-                <q-item-section side top>
-                  <q-item-label caption lines="1">{{ item?.parent?.created_at_human }}</q-item-label>
-                  <q-badge class="q-mt-xs">ID: {{ item?.parent?.id }}</q-badge>
-                </q-item-section>
-
-              </q-item>
-            </q-list>
-          </q-card-section>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
       </q-tab-panels>
     </q-card>
 
-
-    <template v-if="enabled || is_student && get_show_payload?.id">
+    <template v-if="enabled && get_show_payload?.id">
       <div style="height: 40px"></div>
 
       <FormDialog ref="FormDialog"></FormDialog>
@@ -205,25 +170,25 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsSiswaStore } from "src/stores/lms/LmsSiswaStore";
-import FormDialog from "./forms/siswa/FormDialog.vue";
+import { useLmsAdminStore } from "src/stores/lms/LmsAdminStore";
+import FormDialog from "./forms/admin/FormDialog.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsSiswaStore(store);
+    const preStore = useLmsAdminStore(store);
 
     // const page = currentRoute.query.page || 1;
     const slug = currentRoute.params.slug || "";
 
     await preStore.onShow(slug);
   },
-  components: {
-    FormDialog
-  },
   data() {
     return {
-      tab: "student",
+      tab: "admin",
     };
+  },
+  components: {
+    FormDialog,
   },
   watch: {
     get_show_payload: {
@@ -238,11 +203,11 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsSiswaStore, ["get_show_payload", "get_init_show"]),
+    ...mapState(useLmsAdminStore, ["get_show_payload", "get_init_show"]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsSiswaStore, ["onShow", "onChangePage"]),
+    ...mapActions(useLmsAdminStore, ["onShow", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

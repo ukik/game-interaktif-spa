@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-banner dense class="bg-grey-1 q-mb-sm rounded-borders q-card--bordered">
       <q-chip
         @remove="() => onClear('kelas')"

@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <!-- <q-list separator bordered> -->
     <template v-if="get_summary">
 
@@ -37,7 +37,7 @@ import { ref } from "vue";
 
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsDashboardStore } from "src/stores/lms/LmsDashboardStore";
+import { useLmsDashboardQuizMetricStore } from "src/stores/lms/LmsDashboardQuizMetricStore.js";
 
 import DeadlineTable from "./components/quiz_metric/DeadlineTable.vue";
 import RecentSubmissionTable from "./components/quiz_metric/RecentSubmissionTable.vue";
@@ -83,7 +83,7 @@ export default {
     AktivitasNewestTable
   },
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsDashboardStore(store);
+    const preStore = useLmsDashboardQuizMetricStore(store);
 
     const page = currentRoute.query.page || 1;
 
@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsDashboardStore, [
+    ...mapState(useLmsDashboardQuizMetricStore, [
       'get_init_index',
       "get_loading_index",
 
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsDashboardStore, ["onIndex", "onChangePage"]),
+    ...mapActions(useLmsDashboardQuizMetricStore, ["onIndex", "onChangePage"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

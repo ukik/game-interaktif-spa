@@ -14,8 +14,8 @@
             : `width: ${getPageWidth()}px; height: calc(100vh - 0px);`
         "
       >
-        <q-toolbar class="bg-dark text-white">
-          <q-toolbar-title> Edit Sekolah </q-toolbar-title>
+        <q-toolbar class="bg-blue text-white">
+          <q-toolbar-title> Edit Admin </q-toolbar-title>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
@@ -48,8 +48,8 @@
 <script>
 import { mapActions, mapWritableState, mapState } from "pinia";
 import FormStep1 from "./FormStep1.vue";
-import { useFormPengaturanSekolahStore } from "src/stores/lms/form/FormPengaturanSekolahStore";
-import { useLmsSekolahStore } from "src/stores/lms/LmsSekolahStore.js";
+import { useFormPengaturanAdminStore } from "src/stores/lms/form/FormPengaturanAdminStore";
+import { useLmsAdminStore } from "src/stores/lms/LmsAdminStore.js";
 
 export default {
   components: {
@@ -62,29 +62,33 @@ export default {
     };
   },
   computed: {
-    ...mapState(useLmsSekolahStore, ["get_show_payload"]),
-    ...mapWritableState(useFormPengaturanSekolahStore, ["form_edit"]),
+    ...mapState(useLmsAdminStore, ["get_show_payload"]),
+    ...mapWritableState(useFormPengaturanAdminStore, ["form_edit"]),
   },
   methods: {
-    ...mapActions(useFormPengaturanSekolahStore, {
+    ...mapActions(useFormPengaturanAdminStore, {
       onUpdate: "onUpdate",
     }),
-    ...mapActions(useLmsSekolahStore, ["onShow"]),
+    ...mapActions(useLmsAdminStore, ["onShow"]),
     async onOpen(id) {
       this.dialog = true;
       this.id = id;
-      // this.form_edit = payload
-      // if(typeof(this.form_edit['image'] === 'string')) this.form_edit['image'] = null
 
       const ref = JSON.parse(JSON.stringify(this.get_show_payload))
 
-      if (this.$route.name == "lms_sekolah_index") {
-        await this.onShow(id);
-      } else if (this.$route.name == "lms_sekolah_show") {
+      switch (this.$route.name) {
+        case "lms_admin_index":
+          await this.onShow(id);
+          break;
+        case "lms_admin_show":
+          break;
       }
 
       this.form_edit = ref;
-      this.form_edit['image'] = null
+      this.form_edit["image"] = null;
+      this.form_edit["new_password"] = null;
+      this.form_edit["new_password_confirmation"] = null;
+      this.form_edit["old_password"] = null;
 
     },
     showValidationErrors() {
@@ -164,7 +168,6 @@ export default {
     },
   },
   async mounted() {
-
   },
 };
 </script>

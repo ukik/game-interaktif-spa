@@ -16,7 +16,6 @@
         active-class="my-menu-link"
       >
         <q-item-section avatar>
-          <!-- <q-icon :name="item.icon"></q-icon> -->
           <q-avatar color="primary">
             <q-icon color="white" size="18px" :name="item.icon"></q-icon>
           </q-avatar>
@@ -27,7 +26,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item-label header class="q-py-md">Notifikasi</q-item-label>
+      <q-item-label header class="q-py-md">Pemberitahuan</q-item-label>
       <q-item
         v-for="(item, index) in notifikasi_items"
         :key="index"
@@ -91,14 +90,14 @@
 const notifikasi_items = [
   {
     id: 1,
-    title: "PESAN TUGAS",
+    title: "NOTIFIKASI TUGAS",
     subtitle: "Tugas Terbaru",
     icon: "alarm",
     route_name: "lms_notification_tugas_index",
   },
   {
     id: 2,
-    title: "PESAN HASIL",
+    title: "NOTIFIKASI HASIL",
     subtitle: "Nilai Terbaru",
     icon: "alarm_on",
     route_name: "lms_notification_quiz_hasil_index",
@@ -108,15 +107,15 @@ const notifikasi_items = [
 const dashboard_items = [
   {
     id: 1,
-    title: "GENERAL",
-    subtitle: "Tugas Publish",
+    title: "METRIK QUIZ",
+    subtitle: "Performa Tugas",
     icon: "widgets",
     route_name: "dashboard_quiz_metric",
   },
   {
     id: 2,
-    title: "AKTIVITAS",
-    subtitle: "Nilai Submit",
+    title: "STATISTIK QUIZ",
+    subtitle: "Performa Peserta",
     icon: "dashboard",
     route_name: "dashboard_tugas_statistik",
   },
@@ -130,6 +129,14 @@ const pengguna_items = [
     icon: "fa-solid fa-house-user",
     route_name: "lms_sekolah_index",
     route_name_show: "lms_sekolah_show",
+  },
+  {
+    id: 1,
+    title: "ADMIN",
+    subtitle: "Profil Admin",
+    icon: "fa-solid fa-house-user",
+    route_name: "lms_admin_index",
+    route_name_show: "lms_admin_show",
   },
   {
     id: 1,
@@ -207,7 +214,7 @@ export default {
       expanded_nilai: false,
       expanded_ranking: false,
       expanded_tugas: false,
-      expanded_pengaturan: false,
+      expanded_pengaturan: true,
     };
   },
   watch: {
@@ -215,10 +222,10 @@ export default {
       console.log("$route.name", val);
       this.link = val;
 
-      this.expanded_bank = false;
-      this.expanded_nilai = false;
-      this.expanded_ranking = false;
-      this.expanded_tugas = false;
+      // this.expanded_bank = false;
+      // this.expanded_nilai = false;
+      // this.expanded_ranking = false;
+      // this.expanded_tugas = false;
       this.expanded_pengaturan = false;
 
       switch (val) {
@@ -234,10 +241,13 @@ export default {
         // case "lms_tugas_index":
         //   this.expanded_tugas = true;
         //   break;
+        case "lms_admin_index":
         case "lms_sekolah_index":
         case "lms_stakeholder_index":
         case "lms_ortu_index":
         case "lms_siswa_index":
+
+        case "lms_admin_show":
         case "lms_sekolah_show":
         case "lms_stakeholder_show":
         case "lms_ortu_show":
@@ -255,16 +265,19 @@ export default {
     // if (this.$route?.name == "lms_tugas_quiz_stats_index") this.expanded_ranking = true;
     // if (this.$route?.name == "lms_tugas_index") this.expanded_tugas = true;
     switch (this.$route?.name) {
+        case "lms_admin_index":
         case "lms_sekolah_index":
         case "lms_stakeholder_index":
         case "lms_ortu_index":
         case "lms_siswa_index":
+
+        case "lms_admin_show":
         case "lms_sekolah_show":
         case "lms_stakeholder_show":
         case "lms_ortu_show":
         case "lms_siswa_show":
-        this.expanded_pengaturan = true;
-        break;
+          this.expanded_pengaturan = true;
+          break;
     }
   },
 };

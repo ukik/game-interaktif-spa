@@ -4,7 +4,7 @@
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_create.new_password"
+            v-model="form_create.new_password" clearable
             label="Password Baru"
             outlined
             type="password"
@@ -14,7 +14,7 @@
         </div>
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_create.new_password_confirmation"
+            v-model="form_create.new_password_confirmation" clearable
             label="Konfirmasi Password Baru"
             outlined
             type="password"

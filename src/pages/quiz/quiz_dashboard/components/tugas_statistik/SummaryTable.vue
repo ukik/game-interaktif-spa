@@ -19,8 +19,9 @@
           <q-item-section side class="text-h6">{{ Number(item?.total_tugas ?? 0) }}</q-item-section>
         </q-item>
       </div>
-      <div class="col-xs-12 col-sm-6">
-        <q-item>
+      <div class="col-xs-12 col-sm-6 row">
+        <q-separator vertical></q-separator>
+        <q-item class="col">
           <q-item-section avatar>
             <q-avatar color="pink" text-color="white" icon="assignment" />
           </q-item-section>
@@ -39,8 +40,9 @@
           <q-item-section side class="text-h6">{{ Number(item?.total_publish ?? 0) }}</q-item-section>
         </q-item>
       </div>
-      <div class="col-xs-12 col-sm-6">
-        <q-item>
+      <div class="col-xs-12 col-sm-6 row">
+        <q-separator vertical></q-separator>
+        <q-item class="col">
           <q-item-section avatar>
             <q-avatar color="orange" text-color="white" icon="assignment" />
           </q-item-section>

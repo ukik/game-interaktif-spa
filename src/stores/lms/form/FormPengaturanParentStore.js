@@ -58,7 +58,7 @@ function getDummyEmail() {
   return Math.round(Math.random() * 10000000) + "@dummy.com"
 }
 
-const form = {
+const form_dummy = {
   // table: siswa
   siswa: {
     uuid: '',
@@ -82,7 +82,7 @@ const form = {
   siswa_id: [],
 }
 
-const formX = {
+const form = {
   // table: siswa
   siswa: {
     uuid: '',
@@ -106,7 +106,7 @@ const formX = {
   siswa_id: [],
 }
 
-const empty_form = JSON.parse(JSON.stringify(formX))
+const empty_form = JSON.parse(JSON.stringify(form))
 
 export const useFormPengaturanParentStore = defineStore('FormPengaturanParentStore', {
   state: () => ({

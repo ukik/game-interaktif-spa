@@ -97,7 +97,6 @@ a .router-link-active {
   display: none;
 }
 
-
 /* paksa tombol swal horizontal */
 .swal2-actions {
   display: flex !important;
@@ -112,4 +111,17 @@ a .router-link-active {
 .swal2-actions button {
   width: auto !important;
   flex: 0 0 auto !important;
+}
+
+.border-left {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.img_blur {
+  opacity: 0.95;
+  filter: blur(5px) brightness(90%);
+}
+
+.border_round {
+  border: 1px solid #1976d286;
 }

@@ -8,7 +8,7 @@
           :key="index"
           clickable
           v-ripple
-          :to="{ name: 'lms_stakeholder_show', params: { slug: item?.id } }"
+          :to="{ name: 'lms_admin_show', params: { slug: item?.id } }"
         >
           <q-item-section avatar>
             <q-avatar>
@@ -50,11 +50,11 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
-import { useLmsStakeholderStore } from "src/stores/lms/LmsStakeholderStore";
+import { useLmsAdminStore } from "src/stores/lms/LmsAdminStore";
 
 export default {
   async preFetch({ store, currentRoute }) {
-    const preStore = useLmsStakeholderStore(store);
+    const preStore = useLmsAdminStore(store);
 
     const page = currentRoute.query.page || 1;
 
@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapState(useLmsStakeholderStore, [
+    ...mapState(useLmsAdminStore, [
       "get_index_data",
       "get_index_current_page",
       "get_index_last_page",
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsStakeholderStore, ["onIndex", "onChangePage","setKeyword"]),
+    ...mapActions(useLmsAdminStore, ["onIndex", "onChangePage","setKeyword"]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

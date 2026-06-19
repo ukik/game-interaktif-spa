@@ -3,30 +3,41 @@
     <div>
       <div class="q-mb-md">
         <q-input
-          v-model="form_edit.old_password"
+          v-model="form_edit.old_password" type="password" clearable
           label="Password Lama"
           outlined
           hint="required"
-          :rules="[(val) => !!val || 'wajib diisi']"
         />
       </div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password"
+            reactive-rules
+            v-model="form_edit.new_password" clearable
             label="Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="[
+              ...rules.passwordOptional,
+              (val) => {
+                if (!val && form_edit.new_password_confirmation) {
+                  return 'Password baru wajib diisi';
+                }
+                return true;
+              },
+            ]"
           />
         </div>
         <div class="col-12 col-sm-6">
           <q-input
-            v-model="form_edit.new_password_confirmation"
+            reactive-rules
+            v-model="form_edit.new_password_confirmation" clearable
             label="Konfirmasi Password Baru"
             outlined
+            type="password"
             hint="required"
-            :rules="[(val) => !!val || 'wajib diisi']"
+            :rules="rules.confirmPassword(() => form_edit.new_password)"
           />
         </div>
       </div>

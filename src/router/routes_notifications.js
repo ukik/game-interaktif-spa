@@ -28,8 +28,8 @@ const routes_notifications = [
     component: () => import("pages/lms_notification_quiz_hasil/Index.vue"),
     meta: {
       logged: true,
-      title: "Notifikasi Quiz Hasil",
-      meta: [{ name: "description", content: "Notifikasi Quiz Hasil" }],
+      title: "Notifikasi Nilai",
+      meta: [{ name: "description", content: "Notifikasi Nilai" }],
       page_type: 'index',
     },
   },
@@ -39,8 +39,8 @@ const routes_notifications = [
     component: () => import("pages/lms_notification_quiz_hasil/Show.vue"),
     meta: {
       logged: true,
-      title: "Detail Notifikasi Quiz Hasil",
-      meta: [{ name: "description", content: "Detail Notifikasi Quiz Hasil" }],
+      title: "Detail Notifikasi Nilai",
+      meta: [{ name: "description", content: "Detail Notifikasi Nilai" }],
       page_type: 'show',
     },
   },

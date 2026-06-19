@@ -66,6 +66,65 @@ export default boot(({ app, router }) => {
     }
   })
 
+  Object.defineProperty(app.config.globalProperties, 'is_stakeholder', {
+    get() {
+      switch (useAuthStore().getRole) {
+        case 'teacher':
+        case 'principal':
+          return true
+        default:
+          return false
+      }
+    }
+  })
+
+
+  Object.defineProperty(app.config.globalProperties, 'is_admin', {
+    get() {
+      switch (useAuthStore().getRole) {
+        case 'admin':
+          return true
+        default:
+          return false
+      }
+    }
+  })
+
+  Object.defineProperty(app.config.globalProperties, 'is_superadmin', {
+    get() {
+      switch (useAuthStore().getRole) {
+        case 'superadmin':
+          return true
+        default:
+          return false
+      }
+    }
+  })
+
+
+  Object.defineProperty(app.config.globalProperties, 'is_parent', {
+    get() {
+      switch (useAuthStore().getRole) {
+        case 'parent':
+          return true
+        default:
+          return false
+      }
+    }
+  })
+
+
+  Object.defineProperty(app.config.globalProperties, 'is_principal', {
+    get() {
+      switch (useAuthStore().getRole) {
+        case 'principal':
+          return true
+        default:
+          return false
+      }
+    }
+  })
+
   Object.defineProperty(app.config.globalProperties, 'is_teacher', {
     get() {
       return useAuthStore().getRole == 'teacher'
@@ -134,6 +193,35 @@ export default boot(({ app, router }) => {
 
   Object.defineProperty(app.config.globalProperties, 'rules', {
     value: {
+      passwordOptional: [
+        (val) => {
+          if (!val) return true; // kosong diperbolehkan
+          return val.length >= 5 || 'Minimal 5 karakter';
+        },
+        (val) => {
+          if (!val) return true;
+          return val.length <= 100 || 'Maksimal 100 karakter';
+        },
+      ],
+      confirmPassword(passwordRef) {
+        return [
+          (val) => {
+            const password = passwordRef();
+
+            if (!password && !val) return true;
+
+            if (password && !val) {
+              return 'Konfirmasi password wajib diisi';
+            }
+
+            if (!password && val) {
+              return 'Password baru wajib diisi';
+            }
+
+            return val === password || 'Password tidak sama';
+          }
+        ]
+      },
       password: [
         val => !!val || 'Password wajib diisi',
         val => val.length >= 5 || 'Minimal 5 karakter',

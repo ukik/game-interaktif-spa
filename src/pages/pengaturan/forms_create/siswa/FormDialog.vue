@@ -23,7 +23,7 @@
           </q-btn>
         </q-toolbar>
 
-        <q-card-section style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
+        <q-card-section v-if="dialog" style="height: calc(100% - 50px - 53px)" class="scroll q-pa-sm">
           <!-- <q-list bordered class="q-pa-sm">
             <FormStep1 />
           </q-list> -->

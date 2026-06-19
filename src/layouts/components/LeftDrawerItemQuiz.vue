@@ -5,6 +5,45 @@
     </q-toolbar> -->
 
     <q-list>
+      <!-- <q-item-label header class="q-py-md">Dashboard</q-item-label> -->
+      <!-- <q-item-label header class="q-py-md"
+        >STEP 1 <q-icon name="arrow_right"></q-icon>
+      </q-item-label>
+      <q-expansion-item v-model="expanded_dashboard" group="sidebar">
+        <template v-slot:header>
+          <q-item-section avatar>
+            <q-avatar text-color="white" icon="speed" color="primary" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-capitalize">DASHBOARD QUIZ</q-item-label>
+            <q-item-label caption lines="1">Ringkasan Tugas</q-item-label>
+          </q-item-section>
+        </template>
+
+        <q-item
+          :inset-level="0.25"
+          v-for="(item, index) in dashboard_items"
+          :key="index"
+          :to="{ name: item?.route_name }"
+          clickable
+          v-ripple
+          :active="link === item?.route_name"
+          active-class="my-menu-link"
+        >
+          <q-item-section avatar>
+            <q-avatar color="grey-2">
+              <q-icon color="primary" size="18px" name="arrow_forward_ios"></q-icon>
+            </q-avatar>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label class="text-capitalize">{{ item?.title }}</q-item-label>
+            <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+      </q-expansion-item> -->
+
       <!-- Koleksi -->
       <q-item-label header class="q-py-md"
         >STEP 1 <q-icon name="arrow_right"></q-icon>
@@ -16,7 +55,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">BANK QUIZ</q-item-label>
-            <q-item-label caption lines="1">Pilih Materi</q-item-label>
+            <q-item-label caption lines="1">Tambah Tugas</q-item-label>
           </q-item-section>
         </template>
 
@@ -58,7 +97,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">TUGAS QUIZ</q-item-label>
-            <q-item-label caption lines="1">Kumpulan Latihan</q-item-label>
+            <q-item-label caption lines="1">Manajemen Tugas</q-item-label>
           </q-item-section>
         </template>
 
@@ -96,7 +135,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">NILAI QUIZ</q-item-label>
-            <q-item-label caption lines="1">Capaian Siswa</q-item-label>
+            <q-item-label caption lines="1">Hasil Tugas</q-item-label>
           </q-item-section>
         </template>
 
@@ -136,7 +175,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-capitalize">RANKING QUIZ</q-item-label>
-            <q-item-label caption lines="1">Agregat Hasil</q-item-label>
+            <q-item-label caption lines="1">Peringkat Tugas</q-item-label>
           </q-item-section>
         </template>
 
@@ -170,6 +209,24 @@
 </template>
 
 <script>
+const dashboard_items = [
+  {
+    id: 1,
+    title: "DATA METRIK",
+    subtitle: "Performa Tugas",
+    icon: "widgets",
+    route_name: "dashboard_quiz_metric",
+  },
+  {
+    id: 2,
+    title: "DATA STATISTIK",
+    subtitle: "Performa Peserta",
+    icon: "dashboard",
+    route_name: "dashboard_tugas_statistik",
+  },
+];
+
+
 const notifikasi_items = [
   {
     id: 1,
@@ -184,23 +241,6 @@ const notifikasi_items = [
     subtitle: "Nilai Terbaru",
     icon: "alarm_on",
     route_name: "lms_notification_quiz_hasil_index",
-  },
-];
-
-const dashboard_items = [
-  {
-    id: 1,
-    title: "GENERAL",
-    subtitle: "Tugas Publish",
-    icon: "widgets",
-    route_name: "dashboard_quiz_metric",
-  },
-  {
-    id: 2,
-    title: "AKTIVITAS",
-    subtitle: "Nilai Submit",
-    icon: "dashboard",
-    route_name: "dashboard_tugas_statistik",
   },
 ];
 
@@ -285,6 +325,7 @@ export default {
         },
       ],
 
+      expanded_dashboard: true,
       expanded_bank: false,
       expanded_nilai: false,
       expanded_ranking: false,
@@ -300,6 +341,7 @@ export default {
       this.expanded_nilai = false;
       this.expanded_ranking = false;
       this.expanded_tugas = false;
+      this.expanded_dashboard = false;
 
       switch (val) {
         case "lms_quiz_index":
@@ -313,6 +355,10 @@ export default {
           break;
         case "lms_tugas_index":
           this.expanded_tugas = true;
+          break;
+        case "dashboard_quiz_metric":
+        case "dashboard_tugas_statistik":
+          this.expanded_dashboard = true;
           break;
       }
     },

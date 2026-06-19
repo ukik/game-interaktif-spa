@@ -228,7 +228,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
           mapel: normalizeToString(this.valid_filter.mapel),
           kategori: normalizeToString(this.valid_filter.kategori),
           kategori_quiz: normalizeToString(this.valid_filter.kategori_quiz),
-          status: this.tab,
+          status: this.tab == 'semua' ? '' : this.tab,
           expired: this.expired,
           // http://localhost:8000/lms/tugas?jenjang=&kelas=1%2C6%2C7&user=7&mapel=33&kategori=2
         }

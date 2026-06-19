@@ -4,28 +4,38 @@
     <q-header elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
-        <q-btn
-          v-if="$route.meta?.page_type == 'show'"
-          @click="$router.back"
-          flat
-          round
-          dense
-          icon="arrow_back"
-          class="q-mr-sm"
-        />
+        <template v-if="$route.meta?.page_type == 'show'">
+          <q-btn
+            @click="$router.back"
+            flat
+            round
+            dense
+            icon="arrow_back"
+            class="q-mr-sm"
+          />
+          <q-space></q-space>
+        </template>
+        <template v-else>
+          <q-btn flat round to="/">
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+            </q-avatar>
+          </q-btn>
 
-        <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
+          <q-toolbar-title class="q-px-xs"> LABSNIP</q-toolbar-title>
+        </template>
+        <!-- <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title> -->
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
         <BuatTugas />
         <q-btn flat round icon="space_dashboard" @click="onLeftDrawerOpen('general')">
-          <q-tooltip>General</q-tooltip>
+          <q-tooltip v-if="!is_mobile_size">General</q-tooltip>
         </q-btn>
         <q-btn flat round icon="assignment_turned_in" @click="onLeftDrawerOpen('quiz')">
-          <q-tooltip>Quiz</q-tooltip>
+          <q-tooltip v-if="!is_mobile_size">Quiz</q-tooltip>
         </q-btn>
         <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile>
-        <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" />
+        <!-- <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" /> -->
       </q-toolbar>
       <!-- <q-separator></q-separator> -->
       <!-- <q-toolbar class="bg-white text-dark"> Hasil Matching Progress </q-toolbar> -->
@@ -33,9 +43,16 @@
     </q-header>
 
     <!-- behavior="mobile"  -->
-    <q-drawer @hide="onHide" @before-show="onBeforeShow" show-if-above v-model="leftDrawerOpen" :width="is_ipad_lower_size ? 350 : 270" side="left"
+    <q-drawer
+      @hide="onHide"
+      @before-show="onBeforeShow"
+      show-if-above
+      v-model="leftDrawerOpen"
+      :width="is_mobile_size ? 270 : 300"
+      side="left"
       :behavior="is_equal_to_lower_laptop ? 'mobile' : 'default'"
-      bordered>
+      bordered
+    >
       <!-- drawer content -->
       <!-- <LeftDrawerItem /> -->
       <q-slide-transition>
@@ -76,8 +93,9 @@
 
       <div
         id="main"
-        class="col-12 col-xl-5 col-lg-7 col-md-9 col-sm-12 rounded-bordersX"
+        class=""
         :class="[
+          getClass,
           is_mobile_size ? '' : 'q-card--borderedX',
           is_ipad_lower_size ? 'bg-transparent' : 'bg-white',
         ]"
@@ -130,10 +148,18 @@ import ToolbarPage from "./components/ToolbarPage.vue";
 import { scroll } from "quasar";
 import LeftDrawerItemQuiz from "./components/LeftDrawerItemQuiz.vue";
 
-const FormDialogParent = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/parent/FormDialog.vue'))
-const FormDialogSekolah = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/sekolah/FormDialog.vue'))
-const FormDialogSiswa = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/siswa/FormDialog.vue'))
-const FormDialogStakeholder = defineAsyncComponent(() => import('src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue'))
+const FormDialogParent = defineAsyncComponent(() =>
+  import("src/pages/pengaturan/forms_create/parent/FormDialog.vue")
+);
+const FormDialogSekolah = defineAsyncComponent(() =>
+  import("src/pages/pengaturan/forms_create/sekolah/FormDialog.vue")
+);
+const FormDialogSiswa = defineAsyncComponent(() =>
+  import("src/pages/pengaturan/forms_create/siswa/FormDialog.vue")
+);
+const FormDialogStakeholder = defineAsyncComponent(() =>
+  import("src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue")
+);
 
 const { getVerticalScrollPosition } = scroll;
 
@@ -185,6 +211,18 @@ export default {
     const answer = window.confirm("Do you really want to leave?");
     if (!answer) return false; // Cancels the back navigation
   },
+  computed: {
+    getClass() {
+      switch (this.$route.name) {
+        case "dashboard_quiz_metric":
+        case "dashboard_tugas_statistik":
+          return "col-12 col-xl-6 col-lg-10 col-md-10 col-sm-12 rounded-bordersX";
+          break;
+        default:
+          return "col-12 col-xl-6 col-lg-7 col-md-9 col-sm-12 rounded-bordersX";
+      }
+    },
+  },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
     ...mapActions(useUiStore, ["setPageWidth", "setPageScrollY"]),
@@ -195,7 +233,7 @@ export default {
       console.log(label, this.left_drawer_type);
       if (label == this.left_drawer_type) {
         this.leftDrawerOpen = false;
-        return
+        return;
       }
       if (label !== this.left_drawer_type) {
         this.left_drawer_type = label;
@@ -206,7 +244,7 @@ export default {
       this.left_drawer_type = "";
     },
     onBeforeShow() {
-      if(!this.left_drawer_type) this.left_drawer_type = "general";
+      if (!this.left_drawer_type) this.left_drawer_type = "general";
     },
     updateWidth() {
       const vm = this;
@@ -227,9 +265,9 @@ export default {
   },
 
   mounted() {
-    if(!this.is_ipad_lower_size) {
+    if (!this.is_ipad_lower_size) {
       this.left_drawer_type = "general";
-      this.leftDrawerOpen = true
+      this.leftDrawerOpen = true;
     }
 
     setTimeout(() => {

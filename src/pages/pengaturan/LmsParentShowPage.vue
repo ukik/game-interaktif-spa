@@ -1,16 +1,28 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-card flat bordered>
       <!-- <q-card-actions align="left">
         <div class="text-h6">PROFIL</div>
       </q-card-actions> -->
 
-      <q-tabs v-model="tab" :key="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+      <q-tabs
+        v-model="tab"
+        :key="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+      >
         <q-tab name="parent" label="ORANGTUA" />
         <q-tab name="student" label="SISWA">
-          <q-badge color="teal" v-if="get_show_payload?.parent?.siswa.length > 0 " floating>{{
-            get_show_payload?.parent?.siswa.length }}</q-badge>
+          <q-badge
+            color="teal"
+            v-if="get_show_payload?.parent?.siswa.length > 0"
+            floating
+            >{{ get_show_payload?.parent?.siswa.length }}</q-badge
+          >
         </q-tab>
       </q-tabs>
 
@@ -22,8 +34,11 @@
             <q-card-actions align="center" class="q-py-md">
               <!-- <q-parallax :height="250"> -->
               <q-avatar size="240px">
-                <q-img :src="get_show_payload?.url_image" @error="get_show_payload.url_image = global_url_image"
-                  :error-src="global_url_image" />
+                <q-img class="bg-black"
+                  :src="get_show_payload?.url_image"
+                  @error="get_show_payload.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
               </q-avatar>
               <!-- <div class="col-12 text-center">
                 <q-chip class="q-mt-md" color="primary" text-color="white">ID: {{ get_show_payload?.id }}</q-chip>
@@ -89,7 +104,7 @@
                     <q-item-label lines="1" caption>Role</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-item-label class="text-dark  text-capitalize">{{
+                    <q-item-label class="text-dark text-capitalize">{{
                       get_show_payload?.role
                     }}</q-item-label>
                   </q-item-section>
@@ -120,28 +135,43 @@
           <EmptyBlock v-else></EmptyBlock>
         </q-tab-panel>
         <q-tab-panel name="student" class="q-pa-none">
-          <q-card-section v-if="get_show_payload?.parent?.siswa && get_show_payload?.parent?.siswa.length > 0"
-            class="q-pa-sm">
+          <q-card-section
+            v-if="
+              get_show_payload?.parent?.siswa &&
+              get_show_payload?.parent?.siswa.length > 0
+            "
+            class="q-pa-sm"
+          >
             <q-list separator bordered class="text-dark">
-              <q-item v-for="(item, index) in get_show_payload?.parent?.siswa" :key="index"
-                :to="{ name: 'lms_siswa_show', params: { slug: item?.user_id } }" clickable v-ripple>
+              <q-item
+                v-for="(item, index) in get_show_payload?.parent?.siswa"
+                :key="index"
+                :to="{ name: 'lms_siswa_show', params: { slug: item?.user_id } }"
+                clickable
+                v-ripple
+              >
                 <q-item-section avatar top>
                   <q-avatar>
-                    <q-img :src="item?.siswa?.url_image" @error="item.siswa.url_image = global_url_image"
-                      :error-src="global_url_image" />
+                    <q-img
+                      :src="item?.siswa?.url_image"
+                      @error="item.siswa.url_image = global_url_image"
+                      :error-src="global_url_image"
+                    />
                   </q-avatar>
-
                 </q-item-section>
 
                 <q-item-section>
                   <q-item-label>{{ item?.siswa?.name }}</q-item-label>
                   <q-item-label caption lines="1">{{ item?.siswa?.email }}</q-item-label>
-                  <q-item-label caption lines="1">{{ item?.siswa?.telpon }} / {{ item?.siswa?.whatsapp
-                  }}</q-item-label>
+                  <q-item-label caption lines="1"
+                    >{{ item?.siswa?.telpon }} / {{ item?.siswa?.whatsapp }}</q-item-label
+                  >
                 </q-item-section>
 
                 <q-item-section side top>
-                  <q-item-label caption lines="1">{{ item?.siswa?.created_at_human }}</q-item-label>
+                  <q-item-label caption lines="1">{{
+                    item?.siswa?.created_at_human
+                  }}</q-item-label>
                   <q-badge class="q-mt-xs">ID: {{ item?.user_id }}</q-badge>
                 </q-item-section>
               </q-item>
@@ -152,22 +182,23 @@
       </q-tab-panels>
     </q-card>
 
-    <div style="height: 40px"></div>
+    <template v-if="enabled || is_parent && get_show_payload?.id">
+      <div style="height: 40px"></div>
 
-    <FormDialog ref="FormDialog"></FormDialog>
+      <FormDialog ref="FormDialog"></FormDialog>
 
-    <q-page-sticky position="bottom" :offset="[0, 10]">
-      <q-btn
-        @click="onOpenDialog"
-        unelevated
-        rounded
-        label="edit"
-        color="pink"
-        size="md"
-        icon="edit"
-      ></q-btn>
-    </q-page-sticky>
-
+      <q-page-sticky position="bottom" :offset="[0, 10]">
+        <q-btn
+          @click="onOpenDialog"
+          unelevated
+          rounded
+          label="edit"
+          color="pink"
+          size="md"
+          icon="edit"
+        ></q-btn>
+      </q-page-sticky>
+    </template>
   </q-page>
 </template>
 
@@ -189,7 +220,7 @@ export default {
     await preStore.onShow(slug);
   },
   components: {
-    FormDialog
+    FormDialog,
   },
   data() {
     return {

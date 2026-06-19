@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-card flat bordered>
       <q-tabs
         :key="tab"

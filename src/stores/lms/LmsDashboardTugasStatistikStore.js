@@ -80,7 +80,7 @@ export const useLmsDashboardTugasStatistikStore = defineStore('LmsDashboardTugas
 
       Loading.show()
       onRequestPrivate(this, {
-        url: host + '/lms/tugas-statistik',
+        url: host + '/lms/dashboard-quiz-statistik',
         method: 'get',
         params: {
           page: page

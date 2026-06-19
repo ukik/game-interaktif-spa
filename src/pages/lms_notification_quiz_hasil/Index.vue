@@ -1,7 +1,7 @@
 <template>
   <!-- {{ get_index_unread }} -->
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-md bg-white">
+  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
     <q-form @submit="onSubmit" class="q-mb-md">
       <!-- {{ tab }} -- {{ keyword }} -->
       <q-input
@@ -44,10 +44,11 @@
         dense
         class="text-grey"
         active-color="primary"
-        indicator-color="primary"
         align="justify"
       >
         <q-route-tab
+          class="text-primary"
+          active-class="text-primary"
           name="index"
           replace
           :to="{
@@ -59,6 +60,8 @@
           label="Semua"
         />
         <q-route-tab
+          class="text-pink"
+          active-class="text-pink"
           name="index_unread"
           replace
           :to="{
@@ -68,8 +71,12 @@
             },
           }"
           label="Belum Dibaca"
-        />
+        >
+          <q-badge color="pink" floating style="right: -25px;">{{ get_index_total_unread }}</q-badge>
+        </q-route-tab>
         <q-route-tab
+          class="text-teal"
+          active-class="text-teal"
           name="index_read"
           replace
           :to="{
@@ -79,7 +86,9 @@
             },
           }"
           label="Dibaca"
-        />
+        >
+          <q-badge color="teal" floating style="right: -25px;">{{ get_index_total_read }}</q-badge>
+        </q-route-tab>
       </q-tabs>
 
       <q-separator />
@@ -259,6 +268,8 @@ export default {
       "get_index_last_page",
       "get_index_loading",
       "get_init_index",
+      "get_index_total_read",
+      "get_index_total_unread",
     ]),
   },
   methods: {
