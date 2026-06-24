@@ -44,49 +44,36 @@
 
       </q-expansion-item> -->
 
-      <!-- Koleksi -->
       <q-item-label header class="q-py-md"
-        >STEP 1 <q-icon name="arrow_right"></q-icon>
+        >STEP 1
+        <q-icon name="arrow_right"></q-icon>
       </q-item-label>
-      <q-expansion-item v-model="expanded_bank" group="sidebar">
-        <template v-slot:header>
-          <q-item-section avatar>
-            <q-avatar text-color="white" icon="school" color="primary" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-capitalize">BANK QUIZ</q-item-label>
-            <q-item-label caption lines="1">Tambah Tugas</q-item-label>
-          </q-item-section>
-        </template>
+      <q-item
+        :to="{ name: 'lms_tugas_index' }"
+        clickable
+        v-ripple
+        :active="link === 'lms_tugas_index' || link === 'lms_tugas_show'"
+        active-class="my-menu-link"
+      >
+        <q-item-section avatar>
+            <q-avatar
+              text-color="white"
+              icon="fa-solid fa-clipboard-question"
+              color="primary"
+            />
+        </q-item-section>
 
-        <q-item
-          :inset-level="0.25"
-          v-for="(item, index) in quiz_lists"
-          :key="index"
-          :to="{ name: 'lms_quiz_index', params: { quiz: item?.subtitle } }"
-          clickable
-          v-ripple
-          :active="link === 'lms_quiz_index' && $route?.params?.quiz == item?.subtitle"
-          active-class="my-menu-link"
-        >
-          <q-item-section avatar>
-            <q-avatar color="grey-2">
-              <q-icon color="primary" size="18px" name="arrow_forward_ios"></q-icon>
-            </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label class="text-capitalize">{{ item?.title }}</q-item-label>
-            <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-expansion-item>
+        <q-item-section>
+          <q-item-label class="text-capitalize">TUGAS QUIZ</q-item-label>
+          <q-item-label caption lines="1">Aktivitas Siswa</q-item-label>
+        </q-item-section>
+      </q-item>
 
       <!-- Aktivitas -->
-      <q-item-label header class="q-py-md"
+      <q-item-label v-if="false" header class="q-py-md"
         >STEP 2 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
-      <q-expansion-item v-model="expanded_tugas" group="sidebar">
+      <q-expansion-item v-if="false" v-model="expanded_tugas" group="sidebar">
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar
@@ -124,9 +111,47 @@
         </q-item>
       </q-expansion-item>
 
+      <!-- Koleksi -->
+      <q-item-label header class="q-py-md"
+        >STEP 1 <q-icon name="arrow_right"></q-icon>
+      </q-item-label>
+      <q-expansion-item v-model="expanded_bank" group="sidebar">
+        <template v-slot:header>
+          <q-item-section avatar>
+            <q-avatar text-color="white" icon="school" color="primary" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-capitalize">BANK QUIZ</q-item-label>
+            <q-item-label caption lines="1">Buat Tugas</q-item-label>
+          </q-item-section>
+        </template>
+
+        <q-item
+          :inset-level="0.25"
+          v-for="(item, index) in quiz_lists"
+          :key="index"
+          :to="{ name: 'lms_quiz_index', params: { quiz: item?.subtitle } }"
+          clickable
+          v-ripple
+          :active="link === 'lms_quiz_index' && $route?.params?.quiz == item?.subtitle"
+          active-class="my-menu-link"
+        >
+          <q-item-section avatar>
+            <q-avatar color="grey-2">
+              <q-icon color="primary" size="18px" name="arrow_forward_ios"></q-icon>
+            </q-avatar>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label class="text-capitalize">{{ item?.title }}</q-item-label>
+            <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-expansion-item>
+
       <!-- Riwayat -->
       <q-item-label header class="q-py-md"
-        >STEP 3 <q-icon name="arrow_right"></q-icon>
+        >STEP 2 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-model="expanded_nilai" group="sidebar">
         <template v-slot:header>
@@ -166,7 +191,7 @@
 
       <!-- Statistik -->
       <q-item-label header class="q-py-md"
-        >STEP 4 <q-icon name="arrow_right"></q-icon>
+        >STEP 3 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-model="expanded_ranking" group="sidebar">
         <template v-slot:header>
@@ -225,7 +250,6 @@ const dashboard_items = [
     route_name: "dashboard_tugas_statistik",
   },
 ];
-
 
 const notifikasi_items = [
   {

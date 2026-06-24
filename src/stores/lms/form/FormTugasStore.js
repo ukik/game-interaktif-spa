@@ -70,25 +70,12 @@ function formatLaravelError(error) {
   }
 }
 
-export const useFormTugasStore = defineStore('FormTugasStore', {
-  state: () => ({
-    init: {
-      edit: true,
-      create: true,
-      form_tugas_edit: true,
-    },
-    loading: {
-      edit: false,
-      create: false,
-      form_tugas_edit: false,
-    },
-    tugas_reference: null,
-    form_tugas_create: {
+const form_create = {
       user: '',
       aktivitas: '',
-      judul: Math.random(),
-      deskripsi: Math.random(),
-      catatan: Math.random(),
+      judul: '', //Math.random(),
+      deskripsi: '', //Math.random(),
+      catatan: '', //Math.random(),
       tugas_kategori: {
         id: 1,
         nama: 'PR'
@@ -105,7 +92,25 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       siswa_ids_old: [], // additional
       siswa_ids: [], // additional
+    }
+
+    const empty_form = JSON.parse(JSON.stringify(form_create))
+
+
+export const useFormTugasStore = defineStore('FormTugasStore', {
+  state: () => ({
+    init: {
+      edit: true,
+      create: true,
+      form_tugas_edit: true,
     },
+    loading: {
+      edit: false,
+      create: false,
+      form_tugas_edit: false,
+    },
+    tugas_reference: null,
+    form_tugas_create: JSON.parse(JSON.stringify(form_create)),
     form_tugas_edit: {
       user: '',
       aktivitas: '',
@@ -213,21 +218,28 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       //   console.log(key, value)
       //   formData.append(key, value);
       // }
+      const auth = useAuthStore()
 
       Object.keys(this.form_tugas_create).forEach(key => {
         let value = this.form_tugas_create[key]
 
         if(key == 'user') {
-          const auth = useAuthStore()
           formData.append(key, auth.getAuthUser?.id)
-        } else if(key == 'tugas_kategori') {
-          formData.append(key, value['id'])
-        } else {
+        }
+        // else if(key == 'tugas_kategori') {
+        //   formData.append(key, value['id'])
+        // }
+        else {
           formData.append(key, value ?? '')
         }
       })
 
       console.log('formData', this.form_tugas_create)
+
+      formData.append('user', auth.getAuthUser?.id)
+      formData.append('tugas_kategori', this.form_tugas_create?.tugas_kategori?.id)
+
+      console.table([...formData.entries()])
 
       Loading.show()
 
@@ -249,8 +261,6 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
 
       this.loading.create = false
 
-
-
       if (resp == false) return false
       if (!resp?.data) return false
 
@@ -260,6 +270,10 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
         const data = resp?.data
 
         console.log('onCreate', data)
+
+        this.form_tugas_create = empty_form
+        this.tugas_reference = null
+        this.preview = null
 
         return true
       }
@@ -286,6 +300,7 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
       //     formData.append(key, this.form_tugas_edit[key])
       //   }
       // })
+      const auth = useAuthStore()
 
       Object.keys(this.form_tugas_edit).forEach(key => {
         let value = this.form_tugas_edit[key]
@@ -300,21 +315,24 @@ export const useFormTugasStore = defineStore('FormTugasStore', {
         if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return
 
         if (key === 'user') {
-          const auth = useAuthStore()
           value = auth.getAuthUser?.id
 
-        } else if (key === 'tugas_kategori') {
-          value = value?.id
-          if (!value) return
-        } else {
+        }
+        // else if (key === 'tugas_kategori') {
+        //   value = value?.id
+        //   if (!value) return
+        // }
+        else {
           formData.append(key, value ?? '')
         }
 
       })
 
-      console.log('form_tugas_edit', this.form_tugas_edit)
-      console.log('tugas_reference', this.tugas_reference)
+      // console.log('form_tugas_edit', this.form_tugas_edit)
+      // console.log('tugas_reference', this.tugas_reference)
 
+      formData.append('user', auth.getAuthUser?.id)
+      formData.append('tugas_kategori', this.form_tugas_edit?.tugas_kategori?.id)
       formData.append('siswa_ids_old', JSON.stringify(this.tugas_reference?.siswa_ids))
       formData.append('siswa_ids', JSON.stringify(this.form_tugas_edit?.siswa_ids))
 

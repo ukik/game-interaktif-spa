@@ -150,10 +150,6 @@ export const useFormPengaturanAdminStore = defineStore('FormPengaturanAdminStore
           const auth = useAuthStore()
           formData.append(key, auth.getAuthUser?.id)
         }
-
-        // else if (key == 'tugas_kategori') {
-        //   formData.append(key, this.form_create[key]['id'])
-        // }
         else {
           formData.append(key, this.form_create[key] ?? '')
         }
@@ -234,11 +230,6 @@ export const useFormPengaturanAdminStore = defineStore('FormPengaturanAdminStore
           value = auth.getAuthUser?.id
 
         }
-
-        // else if (key === 'tugas_kategori') {
-        //   value = value?.id
-        //   if (!value) return
-        // }
 
         formData.append(key, value ?? '')
       })

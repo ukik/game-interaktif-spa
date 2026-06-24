@@ -261,7 +261,12 @@ export default {
         return;
       }
 
-      await this.onUpdate(this.form_edit?.id);
+      const resp = await this.onUpdate(this.form_edit?.id);
+      if(!resp) {
+        this.Swal.error()
+        return
+      }
+      this.Swal.success()
       this.dialog = false;
     },
   },

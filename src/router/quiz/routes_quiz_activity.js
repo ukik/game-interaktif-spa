@@ -1,7 +1,8 @@
 const routes = [
   // BANK TUGAS
   {
-    path: "/lms-tugas-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
+    // path: "/lms-tugas-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
+    path: "/lms-tugas-index",
     name: 'lms_tugas_index',
     component: () => import("pages/quiz/quiz_aktivitas/LmsTugasIndexPage.vue"),
     meta: {

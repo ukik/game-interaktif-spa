@@ -29,9 +29,23 @@
         >
           <q-item-label overline class="q-pl-sm">DETAIL TUGAS</q-item-label>
           <q-card flat bordered class="q-mb-sm q-mt-md">
+            <q-item class="bg-grey-1">
+              <q-item-section>
+                <q-item-label lines="1" class="text-overline">{{
+                  tugas_reference?.mapel?.nama
+                }}</q-item-label>
+                <q-item-label lines="1" caption>{{ tugas_reference?.topik }}</q-item-label>
+              </q-item-section>
+              <q-item-section avatar side>
+                <q-avatar color="primary" text-color="white">
+                  {{ tugas_reference?.id }}
+                </q-avatar>
+              </q-item-section>
+            </q-item>
+            <q-separator></q-separator>
             <q-card-section horizontal>
               <q-card-section class="q-pt-xs col bg-grey-1">
-                <div class="text-overline">{{ tugas_reference?.mapel?.nama }}</div>
+                <!-- <div class="text-overline">{{ tugas_reference?.mapel?.nama }}</div> -->
                 <div class="text-h6 text-capitalize q-mb-xs">
                   {{ tugas_reference?.tugasable?.kategori }}
                 </div>
@@ -163,8 +177,13 @@ export default {
       onCreate: "onCreate",
     }),
     onOpen(payload) {
+      console.log('onOpen', payload)
       this.dialog = true;
-      this.form_tugas_create.aktivitas = this.model + "-" + this.$route.params?.slug;
+      if(this.$route.params?.slug) {
+        this.form_tugas_create.aktivitas = this.model + "-" + this.$route.params?.slug;
+      } else {
+        this.form_tugas_create.aktivitas = this.model + "-" + payload?.id;
+      }
 
       this.tugas_reference = payload
     },
@@ -257,9 +276,12 @@ export default {
         return;
       }
 
-      console.log("onSubmit", this.onCreate());
-      this.onCreate();
-
+      const resp = await this.onCreate();
+      if(!resp) {
+        this.Swal.error()
+        return
+      }
+      this.Swal.success()
       this.dialog = false;
     },
   },

@@ -153,9 +153,6 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
           formData.append(key, auth.getAuthUser?.id)
         }
 
-        // else if (key == 'tugas_kategori') {
-        //   formData.append(key, this.form_create[key]['id'])
-        // }
         else {
           formData.append(key, this.form_create[key] ?? '')
         }
@@ -231,11 +228,6 @@ export const useFormPengaturanSekolahStore = defineStore('FormPengaturanSekolahS
           value = auth.getAuthUser?.id
 
         }
-
-        // else if (key === 'tugas_kategori') {
-        //   value = value?.id
-        //   if (!value) return
-        // }
 
         formData.append(key, value ?? '')
       })

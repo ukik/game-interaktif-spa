@@ -221,14 +221,20 @@ export default {
         return;
       }
 
-      await this.onUpdate(this.$route?.params?.slug);
+      const resp = await this.onUpdate(this.$route?.params?.slug);
 
       // karena bagian ini dari server, harus di update setelah sukses
       this.form_tugas_edit.status_durasi = this.diffFromNow(
         this.form_tugas_edit?.begin_date,
         this.form_tugas_edit?.end_date
       );
+      if(!resp) {
+        this.Swal.error()
+        return
+      }
+      this.Swal.success()
       this.dialog = false;
+
     },
   },
   mounted() {
