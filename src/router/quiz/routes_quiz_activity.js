@@ -4,7 +4,7 @@ const routes = [
     // path: "/lms-tugas-index/:quiz(arrange|match|boolean|essay|multiple|shortanswer)",
     path: "/lms-tugas-index",
     name: 'lms_tugas_index',
-    component: () => import("pages/quiz/quiz_aktivitas/LmsTugasIndexPage.vue"),
+    component: () => import("pages/quiz/quiz_tugas/LmsTugasIndexPage.vue"),
     meta: {
       logged: true,
       title: "Tugas Quiz",
@@ -15,7 +15,7 @@ const routes = [
   {
     path: "/lms-tugas-show/:slug",
     name: 'lms_tugas_show',
-    component: () => import("pages/quiz/quiz_aktivitas/LmsTugasShowPage.vue"),
+    component: () => import("pages/quiz/quiz_tugas/LmsTugasShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Tugas Quiz",

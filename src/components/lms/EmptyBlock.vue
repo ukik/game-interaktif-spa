@@ -3,8 +3,8 @@
     <NoDataSVG />
   </div> -->
 
-  <div class="flex flex-center q-py-xl">
-    <DotLottieVue ref="lottieRef" style="height: auto; width: 100%; " autoplay loop
+  <div class="flex flex-center" style="padding-top:100px;">
+    <DotLottieVue ref="lottieRef" style="width: 50%; " autoplay loop
       src="/lottie/used_1_404.json" />
     <slot></slot>
   </div>

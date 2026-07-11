@@ -1,6 +1,11 @@
 <template>
-  <q-page-sticky style="z-index: 999;" position="top-right" :offset="[0, 0]">
-    <GlobalLabel shape="skew" position="top-right" backgroundColor="#ff1744" textColor="#ffffff">
+  <q-page-sticky style="z-index: 999" position="top-right" :offset="[0, 0]">
+    <GlobalLabel
+      shape="skew"
+      position="top-right"
+      backgroundColor="#ff1744"
+      textColor="#ffffff"
+    >
       TUTUP
     </GlobalLabel>
   </q-page-sticky>
@@ -39,7 +44,6 @@
     </template>
     <EmptyBlock class="full-width" v-else></EmptyBlock>
   </q-page>
-
 </template>
 
 <script>
@@ -50,47 +54,58 @@ import confetti from "src/composables/quiz/confetti";
 import { QuizActionBeforeRouteLeave } from "src/utils/sweetAlert";
 
 // import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore.js";
-import { myMixin } from './mixinQuiz.js'
+import { myMixin } from "./mixinQuiz.js";
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore.js";
 
 export default {
   mixins: [myMixin],
   async preFetch({ store, currentRoute }) {
-    const mystore = useLmsTugasStore(store)
-    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
+    const mystore = useLmsTugasStore(store);
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas();
   },
   beforeRouteLeave(to, from, next) {
     // const answer = window.confirm('Do you really want to leave?')
     // if (!answer) return false // Cancels the back navigation
-    if (this.is_quiz_done || !this.is_not_error) return next()
-    return QuizActionBeforeRouteLeave(next)
+    if (this.is_quiz_done || !this.is_not_error) return next();
+    return QuizActionBeforeRouteLeave(next);
   },
 
   mounted() {
     this.onStart();
   },
   created() {
-    this.dummyOnCreate('arrange')
+    this.dummyOnCreate("arrange");
+  },
+  data() {
+    return {
+      my_time: 100,
+    };
   },
   methods: {
     onStart() {
-
-      console.log('this.get_aktivitas_tugasable?.konten', this.get_aktivitas_tugasable, this.get_aktivitas_tugasable?.kategori, this.get_aktivitas_tugasable?.konten)
+      console.log(
+        "this.get_aktivitas_tugasable?.konten",
+        this.get_aktivitas_tugasable,
+        this.get_aktivitas_tugasable?.kategori,
+        this.get_aktivitas_tugasable?.konten
+      );
 
       const vm = this;
 
-      if (this.get_aktivitas_tugasable?.kategori != 'arrange') {
-        this.notifFailed('data gagal diproses', 'Salah Quiz')
+      if (this.get_aktivitas_tugasable?.kategori != "arrange") {
+        this.notifFailed("data gagal diproses", "Salah Quiz");
         this.is_not_error = false;
-        return
+        return;
       }
       // const list_questions = this.parseUnknown(this.get_aktivitas_tugasable?.konten) // di laravel sudah diperbaiki pake getter, biar praktis
 
-      const list_questions = this.get_aktivitas_tugasable?.konten
+      // const list_questions = this.get_aktivitas_tugasable?.konten;
+      const list_questions = [{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='gold' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='white' stroke='black' stroke-width='2'\/><line x1='18' y1='18' x2='18' y2='10' stroke='black' stroke-width='2'\/><line x1='18' y1='18' x2='25' y2='18' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='silver' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='wheat' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='orange' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='48' height='36'><rect x='5' y='4' width='38' height='28' fill='sienna' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='48' height='36'><rect x='5' y='4' width='38' height='28' fill='skyblue' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='48' height='36'><rect x='5' y='4' width='38' height='28' fill='lightgreen' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='48' height='36'><rect x='5' y='6' width='38' height='24' fill='white' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='48' height='36'><rect x='5' y='5' width='38' height='26' fill='gray' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='lightgray' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='pink' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='lightyellow' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='white' stroke='black' stroke-width='2'\/><line x1='18' y1='5' x2='18' y2='31' stroke='black'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='beige' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='gold' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='red' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='orange' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='yellowgreen' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='deepskyblue' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='deepskyblue' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='violet' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='limegreen' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='gold' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='tomato' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]},{"w":["<svg width='36' height='36'><circle cx='18' cy='18' r='14' fill='gold' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","lingkaran"]},{"w":["<svg width='48' height='36'><rect x='5' y='4' width='38' height='28' fill='skyblue' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi panjang"]},{"w":["<svg width='36' height='36'><rect x='5' y='5' width='26' height='26' fill='lightgray' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","persegi"]},{"w":["<svg width='36' height='36'><polygon points='18,4 32,30 4,30' fill='gold' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","segitiga"]},{"w":["<svg width='36' height='36'><polygon points='18,3 33,18 18,33 3,18' fill='deepskyblue' stroke='black' stroke-width='2'\/><\/svg>","berbentuk","belah ketupat"]}];
 
-      if (!list_questions) return this.notifFailed('periksa database kembali', 'Konten Kosong')
+      if (!list_questions)
+        return this.notifFailed("periksa database kembali", "Konten Kosong");
 
-      console.log('list_questions', list_questions)
+      console.log("list_questions", list_questions);
 
       let checkingHTML = {};
 
@@ -126,7 +141,7 @@ export default {
       };
 
       /* ================= TIMER ================= */
-      const default_timer = 2;
+      const default_timer = vm.my_time;
       let time = default_timer,
         timerInterval = null;
       const timerEl = document.getElementById("timer");
@@ -135,7 +150,12 @@ export default {
         clearInterval(timerInterval);
         timerEl.textContent = "⏱️ " + time;
         timerInterval = setInterval(() => {
-          if (vm.is_quiz_done || !vm.is_not_error || vm?.$route?.params?.quiz != 'arrange') return clearInterval(timerInterval);
+          if (
+            vm.is_quiz_done ||
+            !vm.is_not_error ||
+            vm?.$route?.params?.quiz != "arrange"
+          )
+            return clearInterval(timerInterval);
 
           if (!document.getElementById("timer")) return clearInterval(timerInterval);
           time--;
@@ -151,9 +171,9 @@ export default {
       let maxLife = 3;
 
       function updateLife() {
-        maxLife--
+        maxLife--;
         if (maxLife < 0) {
-          maxLife = 3
+          maxLife = 3;
 
           current++;
           currentSoal++;
@@ -168,7 +188,6 @@ export default {
 
         const el = document.getElementById("lifeCount");
         if (el) el.textContent = maxLife;
-
       }
 
       /* ================= ELEMENT ================= */
@@ -227,7 +246,6 @@ export default {
         el.addEventListener("pointercancel", cleanup);
       }
       function moveGhost(e) {
-
         const isTouch = e.pointerType === "touch";
 
         const offsetY = isTouch ? 50 : 0;
@@ -252,7 +270,9 @@ export default {
 
       /* ================= GAME ================= */
       function updateScore() {
-        scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${currentSoal + 1}/${totalSoal}`;
+        scoreEl.textContent = `🏆 Score: ${score} | 📘 Soal: ${
+          currentSoal + 1
+        }/${totalSoal}`;
       }
 
       function recordQuizEvent(status, minusScore) {
@@ -283,7 +303,7 @@ export default {
         record_quiz.total_current_score = score;
 
         checkingHTML[currentSoal] = document.getElementById("quizCard").outerHTML;
-        record_quiz.checking = checkingHTML
+        record_quiz.checking = checkingHTML;
 
         record_quiz.question.forEach((q) => {
           record_quiz.total_time_left += q.time_left;
@@ -293,31 +313,64 @@ export default {
         // simpan persisten
         localStorage.setItem("record_quiz_arrange", JSON.stringify(record_quiz));
 
-        vm.setForm(record_quiz)
+        vm.setForm(record_quiz);
       }
 
       function resetAnswerOnly() {
         const q = questions[current];
         if (!q) return;
 
+        // answerEl.innerHTML = "";
+        // [...q.w]
+        //   .sort(() => Math.random() - 0.5)
+        //   .forEach((w) => {
+        //     const el = document.createElement("div");
+        //     el.className = "word";
+        //     if (typeof w === "string" && w.trim().startsWith("<svg")) {
+        //       el.innerHTML = w;
+        //     } else {
+        //       el.textContent = w;
+        //     }
+        //     answerEl.appendChild(el);
+        //     bindDrag(el);
+        //   });
+
+
         answerEl.innerHTML = "";
-        [...q.w]
-          .sort(() => Math.random() - 0.5)
-          .forEach((w) => {
-            const el = document.createElement("div");
-            el.className = "word";
-            el.textContent = w;
-            answerEl.appendChild(el);
-            bindDrag(el);
-          });
+
+        const shuffled = q.w
+          .map((value, index) => ({
+            value,
+            index,
+          }))
+          .sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((item) => {
+          const el = document.createElement("div");
+          el.className = "word";
+
+          el.dataset.index = item.index;
+
+          if (
+            typeof item.value === "string" &&
+            item.value.trim().startsWith("<svg")
+          ) {
+            el.innerHTML = item.value;
+          } else {
+            el.textContent = item.value;
+          }
+
+          answerEl.appendChild(el);
+          bindDrag(el);
+        });
+
+
       }
 
       function loadQuestion() {
-
         if (currentSoal >= totalSoal) {
-
-          console.log('GAME OVER')
-          vm.onCreate()
+          console.log("GAME OVER");
+          vm.onCreate();
           // GAME OVER
 
           // soal terakhir sudah selesai, tampilkan snackbar khusus
@@ -341,18 +394,52 @@ export default {
         startTimer();
         const q = questions[current];
         //questionEl.textContent=q.q;
-        answerEl.innerHTML = "";
-        [...q.w]
-          .sort(() => Math.random() - 0.5)
-          .forEach((w) => {
-            const el = document.createElement("div");
-            el.className = "word";
-            el.textContent = w;
-            answerEl.appendChild(el);
-            bindDrag(el);
-          });
-        updateScore();
+        // answerEl.innerHTML = "";
+        // [...q.w]
+        //   .sort(() => Math.random() - 0.5)
+        //   .forEach((w) => {
+        //     const el = document.createElement("div");
+        //     el.className = "word";
+        //     if (typeof w === "string" && w.trim().startsWith("<svg")) {
+        //       el.innerHTML = w;
+        //     } else {
+        //       el.textContent = w;
+        //     }
+        //     answerEl.appendChild(el);
+        //     bindDrag(el);
+        //   });
 
+
+        answerEl.innerHTML = "";
+
+        const shuffled = q.w
+          .map((value, index) => ({
+            value,
+            index, // simpan urutan asli
+          }))
+          .sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((item) => {
+          const el = document.createElement("div");
+          el.className = "word";
+
+          // simpan index asli
+          el.dataset.index = item.index;
+
+          if (
+            typeof item.value === "string" &&
+            item.value.trim().startsWith("<svg")
+          ) {
+            el.innerHTML = item.value;
+          } else {
+            el.textContent = item.value;
+          }
+
+          answerEl.appendChild(el);
+          bindDrag(el);
+        });
+
+        updateScore();
       }
 
       /* ===== TIME OUT ===== */
@@ -393,7 +480,7 @@ export default {
         if (!locked) {
           checkTrial++;
 
-          updateLife()
+          updateLife();
           // ⏸️ PAUSE TIMER
           // clearInterval(timerInterval); // tidak perlu ini
 
@@ -415,8 +502,20 @@ export default {
       function checkAnswer() {
         if (!questions[current]) return;
 
-        const user = [...answerEl.children].map((e) => e.textContent);
-        if (user.every((w, i) => w === questions[current].w[i])) {
+
+        const userOrder = [...answerEl.children].map((e) =>
+          Number(e.dataset.index)
+        );
+
+        console.log("User :", userOrder);
+        console.log(
+          "Benar:",
+          questions[current].w.map((_, i) => i)
+        );
+
+        const isCorrect = userOrder.every((index, i) => index === i);
+
+        if (isCorrect) {
           score += 100;
           updateScore();
           playTrueFX();
@@ -429,12 +528,10 @@ export default {
 
           total_question_true++;
 
-          maxLife = 3
+          maxLife = 3;
 
           setTimeout(loadQuestion, 700);
-
         } else {
-
           score -= 20;
           minusThisQuestion += 20;
           updateScore();
@@ -450,7 +547,7 @@ export default {
         if (dragged) {
           try {
             dragged.releasePointerCapture?.(0);
-          } catch (e) { }
+          } catch (e) {}
         }
         cleanup(); // hapus ghost & state drag
       }
@@ -463,12 +560,12 @@ export default {
       /* ===== SNACKBAR ===== */
       let sb;
       function showSnackbar(msg, type = "success", duration = 1800) {
-
         vm.$q.notify({
           message: "Jawaban: " + msg,
           color: "white",
           textColor: "dark",
           group: type,
+          position: "top",
         });
 
         // ✅ Simpan record hanya saat snackbar muncul
@@ -478,15 +575,17 @@ export default {
       document.getElementById("btnCheck").addEventListener("click", safeCheck);
 
       document.getElementById("btnReset").addEventListener("click", safeReset);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .word {
+  text-align: center;
+  font-size: 20px;
   background: linear-gradient(135deg, #34d399, #60a5fa);
-  padding: 20px 25px;
+  padding: 20px 25px 15px 25px;
   border-radius: 999px;
   font-weight: bold;
   cursor: grab;
@@ -514,9 +613,7 @@ export default {
   width: auto;
 }
 
-
 #QuizAction {
-
   .answer {
     display: flex;
     flex-wrap: wrap;
@@ -529,13 +626,13 @@ export default {
   }
 
   .controls {
-    display: flex;
-    gap: 12px;
+    // display: flex;
+    // gap: 12px;
     margin-top: 18px;
   }
 
   .controls button {
-    flex: 1;
+    // flex: 1;
     padding: 12px;
     border-radius: 16px;
     border: none;
@@ -543,11 +640,19 @@ export default {
   }
 
   .check {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.75), rgba(74, 222, 128, 0.75));
+    background: linear-gradient(
+      135deg,
+      rgba(34, 197, 94, 0.75),
+      rgba(74, 222, 128, 0.75)
+    );
   }
 
   .reset {
-    background: linear-gradient(135deg, rgba(251, 113, 133, 0.75), rgba(244, 63, 94, 0.75));
+    background: linear-gradient(
+      135deg,
+      rgba(251, 113, 133, 0.75),
+      rgba(244, 63, 94, 0.75)
+    );
     color: #fff;
   }
 
@@ -555,8 +660,8 @@ export default {
   @media screen and (max-width: 600px) {
     .word {
       width: 100%;
-      font-size: 20px;
-      padding: 20px 20px 25px 25px;
+      font-size: 30px;
+      // padding: 20px 20px 25px 25px;
     }
 
     .drag-ghost {

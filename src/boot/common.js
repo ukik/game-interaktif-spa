@@ -2,11 +2,13 @@ import { createPinia, mapActions, mapState } from 'pinia';
 import { boot } from 'quasar/wrappers'
 import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 
-import { useAuthStore } from "src/stores/auth/AuthStore";
+// import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useUiStore } from 'src/stores/ui';
 
 const domain = "http://localhost:8000"
 const MIX_API_ROUTE_PREFIX = "/api";
+
+export const host_server = "http://localhost:8000/api" // "https://labsnip.com/api"
 
 export const host = domain + MIX_API_ROUTE_PREFIX; //+"/v1"; // 'http://properti-backend.local/'; //
 // untuk akses route yg ada di file routes/api.php
@@ -24,7 +26,7 @@ export default boot(async ({ app, ssrContext, router, store }) => {
       };
     },
     methods: {
-      ...mapActions(useUiStore, ['getPageWidth']),
+      // ...mapActions(useUiStore, ['getPageWidth']),
       dateToLocal(myDate) {
         if (!myDate) return ''
         const date = new Date(myDate);
@@ -249,14 +251,14 @@ export default boot(async ({ app, ssrContext, router, store }) => {
         }
       },
       getNamaKelasList(kelasMap, kelasString) {
+        console.log('getNamaKelasList', kelasMap, kelasString);
+
         if (!kelasString) return [];
         if (!kelasMap) return;
 
-        console.log('getNamaKelasList', kelasMap, kelasString);
-
         let ids = [];
 
-        if (typeof kelasString === 'string') {
+        if (typeof kelasString.toString() === 'string') {
           ids = kelasString.split(',');
         } else if (Array.isArray(kelasString)) {
           ids = kelasString;

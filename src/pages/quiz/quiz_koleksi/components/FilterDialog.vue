@@ -33,6 +33,11 @@
             >
               <q-item-section avatar>
                 <q-checkbox v-model="filter.kelas" :val="item?.key" color="teal" />
+                <!-- <q-radio
+                  v-model="filter.kelas"
+                  :val="item.key"
+                  color="teal"
+                /> -->
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{ item?.label }}</q-item-label>

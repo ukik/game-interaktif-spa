@@ -3,8 +3,15 @@
 import { boot } from 'quasar/wrappers'
 import { Screen } from 'quasar'
 import { useAuthStore } from 'src/stores/auth/AuthStore'
+import { useUiStore } from 'src/stores/ui'
 
 export default boot(({ app, router }) => {
+
+  Object.defineProperty(app.config.globalProperties, 'getPageWidth', {
+    value() {
+      return useUiStore().getPageWidth()
+    }
+  })
 
   Object.defineProperty(app.config.globalProperties, 'getAuthUser', {
     get() {

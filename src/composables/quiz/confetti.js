@@ -1,5 +1,5 @@
 export default function confetti() {
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 10; i++) {
         const c = document.createElement("div");
         c.className = "confetti";
         c.style.top = (Math.random() * 100 + (-Math.random() * 200)) + "px";
@@ -9,7 +9,7 @@ export default function confetti() {
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 1300);
     }
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 10; i++) {
         const c = document.createElement("div");
         c.className = "confetti";
         c.style.top = (Math.random() * 100 + (-Math.random() * 200)) + "px";

@@ -3,10 +3,9 @@
     class="flex flex-center bg-transparent row q-pa-sm animate__animated animate__bounce animate__faster">
     <!-- {{ get_init_show && get_aktivitas_tugasable?.kategori }} -->
     <q-card v-if="get_aktivitas_tugasable?.kategori" class="card-shadow card-border-radius game">
-      <q-card-section class="text-center">
-        <div v-if="get_aktivitas_tugasable?.mapel?.nama" class="title">📘 <br> {{get_aktivitas_tugasable?.mapel?.nama}}</div>
-        <div v-if="get_aktivitas_tugasable?.judul" class="subtitle">{{ get_aktivitas_tugasable?.judul }}</div>
-        <!-- <div class="text-body2">{{ get_aktivitas_tugasable?.topik }}</div> -->
+      <q-card-section class="bg-pink text-center">
+        <div v-if="get_aktivitas_tugasable?.mapel?.nama" class="title text-white">{{get_aktivitas_tugasable?.mapel?.nama}}</div>
+        <div v-if="get_aktivitas_tugasable?.judul" class="subtitle text-white">{{ get_aktivitas_tugasable?.judul }}</div>
       </q-card-section>
 
       <q-separator></q-separator>
@@ -16,13 +15,17 @@
       </q-card-section> -->
 
       <q-card-section>
-        <div class="stats">
+        <IndexBCard class="q-mb-md"
+          :item="get_aktivitas_payload?.tugasable"
+          :get_index_kelas="get_data_global_list_kelas"
+        ></IndexBCard>
+
+        <q-card flat bordered class="stats">
           <template v-for="(item, index) in get_aktivitas_payload?.intro?.konten">
             <div class="text-body2">{{ item?.icon }} {{ item?.label }} <span class="text-body2">{{ item?.value }}</span>
             </div>
           </template>
-        </div>
-
+        </q-card>
         <!-- <button @click="startQuiz">🚀 MULAI BELAJAR</button> -->
 
         <q-btn class="quiz-button" color="primary" @click="startQuiz">
@@ -46,14 +49,20 @@
 <script>
 import { mapActions, mapState, mapWritableState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
+import { useGlobalStore } from "src/stores/lms/GlobalStore";
 import { useLmsTugasStore } from "src/stores/lms/LmsTugasStore";
+import IndexBCard from "./IndexBCard.vue";
 
 export default {
   async preFetch({ store, currentRoute }) {
     const mystore = useLmsTugasStore(store)
-    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas()
+    if (!mystore.get_aktivitas_tugasable?.konten) await mystore.onAktivitasTugas('intro')
+  },
+  components: {
+    IndexBCard
   },
   computed: {
+      ...mapState(useGlobalStore, ["get_data_global_list_kelas"]),
     ...mapState(useLmsTugasStore, {
       get_aktivitas_payload: "get_aktivitas_payload",
       get_aktivitas_tugasable: "get_aktivitas_tugasable",

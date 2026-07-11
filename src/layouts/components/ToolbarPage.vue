@@ -3,7 +3,7 @@
     <q-toolbar
       v-if="toolbar"
       class="text-primary bg-white"
-      :class="[is_ipad_lower_size ? '' : 'q-mb-md']"
+      :class="[is_ipad_lower_size ? '' : 'q-mb-mdX']"
     >
       <q-btn flat round dense icon="home" to="/" />
       <q-avatar icon="arrow_forward_ios"></q-avatar>

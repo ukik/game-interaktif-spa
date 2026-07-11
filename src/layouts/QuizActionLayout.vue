@@ -93,11 +93,10 @@
 
       <div
         id="main"
-        class=""
         :class="[
           getClass,
           is_mobile_size ? '' : 'q-card--borderedX',
-          is_ipad_lower_size ? 'bg-transparent' : 'bg-white',
+          is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-px-sm q-pt-sm',
         ]"
       >
         <router-view v-slot="{ Component }">
@@ -213,6 +212,14 @@ export default {
   },
   computed: {
     getClass() {
+      switch (this.$route.meta?.page_type) {
+        case "index":
+          return "col-12";
+        default:
+          return "col-12 col-xl-6 col-lg-7 col-md-9 col-sm-12 rounded-bordersX";
+      }
+
+      return
       switch (this.$route.name) {
         case "dashboard_quiz_metric":
         case "dashboard_tugas_statistik":

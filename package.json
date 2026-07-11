@@ -1,8 +1,8 @@
 {
-  "name": "GameInteraktif",
+  "name": "LABSNIP",
   "version": "0.0.1",
-  "description": "selling diary products",
-  "productName": "Yuvori Snack",
+  "description": "Interaktif Learning",
+  "productName": "LABSNIP",
   "author": "ukik <muhamadduki@gmail.com>",
   "private": true,
   "scripts": {

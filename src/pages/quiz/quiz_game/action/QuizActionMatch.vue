@@ -267,6 +267,7 @@ export default {
           color: "white",
           textColor: "dark",
           group: type,
+          position: 'top'
         });
 
         /* === RECORD SAAT SNACKBAR MUNCUL === */

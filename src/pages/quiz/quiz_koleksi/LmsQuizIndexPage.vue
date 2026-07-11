@@ -1,6 +1,6 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
+  <q-page v-else class="justify-start items-start q-pa-sm q-pb-sm bg-white">
     <q-banner dense class="bg-grey-1 q-mb-sm rounded-borders q-card--bordered">
       <q-chip
         @remove="() => onClear('kelas')"
@@ -34,7 +34,7 @@
     </q-banner>
 
     <template v-if="get_index_data.length > 0">
-      <div class="row q-gutter-y-md">
+      <!-- <div class="row q-gutter-y-md">
         <IndexCard
           @onBuat="onOpenDialog"
           route_play="quiz_intro_public"
@@ -42,7 +42,26 @@
           :get_index_kelas="get_index_kelas"
           route_name="lms_quiz_show"
         ></IndexCard>
+      </div> -->
+      <div v-if="is_ipad_lower_size" class="row q-col-gutter-sm">
+        <IndexBCard
+          @onBuat="onOpenDialog"
+          route_play="quiz_intro_public"
+          :get_index_data="get_index_data"
+          :get_index_kelas="get_data_global_list_kelas"
+          route_name="lms_quiz_show"
+        ></IndexBCard>
       </div>
+      <div v-else class="row q-col-gutter-sm">
+        <IndexACard
+          @onBuat="onOpenDialog"
+          route_play="quiz_intro_public"
+          :get_index_data="get_index_data"
+          :get_index_kelas="get_data_global_list_kelas"
+          route_name="lms_quiz_show"
+        ></IndexACard>
+      </div>
+
     </template>
 
     <EmptyBlock v-else></EmptyBlock>
@@ -87,12 +106,17 @@ import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useLmsBankQuizStore } from "src/stores/lms/LmsBankQuizStore";
 
 import IndexCard from "./components/IndexCard.vue";
+import IndexACard from "./components/IndexACard.vue";
+import IndexBCard from "./components/IndexBCard.vue";
 import FilterDialog from "./components/FilterDialog.vue";
 import FormCreateTugas from "./components/FormCreateTugas.vue";
+import { useGlobalStore } from "src/stores/lms/GlobalStore.js";
 
 export default {
   components: {
     IndexCard,
+    IndexACard,
+    IndexBCard,
     FormCreateTugas,
     FilterDialog,
   },
@@ -111,20 +135,29 @@ export default {
     };
   },
   computed: {
+    ...mapState(useGlobalStore, ["get_data_global_list_kelas"]),
     ...mapState(useAuthStore, ["getAuthUser"]),
-    ...mapWritableState(useLmsBankQuizStore, ["valid_filter"]),
+    ...mapWritableState(useLmsBankQuizStore, ["valid_filter", "filter"]),
     ...mapState(useLmsBankQuizStore, [
       "get_index_data",
       "get_index_current_page",
       "get_index_last_page",
       "get_index_loading",
       "get_init_index",
-      "get_index_kelas",
+      // "get_index_kelas",
     ]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
     ...mapActions(useLmsBankQuizStore, ["onIndex", "onChangePage"]),
+    async onClear(key) {
+      this["filter"][key] = [];
+
+      // this.$q.loading.show()
+      this.valid_filter = JSON.parse(JSON.stringify(this.filter));
+      await this.onIndex();
+      // this.$q.loading.hide()
+    },
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

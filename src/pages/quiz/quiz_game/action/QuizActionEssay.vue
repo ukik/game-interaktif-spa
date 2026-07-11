@@ -720,6 +720,7 @@ export default {
           color: "white",
           textColor: "dark",
           group: type,
+          position: 'top'
         });
 
         if (timeLeft <= 0 || type == "timeout") {

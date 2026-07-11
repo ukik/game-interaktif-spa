@@ -19,8 +19,8 @@
     </q-drawer>
 
     <q-page-container class="row justify-center">
+      <!-- class="col-12 col-lg-7 col-md-9 col-sm-12" -->
       <router-view ref="pageContainer"
-        class="col-12 col-lg-7 col-md-9 col-sm-12"
         :class="[is_mobile_size ? '' : 'q-card--bordered']"
       />
     </q-page-container>

@@ -104,6 +104,15 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      minify: 'esbuild',
+      esbuildOptions: {
+        drop: process.env.NODE_ENV === 'production'
+          ? ['console', 'debugger']
+          : []
+      },
+      // uglifyOptions: {
+      //   compress: { drop_console: true }
+      // },
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node20'
@@ -251,7 +260,7 @@ module.exports = configure(function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'Yuvori Snack'
+        appId: 'LABSNIP.com'
       }
     },
 

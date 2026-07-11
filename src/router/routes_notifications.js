@@ -7,7 +7,7 @@ const routes_notifications = [
       logged: true,
       title: "Notifikasi Tugas",
       meta: [{ name: "description", content: "Notifikasi Tugas" }],
-      page_type: 'index',
+      page_type: 'show',
     },
   },
   {
@@ -30,7 +30,7 @@ const routes_notifications = [
       logged: true,
       title: "Notifikasi Nilai",
       meta: [{ name: "description", content: "Notifikasi Nilai" }],
-      page_type: 'index',
+      page_type: 'show',
     },
   },
   {

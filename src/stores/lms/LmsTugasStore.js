@@ -270,7 +270,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
     },
 
     // dipakai oleh Quiz saat dimainkan: QuizActionArrange, QuizActionBoolean, QuizActionEssay, QuizActionMatch, QuizActionMultiple, QuizActionShortAnswer
-    async onAktivitasTugas() {
+    async onAktivitasTugas(slug = 'aktivitas') {
 
       const route = useRouterStore()
 
@@ -289,7 +289,7 @@ export const useLmsTugasStore = defineStore('LmsTugasStore', {
 
       Loading.show()
       const resp = await axios({
-        url: host + '/lms/tugas/' + tugas_id + '/aktivitas/' + mode,
+        url: host + '/lms/tugas/' + tugas_id + '/'+slug+'/' + mode,
         method: 'get',
         params: {
           quiz

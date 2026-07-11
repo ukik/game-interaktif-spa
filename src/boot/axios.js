@@ -8,9 +8,12 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
 import { useRouterStore } from 'src/stores/auth/RouterStore'
 
-import { host } from './common'
+import { host, host_server } from './common'
 
 import { storeToRefs } from 'pinia';
+
+const route_after_login_redirect = "lms_notification_tugas_index"
+
 
 console.log('BOOT AXIOS KELOAD')
 
@@ -39,7 +42,7 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     path: '/' // wajib
   }
 
-  axios.defaults.baseURL = host
+  axios.defaults.baseURL = process.env.PROD ? host_server : host
 
   axios.defaults.params = {} // wajib ada
   // axios.defaults.params['mode'] = 'human' // digunakan untuk merubah createdAt & updatedAt ke diffForHumans
@@ -134,7 +137,7 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     // always update Login status
     if (isLogin) {
       if (payload?.token) await cookies.set('accessToken', payload?.token, is_cookie_secure)
-      if (route.getName == 'login' || route.getName == 'register') router.replace({ name: 'dashboard' })
+      if (route.getName == 'login' || route.getName == 'register') router.replace({ name: route_after_login_redirect })
       // if (additional?.idToken) await cookies.set('idToken', additional?.idToken, is_cookie_secure)
       // if (additional?.refreshToken) await cookies.set('refreshToken', additional?.refreshToken, is_cookie_secure)
     } else if (route.getMeta?.logged) {
