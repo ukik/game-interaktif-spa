@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md ">
+  <q-page class="q-pa-md bg-white">
     <q-list>
       <div class="full-width">
         <q-skeleton height="100px" square animation="fade" />

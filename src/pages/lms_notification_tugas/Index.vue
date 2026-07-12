@@ -1,165 +1,170 @@
 <template>
   <!-- {{ get_index_unread }} -->
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-    <q-form @submit="onSubmit" class="q-mb-md">
-      <!-- {{ tab }} -- {{ keyword }} -->
-      <q-input
-        @clear="onSubmit"
-        outlined
-        bottom-slots
-        v-model="my_keyword"
-        placeholder="keyword..."
-        counter
-        maxlength="50"
-        clearable
-      >
-        <!-- <template v-slot:before>
-            <q-icon name="flight_takeoff" />
-          </template> -->
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
 
-        <template v-slot:prepend>
-          <!-- <q-icon v-if="keyword !== ''" name="close" @click="keyword = ''" class="cursor-pointer" /> -->
-          <q-icon name="search" />
-        </template>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-8 col-xl-8 col-12">
 
-        <template v-slot:hint> Keyword </template>
-
-        <template v-slot:after>
-          <q-btn
-            unelevated
-            class="full-height"
-            @click="onSubmit"
-            color="primary"
-            icon="search"
-          ></q-btn>
-        </template>
-      </q-input>
-    </q-form>
-
-    <q-list separator bordered>
-      <!-- <template v-if="get_index_data.length > 0"> -->
-      <q-tabs
-        v-model="tab"
-        dense
-        class="text-grey"
-        active-color="primary"
-        align="justify"
-      >
-        <q-route-tab
-          class="text-primary"
-          active-class="text-primary"
-          name="index"
-          replace
-          :to="{
-            query: {
-              ...$route.query,
-              status: '',
-            },
-          }"
-          label="Semua"
-        />
-        <q-route-tab
-          class="text-pink"
-          active-class="text-pink"
-          name="index_unread"
-          replace
-          :to="{
-            query: {
-              ...$route.query,
-              status: 'unread',
-            },
-          }"
-          label="Belum Dibaca"
+      <q-form @submit="onSubmit" class="q-mb-md">
+        <!-- {{ tab }} -- {{ keyword }} -->
+        <q-input
+          @clear="onSubmit"
+          outlined
+          bottom-slots
+          v-model="my_keyword"
+          placeholder="keyword..."
+          counter
+          maxlength="50"
+          clearable
         >
-          <q-badge color="pink" floating style="right: -25px;">{{ get_index_total_unread }}</q-badge>
-        </q-route-tab>
-        <q-route-tab
-          class="text-teal"
-          active-class="text-teal"
-          name="index_read"
-          replace
-          :to="{
-            query: {
-              ...$route.query,
-              status: 'read',
-            },
-          }"
-          label="Dibaca"
+          <!-- <template v-slot:before>
+              <q-icon name="flight_takeoff" />
+            </template> -->
+
+          <template v-slot:prepend>
+            <!-- <q-icon v-if="keyword !== ''" name="close" @click="keyword = ''" class="cursor-pointer" /> -->
+            <q-icon name="search" />
+          </template>
+
+          <template v-slot:hint> Keyword </template>
+
+          <template v-slot:after>
+            <q-btn
+              unelevated
+              class="full-height"
+              @click="onSubmit"
+              color="primary"
+              icon="search"
+            ></q-btn>
+          </template>
+        </q-input>
+      </q-form>
+
+      <q-list separator bordered>
+        <!-- <template v-if="get_index_data.length > 0"> -->
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          align="justify"
         >
-          <q-badge color="teal" floating style="right: -25px;">{{ get_index_total_read }}</q-badge>
-        </q-route-tab>
-      </q-tabs>
+          <q-route-tab
+            class="text-primary"
+            active-class="text-primary"
+            name="index"
+            replace
+            :to="{
+              query: {
+                ...$route.query,
+                status: '',
+              },
+            }"
+            label="Semua"
+          />
+          <q-route-tab
+            class="text-pink"
+            active-class="text-pink"
+            name="index_unread"
+            replace
+            :to="{
+              query: {
+                ...$route.query,
+                status: 'unread',
+              },
+            }"
+            label="Belum Dibaca"
+          >
+            <q-badge color="pink" floating style="right: -25px;">{{ get_index_total_unread }}</q-badge>
+          </q-route-tab>
+          <q-route-tab
+            class="text-teal"
+            active-class="text-teal"
+            name="index_read"
+            replace
+            :to="{
+              query: {
+                ...$route.query,
+                status: 'read',
+              },
+            }"
+            label="Dibaca"
+          >
+            <q-badge color="teal" floating style="right: -25px;">{{ get_index_total_read }}</q-badge>
+          </q-route-tab>
+        </q-tabs>
 
-      <q-separator />
+        <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="index" class="q-pa-none">
-          <template v-if="get_index_data?.length > 0">
-            <SlideItem
-              v-for="(item, index) in get_index_data"
-              :item="item"
-              :index="index"
-              :onRead="() => onRead(item?.id)"
-              :onDelete="() => onDelete(item?.id)"
-            ></SlideItem>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="index" class="q-pa-none">
+            <template v-if="get_index_data?.length > 0">
+              <SlideItem
+                v-for="(item, index) in get_index_data"
+                :item="item"
+                :index="index"
+                :onRead="() => onRead(item?.id)"
+                :onDelete="() => onDelete(item?.id)"
+              ></SlideItem>
 
-            <q-separator></q-separator>
-            <q-card-actions class="" align="evenly">
-              <q-btn
-                unelevated
-                @click="onOpenDialogDeleteAll"
-                label="Bersihkan Semua"
-                icon="delete"
-                color="red"
-                dense
-              />
-              <q-btn
-                unelevated
-                @click="onOpenDialogCheckAll"
-                label="Centang Semua"
-                icon="done_all"
-                color="positive"
-                dense
-              />
-            </q-card-actions>
-          </template>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
-        <q-tab-panel name="index_unread" class="q-pa-none">
-          <template v-if="get_index_unread_data?.length > 0">
-            <SlideItem
-              v-for="(item, index) in get_index_unread_data"
-              :item="item"
-              :index="index"
-              :onRead="() => onRead(item?.id)"
-              :onDelete="() => onDelete(item?.id)"
-            ></SlideItem>
-          </template>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
-        <q-tab-panel name="index_read" class="q-pa-none">
-          <template v-if="get_index_read_data?.length > 0">
-            <SlideItem
-              v-for="(item, index) in get_index_read_data"
-              :item="item"
-              :index="index"
-              :onRead="() => onRead(item?.id)"
-              :onDelete="() => onDelete(item?.id)"
-            ></SlideItem>
-          </template>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
-      </q-tab-panels>
+              <q-separator></q-separator>
+              <q-card-actions class="" align="evenly">
+                <q-btn
+                  unelevated
+                  @click="onOpenDialogDeleteAll"
+                  label="Bersihkan Semua"
+                  icon="delete"
+                  color="red"
+                  dense
+                />
+                <q-btn
+                  unelevated
+                  @click="onOpenDialogCheckAll"
+                  label="Centang Semua"
+                  icon="done_all"
+                  color="positive"
+                  dense
+                />
+              </q-card-actions>
+            </template>
+            <EmptyBlock v-else></EmptyBlock>
+          </q-tab-panel>
+          <q-tab-panel name="index_unread" class="q-pa-none">
+            <template v-if="get_index_unread_data?.length > 0">
+              <SlideItem
+                v-for="(item, index) in get_index_unread_data"
+                :item="item"
+                :index="index"
+                :onRead="() => onRead(item?.id)"
+                :onDelete="() => onDelete(item?.id)"
+              ></SlideItem>
+            </template>
+            <EmptyBlock v-else></EmptyBlock>
+          </q-tab-panel>
+          <q-tab-panel name="index_read" class="q-pa-none">
+            <template v-if="get_index_read_data?.length > 0">
+              <SlideItem
+                v-for="(item, index) in get_index_read_data"
+                :item="item"
+                :index="index"
+                :onRead="() => onRead(item?.id)"
+                :onDelete="() => onDelete(item?.id)"
+              ></SlideItem>
+            </template>
+            <EmptyBlock v-else></EmptyBlock>
+          </q-tab-panel>
+        </q-tab-panels>
 
-      <!-- </template> -->
+        <!-- </template> -->
 
-      <!-- <EmptyBlock v-else></EmptyBlock> -->
-    </q-list>
-    <div style="height: 47px"></div>
+        <!-- <EmptyBlock v-else></EmptyBlock> -->
+      </q-list>
 
-    <q-page-sticky v-if="get_index_data?.length > 0" position="bottom" :offset="[0, 0]">
-      <Pagination
+    </div>
+
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <q-page-sticky id="sticky_pagination" v-if="get_index_data?.length > 0" position="bottom" :offset="[0, 0]">
+      <Pagination v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"

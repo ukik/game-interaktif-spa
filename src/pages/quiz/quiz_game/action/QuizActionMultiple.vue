@@ -59,7 +59,11 @@ export default {
     if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
-
+  data() {
+    return {
+      my_time: 100,
+    };
+  },
   mounted() {
     this.onStart();
   },
@@ -284,7 +288,7 @@ export default {
         );
       }
 
-      let timeDefault = 10;
+      let timeDefault = vm.my_time;
       let timeLeft = timeDefault;
       let timerInterval = null;
       function startTimer(card, question) {

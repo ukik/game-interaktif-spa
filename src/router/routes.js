@@ -1,8 +1,8 @@
 import routes_quiz_action_public from "./quiz/routes_quiz_action_public";
 import routes_quiz_action from "./quiz/routes_quiz_action";
 import routes_quiz_report from "./quiz/routes_quiz_report";
-import routes_collection from "./quiz/routes_quiz_collection";
-import routes_activity from "./quiz/routes_quiz_activity";
+import routes_quiz_bank from "./quiz/routes_quiz_bank";
+import routes_quiz_tugas from "./quiz/routes_quiz_tugas";
 import routes_stats from "./quiz/routes_quiz_stats";
 import routes_riwayat from "./quiz/routes_quz_riwayat";
 import routes_quiz_intro from "./quiz/routes_quiz_intro";
@@ -49,8 +49,8 @@ const routes = [
     children: [
       ...routes_quiz_dashboard,
       ...routes_account,
-      ...routes_collection,
-      ...routes_activity,
+      ...routes_quiz_bank,
+      ...routes_quiz_tugas,
       ...routes_stats,
       ...routes_notifications,
       ...routes_riwayat,
@@ -67,7 +67,7 @@ const routes = [
         component: () => import("pages/LoginPage.vue"),
         meta: {
           logged: false,
-          title: "Login STARKY",
+          title: "LABSNIP",
           meta: [{ name: "description", content: "Login produk." }],
         },
       },
@@ -77,7 +77,7 @@ const routes = [
         component: () => import("pages/LoggedPage.vue"),
         meta: {
           logged: true,
-          title: "Logged STARKY",
+          title: "LABSNIP",
           meta: [{ name: "description", content: "Logged produk." }],
         },
       },
@@ -102,7 +102,7 @@ const routes = [
       //   name: "home",
       //   component: () => import("pages/Home.vue"),
       //   meta: {
-      //     title: "Beranda - Yuvoria SNACK",
+      //     title: "Beranda - LABSNIP",
       //     meta: [{ name: "description", content: "Beranda produk." }],
       //   },
       // },
@@ -111,7 +111,7 @@ const routes = [
       //   name: "product",
       //   component: () => import("pages/Product.vue"),
       //   meta: {
-      //     title: "Product - Yuvoria SNACK",
+      //     title: "Product - LABSNIP",
       //     meta: [{ name: "description", content: "Deskripsi produk." }],
       //   },
       // },
@@ -120,7 +120,7 @@ const routes = [
       //   name: "list",
       //   component: () => import("pages/List.vue"),
       //   meta: {
-      //     title: "List - Yuvoria SNACK",
+      //     title: "List - LABSNIP",
       //     meta: [{ name: "description", content: "List produk" }],
       //   },
       // },

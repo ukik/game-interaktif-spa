@@ -133,7 +133,7 @@
     </q-banner>
 
     <template v-if="get_index_data.length > 0">
-      <div class="row q-gutter-y-md">
+      <div class="row q-col-gutter-sm">
         <IndexCard
           :get_index_data="get_index_data"
           :get_index_kelas="get_index_kelas"
@@ -145,9 +145,9 @@
 
     <EmptyBlock v-else></EmptyBlock>
 
-    <div style="height: 47px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
+      <Pagination v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"

@@ -10,6 +10,7 @@ const routes = [
       title: "Ranking Quiz",
       meta: [{ name: "description", content: "Ranking Quiz" }],
       page_type: 'index',
+      sidebar_id: 1,
     },
   },
   {
@@ -21,6 +22,7 @@ const routes = [
       title: "Detail Ranking Quiz",
       meta: [{ name: "description", content: "Detail Ranking Quiz" }],
       page_type: 'show',
+      sidebar_id: 1,
     },
   },
 

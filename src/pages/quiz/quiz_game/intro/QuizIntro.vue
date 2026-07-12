@@ -28,10 +28,6 @@
         </q-card>
         <!-- <button @click="startQuiz">🚀 MULAI BELAJAR</button> -->
 
-        <q-btn class="quiz-button" color="primary" @click="startQuiz">
-          🚀 MULAI BELAJAR
-        </q-btn>
-
         <!-- <q-card-section class="q-pb-none" align="center">
           <div class="footer">
             Ayo jadi jago English! ✨
@@ -39,6 +35,16 @@
         </q-card-section> -->
 
       </q-card-section>
+
+      <q-separator></q-separator>
+
+      <q-card-actions class="q-pa-md" align="center">
+        <q-btn class="quiz-button" color="primary" @click="startQuiz">
+          <span class="q-px-md">🚀 MULAI BELAJAR</span>
+        </q-btn>
+
+      </q-card-actions>
+
     </q-card>
     <Lottie_1_404 v-else>
       <q-btn round to="/" color="pink" size="xl" icon="home" />

@@ -180,7 +180,7 @@ export default {
   },
   mounted() {
     const params = this.$route?.params
-    const data = JSON.parse(localStorage.getItem("record_quiz_"+params?.quiz+'2'));
+    const data = JSON.parse(localStorage.getItem("record_quiz_"+params?.quiz+''));
     console.log('mounted', data)
     if (!data) {
       alert("Data quiz tidak ditemukan!");

@@ -1,34 +1,77 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-    <q-card flat bordered>
-      <q-tabs
-        v-model="tab"
-        dense
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-      >
-        <q-tab name="tab1" label="QUIZ" />
-      </q-tabs>
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-12">
+      <q-card flat bordered class="rounded-borders q-mb-md">
+        <q-card-actions
+          align="center"
+          class="q-pa-none col-xs-12 col-sm-12 col-md-6 col-6"
+        >
+          <q-item
+            v-if="is_teacher || enabled"
+            @click="onOpenDialog"
+            class="col-6 text-white bg-primary"
+            clickable
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon text-color="white" name="post_add" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Buat Tugas</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item
+            class="col text-white bg-pink"
+            clickable
+            v-ripple
+            :to="{
+              name: 'quiz_intro_public',
+              params: {
+                mode: 'all',
+                quiz: get_show_payload?.kategori,
+                slug: get_show_payload?.id,
+              },
+            }"
+          >
+            <q-item-section avatar>
+              <q-icon text-color="white" name="play_circle" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Coba</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-card-actions>
+      </q-card>
 
-      <q-separator />
+      <q-card flat bordered>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+        >
+          <q-tab name="tab1" label="QUIZ" />
+        </q-tabs>
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="tab1" class="q-pa-none">
-          <template v-if="get_show_payload?.id">
-            <ShowTab1Card
-              :get_show_payload="get_show_payload"
-              :get_show_kelas="get_show_kelas"
-            ></ShowTab1Card>
-          </template>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
-      </q-tab-panels>
-    </q-card>
+        <q-separator />
 
-    <div style="height: 50px"></div>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="tab1" class="q-pa-none">
+            <template v-if="get_show_payload?.id">
+              <ShowTab1Card
+                :get_show_payload="get_show_payload"
+                :get_show_kelas="get_show_kelas"
+              ></ShowTab1Card>
+            </template>
+            <EmptyBlock v-else></EmptyBlock>
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+    </div>
+    <!-- <div style="height: 50px"></div>
     <q-page-sticky v-if="getPageWidth" position="bottom" :offset="[0, 0]">
       <q-card-actions
         align="center"
@@ -70,7 +113,7 @@
           </q-item-section>
         </q-item>
       </q-card-actions>
-    </q-page-sticky>
+    </q-page-sticky> -->
 
     <FormCreateTugas ref="FormCreateTugas" model="LmsQuiz"></FormCreateTugas>
   </q-page>
@@ -96,7 +139,7 @@ export default {
     // const page = currentRoute.query.page || 1;
     const slug = currentRoute.params.slug || "";
 
-    preStore.setKategori(currentRoute.params.quiz)
+    preStore.setKategori(currentRoute.params.quiz);
 
     await preStore.onShow(slug);
   },

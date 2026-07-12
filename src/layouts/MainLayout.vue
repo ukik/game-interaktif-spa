@@ -4,7 +4,7 @@
       <q-toolbar v-if="$route.name == 'home'">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> YUVORIA SNACK </q-toolbar-title>
+        <q-toolbar-title> LABSNIP </q-toolbar-title>
 
         <div>Versi v{{ $q.version }}</div>
       </q-toolbar>
@@ -96,4 +96,18 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+</script>
+
+<script>
+import { mapActions } from "pinia";
+import { useGlobalStore } from "src/stores/lms/GlobalStore";
+
+export default {
+  methods: {
+    ...mapActions(useGlobalStore, ["onRequestDemo"]),
+  },
+  mounted() {
+    this.onRequestDemo()
+  },
+};
 </script>

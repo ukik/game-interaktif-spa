@@ -3,14 +3,33 @@
     <div class="flex flex-center">
       <q-card class="bg-transparent" flat>
         <q-card-actions align="center">
-          <DotLottieVue style="height: auto; width: 500px; margin-top: 0px;" autoplay loop src="/lottie/used_trophy.json" />
+          <DotLottieVue
+            style="height: auto; width: 500px; margin-top: 0px"
+            autoplay
+            loop
+            src="/lottie/used_trophy.json"
+          />
         </q-card-actions>
         <q-card-actions align="center">
-          <DotLottieVue style="height: auto; width: 550px; margin-top: -200px;" autoplay loop
-            src="/lottie/used_exploding_ribbon_and_confetti.json" />
+          <DotLottieVue
+            style="height: auto; width: 550px; margin-top: -200px"
+            autoplay
+            loop
+            src="/lottie/used_exploding_ribbon_and_confetti.json"
+          />
         </q-card-actions>
         <q-card-actions v-if="is_next" align="center">
-          <q-btn style="margin-top: -40px;" round @click="gotoReport" color="orange" size="xl" icon="arrow_forward" />
+          <q-btn
+            style="margin-top: -40px"
+            rounded
+            @click="gotoReport"
+            color="white"
+            text-color="primary"
+            size="xl"
+            icon-right="arrow_forward"
+          >
+            <span class="q-px-md">Hasil</span>
+          </q-btn>
           <!-- <q-btn rounded @click="gotoReport" color="primary" style="width: 220px; margin-top:0px;" size="xl" icon-right="description" label="Laporan" /> -->
         </q-card-actions>
       </q-card>
@@ -19,44 +38,42 @@
 </template>
 
 <script setup>
-import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 </script>
 
 <script>
-import { mapActions, mapState, mapWritableState } from 'pinia';
-import { useQuizStore } from 'src/stores/lms/form/QuizStore';
-import { useUiStore } from 'src/stores/ui';
+import { mapActions, mapState, mapWritableState } from "pinia";
+import { useQuizStore } from "src/stores/lms/form/QuizStore";
+import { useUiStore } from "src/stores/ui";
 
 export default {
   computed: {
-    ...mapWritableState(useQuizStore, ['router_push','is_quiz_done'])
+    ...mapWritableState(useQuizStore, ["router_push", "is_quiz_done"]),
     // ...mapWritableState(useUiStore, ['report_confirm_dialog'])
   },
-  emits: ['onBubbleEvent'],
+  emits: ["onBubbleEvent"],
   data() {
     return {
       dialog: false,
       is_next: false,
-    }
+    };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     gotoReport() {
-      console.log('this.router_push', this.router_push)
+      console.log("this.router_push", this.router_push);
 
-      this.removeAllEventsInGame()
-      this.$router.push(this.router_push)
+      this.removeAllEventsInGame();
+      this.$router.replace(this.router_push);
     },
     handleComplete() {
-      console.log('Animasi selesai');
-      const vm = this
+      console.log("Animasi selesai");
+      const vm = this;
 
       setTimeout(function () {
         vm.is_next = true;
-        console.log('xxxxxxxxx')
-      }, 2500)
-
+        console.log("xxxxxxxxx");
+      }, 2500);
 
       // trigger event ke parent
       // this.onBubbleEvent();
@@ -67,8 +84,8 @@ export default {
       this.dialog = true;
     },
     onBubbleEvent() {
-      this.$emit('onBubbleEvent')
-    }
-  }
-}
+      this.$emit("onBubbleEvent");
+    },
+  },
+};
 </script>

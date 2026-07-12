@@ -3,7 +3,7 @@ const routes = [
   {
     path: "/lms-modul-index",
     name: 'lms_modul_index',
-    component: () => import("pages/quiz/quiz_koleksi/LmsModulIndexPage.vue"),
+    component: () => import("pages/quiz/quiz_bank/LmsModulIndexPage.vue"),
     meta: {
       logged: true,
       title: "Bank Modul",
@@ -14,7 +14,7 @@ const routes = [
   {
     path: "/lms-modul-show/:slug",
     name: 'lms_modul_show',
-    component: () => import("pages/quiz/quiz_koleksi/LmsModulShowPage.vue"),
+    component: () => import("pages/quiz/quiz_bank/LmsModulShowPage.vue"),
     meta: {
       logged: true,
       title: "Detail Bank Modul",

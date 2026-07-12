@@ -10,6 +10,7 @@ const routes = [
       title: "Nilai Quiz",
       meta: [{ name: "description", content: "Nilai Quiz" }],
       page_type: 'index',
+      sidebar_id: 2,
     },
   },
   {
@@ -21,6 +22,7 @@ const routes = [
       title: "Detail Nilai Quiz",
       meta: [{ name: "description", content: "Detail Nilai Quiz" }],
       page_type: 'show',
+      sidebar_id: 2,
     },
   },
 

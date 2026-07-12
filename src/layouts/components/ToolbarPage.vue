@@ -12,7 +12,8 @@
         {{ $route?.params?.quiz ? `/ ${$route?.params?.quiz}` : "" }}</q-toolbar-title
       >
     </q-toolbar>
-    <q-separator v-if="is_ipad_lower_size" color="grey-4"></q-separator>
+    <!-- v-if="is_ipad_lower_size"  -->
+    <q-separator color="grey-4"></q-separator>
   </div>
 </template>
 

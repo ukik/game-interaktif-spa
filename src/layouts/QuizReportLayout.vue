@@ -156,6 +156,7 @@ export default {
   },
 
   mounted() {
+    return
     setTimeout(() => {
       this.updateWidth();
     }, 2000);

@@ -59,6 +59,11 @@ export default {
     if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
+  data() {
+    return {
+      my_time: 200,
+    };
+  },
   mounted() {
     this.onStart();
   },
@@ -122,7 +127,7 @@ export default {
       /* ================= TIMER ================= */
       let life = 3;
 
-      let timeDefault = 15;
+      let timeDefault = vm.my_time;
       let timeLeft = timeDefault;
       let timerInterval = null;
 

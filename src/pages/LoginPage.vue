@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center row q-pa-md">
-    <form class="col-12 col-sm-8 col-sm-8 col-md-6" @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
+  <q-page class="col-12 flex flex-center row q-pa-md">
+    <form class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4" @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
       <q-card v-if="!is_confirmed">
         <q-card-section class="bg-primary text-white">
           <div class="text-h6">Selamat Datang</div>
@@ -11,12 +11,12 @@
 
         <q-card-section class="q-gutter-md">
           <!-- {{ auth }} -->
-
+          <LoginUserDemo />
 
           <q-input v-if="!form_login_role?.temp_token" ref="emailRef" filled v-model="form_login.email" type="email"
             label="Your email *" hint="wajib diisi email" lazy-rules :rules="emailRules" />
 
-          <q-input v-if="!form_login_role?.temp_token" ref="passwordRef" filled type="text"
+          <q-input v-if="!form_login_role?.temp_token" ref="passwordRef" filled type="password"
             v-model="form_login.password" label="Your password *" hint="wajib diisi password" lazy-rules
             :rules="passwordRules" />
 
@@ -51,7 +51,7 @@
         <q-separator></q-separator>
 
         <q-card-actions v-if="!form_login_role?.temp_token" class="q-pa-md" align="between">
-            <q-btn label="Submit" icon="send" type="submit" color="primary" />
+            <q-btn label="Sign-In" icon="send" type="submit" color="primary" />
             <q-btn label="Reset" @click="onClearFormLogin" type="reset" color="negative" icon="delete" outline class="q-ml-sm" />
         </q-card-actions>
         <q-card-actions v-else class="q-pa-md" align="center">
@@ -69,12 +69,18 @@ import axios from 'axios'
 import metaMixin from 'src/mixins/createMetaMixin'
 import { mapState, mapStores, mapActions } from 'pinia';
 import { useAuthStore } from 'src/stores/auth/AuthStore';
+import LoginUserDemo from 'src/components/lms/LoginUserDemo.vue';
+
+
 
 
 const isValidEmail = (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
 
 export default {
   mixins: [metaMixin],
+  components: {
+    LoginUserDemo
+  },
   data() {
     return {
       accept: false,

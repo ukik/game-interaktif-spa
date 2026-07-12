@@ -66,7 +66,11 @@ export default {
     if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
-
+  data() {
+    return {
+      my_time: 100,
+    };
+  },
   mounted() {
     this.onStart();
   },
@@ -289,7 +293,7 @@ export default {
       }
 
       /* ================== TAMBAHAN: COUNTDOWN 120 DETIK ================== */
-      const default_timeLeft = 30;
+      const default_timeLeft = vm.my_time;
       let timeLeft = default_timeLeft;
       const timerEl = document.getElementById("timer");
 

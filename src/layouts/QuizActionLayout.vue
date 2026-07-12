@@ -48,18 +48,19 @@
       @before-show="onBeforeShow"
       show-if-above
       v-model="leftDrawerOpen"
-      :width="is_mobile_size ? 270 : 300"
+      :width="is_mobile_size ? 270 : 270"
       side="left"
       :behavior="is_equal_to_lower_laptop ? 'mobile' : 'default'"
       bordered
     >
+      <TabSidebar :prop_tab="left_drawer_type" @onBubbleEvent="onTabSidebar" />
       <!-- drawer content -->
       <!-- <LeftDrawerItem /> -->
       <q-slide-transition>
-        <LeftDrawerItemQuiz v-if="left_drawer_type == 'quiz'" />
+        <LeftDrawerItemQuiz @onBackSidebar="onBackSidebar" v-if="left_drawer_type == 'quiz'" />
       </q-slide-transition>
       <q-slide-transition>
-        <LeftDrawerItemGeneral v-if="left_drawer_type == 'general'" />
+        <LeftDrawerItemGeneral @onChangeTabSidebar="onTabSidebar" v-if="left_drawer_type == 'general'" />
       </q-slide-transition>
       <!-- <transition
   enter-active-class="q-transition--slide-right-enter-active"
@@ -85,7 +86,7 @@
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container class="row justify-center">
+    <q-page-container class="rowX justify-center">
       <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
 
@@ -96,7 +97,7 @@
         :class="[
           getClass,
           is_mobile_size ? '' : 'q-card--borderedX',
-          is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-px-sm q-pt-sm',
+          is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-pa-smX',
         ]"
       >
         <router-view v-slot="{ Component }">
@@ -160,10 +161,19 @@ const FormDialogStakeholder = defineAsyncComponent(() =>
   import("src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue")
 );
 
+const TabSidebar = defineAsyncComponent(() =>
+  import("./components/TabSidebar.vue")
+);
+
+
 const { getVerticalScrollPosition } = scroll;
+
+
+import { useGlobalStore } from 'src/stores/lms/GlobalStore';
 
 export default {
   components: {
+    TabSidebar,
     FormDialogParent,
     FormDialogSekolah,
     FormDialogSiswa,
@@ -197,14 +207,14 @@ export default {
       },
     };
   },
-  // watch: {
-  //   "$route.name"(val) {
-  //     console.log("watch");
-  //     this.$nextTick(() => {
-  //       // this.updateWidth() // agar selalu update
-  //     });
-  //   },
-  // },
+  watch: {
+    "$route.meta"(val) {
+      console.log("watch");
+      this.$nextTick(() => {
+        this.left_drawer_type = (val?.sidebar_id == 2) ? "quiz" : "general";
+      });
+    },
+  },
   beforeRouteLeave(to, from) {
     return;
     const answer = window.confirm("Do you really want to leave?");
@@ -233,6 +243,16 @@ export default {
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
     ...mapActions(useUiStore, ["setPageWidth", "setPageScrollY"]),
+
+    ...mapActions(useGlobalStore, ['onRequest','onRequestGuru']),
+
+    onBackSidebar() {
+      this.left_drawer_type = 'general'
+    },
+    onTabSidebar(val) {
+      console.log(val)
+      this.left_drawer_type = val
+    },
     onLogoutConfirmDialog() {
       this.$refs.LogoutConfirmDialog.onOpen(true);
     },
@@ -272,16 +292,22 @@ export default {
   },
 
   mounted() {
+    this.left_drawer_type = "general";
+    if(this.$route?.meta?.sidebar_id == 2) this.left_drawer_type = "quiz";
+
     if (!this.is_ipad_lower_size) {
-      this.left_drawer_type = "general";
       this.leftDrawerOpen = true;
     }
+
+    this.onRequest()
+    this.onRequestGuru()
 
     setTimeout(() => {
       this.updateWidth();
     }, 1000);
 
     return;
+
     const vm = this;
 
     vm.scrollHandler = () => {

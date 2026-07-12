@@ -4,6 +4,15 @@
       <q-toolbar-title>EMERALD</q-toolbar-title>
     </q-toolbar> -->
 
+    <!-- <div class="full-width q-py-none">
+      <q-toolbar
+        class="text-primary bg-white">
+        <q-btn flat round dense icon="arrow_back" @click="onBackSidebar" />
+      </q-toolbar>
+    </div> -->
+
+    <!-- <q-separator></q-separator> -->
+
     <q-list>
       <!-- <q-item-label header class="q-py-md">Dashboard</q-item-label> -->
       <!-- <q-item-label header class="q-py-md"
@@ -44,9 +53,8 @@
 
       </q-expansion-item> -->
 
-      <q-item-label header class="q-py-md"
-        >STEP 1
-        <q-icon name="arrow_right"></q-icon>
+      <!-- <q-item-label header class="q-py-md"
+        >Pengaturan Tugas
       </q-item-label>
       <q-item
         :to="{ name: 'lms_tugas_index' }"
@@ -56,21 +64,21 @@
         active-class="my-menu-link"
       >
         <q-item-section avatar>
-            <q-avatar
-              text-color="white"
-              icon="fa-solid fa-clipboard-question"
-              color="primary"
-            />
+          <q-avatar
+            text-color="white"
+            icon="fa-solid fa-clipboard-question"
+            color="primary"
+          />
         </q-item-section>
 
         <q-item-section>
           <q-item-label class="text-capitalize">TUGAS QUIZ</q-item-label>
           <q-item-label caption lines="1">Aktivitas Siswa</q-item-label>
         </q-item-section>
-      </q-item>
+      </q-item> -->
 
       <!-- Aktivitas -->
-      <q-item-label v-if="false" header class="q-py-md"
+      <!-- <q-item-label v-if="false" header class="q-py-md"
         >STEP 2 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-if="false" v-model="expanded_tugas" group="sidebar">
@@ -109,7 +117,7 @@
             <q-item-label caption lines="1">{{ item?.subtitle }}</q-item-label>
           </q-item-section>
         </q-item>
-      </q-expansion-item>
+      </q-expansion-item> -->
 
       <!-- Koleksi -->
       <q-item-label header class="q-py-md"
@@ -350,9 +358,11 @@ export default {
       ],
 
       expanded_dashboard: true,
-      expanded_bank: false,
+
+      expanded_bank: true,
       expanded_nilai: false,
       expanded_ranking: false,
+
       expanded_tugas: false,
     };
   },
@@ -386,6 +396,11 @@ export default {
           break;
       }
     },
+  },
+  methods: {
+    onBackSidebar() {
+      this.$emit('onBackSidebar')
+    }
   },
   mounted() {
     this.link = this.$route.name;

@@ -87,8 +87,8 @@ export const useAuthStore = defineStore('AuthStore', {
     },
 
     form_login: {
-      email: "superadmin@gmail.com",
-      password: "12345",
+      email: "", //"superadmin@gmail.com",
+      password: "", // "12345",
       remember: false,
     },
     form_reset_password: {

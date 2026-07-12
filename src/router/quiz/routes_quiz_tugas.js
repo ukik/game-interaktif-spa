@@ -10,6 +10,7 @@ const routes = [
       title: "Tugas Quiz",
       meta: [{ name: "description", content: "Tugas Quiz" }],
       page_type: 'index',
+      sidebar_id: 1,
     },
   },
   {
@@ -21,6 +22,7 @@ const routes = [
       title: "Detail Tugas Quiz",
       meta: [{ name: "description", content: "Detail Tugas Quiz" }],
       page_type: 'show',
+      sidebar_id: 1,
     },
   },
 ]

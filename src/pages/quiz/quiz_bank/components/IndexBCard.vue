@@ -40,6 +40,19 @@
         </template>
       </q-card-actions>
 
+      <q-separator />
+      <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
+        <q-img
+          position="50% 0%"
+          :fit="is_mobile_size ? '' : 'cover'"
+          :height="is_mobile_size ? '' : '180px'"
+          class="rounded-borders bg-white"
+          :src="item?.url_image"
+          @error="item.url_image = global_url_image"
+          :error-src="global_url_image"
+        >
+        </q-img>
+      </q-card-section>
       <!-- <q-card-actions align="between" class="q-px-md text-caption">
       <q-badge color="cyan" class="q-pa-xs q-mr-sm" :label="'ID: ' + item?.id" />
       <q-item-label lines="1" class="text-overline">
@@ -57,36 +70,24 @@
           <q-item-label lines="1" caption>{{ item?.topik }}</q-item-label>
         </q-item-section>
         <!-- <q-item-section avatar side>
-          <q-avatar color="grey-4">
+          <q-chip square color="grey-4 text-bold">
             {{ item?.id }}
-          </q-avatar>
+          </q-chip>
         </q-item-section> -->
       </q-item>
 
       <q-separator></q-separator>
-      <q-card-section horizontal>
-        <q-card-section class="q-pt-xs col bg-grey-1">
-          <div class="text-h6 text-capitalize q-mb-xs">{{ item?.kategori }}</div>
-          <q-item-label caption lines="2" class="text-grey-7">
-            {{ item?.subtopik }}
-          </q-item-label>
-          <q-item-label lines="3" class="text-dark">
-            {{ item?.judul }}
-          </q-item-label>
-        </q-card-section>
-
-        <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
-          <q-img
-            position="50% 0%"
-            :fit="is_mobile_size ? '' : 'cover'"
-            :height="is_mobile_size ? '' : '140px'"
-            class="rounded-borders bg-white"
-            :src="item?.url_image"
-            @error="item.url_image = global_url_image"
-            :error-src="global_url_image"
-          />
-        </q-card-section>
+      <!-- <q-card-section> -->
+      <q-card-section class="q-pt-xs col bg-grey-1">
+        <div class="text-h6 text-capitalize q-mb-xs">{{ item?.kategori }}</div>
+        <q-item-label caption lines="2" class="text-grey-7">
+          {{ item?.subtopik }}
+        </q-item-label>
+        <q-item-label lines="3" class="text-dark">
+          {{ item?.judul }}
+        </q-item-label>
       </q-card-section>
+      <!-- </q-card-section> -->
 
       <q-separator />
 
@@ -107,6 +108,7 @@
           label="Detail"
         ></q-btn>
         <q-btn
+          target="_blank"
           unelevated
           :to="{
             name: route_play,

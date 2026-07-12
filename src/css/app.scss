@@ -125,3 +125,11 @@ a .router-link-active {
 .border_round {
   border: 1px solid #1976d286;
 }
+
+
+// #sticky_toolbar div,
+#sticky_pagination div {
+  width: 100%;
+  // display: flex;
+  // flex-wrap: wrap;
+}

@@ -47,7 +47,7 @@ for (let index = 0; index < 12; index++) {
 }
 export const useLmsTugasStore = defineStore('LmsTugasStore', {
   state: () => ({
-    tab: 'publish',
+    tab: 'semua',
     expired: 'false',
     init: {
       index: true,

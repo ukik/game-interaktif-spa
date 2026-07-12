@@ -7,7 +7,7 @@ export default createMetaMixin(function () {
     // 🔥 dinamis
     title: routeTitle,
 
-    titleTemplate: title => `${title} - My Website`,
+    titleTemplate: title => `${title} - Jadi Pintar Itu Hebat`,
 
     meta: {
       description: { name: 'description', content: 'Page 1' },
@@ -21,7 +21,7 @@ export default createMetaMixin(function () {
         property: 'og:title',
         // optional; similar to titleTemplate, but allows templating with other meta properties
         template(ogTitle) {
-          return `${ogTitle} - My Website`
+          return `${ogTitle} - Jadi Pintar Itu Hebat`
         }
       }
     },

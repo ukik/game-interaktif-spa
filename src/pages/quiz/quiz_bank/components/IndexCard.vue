@@ -107,6 +107,7 @@
         label="Detail"
       ></q-btn>
       <q-btn
+        target="_blank"
         unelevated
         :to="{
           name: route_play,

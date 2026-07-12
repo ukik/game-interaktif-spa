@@ -1,6 +1,9 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
+
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-12">
+
     <q-card flat bordered>
       <q-tabs
         v-model="tab"
@@ -81,8 +84,10 @@
       </q-tab-panels>
     </q-card>
 
+    </div>
+
     <!-- <div style="height: 50px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
+    <q-page-sticky id="sticky_toolbar" position="bottom" :offset="[0, 0]">
       <q-card-actions
         align="center"
         class="bg-primary q-pa-none"

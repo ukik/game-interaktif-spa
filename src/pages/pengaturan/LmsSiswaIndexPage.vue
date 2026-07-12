@@ -1,54 +1,60 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-    <q-list separator bordered class="bg-white">
-      <template v-if="get_index_data.length > 0">
-        <q-item
-          v-for="(item, index) in get_index_data"
-          :key="index"
-          clickable
-          v-ripple
-          :to="{ name: 'lms_siswa_show', params: { slug: item?.id } }"
-        >
-          <q-item-section avatar>
-            <q-avatar>
-              <q-img
-                :src="item?.url_image"
-                @error="item.url_image = global_url_image"
-                :error-src="global_url_image"
-              />
-              <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
-            </q-avatar>
-          </q-item-section>
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
 
-          <q-item-section>
-            <q-item-label lines="1">{{ item?.name }}</q-item-label>
-            <q-item-label caption lines="1"
-              ><q-badge color="cyan">ID: {{ item?.id }}</q-badge> {{ item?.email }}</q-item-label
-            >
-            <!-- <q-item-label caption lines="1">{{ item?.siswa?.nis }} / {{ item?.siswa?.nisn }}</q-item-label> -->
-          </q-item-section>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-8 col-xl-8 col-12">
 
-          <q-item-section side>
-            <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
-            <q-item-label>
+      <q-list separator bordered class="bg-white">
+        <template v-if="get_index_data.length > 0">
+          <q-item
+            v-for="(item, index) in get_index_data"
+            :key="index"
+            clickable
+            v-ripple
+            :to="{ name: 'lms_siswa_show', params: { slug: item?.id } }"
+          >
+            <q-item-section avatar>
               <q-avatar>
-                <q-icon name="group" color="grey" />
-                <q-badge floating color="teal">{{ item?.siswa?.parents_count }}</q-badge>
+                <q-img
+                  :src="item?.url_image"
+                  @error="item.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
+                <!-- <q-badge class="badge-left" floating color="primary">{{ item?.id }}</q-badge> -->
               </q-avatar>
-            </q-item-label>
-          </q-item-section>
-          <!-- <q-badge class="square top badge-left" floating color="cyan">{{
-            item?.id
-          }}</q-badge> -->
-        </q-item>
-      </template>
+            </q-item-section>
 
-      <EmptyBlock v-else></EmptyBlock>
-    </q-list>
-    <div style="height: 47px"></div>
-    <q-page-sticky v-if="is_student" position="bottom" :offset="[0, 0]">
-      <Pagination
+            <q-item-section>
+              <q-item-label lines="1">{{ item?.name }}</q-item-label>
+              <q-item-label caption lines="1"
+                ><q-badge color="cyan">ID: {{ item?.id }}</q-badge> {{ item?.email }}</q-item-label
+              >
+              <!-- <q-item-label caption lines="1">{{ item?.siswa?.nis }} / {{ item?.siswa?.nisn }}</q-item-label> -->
+            </q-item-section>
+
+            <q-item-section side>
+              <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
+              <q-item-label>
+                <q-avatar>
+                  <q-icon name="group" color="grey" />
+                  <q-badge floating color="teal">{{ item?.siswa?.parents_count }}</q-badge>
+                </q-avatar>
+              </q-item-label>
+            </q-item-section>
+            <!-- <q-badge class="square top badge-left" floating color="cyan">{{
+              item?.id
+            }}</q-badge> -->
+          </q-item>
+        </template>
+
+        <EmptyBlock v-else></EmptyBlock>
+      </q-list>
+
+    </div>
+
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
+      <Pagination v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"

@@ -60,7 +60,11 @@ export default {
     if (this.is_quiz_done || !this.is_not_error) return next()
     return QuizActionBeforeRouteLeave(next)
   },
-
+  data() {
+    return {
+      my_time: 100,
+    };
+  },
   mounted() {
     this.onStart();
   },
@@ -326,7 +330,7 @@ export default {
       const timer = document.getElementById("timer");
       const scoreEl = document.getElementById("score");
 
-      const default_timeLeft = 10; //100;
+      const default_timeLeft = vm.my_time; //100;
       let timeLeft = default_timeLeft;
       let countdown = null;
 

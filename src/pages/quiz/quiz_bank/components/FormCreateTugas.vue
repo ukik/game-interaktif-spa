@@ -37,7 +37,7 @@
                 <q-item-label lines="1" caption>{{ tugas_reference?.topik }}</q-item-label>
               </q-item-section>
               <q-item-section avatar side>
-                <q-avatar color="primary" text-color="white">
+                <q-avatar square color="primary" class="rounded-borders" text-color="white">
                   {{ tugas_reference?.id }}
                 </q-avatar>
               </q-item-section>

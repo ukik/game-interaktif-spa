@@ -64,7 +64,7 @@ export async function onRequestPublic(store, url = {
   if (!resp?.data) return false
 
   store.data[key] = resp?.data
-  console.log('onRequestPublic', store[key])
+  console.log('onRequestPublic DONE', store[key])
 
   return true
 }
@@ -103,7 +103,7 @@ export async function onRequestPrivate(store, url = {
   if (resp?.data?.isLogin) {
 
     store.data[key] = resp?.data
-    console.log('onRequestPrivate', store[key])
+    console.log('onRequestPrivate DONE', store[key])
 
     return true
   }

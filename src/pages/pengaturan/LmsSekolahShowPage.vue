@@ -1,196 +1,215 @@
 <template>
   <InitLoading v-if="get_init_show"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-    <q-card flat bordered>
-      <!-- <q-card-actions align="left">
-        <div class="text-h6">PROFIL</div>
-      </q-card-actions> -->
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
 
-      <q-tabs
-        v-model="tab"
-        dense
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-      >
-        <q-tab name="school" label="SEKOLAH" />
-      </q-tabs>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-12">
+      <q-card flat bordered class="rounded-borders q-mb-md">
+        <q-card-actions
+          align="center"
+          class="q-pa-none col-xs-12 col-sm-12 col-md-6 col-6"
+        >
+          <q-btn class="full-width"
+          @click="onOpenDialog"
+          unelevated
+          label="edit"
+          color="pink"
+          size="md"
+          icon="edit"
+        ></q-btn>
+        </q-card-actions>
+      </q-card>
 
-      <q-separator />
+      <q-card flat bordered>
+        <!-- <q-card-actions align="left">
+          <div class="text-h6">PROFIL</div>
+        </q-card-actions> -->
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="school" class="q-pa-none">
-          <template v-if="get_show_payload?.id">
-            <q-card-actions align="center" class="q-py-sm">
-              <q-parallax :height="is_mobile_size ? 250 : 450">
-                <q-img
-                  position="50% 0%"
-                  :src="get_show_payload?.url_image"
-                  @error="get_show_payload.url_image = global_url_image"
-                  :error-src="global_url_image"
-                />
-              </q-parallax>
-            </q-card-actions>
-            <q-card-actions v-if="false" align="center" class="q-py-md">
-              <!-- <q-parallax :height="250"> -->
-              <q-avatar size="240px">
-                <q-img
-                  :src="get_show_payload?.url_image"
-                  @error="get_show_payload.url_image = global_url_image"
-                  :error-src="global_url_image"
-                />
-              </q-avatar>
-              <!-- </q-parallax> -->
-            </q-card-actions>
-            <q-separator></q-separator>
-            <q-card-section class="q-pa-sm">
-              <q-list separator bordered class="text-dark">
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>ID</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.id
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Nama</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.nama
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Email</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.email
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Telpon</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.telpon
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Whatsapp</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.whatsapp
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+        >
+          <q-tab name="school" label="SEKOLAH" />
+        </q-tabs>
 
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>NPSN</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.npsn
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Jenjang</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.jenjang
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Provinsi</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark text-capitalize">{{
-                      get_show_payload?.provinsi
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kota</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark text-capitalize">{{
-                      get_show_payload?.kota
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kecamatan</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark text-capitalize">{{
-                      get_show_payload?.kecamatan
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Kode Pos</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark text-capitalize">{{
-                      get_show_payload?.kode_pos
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section avatar>
-                    <q-item-label lines="1" caption>Alamat</q-item-label>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-dark text-right">{{
-                      get_show_payload?.alamat
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1" caption>Dibuat</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label class="text-dark">{{
-                      get_show_payload?.created_at_human
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card-section>
-          </template>
-          <EmptyBlock v-else></EmptyBlock>
-        </q-tab-panel>
-      </q-tab-panels>
-    </q-card>
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="school" class="q-pa-none">
+            <template v-if="get_show_payload?.id">
+              <q-card-actions align="center" class="q-py-sm">
+                <q-parallax :height="is_mobile_size ? 250 : 450">
+                  <q-img
+                    position="50% 0%"
+                    :src="get_show_payload?.url_image"
+                    @error="get_show_payload.url_image = global_url_image"
+                    :error-src="global_url_image"
+                  />
+                </q-parallax>
+              </q-card-actions>
+              <q-card-actions v-if="false" align="center" class="q-py-md">
+                <!-- <q-parallax :height="250"> -->
+                <q-avatar size="240px">
+                  <q-img
+                    :src="get_show_payload?.url_image"
+                    @error="get_show_payload.url_image = global_url_image"
+                    :error-src="global_url_image"
+                  />
+                </q-avatar>
+                <!-- </q-parallax> -->
+              </q-card-actions>
+              <q-separator></q-separator>
+              <q-card-section class="q-pa-sm">
+                <q-list separator bordered class="text-dark">
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>ID</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.id
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Nama</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.nama
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Email</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.email
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Telpon</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.telpon
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Whatsapp</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.whatsapp
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>NPSN</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.npsn
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Jenjang</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.jenjang
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Provinsi</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark text-capitalize">{{
+                        get_show_payload?.provinsi
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Kota</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark text-capitalize">{{
+                        get_show_payload?.kota
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Kecamatan</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark text-capitalize">{{
+                        get_show_payload?.kecamatan
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Kode Pos</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark text-capitalize">{{
+                        get_show_payload?.kode_pos
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-item-label lines="1" caption>Alamat</q-item-label>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label class="text-dark text-right">{{
+                        get_show_payload?.alamat
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label lines="1" caption>Dibuat</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label class="text-dark">{{
+                        get_show_payload?.created_at_human
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+            </template>
+            <EmptyBlock v-else></EmptyBlock>
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+    </div>
 
     <template v-if="get_show_payload?.id">
       <div style="height: 40px"></div>
 
       <FormDialog ref="FormDialog"></FormDialog>
 
-      <q-page-sticky position="bottom" :offset="[0, 10]">
+      <!-- <q-page-sticky id="sticky_toolbar" position="bottom" :offset="[0, 10]">
         <q-btn
           @click="onOpenDialog"
           unelevated
@@ -200,7 +219,7 @@
           size="md"
           icon="edit"
         ></q-btn>
-      </q-page-sticky>
+      </q-page-sticky> -->
     </template>
   </q-page>
 </template>

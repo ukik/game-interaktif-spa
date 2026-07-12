@@ -1,19 +1,27 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-
     <template v-if="get_index_data.length > 0">
       <div class="row q-gutter-y-md">
-        <IndexCard :get_index_data="get_index_data" :get_index_kelas="get_index_kelas" route_name="lms_tugas_modul_stats_show" leaderboard_key="tugas_modul_hasil"></IndexCard>
+        <IndexCard
+          :get_index_data="get_index_data"
+          :get_index_kelas="get_index_kelas"
+          route_name="lms_tugas_modul_stats_show"
+          leaderboard_key="tugas_modul_hasil"
+        ></IndexCard>
       </div>
     </template>
 
     <EmptyBlock v-else></EmptyBlock>
 
-    <div style="height: 47px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination :current_page="get_index_current_page" :last_page="get_index_last_page" :disable="get_index_loading"
-        @onBubbleEvent="onBubbleEvent"></Pagination>
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
+      <Pagination v-if="get_index_data?.length > 0"
+        :current_page="get_index_current_page"
+        :last_page="get_index_last_page"
+        :disable="get_index_loading"
+        @onBubbleEvent="onBubbleEvent"
+      ></Pagination>
     </q-page-sticky>
   </q-page>
 </template>
@@ -29,7 +37,7 @@ import IndexCard from "./components/IndexCard.vue";
 
 export default {
   components: {
-    IndexCard
+    IndexCard,
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsTugasModulLogStore(store);
@@ -70,13 +78,17 @@ export default {
       "get_index_current_page",
       "get_index_last_page",
       "get_index_loading",
-      'get_init_index',
-      'get_index_kelas',
+      "get_init_index",
+      "get_index_kelas",
     ]),
   },
   methods: {
     ...mapActions(useAuthStore, ["onLogout"]),
-    ...mapActions(useLmsTugasModulLogStore, ["onIndex", "onChangePage", "getNamaKelasList"]),
+    ...mapActions(useLmsTugasModulLogStore, [
+      "onIndex",
+      "onChangePage",
+      "getNamaKelasList",
+    ]),
     onBubbleEvent(val) {
       console.log("onBubbleEvent", val);
       this.onChangePage(val);

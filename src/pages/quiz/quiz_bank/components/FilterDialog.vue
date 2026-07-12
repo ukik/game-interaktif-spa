@@ -123,7 +123,7 @@ export default {
       "get_data_global_list_kelas",
       "get_data_global_list_kategori_quiz",
       "get_data_global_list_mapel",
-      "get_data_global_list_guru",
+      // "get_data_global_list_guru",
     ]),
     ...mapWritableState(useLmsBankQuizStore, ["filter", "valid_filter"]),
     kategoriOptions() {
@@ -144,15 +144,15 @@ export default {
         disable: full && !this["filter"].mapel.includes(item.id),
       }));
     },
-    guruOptions() {
-      // return []
-      const full = this["filter"].guru.length >= 3;
+    // guruOptions() {
+    //   // return []
+    //   const full = this["filter"].guru.length >= 3;
 
-      return this["filter"].optionsGuru.map((item) => ({
-        ...item,
-        disable: full && !this["filter"].guru.includes(item.id),
-      }));
-    },
+    //   return this["filter"].optionsGuru.map((item) => ({
+    //     ...item,
+    //     disable: full && !this["filter"].guru.includes(item.id),
+    //   }));
+    // },
   },
   methods: {
     ...mapActions(useLmsBankQuizStore, ["onIndex"]),
@@ -160,7 +160,7 @@ export default {
       this["filter"].kelas = [];
       this["filter"].mapel = [];
       this["filter"].kategori = [];
-      this["filter"].guru = [];
+      // this["filter"].guru = [];
 
       // this.$q.loading.show()
       this.valid_filter = JSON.parse(JSON.stringify(this.filter));
@@ -170,14 +170,14 @@ export default {
 
       this.optionsKategori = [...this.get_data_global_list_kategori_quiz];
       this.optionsMapel = [...this.get_data_global_list_mapel];
-      this.optionsGuru = [...this.get_data_global_list_guru];
+      // this.optionsGuru = [...this.get_data_global_list_guru];
     },
     onOpen(val) {
       this.confirm = val;
 
       this["filter"].optionsKategori = [...this.get_data_global_list_kategori_quiz];
       this["filter"].optionsMapel = [...this.get_data_global_list_mapel];
-      this["filter"].optionsGuru = [...this.get_data_global_list_guru];
+      // this["filter"].optionsGuru = [...this.get_data_global_list_guru];
     },
     onUpdate(val, key) {
       val = val || [];

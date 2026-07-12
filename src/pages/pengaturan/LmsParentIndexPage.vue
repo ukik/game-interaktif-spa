@@ -1,82 +1,88 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
-  <q-page v-else class="justify-start items-start q-pa-sm bg-white">
-    <q-form @submit="onSubmit" class="q-mb-md">
-      <q-input
-        @clear="onSubmit"
-        outlined
-        bottom-slots
-        v-model="my_keyword"
-        placeholder="keyword..."
-        counter
-        maxlength="50"
-        clearable
-      >
-        <template v-slot:prepend>
-          <q-icon name="search" />
-        </template>
+  <q-page v-else class="justify-center items-start q-pa-sm bg-white row">
 
-        <template v-slot:hint> Keyword </template>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-8 col-xl-8 col-12">
 
-        <template v-slot:after>
-          <q-btn
-            unelevated
-            class="full-height"
-            @click="onSubmit"
-            color="primary"
-            icon="search"
-          ></q-btn>
-        </template>
-      </q-input>
-    </q-form>
-
-    <q-list separator bordered class="bg-white">
-      <template v-if="get_index_data.length > 0">
-        <q-item
-          v-for="(item, index) in get_index_data"
-          :key="index"
-          clickable
-          v-ripple
-          :to="{ name: 'lms_ortu_show', params: { slug: item?.id } }"
+      <q-form @submit="onSubmit" class="q-mb-md">
+        <q-input
+          @clear="onSubmit"
+          outlined
+          bottom-slots
+          v-model="my_keyword"
+          placeholder="keyword..."
+          counter
+          maxlength="50"
+          clearable
         >
-          <q-item-section avatar>
-            <q-avatar>
-              <q-img
-                :src="item?.url_image"
-                @error="item.url_image = global_url_image"
-                :error-src="global_url_image"
-              />
-            </q-avatar>
-          </q-item-section>
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
 
-          <q-item-section>
-            <q-item-label>{{ item?.name }}</q-item-label>
-            <q-item-label caption lines="1"
-              ><q-badge color="cyan">ID: {{ item?.id }}</q-badge> {{ item?.email }}
-            </q-item-label>
-            <!-- <q-item-label caption lines="1">{{ item?.ortu?.nis }} / {{ item?.ortu?.nisn }}</q-item-label> -->
-          </q-item-section>
+          <template v-slot:hint> Keyword </template>
 
-          <q-item-section side>
-            <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
-            <q-item-label>
+          <template v-slot:after>
+            <q-btn
+              unelevated
+              class="full-height"
+              @click="onSubmit"
+              color="primary"
+              icon="search"
+            ></q-btn>
+          </template>
+        </q-input>
+      </q-form>
+
+      <q-list separator bordered class="bg-white">
+        <template v-if="get_index_data.length > 0">
+          <q-item
+            v-for="(item, index) in get_index_data"
+            :key="index"
+            clickable
+            v-ripple
+            :to="{ name: 'lms_ortu_show', params: { slug: item?.id } }"
+          >
+            <q-item-section avatar>
               <q-avatar>
-                <q-icon name="group" color="grey" />
-                <q-badge floating color="teal">{{ item?.parent?.siswa_count }}</q-badge>
+                <q-img
+                  :src="item?.url_image"
+                  @error="item.url_image = global_url_image"
+                  :error-src="global_url_image"
+                />
               </q-avatar>
-            </q-item-label>
-          </q-item-section>
-          <!-- <q-badge class="square top badge-left" floating color="cyan">{{
-            item?.id
-          }}</q-badge> -->
-        </q-item>
-      </template>
+            </q-item-section>
 
-      <EmptyBlock v-else></EmptyBlock>
-    </q-list>
-    <div style="height: 47px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
-      <Pagination
+            <q-item-section>
+              <q-item-label>{{ item?.name }}</q-item-label>
+              <q-item-label caption lines="1"
+                ><q-badge color="cyan">ID: {{ item?.id }}</q-badge> {{ item?.email }}
+              </q-item-label>
+              <!-- <q-item-label caption lines="1">{{ item?.ortu?.nis }} / {{ item?.ortu?.nisn }}</q-item-label> -->
+            </q-item-section>
+
+            <q-item-section side>
+              <!-- <q-item-label caption lines="1">{{ item?.created_at_human }}</q-item-label> -->
+              <q-item-label>
+                <q-avatar>
+                  <q-icon name="group" color="grey" />
+                  <q-badge floating color="teal">{{ item?.parent?.siswa_count }}</q-badge>
+                </q-avatar>
+              </q-item-label>
+            </q-item-section>
+            <!-- <q-badge class="square top badge-left" floating color="cyan">{{
+              item?.id
+            }}</q-badge> -->
+          </q-item>
+        </template>
+
+        <EmptyBlock v-else></EmptyBlock>
+      </q-list>
+
+    </div>
+
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
+      <Pagination v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"

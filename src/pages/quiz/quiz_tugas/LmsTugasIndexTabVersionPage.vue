@@ -1,6 +1,72 @@
 <template>
   <InitLoading v-if="get_init_index"></InitLoading>
   <q-page v-else class="justify-start items-start q-pa-sm bg-white">
+    <!-- {{ tab }} {{ expired }} -->
+
+    <!-- <template v-if="get_index_data.length > 0"> -->
+    <!-- <q-list v-if="
+      normalizeToString(valid_filter?.kelas) ||
+      normalizeToString(valid_filter?.mapel) ||
+      normalizeToString(valid_filter?.kategori) ||
+      normalizeToString(valid_filter?.guru)
+    " bordered class="bg-white q-mb-sm q-py-sm text-capitalize">
+
+      <q-item dense class="q-py-none" v-if="valid_filter?.kelas?.length > 0">
+        <q-item-section>
+          <q-item-label caption>Kelas</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-item-label>{{ getFilterKelas(valid_filter?.kelas) }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn @click="() => onClear('kelas')" dense round flat icon="close"></q-btn>
+        </q-item-section>
+      </q-item>
+      <q-item dense class="q-py-none" v-if="normalizeToString(valid_filter?.mapel)">
+        <q-item-section>
+          <q-item-label caption>Mapel</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-item-label>{{ getFilter(valid_filter?.mapel, 'list_mapel')?.nama }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn @click="() => onClear('mapel')"  dense round flat icon="close"></q-btn>
+        </q-item-section>
+      </q-item>
+      <q-item dense class="q-py-none" v-if="normalizeToString(valid_filter?.kategori)">
+        <q-item-section>
+          <q-item-label caption>Kategori</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-item-label>{{ getFilter(valid_filter?.kategori, 'list_kategori_tugas')?.nama }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn @click="() => onClear('kategori')"  dense round flat icon="close"></q-btn>
+        </q-item-section>
+      </q-item>
+      <q-item dense class="q-py-none" v-if="normalizeToString(valid_filter?.guru)">
+        <q-item-section>
+          <q-item-label caption>Guru</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-item-label>{{ getFilter(valid_filter?.guru, 'list_guru')?.name }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn @click="() => onClear('guru')"  dense round flat icon="close"></q-btn>
+        </q-item-section>
+      </q-item>
+
+      <q-separator></q-separator>
+
+      <q-item dense class="q-py-none q-pt-sm">
+        <q-item-section class="text-center">
+          <q-item-label>
+          <q-btn @click="onClearAll" unelevated dense class="q-px-md"  color="red" label="Clear" icon="delete"></q-btn>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list> -->
+
     <q-banner dense class="bg-grey-1 q-mb-sm rounded-borders q-card--bordered">
       <!-- <div class="text-primary text-bold q-mb-sm">FILTER</div> -->
       <q-chip
@@ -53,83 +119,7 @@
       ></q-chip>
     </q-banner>
 
-    <q-list bordered class="row">
-      <q-item dense tag="label" v-ripple>
-        <q-item-section avatar>
-          <q-radio v-model="tab" val="semua" color="teal" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>Semua</q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-item dense tag="label" v-ripple>
-        <q-item-section avatar>
-          <q-radio v-model="tab" val="publish" color="orange" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>Publish</q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-item dense tag="label" v-ripple>
-        <q-item-section avatar top>
-          <q-radio v-model="tab" val="draft" color="cyan" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>Draft</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
-
     <q-tabs
-      v-model="expired"
-      dense
-      inline-label
-
-      class="bg-teal text-grey-4 shadow-2"
-      active-color="white"
-      indicator-color="white"
-      :align="is_ipad_lower_size ? 'justify' : 'left'"
-    >
-      <q-tab icon="lock_open" name="false" label="Tersedia" />
-      <q-tab icon="lock" name="true" label="Selesai" />
-    </q-tabs>
-    <q-tab-panels v-model="expired" animated>
-      <q-tab-panel name="false" class="q-pa-none q-py-sm">
-        <div
-          class="row q-col-gutter-sm"
-          v-if="get_index_data?.length > 0 && !get_loading"
-        >
-          <IndexCard
-            :get_index_data="get_index_data"
-            :get_index_kelas="get_index_kelas"
-            route_name="lms_tugas_show"
-            route_name_rank="lms_tugas_quiz_stats_show"
-          >
-          </IndexCard>
-        </div>
-        <EmptyBlock v-else></EmptyBlock>
-      </q-tab-panel>
-      <q-tab-panel name="true" class="q-pa-none q-py-sm">
-        <div
-          class="row q-col-gutter-sm"
-          v-if="get_index_data?.length > 0 && !get_loading"
-        >
-          <IndexCard
-            :get_index_data="get_index_data"
-            :get_index_kelas="get_index_kelas"
-            route_name="lms_tugas_show"
-            route_name_rank="lms_tugas_quiz_stats_show"
-          >
-          </IndexCard>
-        </div>
-        <EmptyBlock v-else></EmptyBlock>
-      </q-tab-panel>
-    </q-tab-panels>
-
-    <q-tabs
-      v-if="false"
       v-model="tab"
       dense
       class="text-grey"
@@ -142,8 +132,7 @@
     </q-tabs>
 
     <q-separator />
-
-    <q-tab-panels v-if="false" v-model="tab" animated>
+    <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="semua" class="q-pa-none">
         <template v-if="tab == 'semua'">
           <q-tabs
@@ -299,10 +288,9 @@
 
     <!-- <EmptyBlock v-else></EmptyBlock> -->
 
-    <div v-if="get_index_data?.length > 0" style="height: 65px"></div>
+    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
     <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
-      <Pagination
-        v-if="get_index_data?.length > 0"
+      <Pagination v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"
@@ -371,7 +359,7 @@ export default {
         this.onIndex();
       },
     },
-    expired: {
+    expired_1: {
       // immediate: true, // 🔥 ini kunci
       deep: true,
       async handler(val) {
@@ -380,24 +368,15 @@ export default {
         this.onIndex();
       },
     },
-    // expired_1: {
-    //   // immediate: true, // 🔥 ini kunci
-    //   deep: true,
-    //   async handler(val) {
-    //     this.expired = val;
-    //     await this.$nextTick();
-    //     this.onIndex();
-    //   },
-    // },
-    // expired_2: {
-    //   // immediate: true, // 🔥 ini kunci
-    //   deep: true,
-    //   async handler(val) {
-    //     this.expired = val;
-    //     await this.$nextTick();
-    //     this.onIndex();
-    //   },
-    // },
+    expired_2: {
+      // immediate: true, // 🔥 ini kunci
+      deep: true,
+      async handler(val) {
+        this.expired = val;
+        await this.$nextTick();
+        this.onIndex();
+      },
+    },
   },
   computed: {
     ...mapState(useAuthStore, ["getAuthUser"]),

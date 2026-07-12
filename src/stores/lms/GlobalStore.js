@@ -5,7 +5,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 
 import { host } from 'src/boot/common'
 
-import { onRequestPrivate, notifSuccess, notifFailed } from 'src/utils/apiRequestGlobal';
+import { onRequestPrivate, onRequestPublic, notifSuccess, notifFailed } from 'src/utils/apiRequestGlobal';
 
 function normalizeToString(value, separator = ',') {
   if (Array.isArray(value)) {
@@ -19,6 +19,8 @@ export const useGlobalStore = defineStore('GlobalStore', {
   state: () => ({
     init: {
       global: true,
+      global_guru: true,
+      global_demo: true,
     },
     data: {
       global: {
@@ -31,20 +33,34 @@ export const useGlobalStore = defineStore('GlobalStore', {
           list_kategori_tugas: null,
           list_jenjang: null,
         }
+      },
+      global_guru: {
+        payload: {
+          list_guru: null,
+        }
+      },
+      global_demo: {
+        payload: {
+          list_demo: null,
+        }
       }
     },
     loading: {
       global: false,
+      global_guru: false,
+      global_demo: false,
     }
   }),
   getters: {
     get_init_global: ({ init }) => init?.global,
     get_data_global: ({ data }) => data?.global,
 
+    get_data_global_list_guru: ({ data }) => data?.global_guru?.payload?.list_guru ?? [],
+    get_data_global_list_demo: ({ data }) => data?.global_demo?.payload?.list_demo ?? [],
+
     get_data_global_list_kelas: ({ data }) => data?.global?.payload?.list_kelas ?? [],
     get_data_global_list_kategori_quiz: ({ data }) => data?.global?.payload?.list_kategori_quiz ?? [],
     get_data_global_list_kategori_tugas: ({ data }) => data?.global?.payload?.list_kategori_tugas ?? [],
-    get_data_global_list_guru: ({ data }) => data?.global?.payload?.list_guru ?? [],
     get_data_global_list_mapel: ({ data }) => data?.global?.payload?.list_mapel ?? [],
     get_data_global_list_jenjang: ({ data }) => data?.global?.payload?.list_jenjang ?? [],
 
@@ -120,6 +136,25 @@ export const useGlobalStore = defineStore('GlobalStore', {
       }, 'global')
 
     },
+
+    async onRequestGuru() {
+
+      onRequestPrivate(this, {
+        url: host + '/global/guru',
+        method: 'get',
+      }, 'global_guru')
+
+    },
+
+    async onRequestDemo() {
+
+      onRequestPublic(this, {
+        url: host + '/global/demo',
+        method: 'get',
+      }, 'global_demo')
+
+    },
+
   },
 });
 

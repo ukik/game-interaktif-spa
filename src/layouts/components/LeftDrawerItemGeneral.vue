@@ -26,6 +26,29 @@
         </q-item-section>
       </q-item>
 
+
+      <q-item
+        @click="() => onChangeTabSidebar('quiz')"
+        :to="{ name: 'lms_tugas_index' }"
+        clickable
+        v-ripple
+        :active="link === 'lms_tugas_index' || link === 'lms_tugas_show'"
+        active-class="my-menu-link"
+      >
+        <q-item-section avatar>
+            <q-avatar
+              text-color="white"
+              icon="fa-solid fa-clipboard-question"
+              color="primary"
+            />
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label class="text-capitalize">TUGAS QUIZ</q-item-label>
+          <q-item-label caption lines="1">Aktivitas Siswa</q-item-label>
+        </q-item-section>
+      </q-item>
+
       <q-item-label header class="q-py-md">Pemberitahuan</q-item-label>
       <q-item
         v-for="(item, index) in notifikasi_items"
@@ -256,6 +279,11 @@ export default {
           break;
       }
     },
+  },
+  methods: {
+    onChangeTabSidebar(val) {
+      // this.$emit('onChangeTabSidebar', val)
+    }
   },
   mounted() {
     this.link = this.$route.name;

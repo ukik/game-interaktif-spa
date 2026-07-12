@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       my_time: 100,
+      my_max_questions: 9, // karena index dimulai dari 0-9 = 10
     };
   },
   methods: {
@@ -110,7 +111,7 @@ export default {
       let checkingHTML = {};
 
       let questions = [];
-      const max_questions = 9; // karena index dimulai dari 0-9 = 10
+      const max_questions = vm.my_max_questions; //9; // karena index dimulai dari 0-9 = 10
 
       const shuffled = [...list_questions].sort(() => Math.random() - 0.5);
 

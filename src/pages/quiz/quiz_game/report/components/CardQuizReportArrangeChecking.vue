@@ -15,8 +15,9 @@ export default {
 
 
   .word {
+    font-size: 20px;
     background: linear-gradient(135deg, #34d399, #60a5fa);
-    padding: 20px 25px;
+    padding: 20px 25px 15px 25px;
     border-radius: 999px;
     font-weight: bold;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
@@ -69,8 +70,9 @@ export default {
   @media screen and (max-width: 600px) {
     .word {
       width: 100%;
-      font-size: 20px;
-      padding: 20px 20px 25px 25px;
+      // font-size: 20px;
+      font-size: 30px;
+      // padding: 20px 20px 25px 25px;
     }
 
     .drag-ghost {

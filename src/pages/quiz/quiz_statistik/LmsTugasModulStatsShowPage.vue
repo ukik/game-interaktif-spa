@@ -68,7 +68,7 @@
     </q-card>
 
     <!-- <div style="height: 50px"></div>
-    <q-page-sticky position="bottom" :offset="[0, 0]">
+    <q-page-sticky id="sticky_toolbar" position="bottom" :offset="[0, 0]">
       <q-card-actions
         align="center"
         class="bg-primary q-pa-none"
