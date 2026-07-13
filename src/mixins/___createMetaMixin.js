@@ -1,15 +1,29 @@
 import { createMetaMixin } from 'quasar'
 
 export default createMetaMixin(function () {
-  const routeTitle = this.$route.meta?.title
-    ? `LABSNIP (${this.$route.meta.title}) `
-    : 'LABSNIP'
-
-  const routeDescription =
-    this.$route.meta?.description ??
-    'LABSNIP (Sosial Interaktif Learning) adalah platform LMS dengan pembelajaran interaktif, game edukasi, kuis online, asesmen digital, dan media belajar untuk siswa, guru, dan sekolah.'
+  const routeTitle = this.$route.meta?.title || 'LABSNIP'
 
   return {
+
+    // meta: {
+    //   description: { name: 'description', content: 'Page 1' },
+    //   keywords: { name: 'keywords', content: 'LABSNIP - Jadi Pintar Itu Hebat' },
+    //   equiv: {
+    //     'http-equiv': 'Content-Type',
+    //     content: 'text/html; charset=UTF-8'
+    //   },
+    //   // note: for Open Graph type metadata you will need to use SSR, to ensure page is rendered by the server
+    //   ogTitle: {
+    //     property: 'og:title',
+    //     // optional; similar to titleTemplate, but allows templating with other meta properties
+    //     template(ogTitle) {
+    //       return `${ogTitle} - Jadi Pintar Itu Hebat`
+    //     }
+    //   }
+    // },
+
+    // saran dari ChatGPT
+    // titleTemplate: title => `${title} - Sosial Interaktif Learning`,
 
     // 🔥 dinamis
     title: routeTitle,
@@ -20,7 +34,7 @@ export default createMetaMixin(function () {
     meta: {
       description: {
         name: 'description',
-        content: routeDescription
+        content: 'LABSNIP (Sosial Interaktif Learning) adalah platform LMS dengan pembelajaran interaktif, game edukasi, kuis online, asesmen digital, dan media belajar untuk siswa, guru, dan sekolah.'
       },
 
       keywords: {
@@ -47,7 +61,7 @@ export default createMetaMixin(function () {
 
       ogDescription: {
         property: 'og:description',
-        content: routeDescription
+        content: 'LABSNIP Sosial Interaktif Learning'
       },
 
       ogType: {
@@ -57,7 +71,7 @@ export default createMetaMixin(function () {
 
       ogImage: {
         property: 'og:image',
-        content: 'https://labsnip.com/icons/og-image.png'
+        content: '/icons/og-image.png'
       },
 
       ogUrl: {
@@ -79,7 +93,7 @@ export default createMetaMixin(function () {
 
       twitterDescription: {
         name: 'twitter:description',
-        content: routeDescription
+        content: 'LABSNIP (Sosial Interaktif Learning) adalah platform LMS dengan pembelajaran interaktif, game edukasi, kuis online, asesmen digital, dan media belajar untuk siswa, guru, dan sekolah.'
       },
 
       twitterImage: {
@@ -107,20 +121,6 @@ export default createMetaMixin(function () {
         content: 'id_ID'
       },
 
-      ogImageWidth: {
-        property: 'og:image:width',
-        content: '1200'
-      },
-
-      ogImageHeight: {
-        property: 'og:image:height',
-        content: '630'
-      },
-
-      ogImageAlt: {
-        property: 'og:image:alt',
-        content: 'LABSNIP - Sosial Interaktif Learning'
-      },
 
       themeColor: {
         name: 'theme-color',
@@ -137,26 +137,27 @@ export default createMetaMixin(function () {
 
       canonical: {
         rel: 'canonical',
-        href: `https://labsnip.com${this.$route.fullPath}`
+        href: 'https://labsnip.com'
       }
     },
     script: {
       ldJson: {
         type: 'application/ld+json',
-        innerHTML: JSON.stringify({
+        innerHTML: {
           "@context": "https://schema.org",
           "@type": "WebSite",
           "name": "LABSNIP",
           "url": "https://labsnip.com",
           "description": "LABSNIP adalah platform LMS dengan pembelajaran interaktif dan game edukasi.",
           "inLanguage": "id-ID"
-        })
+        }
       }
     },
 
 
     htmlAttr: {
-      lang: 'id-ID',
+      'xmlns:cc': 'http://creativecommons.org/ns#',
+      empty: undefined
     },
 
     // bodyAttr: {

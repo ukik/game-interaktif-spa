@@ -67,8 +67,8 @@ const routes = [
         component: () => import("pages/LoginPage.vue"),
         meta: {
           logged: false,
-          title: "LABSNIP",
-          meta: [{ name: "description", content: "Login produk." }],
+          title: "Login",
+          description: "Halaman masuk ke sistem LABSNIP untuk mengakses fitur pembelajaran, kuis, tugas, dan manajemen pengguna."
         },
       },
       {
@@ -77,8 +77,18 @@ const routes = [
         component: () => import("pages/LoggedPage.vue"),
         meta: {
           logged: true,
-          title: "LABSNIP",
-          meta: [{ name: "description", content: "Logged produk." }],
+          title: "Logged",
+          description: "Halaman konfirmasi autentikasi pengguna sebelum diarahkan ke dashboard sesuai hak akses."
+        },
+      },
+      {
+        path: "/announcement",
+        name: "announcement",
+        component: () => import("pages/Announcement.vue"),
+        meta: {
+          logged: false,
+          title: "Logged",
+          description: ""
         },
       },
 

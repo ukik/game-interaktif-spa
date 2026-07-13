@@ -13,7 +13,8 @@
             icon="arrow_back"
             class="q-mr-sm"
           />
-          <q-space></q-space>
+          <!-- <q-space></q-space> -->
+          <q-toolbar-title class="q-px-xs"> KEMBALI</q-toolbar-title>
         </template>
         <template v-else>
           <q-btn flat round to="/">
@@ -27,7 +28,7 @@
         <!-- <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title> -->
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
-        <BuatTugas />
+        <BuatTugas v-if="enabled" />
         <q-btn flat round icon="space_dashboard" @click="onLeftDrawerOpen('general')">
           <q-tooltip v-if="!is_mobile_size">General</q-tooltip>
         </q-btn>
@@ -57,10 +58,16 @@
       <!-- drawer content -->
       <!-- <LeftDrawerItem /> -->
       <q-slide-transition>
-        <LeftDrawerItemQuiz @onBackSidebar="onBackSidebar" v-if="left_drawer_type == 'quiz'" />
+        <LeftDrawerItemQuiz
+          @onBackSidebar="onBackSidebar"
+          v-if="left_drawer_type == 'quiz'"
+        />
       </q-slide-transition>
       <q-slide-transition>
-        <LeftDrawerItemGeneral @onChangeTabSidebar="onTabSidebar" v-if="left_drawer_type == 'general'" />
+        <LeftDrawerItemGeneral
+          @onChangeTabSidebar="onTabSidebar"
+          v-if="left_drawer_type == 'general'"
+        />
       </q-slide-transition>
       <!-- <transition
   enter-active-class="q-transition--slide-right-enter-active"
@@ -131,6 +138,13 @@
   </q-layout>
 </template>
 
+<script setup>
+import { useRoute } from "vue-router";
+import useRouteMetaSafe from "src/composables/useRouteMetaSafe";
+const route = useRoute();
+useRouteMetaSafe({ title: route.title, meta: route.meta });
+</script>
+
 <script>
 import { ref, defineAsyncComponent } from "vue";
 
@@ -161,17 +175,16 @@ const FormDialogStakeholder = defineAsyncComponent(() =>
   import("src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue")
 );
 
-const TabSidebar = defineAsyncComponent(() =>
-  import("./components/TabSidebar.vue")
-);
-
+const TabSidebar = defineAsyncComponent(() => import("./components/TabSidebar.vue"));
 
 const { getVerticalScrollPosition } = scroll;
 
+import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
-import { useGlobalStore } from 'src/stores/lms/GlobalStore';
+import metaMixin from 'src/mixins/createMetaMixin'
 
 export default {
+  mixins: [metaMixin],
   components: {
     TabSidebar,
     FormDialogParent,
@@ -189,29 +202,31 @@ export default {
   data() {
     return {
       left_drawer_type: "general",
+      leftDrawerOpen: false,
+      rightDrawerOpen: false,
     };
   },
-  setup() {
-    const leftDrawerOpen = ref(false);
-    const rightDrawerOpen = ref(false);
+  // setup() {
+  //   const leftDrawerOpen = ref(false);
+  //   const rightDrawerOpen = ref(false);
 
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
+  //   return {
+  //     leftDrawerOpen,
+  //     toggleLeftDrawer() {
+  //       leftDrawerOpen.value = !leftDrawerOpen.value;
+  //     },
 
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value;
-      },
-    };
-  },
+  //     rightDrawerOpen,
+  //     toggleRightDrawer() {
+  //       rightDrawerOpen.value = !rightDrawerOpen.value;
+  //     },
+  //   };
+  // },
   watch: {
     "$route.meta"(val) {
       console.log("watch");
       this.$nextTick(() => {
-        this.left_drawer_type = (val?.sidebar_id == 2) ? "quiz" : "general";
+        this.left_drawer_type = val?.sidebar_id == 2 ? "quiz" : "general";
       });
     },
   },
@@ -229,7 +244,7 @@ export default {
           return "col-12 col-xl-6 col-lg-7 col-md-9 col-sm-12 rounded-bordersX";
       }
 
-      return
+      return;
       switch (this.$route.name) {
         case "dashboard_quiz_metric":
         case "dashboard_tugas_statistik":
@@ -244,14 +259,19 @@ export default {
     ...mapActions(useAuthStore, ["onLogout"]),
     ...mapActions(useUiStore, ["setPageWidth", "setPageScrollY"]),
 
-    ...mapActions(useGlobalStore, ['onRequest','onRequestGuru']),
-
+    ...mapActions(useGlobalStore, ["onRequest", "onRequestGuru"]),
+    toggleLeftDrawer() {
+      this.leftDrawerOpen = !this.leftDrawerOpen;
+    },
+    toggleRightDrawer() {
+      this.rightDrawerOpen = !this.rightDrawerOpen;
+    },
     onBackSidebar() {
-      this.left_drawer_type = 'general'
+      this.left_drawer_type = "general";
     },
     onTabSidebar(val) {
-      console.log(val)
-      this.left_drawer_type = val
+      console.log(val);
+      this.left_drawer_type = val;
     },
     onLogoutConfirmDialog() {
       this.$refs.LogoutConfirmDialog.onOpen(true);
@@ -293,14 +313,14 @@ export default {
 
   mounted() {
     this.left_drawer_type = "general";
-    if(this.$route?.meta?.sidebar_id == 2) this.left_drawer_type = "quiz";
+    if (this.$route?.meta?.sidebar_id == 2) this.left_drawer_type = "quiz";
 
     if (!this.is_ipad_lower_size) {
       this.leftDrawerOpen = true;
     }
 
-    this.onRequest()
-    this.onRequestGuru()
+    this.onRequest();
+    this.onRequestGuru();
 
     setTimeout(() => {
       this.updateWidth();

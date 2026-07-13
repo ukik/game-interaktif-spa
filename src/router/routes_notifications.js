@@ -6,8 +6,8 @@ const routes_notifications = [
     meta: {
       logged: true,
       title: "Notifikasi Tugas",
-      meta: [{ name: "description", content: "Notifikasi Tugas" }],
-      page_type: 'show',
+      description: "Halaman notifikasi tugas yang menampilkan daftar pemberitahuan tugas, pembaruan, dan aktivitas terkait penugasan.",
+      page_type: 'index',
     },
   },
   {
@@ -17,11 +17,10 @@ const routes_notifications = [
     meta: {
       logged: true,
       title: "Detail Notifikasi Tugas",
-      meta: [{ name: "description", content: "Detail Notifikasi Tugas" }],
+      description: "Halaman detail notifikasi tugas yang menampilkan informasi lengkap mengenai pemberitahuan dan aktivitas tugas.",
       page_type: 'show',
     },
   },
-
   {
     path: "/lms-notification-quiz-hasil-index",
     name: 'lms_notification_quiz_hasil_index',
@@ -29,8 +28,8 @@ const routes_notifications = [
     meta: {
       logged: true,
       title: "Notifikasi Nilai",
-      meta: [{ name: "description", content: "Notifikasi Nilai" }],
-      page_type: 'show',
+      description: "Halaman notifikasi nilai yang menampilkan daftar pemberitahuan hasil kuis, nilai, dan pembaruan penilaian peserta.",
+      page_type: 'index',
     },
   },
   {
@@ -40,11 +39,10 @@ const routes_notifications = [
     meta: {
       logged: true,
       title: "Detail Notifikasi Nilai",
-      meta: [{ name: "description", content: "Detail Notifikasi Nilai" }],
+      description: "Halaman detail notifikasi nilai yang menampilkan informasi lengkap mengenai hasil kuis, nilai, dan pemberitahuan penilaian.",
       page_type: 'show',
     },
   },
-
 
 ]
 

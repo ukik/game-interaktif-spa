@@ -6,9 +6,7 @@ const routes = [
     meta: {
       logged: true,
       title: 'Intro Quiz',
-      meta: [
-        { name: 'description', content: 'Intro Quiz' }
-      ],
+      description: 'Halaman pengantar kuis yang menampilkan informasi, petunjuk pengerjaan, dan pengaturan sebelum memulai kuis.',
       page_type: 'show',
     }
   },
@@ -19,9 +17,7 @@ const routes = [
     meta: {
       logged: false,
       title: 'Intro Quiz',
-      meta: [
-        { name: 'description', content: 'Intro Quiz' }
-      ],
+      description: 'Halaman pengantar kuis yang menampilkan informasi, petunjuk pengerjaan, dan pengaturan sebelum memulai kuis.',
       page_type: 'show',
     }
   },

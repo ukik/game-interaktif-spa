@@ -8,7 +8,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Bank Quiz",
-      meta: [{ name: "description", content: "Bank Quiz" }],
+      description: "Halaman untuk membuat, mengelola, dan menggunakan berbagai jenis soal interaktif seperti Arrange, Match, Benar atau Salah, Essay, Pilihan Ganda, dan Jawaban Singkat.",
       page_type: 'index',
       sidebar_id: 2,
     },
@@ -20,7 +20,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Detail Bank Quiz",
-      meta: [{ name: "description", content: "Detail Bank Quiz" }],
+      description: "Halaman detail yang menampilkan informasi soal, konfigurasi, materi pembelajaran, dan pengaturan kuis interaktif yang dapat digunakan dalam proses belajar mengajar.",
       page_type: 'show',
       sidebar_id: 2,
     },

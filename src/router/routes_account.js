@@ -7,7 +7,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Admin",
-      meta: [{ name: "description", content: "Admin" }],
+    description: "Halaman manajemen admin yang menampilkan daftar administrator serta pengelolaan akun dan hak akses.",
       page_type: 'index',
     },
   },
@@ -18,10 +18,11 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Detail Admin",
-      meta: [{ name: "description", content: "Detail Admin" }],
+      description: "Halaman detail admin yang menampilkan informasi profil, hak akses, dan aktivitas administrator.",
       page_type: 'show',
     },
   },
+
   // SISWA
   {
     path: "/lms-siswa-index",
@@ -30,7 +31,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Siswa",
-      meta: [{ name: "description", content: "Siswa" }],
+      description: "Halaman manajemen siswa yang menampilkan daftar peserta didik beserta informasi akun dan data akademik.",
       page_type: 'index',
     },
   },
@@ -41,7 +42,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Detail Siswa",
-      meta: [{ name: "description", content: "Detail Siswa" }],
+      description: "Halaman detail siswa yang menampilkan profil, informasi akun, dan riwayat aktivitas peserta didik.",
       page_type: 'show',
     },
   },
@@ -53,7 +54,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Stakeholder",
-      meta: [{ name: "description", content: "Stakeholder" }],
+      description: "Halaman manajemen stakeholder yang menampilkan daftar pengguna dan informasi akun stakeholder.",
       page_type: 'index',
     },
   },
@@ -64,7 +65,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Detail Stakeholder",
-      meta: [{ name: "description", content: "Detail Stakeholder" }],
+      description: "Halaman detail stakeholder yang menampilkan profil, informasi akun, dan data stakeholder.",
       page_type: 'show',
     },
   },
@@ -76,7 +77,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Orangtua",
-      meta: [{ name: "description", content: "Orangtua" }],
+      description: "Halaman manajemen orang tua yang menampilkan daftar akun wali murid beserta informasi terkait.",
       page_type: 'index',
     },
   },
@@ -87,7 +88,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Detail Orangtua",
-      meta: [{ name: "description", content: "Detail Orangtua" }],
+      description: "Halaman detail orang tua yang menampilkan profil, informasi akun, dan data wali murid.",
       page_type: 'show',
     },
   },
@@ -99,7 +100,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Sekolah",
-      meta: [{ name: "description", content: "Sekolah" }],
+      description: "Halaman manajemen sekolah yang menampilkan daftar sekolah beserta informasi dan pengaturan data sekolah.",
       page_type: 'index',
     },
   },
@@ -110,7 +111,7 @@ const routes_account = [
     meta: {
       logged: true,
       title: "Detail Sekolah",
-      meta: [{ name: "description", content: "Detail Sekolah" }],
+      description: "Halaman detail sekolah yang menampilkan profil, informasi, dan data lengkap sekolah.",
       page_type: 'show',
     },
   },

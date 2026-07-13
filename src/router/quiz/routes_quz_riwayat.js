@@ -8,7 +8,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Nilai Quiz",
-      meta: [{ name: "description", content: "Nilai Quiz" }],
+      description: "Halaman riwayat nilai kuis yang menampilkan daftar hasil, skor, dan status pengerjaan kuis peserta.",
       page_type: 'index',
       sidebar_id: 2,
     },
@@ -20,7 +20,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Detail Nilai Quiz",
-      meta: [{ name: "description", content: "Detail Nilai Quiz" }],
+      description: "Halaman detail nilai kuis yang menampilkan skor, jawaban, waktu pengerjaan, dan ringkasan hasil kuis peserta.",
       page_type: 'show',
       sidebar_id: 2,
     },

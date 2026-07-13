@@ -6,9 +6,7 @@ const routes = [
     meta: {
       logged: false,
       title: 'Report Quiz',
-      meta: [
-        { name: 'description', content: 'Report Quiz' }
-      ],
+      description: 'Halaman hasil kuis yang menampilkan nilai, statistik, jawaban peserta, dan analisis hasil pengerjaan kuis.',
       page_type: 'show',
     }
   },
@@ -19,9 +17,7 @@ const routes = [
     meta: {
       logged: false,
       title: 'Report Quiz',
-      meta: [
-        { name: 'description', content: 'Report Quiz' }
-      ],
+      description: 'Halaman hasil kuis yang menampilkan nilai, statistik, jawaban peserta, dan analisis hasil pengerjaan kuis.',
       page_type: 'show',
     },
     beforeEnter: (to, from, next) => {

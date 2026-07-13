@@ -121,7 +121,7 @@
 
       <!-- Koleksi -->
       <q-item-label header class="q-py-md"
-        >STEP 1 <q-icon name="arrow_right"></q-icon>
+        >Step 1 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-model="expanded_bank" group="sidebar">
         <template v-slot:header>
@@ -159,7 +159,7 @@
 
       <!-- Riwayat -->
       <q-item-label header class="q-py-md"
-        >STEP 2 <q-icon name="arrow_right"></q-icon>
+        >Step 2 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-model="expanded_nilai" group="sidebar">
         <template v-slot:header>
@@ -167,8 +167,8 @@
             <q-avatar text-color="white" icon="fa-solid fa-chart-line" color="primary" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-capitalize">NILAI QUIZ</q-item-label>
-            <q-item-label caption lines="1">Hasil Tugas</q-item-label>
+            <q-item-label class="text-capitalize">HASIL QUIZ</q-item-label>
+            <q-item-label caption lines="1">Nilai Tugas</q-item-label>
           </q-item-section>
         </template>
 
@@ -199,7 +199,7 @@
 
       <!-- Statistik -->
       <q-item-label header class="q-py-md"
-        >STEP 3 <q-icon name="arrow_right"></q-icon>
+        >Step 3 <q-icon name="arrow_right"></q-icon>
       </q-item-label>
       <q-expansion-item v-model="expanded_ranking" group="sidebar">
         <template v-slot:header>

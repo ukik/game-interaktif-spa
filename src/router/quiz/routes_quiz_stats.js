@@ -8,7 +8,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Ranking Quiz",
-      meta: [{ name: "description", content: "Ranking Quiz" }],
+      description: "Halaman ranking kuis yang menampilkan peringkat peserta, nilai, dan statistik hasil pengerjaan kuis.",
       page_type: 'index',
       sidebar_id: 1,
     },
@@ -20,7 +20,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Detail Ranking Quiz",
-      meta: [{ name: "description", content: "Detail Ranking Quiz" }],
+      description: "Halaman detail ranking kuis yang menampilkan informasi peringkat, nilai, dan analisis hasil pengerjaan peserta.",
       page_type: 'show',
       sidebar_id: 1,
     },

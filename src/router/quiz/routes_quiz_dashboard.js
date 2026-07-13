@@ -6,7 +6,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Dashboard Tugas Metric",
-      meta: [{ name: "description", content: "Dashboard Tugas Metric" }],
+      description: "Halaman untuk memantau metrik tugas, progres pengerjaan, performa peserta, dan ringkasan aktivitas pembelajaran.",
       page_type: 'index',
     },
   },
@@ -17,7 +17,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Dashboard Tugas Statistik",
-      meta: [{ name: "description", content: "Dashboard Tugas Statistik" }],
+      description: "Halaman statistik tugas yang menampilkan data penyelesaian, hasil penilaian, distribusi nilai, dan analisis aktivitas peserta.",
       page_type: 'index',
     },
   },

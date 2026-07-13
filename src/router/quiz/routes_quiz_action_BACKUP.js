@@ -6,7 +6,9 @@ const routes = [
     meta: {
       logged: true,
       title: 'Quiz Arrange',
-      description: 'Kerjakan Quiz Arrange dengan menyusun jawaban dalam urutan yang benar. Media pembelajaran interaktif untuk melatih logika, pemahaman, dan kemampuan berpikir siswa.',
+      meta: [
+        { name: 'description', content: 'Quiz Arrange' }
+      ],
       page_type: 'show',
     }
   },
@@ -16,8 +18,10 @@ const routes = [
     component: () => import('src/pages/quiz/quiz_game/action/QuizActionBoolean.vue'),
     meta: {
       logged: true,
-      title: 'Quiz Benar/Salah',
-      description: 'Kerjakan Quiz Benar/Salah untuk menguji pemahaman materi melalui pilihan benar atau salah secara interaktif dan mudah digunakan.',
+      title: 'Quiz Boolean',
+      meta: [
+        { name: 'description', content: 'Quiz Boolean' }
+      ],
       page_type: 'show',
     }
   },
@@ -28,7 +32,9 @@ const routes = [
     meta: {
       logged: true,
       title: 'Quiz Essay',
-      description: 'Kerjakan Quiz Essay dengan menjawab pertanyaan secara bebas untuk melatih kemampuan berpikir kritis, analisis, dan penalaran siswa.',
+      meta: [
+        { name: 'description', content: 'Quiz Essay' }
+      ],
       page_type: 'show',
     }
   },
@@ -39,7 +45,9 @@ const routes = [
     meta: {
       logged: true,
       title: 'Quiz Match',
-      description: 'Kerjakan Quiz Match dengan mencocokkan pasangan jawaban yang tepat. Cocok untuk melatih daya ingat, pemahaman konsep, dan konsentrasi.',
+      meta: [
+        { name: 'description', content: 'Quiz Match' }
+      ],
       page_type: 'show',
     }
   },
@@ -49,8 +57,10 @@ const routes = [
     component: () => import('src/pages/quiz/quiz_game/action/QuizActionMultiple.vue'),
     meta: {
       logged: true,
-      title: 'Quiz Pilihan Ganda',
-      description: 'Kerjakan Quiz Pilihan Ganda untuk menguji pemahaman materi melalui soal interaktif dengan berbagai pilihan jawaban.',
+      title: 'Quiz Multiple',
+      meta: [
+        { name: 'description', content: 'Quiz Multiple' }
+      ],
       page_type: 'show',
     }
   },
@@ -60,8 +70,10 @@ const routes = [
     component: () => import('src/pages/quiz/quiz_game/action/QuizActionShortAnswer.vue'),
     meta: {
       logged: true,
-      title: 'Quiz Jawaban Singkat',
-      description: 'Kerjakan Quiz Jawaban Singkat dengan memberikan jawaban secara langsung untuk mengukur pemahaman konsep dan ketepatan siswa.',
+      title: 'Quiz ShortAnswer',
+      meta: [
+        { name: 'description', content: 'Quiz ShortAnswer' }
+      ],
       page_type: 'show',
     }
   },

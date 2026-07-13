@@ -8,7 +8,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Tugas Quiz",
-      meta: [{ name: "description", content: "Tugas Quiz" }],
+      description: "Halaman daftar tugas kuis yang menampilkan seluruh tugas, status pengerjaan, dan informasi penugasan peserta.",
       page_type: 'index',
       sidebar_id: 1,
     },
@@ -20,7 +20,7 @@ const routes = [
     meta: {
       logged: true,
       title: "Detail Tugas Quiz",
-      meta: [{ name: "description", content: "Detail Tugas Quiz" }],
+      description: "Halaman detail tugas kuis yang menampilkan informasi tugas, peserta, jadwal, pengaturan, dan hasil pengerjaan.",
       page_type: 'show',
       sidebar_id: 1,
     },
