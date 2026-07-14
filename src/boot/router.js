@@ -4,13 +4,7 @@ import { boot } from 'quasar/wrappers';
 import { useRouterStore } from 'src/stores/auth/RouterStore'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
 
-// const route_after_login_redirect = { name: "lms_notification_tugas_index" }
-const route_after_login_redirect = {
-  name: "lms_quiz_index",
-  params: {
-    quiz: 'arrange'
-  }
-}
+import { route_after_login_redirect } from 'src/utils/route_after_login_redirect';
 
 export default boot(async ({ router, store }) => {
   const auth = useAuthStore(store) // inject disini ya

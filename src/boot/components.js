@@ -178,6 +178,9 @@ export default boot(({ app }) => {
     defineAsyncComponent(() => import('src/components/lms/GlobalLabel.vue'))
   )
 
+  app.component("PullToRefresh",
+    defineAsyncComponent(() => import('src/components/lms/PullToRefresh.vue'))
+  )
 
   // app.component("RelatedImageSlide",
   //   defineAsyncComponent(() => import('src/components/RelatedImageSlide.vue'))

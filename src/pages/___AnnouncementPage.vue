@@ -127,7 +127,7 @@ li {
 
 <template>
   <q-page class="col-12 row flex flex-center">
-    <div class="body col-12 col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
+    <div class="body col-12 col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 rounded-borders">
       <div class="container">
         <div class="header">
           <!-- <div class="badge">RELEASE</div> -->
@@ -401,3 +401,7 @@ li {
     </div>
   </q-page>
 </template>
+
+<script>
+import AnnouncementView from 'src/components/lms/AnnouncementView.vue';
+</script>

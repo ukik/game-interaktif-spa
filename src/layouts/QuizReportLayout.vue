@@ -12,19 +12,12 @@
     <q-header v-if="!getRouteQuery?.no_header" elevated height-hint="98">
       <!-- <div class="bg-orange text-white sticky-toolbar"> -->
       <q-toolbar class="bg-primary text-white">
-        <q-btn
-          @click="$router.back"
-          flat
-          round
-          dense
-          icon="arrow_back"
-          class="q-mr-sm"
-        />
+        <q-btn @click="onBack" flat round dense icon="arrow_back" class="q-mr-sm" />
 
         <q-toolbar-title class="q-px-xs">{{ $route.meta?.title }}</q-toolbar-title>
         <!-- <q-toolbar-title class="q-px-xs">📑 Dashboard</q-toolbar-title> -->
         <!-- <q-btn flat round icon="search" /> -->
-        <q-btn flat round icon="home" to="/" />
+        <!-- <q-btn flat round icon="home" to="/" /> -->
         <!-- <q-btn flat round icon="group_add" @click="leftDrawerOpen = true" /> -->
         <!-- <MenuProfile @onBubbleEvent="onLogoutConfirmDialog"></MenuProfile> -->
         <!-- <q-btn flat round icon="logout" @click="onLogoutConfirmDialog" /> -->
@@ -137,6 +130,9 @@ export default {
     onLogoutConfirmDialog() {
       this.$refs.LogoutConfirmDialog.onOpen(true);
     },
+    onBack() {
+      window.close();
+    },
     updateWidth() {
       const ui = useUiStore();
 
@@ -156,7 +152,7 @@ export default {
   },
 
   mounted() {
-    return
+    return;
     setTimeout(() => {
       this.updateWidth();
     }, 2000);

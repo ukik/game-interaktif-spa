@@ -5,14 +5,15 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 // import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useUiStore } from 'src/stores/ui';
 
-const domain = "http://localhost:8000"
-const MIX_API_ROUTE_PREFIX = "/api";
+const domain = "http://localhost:8000/api"
+const host_server = "https://labsnip.com/api" // "http://localhost:8000/api"
+// export const host_server = process.env.PROD
+//   ? "https://labsnip.com/api"
+//   : "http://localhost:8000/api";
 
-export const host_server = "http://localhost:8000/api" // "https://labsnip.com/api"
-
-export const host = domain + MIX_API_ROUTE_PREFIX; //+"/v1"; // 'http://properti-backend.local/'; //
+export const host = process.env.PROD ? host_server : domain; //+"/v1"; // 'http://properti-backend.local/'; //
 // untuk akses route yg ada di file routes/api.php
-export const route_api = domain + MIX_API_ROUTE_PREFIX; // 'http://properti-backend.local/'; //
+export const route_api = domain; // 'http://properti-backend.local/'; //
 
 export default boot(async ({ app, ssrContext, router, store }) => {
   // app.use(createPinia())

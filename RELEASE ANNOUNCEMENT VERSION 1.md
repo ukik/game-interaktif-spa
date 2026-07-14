@@ -137,16 +137,53 @@ C. FITUR QUIZ
           Menampilkan peringkat peserta berdasarkan hasil penilaian soal Esai.
 
 
-    C.4. GAMEPLAY QUIZ
+D. GAMEPLAY QUIZ
 
-      C.4.1. INTRO
-          Menampilkan informasi awal sebelum quiz dimulai, termasuk petunjuk dan aturan.
+    D.1. INTRO
+        Menampilkan informasi awal sebelum quiz dimulai, termasuk petunjuk dan aturan.
 
-      C.4.2. ACTION
-          Halaman utama peserta untuk mengerjakan quiz secara interaktif.
+    D.2. ACTION
+        Halaman utama peserta untuk mengerjakan quiz secara interaktif.
 
-      C.4.3. REPORT
-          Menampilkan ringkasan hasil, nilai, waktu pengerjaan, dan performa setelah quiz selesai.
+        D.2.1. MENYUSUN (ARRANGE)
+          Menampilkan hasil penilaian otomatis untuk soal Menyusun.
+
+        D.2.2. BENAR / SALAH (BOOLEAN)
+          Menampilkan hasil penilaian otomatis untuk soal Benar/Salah.
+
+        D.2.3. MENCOCOKKAN (MATCH)
+          Menampilkan hasil penilaian otomatis untuk soal Mencocokkan.
+
+        D.2.4. PILIHAN GANDA (MULTIPLE CHOICE)
+          Menampilkan hasil penilaian otomatis untuk soal Pilihan Ganda.
+
+        D.2.5. ISIAN SINGKAT (SHORT ANSWER)
+          Menampilkan hasil penilaian otomatis maupun validasi jawaban singkat.
+
+        D.2.6. ESAI (ESSAY)
+          Menampilkan hasil penilaian manual oleh guru beserta umpan balik.
+
+
+    D.3. REPORT
+        Menampilkan ringkasan hasil, nilai, waktu pengerjaan, dan performa setelah quiz selesai.
+
+        D.3.1. MENYUSUN (ARRANGE)
+          Menampilkan hasil penilaian otomatis untuk soal Menyusun.
+
+        D.3.2. BENAR / SALAH (BOOLEAN)
+          Menampilkan hasil penilaian otomatis untuk soal Benar/Salah.
+
+        D.3.3. MENCOCOKKAN (MATCH)
+          Menampilkan hasil penilaian otomatis untuk soal Mencocokkan.
+
+        D.3.4. PILIHAN GANDA (MULTIPLE CHOICE)
+          Menampilkan hasil penilaian otomatis untuk soal Pilihan Ganda.
+
+        D.3.5. ISIAN SINGKAT (SHORT ANSWER)
+          Menampilkan hasil penilaian otomatis maupun validasi jawaban singkat.
+
+        D.3.6. ESAI (ESSAY)
+          Menampilkan hasil penilaian manual oleh guru beserta umpan balik.
 
 
 E. AUDIO

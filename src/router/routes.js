@@ -84,7 +84,7 @@ const routes = [
       {
         path: "/announcement",
         name: "announcement",
-        component: () => import("pages/Announcement.vue"),
+        component: () => import("pages/AnnouncementPage.vue"),
         meta: {
           logged: false,
           title: "Logged",

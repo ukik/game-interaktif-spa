@@ -379,15 +379,19 @@ export default {
 
       switch (val) {
         case "lms_quiz_index":
+        case "lms_quiz_show":
           this.expanded_bank = true;
           break;
         case "lms_tugas_quiz_log_index":
+        case "lms_tugas_quiz_log_show":
           this.expanded_nilai = true;
           break;
         case "lms_tugas_quiz_stats_index":
+        case "lms_tugas_quiz_stats_show":
           this.expanded_ranking = true;
           break;
         case "lms_tugas_index":
+        case "lms_tugas_show":
           this.expanded_tugas = true;
           break;
         case "dashboard_quiz_metric":

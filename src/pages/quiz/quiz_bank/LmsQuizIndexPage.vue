@@ -61,16 +61,16 @@
           route_name="lms_quiz_show"
         ></IndexACard>
       </div>
-
     </template>
 
     <EmptyBlock v-else></EmptyBlock>
 
     <FormCreateTugas ref="FormCreateTugas" model="LmsQuiz"></FormCreateTugas>
 
-    <div v-if="get_index_data?.length > 0"  style="height: 65px"></div>
+    <div v-if="get_index_data?.length > 0" style="height: 65px"></div>
     <q-page-sticky id="sticky_pagination" position="bottom" :offset="[0, 0]">
-      <Pagination v-if="get_index_data?.length > 0"
+      <Pagination
+        v-if="get_index_data?.length > 0"
         :current_page="get_index_current_page"
         :last_page="get_index_last_page"
         :disable="get_index_loading"
@@ -78,25 +78,27 @@
       ></Pagination>
     </q-page-sticky>
 
-    <q-page-sticky
-      :position="is_ipad_lower_size ? 'bottom-right' : 'right'"
-      v-if="is_ipad_lower_size"
-      :offset="is_ipad_lower_size ? [10, 0] : [10, 10]"
-    >
-      <!-- <q-fab icon="search" direction="up" color="accent"></q-fab> -->
-      <q-btn
-        @click="() => $refs?.FilterDialog?.onOpen(true)"
-        unelevated
-        round
-        :color="is_ipad_lower_size ? 'primary' : 'pink'"
-        size="md"
-        icon="search"
-      ></q-btn>
-    </q-page-sticky>
+
 
     <keep-alive>
       <FilterDialog ref="FilterDialog" onAction=""></FilterDialog>
     </keep-alive>
+
+    <q-page-scroller position="top-right" :scroll-offset="150" :offset="[8, 10]">
+      <div>
+        <q-btn unelevated round icon="keyboard_arrow_up" color="accent" />
+      </div>
+      <div class="q-mt-sm">
+        <q-btn
+          @click="() => $refs?.FilterDialog?.onOpen(true)"
+          unelevated
+          round
+          :color="is_ipad_lower_size ? 'primary' : 'pink'"
+          size="md"
+          icon="search"
+        ></q-btn>
+      </div>
+    </q-page-scroller>
   </q-page>
 </template>
 
@@ -167,6 +169,7 @@ export default {
     },
   },
   async mounted() {
+    // this.$emit('onBubblePullToRefresh', (this.onIndex))
     // await this.$nextTick();
     // this.$glightbox?.init();
   },

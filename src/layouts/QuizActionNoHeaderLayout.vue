@@ -4,7 +4,7 @@
       <q-toolbar class="bg-primary text-white">
         <q-btn
           v-if="$route.meta?.page_type == 'show'"
-          @click="$router.back"
+          @click="onBack"
           flat
           round
           dense
@@ -143,6 +143,19 @@ export default {
     ...mapActions(useAuthStore, ["onLogout"]),
     onLogoutConfirmDialog() {
       this.$refs.LogoutConfirmDialog.onOpen(true);
+    },
+    onBack() {
+      switch (this.$route?.name) {
+        case "quiz_intro":
+        case "quiz_intro_public":
+        // case "quiz_report":
+        // case "quiz_report_public":
+          window.close();
+          break;
+        default:
+          this.$router.back()
+          break;
+      }
     },
     updateWidth() {
       const ui = useUiStore();

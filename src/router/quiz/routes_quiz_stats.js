@@ -10,7 +10,7 @@ const routes = [
       title: "Ranking Quiz",
       description: "Halaman ranking kuis yang menampilkan peringkat peserta, nilai, dan statistik hasil pengerjaan kuis.",
       page_type: 'index',
-      sidebar_id: 1,
+      sidebar_id: 2,
     },
   },
   {
@@ -22,7 +22,7 @@ const routes = [
       title: "Detail Ranking Quiz",
       description: "Halaman detail ranking kuis yang menampilkan informasi peringkat, nilai, dan analisis hasil pengerjaan peserta.",
       page_type: 'show',
-      sidebar_id: 1,
+      sidebar_id: 2,
     },
   },
 

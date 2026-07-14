@@ -8,18 +8,22 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 import { useAuthStore } from 'src/stores/auth/AuthStore';
 import { useRouterStore } from 'src/stores/auth/RouterStore'
 
-import { host, host_server } from './common'
+import { host } from './common'
 
 import { storeToRefs } from 'pinia';
 
-// const route_after_login_redirect = { name: "lms_notification_tugas_index" }
-const route_after_login_redirect = {
-  name: "lms_quiz_index",
-  params: {
-    quiz: 'arrange'
+import { route_after_login_redirect } from 'src/utils/route_after_login_redirect';
+
+import { getActivePinia } from 'pinia'
+
+export const resetAllStores = () => {
+  const pinia = getActivePinia()
+  if (pinia) {
+    pinia._s.forEach((store) => {
+      store.$reset()
+    })
   }
 }
-
 
 console.log('BOOT AXIOS KELOAD')
 
@@ -48,7 +52,7 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     path: '/' // wajib
   }
 
-  axios.defaults.baseURL = process.env.PROD ? host_server : host
+  axios.defaults.baseURL = host
 
   axios.defaults.params = {} // wajib ada
   // axios.defaults.params['mode'] = 'human' // digunakan untuk merubah createdAt & updatedAt ke diffForHumans
@@ -143,14 +147,21 @@ export default boot(async ({ app, ssrContext, router, store, urlPath }) => {
     // always update Login status
     if (isLogin) {
       if (payload?.token) await cookies.set('accessToken', payload?.token, is_cookie_secure)
-      if (route.getName == 'login' || route.getName == 'register') router.replace(route_after_login_redirect)
+
+      // redirect di bawah ini macet karena pakai resetAllStores(); tapi kalo pakai location.reload(); tidak masalah
+      // jadi ku pindah ke LoginPage.vue sebagai watch
+      // if (route.getName == 'login' || route.getName == 'register') router.replace(route_after_login_redirect)
+
       // if (additional?.idToken) await cookies.set('idToken', additional?.idToken, is_cookie_secure)
       // if (additional?.refreshToken) await cookies.set('refreshToken', additional?.refreshToken, is_cookie_secure)
     } else if (route.getMeta?.logged) {
       await onClearAuth()
       await cookies.remove('accessToken')
       await router.replace({ name: 'login' })
-      location.reload();
+
+      // hard reset
+      resetAllStores();
+      // location.reload();
     }
 
 

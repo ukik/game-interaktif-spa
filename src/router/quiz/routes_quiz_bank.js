@@ -12,6 +12,10 @@ const routes = [
       page_type: 'index',
       sidebar_id: 2,
     },
+    beforeEnter: (to, from, next) => {
+      console.log('beforeEnter lms_quiz_index')
+      next()
+    },
   },
   {
     path: "/lms-quiz-show/:slug",

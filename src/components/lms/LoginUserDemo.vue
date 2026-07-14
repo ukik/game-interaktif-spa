@@ -24,9 +24,17 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>{{ scope.opt.name }}</q-item-label>
-            <q-item-label caption>{{ scope.opt.role }}</q-item-label>
+            <q-item-label caption>{{ scope.opt.email }}</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>
+              <q-chip :label="scope.opt.role" text-color="white" :class="[roleColor(scope.opt.role)]"></q-chip>
+            </q-item-label>
           </q-item-section>
         </q-item>
+
+
+        <q-separator></q-separator>
       </template>
     </q-select>
   </div>
@@ -48,6 +56,20 @@ export default {
       options: "get_data_global_list_demo",
     }),
     ...mapState(useAuthStore, ["form_login"]),
+  },
+  methods: {
+    roleColor(val) {
+      switch (val) {
+        case 'principal':
+          return 'bg-teal';
+        case 'teacher':
+          return 'bg-red';
+        case 'student':
+          return 'bg-cyan';
+        case 'parent':
+          return 'bg-orange';
+      }
+    }
   },
   watch: {
     model(val) {

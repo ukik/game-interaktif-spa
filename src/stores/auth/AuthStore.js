@@ -41,6 +41,30 @@ function notifFailed(caption = 'data gagal diproses', message = 'Loading failed'
   })
 }
 
+const formAuth = {
+  "isLogin": false,
+  "message": "",
+
+  "data": {
+    "accessToken": "",
+
+    "user": {
+      "id": "",
+      "name": "",
+      "email": "",
+      "image": "",
+      "telpon": "",
+      "alamat": "",
+      "password": "",
+      "role": "",
+      "createdAt": "",
+      "updatedAt": "",
+      "deletedAt": ""
+    },
+    "roles": "",
+    "expiresIn": 0
+  }
+}
 
 // no need to import defineStore and acceptHMRUpdate
 export const useAuthStore = defineStore('AuthStore', {
@@ -106,30 +130,7 @@ export const useAuthStore = defineStore('AuthStore', {
       passwordConfirmation: '12345',
       gender: 'Gender',
     },
-    auth: {
-      "isLogin": false,
-      "message": "",
-
-      "data": {
-        "accessToken": "",
-
-        "user": {
-          "id": "",
-          "name": "",
-          "email": "",
-          "image": "",
-          "telpon": "",
-          "alamat": "",
-          "password": "",
-          "role": "",
-          "createdAt": "",
-          "updatedAt": "",
-          "deletedAt": ""
-        },
-        "roles": "",
-        "expiresIn": 0
-      }
-    },
+    auth: formAuth,
     loading: {
       fetchCSRF: false,
       fetchInitAuth: false, // true after refresh (1x request only)

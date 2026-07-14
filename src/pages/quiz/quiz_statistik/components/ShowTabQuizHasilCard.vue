@@ -115,7 +115,7 @@
         ></q-chip>
         <q-separator></q-separator>
       </div>
-      <q-item v-for="(item, index) in payload?.data" :to="{
+      <q-item target="_blank" v-for="(item, index) in payload?.data" :to="{
         name: 'quiz_report',
         params: {
           quiz: tugas?.tugasable?.kategori,

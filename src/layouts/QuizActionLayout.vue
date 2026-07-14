@@ -97,21 +97,28 @@
       <!-- <router-view ref="pageContainer" class="col-12 col-xl-5 col-lg-5 col-md-8 col-sm-12 rounded-bordersX"
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
 
-      <ToolbarPage></ToolbarPage>
+      <!-- <PullToRefresh :onAction="onPullToRefreshFunction"> -->
+        <ToolbarPage></ToolbarPage>
 
-      <div
-        id="main"
-        :class="[
-          getClass,
-          is_mobile_size ? '' : 'q-card--borderedX',
-          is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-pa-smX',
-        ]"
-      >
-        <router-view v-slot="{ Component }">
-          <component :is="Component" ref="pageContainer" />
-        </router-view>
-      </div>
+        <div
+          id="main"
+          :class="[
+            getClass,
+            is_mobile_size ? '' : 'q-card--borderedX',
+            is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-pa-smX',
+          ]"
+        >
+          <router-view v-slot="{ Component }">
+            <component
+              @onBubblePullToRefresh="onPullToRefreshFunction = $event"
+              :is="Component"
+              ref="pageContainer"
+            />
+          </router-view>
+        </div>
+      <!-- </PullToRefresh> -->
 
+      <DialogAnnouncement></DialogAnnouncement>
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
@@ -174,6 +181,9 @@ const FormDialogSiswa = defineAsyncComponent(() =>
 const FormDialogStakeholder = defineAsyncComponent(() =>
   import("src/pages/pengaturan/forms_create/stakeholder/FormDialog.vue")
 );
+const DialogAnnouncement = defineAsyncComponent(() =>
+  import("src/components/lms/DialogAnnouncement.vue")
+);
 
 const TabSidebar = defineAsyncComponent(() => import("./components/TabSidebar.vue"));
 
@@ -181,11 +191,13 @@ const { getVerticalScrollPosition } = scroll;
 
 import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
-import metaMixin from 'src/mixins/createMetaMixin'
+import metaMixin from "src/mixins/createMetaMixin";
 
 export default {
   mixins: [metaMixin],
   components: {
+    DialogAnnouncement,
+
     TabSidebar,
     FormDialogParent,
     FormDialogSekolah,
@@ -201,6 +213,7 @@ export default {
   },
   data() {
     return {
+      onPullToRefreshFunction: function () {},
       left_drawer_type: "general",
       leftDrawerOpen: false,
       rightDrawerOpen: false,
@@ -277,6 +290,10 @@ export default {
       this.$refs.LogoutConfirmDialog.onOpen(true);
     },
     onLeftDrawerOpen(label) {
+      this.leftDrawerOpen = true;
+      this.left_drawer_type = label;
+      return;
+
       console.log(label, this.left_drawer_type);
       if (label == this.left_drawer_type) {
         this.leftDrawerOpen = false;
