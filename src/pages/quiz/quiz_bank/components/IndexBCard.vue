@@ -8,12 +8,12 @@
       <q-item>
         <q-item-section avatar>
           <!-- <q-avatar> -->
-            <q-img
-              class="rounded-borders full-height"
-              :src="item?.user?.url_image"
-              @error="item.user.url_image = global_url_image"
-              :error-src="global_url_image"
-            />
+          <q-img
+            class="rounded-borders full-height"
+            :src="item?.user?.url_image"
+            @error="item.user.url_image = global_url_image"
+            :error-src="global_url_image"
+          />
           <!-- </q-avatar> -->
         </q-item-section>
         <q-item-section>
@@ -86,6 +86,9 @@
         <q-item-label lines="3" class="text-dark">
           {{ item?.judul }}
         </q-item-label>
+        <q-item-label caption lines="3" class="text-dark q-pt-sm">
+          {{ item?.deskripsi }}
+        </q-item-label>
       </q-card-section>
       <!-- </q-card-section> -->
 
@@ -108,7 +111,7 @@
           label="Detail"
         ></q-btn>
         <q-btn
-          target="_blank"
+          :target="getTarget"
           unelevated
           :to="{
             name: route_play,

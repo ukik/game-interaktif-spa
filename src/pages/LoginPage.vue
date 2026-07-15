@@ -13,7 +13,7 @@
         </q-card-section>
 
         <q-separator />
-
+<!-- {{ isMobile }} -- {{ getHost }} -->
         <q-card-section class="q-gutter-md">
           <!-- {{ auth }} -->
           <LoginUserDemo />

@@ -11,6 +11,7 @@
           icon="arrow_back"
           class="q-mr-sm"
         />
+        <q-toolbar-title class="q-px-xs"> KEMBALI</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -69,14 +70,20 @@
         ]"
       >
         <router-view v-slot="{ Component }">
-          <component :is="Component" ref="pageContainer" />
+          <component :is="Component" ref="pageContainer">
+          </component>
         </router-view>
       </div>
 
+       <q-page-sticky v-if="routeFilter" position="bottom-right" :offset="[18, 18]">
+          <q-btn @click="this.$refs.DialogHint?.onOpen()" fab icon="fa-solid fa-question" color="accent" />
+        </q-page-sticky>
       <!-- <q-space class="col-12 q-mb-sm"></q-space> -->
     </q-page-container>
 
+    <DialogHint ref="DialogHint"></DialogHint>
     <LogoutConfirmDialog ref="LogoutConfirmDialog"></LogoutConfirmDialog>
+
     <!-- <ReportConfirmDialog ref="ReportConfirmDialog"></ReportConfirmDialog> -->
 
     <!-- <DialogResult></DialogResult> -->
@@ -104,9 +111,13 @@ import { useAuthStore } from "src/stores/auth/AuthStore";
 import MenuProfile from "./components/MenuProfile.vue";
 
 import { useUiStore } from "src/stores/ui";
+import DialogHint from "./components/DialogHint.vue";
+
+
 
 export default {
   components: {
+    DialogHint,
     LeftDrawerItem,
     MenuProfile,
   },
@@ -125,6 +136,17 @@ export default {
         rightDrawerOpen.value = !rightDrawerOpen.value;
       },
     };
+  },
+  computed: {
+    routeFilter() {
+      switch (this.$route?.name) {
+        case 'quiz_intro':
+        case 'quiz_intro_public':
+          return false
+        default:
+          return true
+      }
+    }
   },
   watch: {
     "$route.name"(val) {
@@ -150,7 +172,7 @@ export default {
         case "quiz_intro_public":
         // case "quiz_report":
         // case "quiz_report_public":
-          window.close();
+          this.closeWindow()
           break;
         default:
           this.$router.back()
@@ -176,7 +198,7 @@ export default {
   },
 
   mounted() {
-    return
+    // return
     setTimeout(() => {
       this.updateWidth();
     }, 1000);

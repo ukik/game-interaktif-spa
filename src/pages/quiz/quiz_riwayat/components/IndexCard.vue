@@ -30,7 +30,9 @@
       <q-card-actions class="q-py-none" align="between">
         <q-item
           class="col-auto q-pl-sm"
-          :class="[item?.status_durasi?.status == 'selesai' ? 'text-red' : 'text-positive']"
+          :class="[
+            item?.status_durasi?.status == 'selesai' ? 'text-red' : 'text-positive',
+          ]"
         >
           <q-item-section avatar top>
             <q-avatar icon="home" color="grey-2" text-color="positive" />
@@ -84,136 +86,149 @@
           </q-item-section>
         </template> -->
 
-        <q-separator></q-separator>
-        <q-card-section horizontal>
-          <q-card-section class="q-pt-xs col bg-grey-1">
-            <div class="text-overline">{{ item?.mapel?.nama }}</div>
-            <div class="text-h6 text-capitalize q-mb-xs">
-              {{ item?.tugasable?.kategori }}
-            </div>
-            <q-item-label lines="2">
-              {{ item?.judul }}
-            </q-item-label>
-            <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
-              {{ item?.tugasable?.judul }}
-            </q-item-label>
-          </q-card-section>
+      <q-separator></q-separator>
 
-          <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
-            <q-img
-              :height="is_mobile_size ? '' : '140px'"
-              class="rounded-borders bg-white"
-              :src="item?.url_image"
-              @error="item.url_image = global_url_image"
-              :error-src="global_url_image"
-            />
-          </q-card-section>
+      <q-item>
+        <q-item-section>
+          <q-item-label lines="1" class="text-overline">{{
+            item?.tugasable?.mapel?.nama
+          }}</q-item-label>
+          <q-item-label lines="1" caption>{{ item?.tugasable?.topik }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-separator></q-separator>
+      <q-card-section horizontal>
+        <q-card-section class="q-pt-xs col bg-grey-1">
+          <div class="text-h6 text-capitalize q-mb-xs">
+            {{ item?.tugasable?.kategori }}
+          </div>
+          <q-item-label caption lines="2" class="text-grey-7">
+            {{ item?.tugasable?.subtopik }}
+          </q-item-label>
+          <q-item-label lines="3" class="text-dark">
+            {{ item?.tugasable?.judul }}
+          </q-item-label>
+          <q-item-label caption lines="3" class="text-dark q-pt-sm">
+            {{ item?.tugasable?.deskripsi }}
+          </q-item-label>
         </q-card-section>
 
-        <q-separator></q-separator>
-        <q-card-actions class="q-pa-none">
-          <q-item dense class="col-6">
-            <q-item-section>
-              <q-item-label lines="1">Total Soal</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_question }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator vertical></q-separator>
-          <q-item dense class="col">
-            <q-item-section>
-              <q-item-label lines="1">Total Benar</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_question_true }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card-actions>
+        <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">
+          <q-img
+            :height="is_mobile_size ? '' : '140px'"
+            class="rounded-borders bg-white"
+            :src="item?.url_image"
+            @error="item.url_image = global_url_image"
+            :error-src="global_url_image"
+          />
+        </q-card-section>
+      </q-card-section>
 
-        <q-separator></q-separator>
-        <q-card-actions class="q-pa-none">
-          <q-item dense class="col-6">
-            <q-item-section>
-              <q-item-label lines="1">Total Salah</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_question_false }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator vertical></q-separator>
-          <q-item dense class="col">
-            <q-item-section>
-              <q-item-label lines="1">Total Siswa Waktu</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_time_left }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card-actions>
+      <q-separator></q-separator>
+      <q-card-actions class="q-pa-none">
+        <q-item dense class="col-6">
+          <q-item-section>
+            <q-item-label lines="1">Total Soal</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_question }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator vertical></q-separator>
+        <q-item dense class="col">
+          <q-item-section>
+            <q-item-label lines="1">Total Benar</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_question_true }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
 
-        <q-separator></q-separator>
-        <q-card-actions class="q-pa-none">
-          <q-item dense class="col-6">
-            <q-item-section>
-              <q-item-label lines="1">Total Percobaan</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_check_trail }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator vertical></q-separator>
-          <q-item dense class="col">
-            <q-item-section>
-              <q-item-label lines="1">Total Score</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_current_score }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card-actions>
+      <q-separator></q-separator>
+      <q-card-actions class="q-pa-none">
+        <q-item dense class="col-6">
+          <q-item-section>
+            <q-item-label lines="1">Total Salah</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_question_false }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator vertical></q-separator>
+        <q-item dense class="col">
+          <q-item-section>
+            <q-item-label lines="1">Total Siswa Waktu</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_time_left }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
 
-        <q-separator></q-separator>
-        <q-card-actions class="q-pa-none">
-          <q-item dense class="col-6">
-            <q-item-section>
-              <q-item-label lines="1">Total Ranking Poin</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.total_rank_point }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator vertical></q-separator>
-          <q-item dense class="col">
-            <q-item-section>
-              <q-item-label lines="1">Final Ranking</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.final_rank }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card-actions>
+      <q-separator></q-separator>
+      <q-card-actions class="q-pa-none">
+        <q-item dense class="col-6">
+          <q-item-section>
+            <q-item-label lines="1">Total Percobaan</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_check_trail }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator vertical></q-separator>
+        <q-item dense class="col">
+          <q-item-section>
+            <q-item-label lines="1">Total Score</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_current_score }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
 
-        <q-separator></q-separator>
-        <q-card-actions class="q-pa-none">
-          <q-item dense class="col-6">
-            <q-item-section>
-              <q-item-label lines="1">Final Ranking Poin</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.final_rank_point }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator vertical></q-separator>
-          <q-item dense class="col">
-            <q-item-section>
-              <q-item-label lines="1">Kelas</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-item-label>{{ item?.tugas?.kelas?.nama }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card-actions>
+      <q-separator></q-separator>
+      <q-card-actions class="q-pa-none">
+        <q-item dense class="col-6">
+          <q-item-section>
+            <q-item-label lines="1">Total Ranking Poin</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.total_rank_point }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator vertical></q-separator>
+        <q-item dense class="col">
+          <q-item-section>
+            <q-item-label lines="1">Final Ranking</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.final_rank }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
+
+      <q-separator></q-separator>
+      <q-card-actions class="q-pa-none">
+        <q-item dense class="col-6">
+          <q-item-section>
+            <q-item-label lines="1">Final Ranking Poin</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.final_rank_point }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator vertical></q-separator>
+        <q-item dense class="col">
+          <q-item-section>
+            <q-item-label lines="1">Kelas</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-item-label>{{ item?.tugas?.kelas?.nama }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
       <!-- </q-expansion-item> -->
     </q-card>
   </div>
@@ -226,14 +241,14 @@ export default {
     route_play() {
       return function (item) {
         return {
-          name: 'quiz_report',
+          name: "quiz_report",
           params: {
             quiz: item?.tugasable?.kategori,
             slug: item?.tugas_id,
-            mode: 'student',
+            mode: "student",
             siswa_id: item?.siswa?.id,
-          }
-        }
+          },
+        };
       };
     },
   },

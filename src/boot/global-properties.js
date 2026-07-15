@@ -5,7 +5,31 @@ import { Screen } from 'quasar'
 import { useAuthStore } from 'src/stores/auth/AuthStore'
 import { useUiStore } from 'src/stores/ui'
 
+import { Platform } from 'quasar'
+
+import { host } from './common'
+
 export default boot(({ app, router }) => {
+
+  Object.defineProperty(app.config.globalProperties, 'getTarget', {
+    get() {
+     return (Platform.is.mobile) ? '_blank' : '_blank'
+    }
+  })
+
+
+  Object.defineProperty(app.config.globalProperties, 'getHost', {
+    get() {
+     return host
+    }
+  })
+
+  Object.defineProperty(app.config.globalProperties, 'isMobile', {
+    get() {
+      if (Platform.is.mobile) return true
+      return false
+    }
+  })
 
   Object.defineProperty(app.config.globalProperties, 'getPageWidth', {
     value() {

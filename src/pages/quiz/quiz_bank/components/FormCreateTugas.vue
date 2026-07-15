@@ -34,10 +34,17 @@
                 <q-item-label lines="1" class="text-overline">{{
                   tugas_reference?.mapel?.nama
                 }}</q-item-label>
-                <q-item-label lines="1" caption>{{ tugas_reference?.topik }}</q-item-label>
+                <q-item-label lines="1" caption>{{
+                  tugas_reference?.topik
+                }}</q-item-label>
               </q-item-section>
               <q-item-section avatar side>
-                <q-avatar square color="primary" class="rounded-borders" text-color="white">
+                <q-avatar
+                  square
+                  color="primary"
+                  class="rounded-borders"
+                  text-color="white"
+                >
                   {{ tugas_reference?.id }}
                 </q-avatar>
               </q-item-section>
@@ -45,15 +52,17 @@
             <q-separator></q-separator>
             <q-card-section horizontal>
               <q-card-section class="q-pt-xs col bg-grey-1">
-                <!-- <div class="text-overline">{{ tugas_reference?.mapel?.nama }}</div> -->
                 <div class="text-h6 text-capitalize q-mb-xs">
-                  {{ tugas_reference?.tugasable?.kategori }}
+                  {{ tugas_reference?.kategori }}
                 </div>
-                <q-item-label lines="2">
+                <q-item-label caption lines="2" class="text-grey-7">
+                  {{ tugas_reference?.subtopik }}
+                </q-item-label>
+                <q-item-label lines="3" class="text-dark">
                   {{ tugas_reference?.judul }}
                 </q-item-label>
-                <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
-                  {{ tugas_reference?.tugasable?.judul }}
+                <q-item-label caption lines="3" class="text-dark q-pt-sm">
+                  {{ tugas_reference?.deskripsi }}
                 </q-item-label>
               </q-card-section>
 
@@ -177,15 +186,15 @@ export default {
       onCreate: "onCreate",
     }),
     onOpen(payload) {
-      console.log('onOpen', payload)
+      console.log("onOpen", payload);
       this.dialog = true;
-      if(this.$route.params?.slug) {
+      if (this.$route.params?.slug) {
         this.form_tugas_create.aktivitas = this.model + "-" + this.$route.params?.slug;
       } else {
         this.form_tugas_create.aktivitas = this.model + "-" + payload?.id;
       }
 
-      this.tugas_reference = payload
+      this.tugas_reference = payload;
     },
     showValidationErrors() {
       const form = this.$refs.formRef;
@@ -277,11 +286,11 @@ export default {
       }
 
       const resp = await this.onCreate();
-      if(!resp) {
-        this.Swal.error()
-        return
+      if (!resp) {
+        this.Swal.error();
+        return;
       }
-      this.Swal.success()
+      this.Swal.success();
       this.dialog = false;
     },
   },

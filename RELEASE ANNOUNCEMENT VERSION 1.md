@@ -1,3 +1,6 @@
+Nama Platform: LABSNIP | Sosial Interaktif Learning - Jadi Pintar Itu Hebat
+Deskripsi Platform: LABSNIP (Sosial Interaktif Learning) adalah platform LMS dengan pembelajaran interaktif, game edukasi, kuis online, asesmen digital, dan media belajar untuk siswa, guru, dan sekolah.
+
 ```
 RELEASE ANNOUNCEMENT VERSION 1.0.0
 

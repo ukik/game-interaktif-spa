@@ -23,7 +23,7 @@ export const useUiStore = defineStore('ui', {
     },
 
     getPageWidth() {
-      return this.pageWidth / 2
+      return this.pageWidth > 800 ? 800 : this.pageWidth; /// 2
     }
   }
 })

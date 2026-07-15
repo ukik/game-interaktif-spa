@@ -54,7 +54,7 @@
       :behavior="is_equal_to_lower_laptop ? 'mobile' : 'default'"
       bordered
     >
-      <TabSidebar :prop_tab="left_drawer_type" @onBubbleEvent="onTabSidebar" />
+      <TabSidebar />
       <!-- drawer content -->
       <!-- <LeftDrawerItem /> -->
       <q-slide-transition>
@@ -98,24 +98,27 @@
         :class="[is_mobile_size ? '' : ' q-card--borderedX', is_ipad_lower_size ? 'bg-transparent' : 'bg-white']" /> -->
 
       <!-- <PullToRefresh :onAction="onPullToRefreshFunction"> -->
-        <ToolbarPage></ToolbarPage>
+      <ToolbarPage></ToolbarPage>
 
-        <div
-          id="main"
-          :class="[
-            getClass,
-            is_mobile_size ? '' : 'q-card--borderedX',
-            is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-pa-smX',
-          ]"
-        >
-          <router-view v-slot="{ Component }">
+      <div
+        id="main"
+        :class="[
+          getClass,
+          is_mobile_size ? '' : 'q-card--borderedX',
+          is_ipad_lower_size ? 'bg-transparent' : 'bg-whiteX q-pa-smX',
+        ]"
+      >
+        <router-view v-slot="{ Component }">
+          <!-- <KeepAlive :include="['lms_quiz_index']"> -->
+          <!-- <KeepAlive> -->
             <component
-              @onBubblePullToRefresh="onPullToRefreshFunction = $event"
               :is="Component"
               ref="pageContainer"
+              @onBubblePullToRefresh="onPullToRefreshFunction = $event"
             />
-          </router-view>
-        </div>
+          <!-- </KeepAlive> -->
+        </router-view>
+      </div>
       <!-- </PullToRefresh> -->
 
       <DialogAnnouncement></DialogAnnouncement>
@@ -156,7 +159,7 @@ useRouteMetaSafe({ title: route.title, meta: route.meta });
 import { ref, defineAsyncComponent } from "vue";
 
 import LeftDrawerItem from "./components/LeftDrawerItem.vue";
-import { mapActions } from "pinia";
+import { mapActions, mapWritableState } from "pinia";
 import { useAuthStore } from "src/stores/auth/AuthStore";
 
 import MenuProfile from "./components/MenuProfile.vue";
@@ -192,6 +195,7 @@ const { getVerticalScrollPosition } = scroll;
 import { useGlobalStore } from "src/stores/lms/GlobalStore";
 
 import metaMixin from "src/mixins/createMetaMixin";
+import { useQuizActionLayoutStore } from "src/stores/QuizActionLayoutStore.js";
 
 export default {
   mixins: [metaMixin],
@@ -214,8 +218,8 @@ export default {
   data() {
     return {
       onPullToRefreshFunction: function () {},
-      left_drawer_type: "general",
-      leftDrawerOpen: false,
+      // left_drawer_type: "general",
+      // leftDrawerOpen: false,
       rightDrawerOpen: false,
     };
   },
@@ -249,6 +253,7 @@ export default {
     if (!answer) return false; // Cancels the back navigation
   },
   computed: {
+    ...mapWritableState(useQuizActionLayoutStore, ["leftDrawerOpen", "left_drawer_type"]),
     getClass() {
       switch (this.$route.meta?.page_type) {
         case "index":
@@ -292,17 +297,6 @@ export default {
     onLeftDrawerOpen(label) {
       this.leftDrawerOpen = true;
       this.left_drawer_type = label;
-      return;
-
-      console.log(label, this.left_drawer_type);
-      if (label == this.left_drawer_type) {
-        this.leftDrawerOpen = false;
-        return;
-      }
-      if (label !== this.left_drawer_type) {
-        this.left_drawer_type = label;
-        this.leftDrawerOpen = true;
-      }
     },
     onHide() {
       this.left_drawer_type = "";

@@ -131,7 +131,7 @@ export default {
       this.$refs.LogoutConfirmDialog.onOpen(true);
     },
     onBack() {
-      window.close();
+      this.closeWindow()
     },
     updateWidth() {
       const ui = useUiStore();
@@ -152,7 +152,7 @@ export default {
   },
 
   mounted() {
-    return;
+    // return;
     setTimeout(() => {
       this.updateWidth();
     }, 2000);

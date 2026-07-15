@@ -5,11 +5,8 @@ import { Loading, Notify, Cookies, Platform, Screen } from 'quasar'
 // import { useAuthStore } from "src/stores/auth/AuthStore";
 import { useUiStore } from 'src/stores/ui';
 
-const domain = "http://localhost:8000/api"
+const domain = Platform.is.mobile ? "http://192.168.1.5:8000/api" : "http://localhost:8000/api"
 const host_server = "https://labsnip.com/api" // "http://localhost:8000/api"
-// export const host_server = process.env.PROD
-//   ? "https://labsnip.com/api"
-//   : "http://localhost:8000/api";
 
 export const host = process.env.PROD ? host_server : domain; //+"/v1"; // 'http://properti-backend.local/'; //
 // untuk akses route yg ada di file routes/api.php
@@ -28,6 +25,10 @@ export default boot(async ({ app, ssrContext, router, store }) => {
     },
     methods: {
       // ...mapActions(useUiStore, ['getPageWidth']),
+      closeWindow() {
+        window.open('', '_self');
+        window.close();
+      },
       dateToLocal(myDate) {
         if (!myDate) return ''
         const date = new Date(myDate);

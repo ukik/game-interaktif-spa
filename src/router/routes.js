@@ -23,8 +23,8 @@ const routes = [
     ]
   },
   {
-    path: "/QuizActionNoHeaderLayout",
-    component: () => import("layouts/QuizActionNoHeaderLayout.vue"),
+    path: "/QuicActionLayout",
+    component: () => import("layouts/QuicActionLayout.vue"),
     children: [
       ...routes_quiz_action,
       ...routes_quiz_action_public,
@@ -44,8 +44,8 @@ const routes = [
   },
 
   {
-    path: "/QuizActionLayout",
-    component: () => import("layouts/QuizActionLayout.vue"),
+    path: "/GeneralLayout",
+    component: () => import("layouts/GeneralLayout.vue"),
     children: [
       ...routes_quiz_dashboard,
       ...routes_account,

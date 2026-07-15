@@ -69,6 +69,9 @@
           <q-item-label lines="3" class="text-dark">
             {{ item?.judul }}
           </q-item-label>
+          <q-item-label caption lines="3" class="text-dark q-pt-sm">
+            {{ item?.deskripsi }}
+          </q-item-label>
         </q-card-section>
 
         <q-card-section class="col-4 flex flex-center justify-end bg-grey-1">

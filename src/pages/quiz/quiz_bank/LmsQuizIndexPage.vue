@@ -78,17 +78,12 @@
       ></Pagination>
     </q-page-sticky>
 
-
-
     <keep-alive>
       <FilterDialog ref="FilterDialog" onAction=""></FilterDialog>
     </keep-alive>
 
-    <q-page-scroller position="top-right" :scroll-offset="150" :offset="[8, 10]">
+    <q-page-scroller position="right" :scroll-offset="150" :offset="[8, 10]">
       <div>
-        <q-btn unelevated round icon="keyboard_arrow_up" color="accent" />
-      </div>
-      <div class="q-mt-sm">
         <q-btn
           @click="() => $refs?.FilterDialog?.onOpen(true)"
           unelevated
@@ -97,6 +92,9 @@
           size="md"
           icon="search"
         ></q-btn>
+      </div>
+      <div class="q-mt-sm">
+        <q-btn unelevated round icon="keyboard_arrow_up" color="accent" />
       </div>
     </q-page-scroller>
   </q-page>
@@ -124,6 +122,10 @@ export default {
   },
   async preFetch({ store, currentRoute }) {
     const preStore = useLmsBankQuizStore(store);
+
+    // console.log('CHECK preFetch', preStore.get_index_data.length)
+    // if(preStore.get_index_data.length > 0) return
+    // console.log('START preFetch', preStore.get_index_data.length)
 
     const page = currentRoute.query.page || 1;
 

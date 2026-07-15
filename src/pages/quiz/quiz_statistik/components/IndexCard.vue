@@ -81,7 +81,9 @@
       <q-card-actions class="q-py-none" align="between">
         <q-item
           class="col-auto q-pl-sm"
-          :class="[item?.status_durasi?.status == 'selesai' ? 'text-red' : 'text-positive']"
+          :class="[
+            item?.status_durasi?.status == 'selesai' ? 'text-red' : 'text-positive',
+          ]"
         >
           <q-item-section avatar top>
             <q-avatar
@@ -141,7 +143,9 @@
 
           <q-item-section class="text-capitalize">
             <q-item-label>Detail Tugas ( {{ item?.tugasable?.kategori }} )</q-item-label>
-            <q-item-label v-if="item?.tugas_kategori?.nama" caption>{{ item?.tugas_kategori?.nama }}</q-item-label>
+            <q-item-label v-if="item?.tugas_kategori?.nama" caption>{{
+              item?.tugas_kategori?.nama
+            }}</q-item-label>
           </q-item-section>
         </template>
 
@@ -191,19 +195,30 @@
             </q-item-label>
           </q-item-section>
         </q-item>
+        <q-separator></q-separator>
+        <q-item>
+          <q-item-section>
+            <q-item-label lines="1" class="text-overline">{{
+              item?.mapel?.nama
+            }}</q-item-label>
+            <q-item-label lines="1" caption>{{ item?.tugasable?.topik }}</q-item-label>
+          </q-item-section>
+        </q-item>
 
         <q-separator></q-separator>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs col bg-grey-1">
-            <div class="text-overline">{{ item?.mapel?.nama }}</div>
             <div class="text-h6 text-capitalize q-mb-xs">
               {{ item?.tugasable?.kategori }}
             </div>
-            <q-item-label lines="2">
-              {{ item?.judul }}
+            <q-item-label caption lines="2" class="text-grey-7">
+              {{ item?.tugasable?.subtopik }}
             </q-item-label>
-            <q-item-label :lines="is_mobile_size ? 1 : 2" class="text-grey-7" caption>
+            <q-item-label lines="3" class="text-dark">
               {{ item?.tugasable?.judul }}
+            </q-item-label>
+            <q-item-label caption lines="3" class="text-dark q-pt-sm">
+              {{ item?.tugasable?.deskripsi }}
             </q-item-label>
           </q-card-section>
 
